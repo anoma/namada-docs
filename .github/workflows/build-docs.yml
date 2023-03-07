@@ -24,15 +24,15 @@ jobs:
           - name: Build Specs docs image
             image: specs
             path: specs
-            secret_name_suffix: _SPECS
+            secret_name: UPDATE_URL_SPECS
           - name: Build Docs docs image
             image: docs
             path: docs
-            secret_name_suffix: _DOCS
+            secret_name: UPDATE_URL_DOCS
           - name: Build Dev docs image
             image: dev
             path: dev
-            secret_name_suffix: _DEV
+            secret_name: UPDATE_URL_DEV
 
     steps:
       - name: Checkout repo
@@ -61,6 +61,4 @@ jobs:
             path=${{ matrix.make.path }}
       - name: Update image
         if: github.ref == 'refs/heads/master'
-        run: curl -I -X POST ${{ secrets[$SECRET_NAME] }} --fail
-        env:
-          SECRET_NAME: UPDATE_URL${{ matrix.make.secret_name_suffix }}
+        run: curl -I -X POST ${{ secrets[matrix.make.secret_name] }} --fail
