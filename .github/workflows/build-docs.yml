@@ -68,5 +68,7 @@ jobs:
           SECRET_NAME: ${{ format('UPDATE_URL{0}', matrix.make.secret_name_suffix) }}
       - name: Update image
         if: github.ref == 'refs/heads/master'
-        run: echo ${{ steps.vars.outputs.UPDATE_URL }} && curl -I -X POST https://portainer.heliax.click/api/webhooks/232b09f2-9332-40a5-a290-68591a7d4eb5 --fail
+        run: echo ${{ steps.vars.outputs.UPDATE_URL }} && curl -I -X POST $URL --fail
+        env:
+          URL: https://portainer.heliax.click/api/webhooks/232b09f2-9332-40a5-a290-68591a7d4eb5
       
