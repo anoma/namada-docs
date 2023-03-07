@@ -63,4 +63,4 @@ jobs:
         if: github.ref == 'refs/heads/master'
         run: curl -I -X POST ${{ secrets[env.SECRET_NAME] }} --fail
         env:
-          SECRET_NAME: UPDATE_URL_${{ matrix.make.secret_name_suffix }}
+          SECRET_NAME: UPDATE_URL${{ matrix.make.secret_name_suffix }}
