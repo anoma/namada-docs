@@ -435,3 +435,5 @@ MigrationBackup/
 .ionide/
 
 # End of https://www.toptal.com/developers/gitignore/api/osx,macos,vs,visualstudiocode,rust
+
+*/book
