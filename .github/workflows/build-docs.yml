@@ -59,22 +59,4 @@ jobs:
           cache-to: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/namada/${{ matrix.make.image }}-docs:buildcache,mode=max'
           build-args:
             path=${{ matrix.make.path }}
-      - name: Set secret name
-        id: vars
-        if: github.ref == 'refs/heads/master'
-        run: echo "::set-output name=UPDATE_URL::${SECRET_NAME}"
-        env:
-          SECRET_NAME: ${{ format('UPDATE_URL{0}', matrix.make.secret_name_suffix) }}
-      - name: Set up WireGuard
-        uses: egor-tensin/setup-wireguard@v1
-        with:
-          endpoint: ${{ secrets.ENDPOINT }}
-          endpoint_public_key: ${{ secrets.PUBLIC_KEY }}
-          ips: ${{ secrets.IPS }}
-          allowed_ips: ${{ secrets.ALLOWED_IPS }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
-          preshared_key: ${{ secrets.PRE_SHARED_KEY }}
-      - name: Update image
-        if: github.ref == 'refs/heads/master'
-        run: curl -I -X POST ${{ steps.vars.outputs.UPDATE_URL }} --fail
       
