@@ -61,6 +61,6 @@ jobs:
             path=${{ matrix.make.path }}
       - name: Update image
         if: github.ref == 'refs/heads/master'
-        run: curl -I -X POST ${{ secrets[env.SECRET_NAME] }} --fail
+        run: curl -I -X POST ${{ secrets[$SECRET_NAME] }} --fail
         env:
           SECRET_NAME: UPDATE_URL${{ matrix.make.secret_name_suffix }}
