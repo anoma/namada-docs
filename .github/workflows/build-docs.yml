@@ -24,12 +24,15 @@ jobs:
           - name: Build Specs docs image
             image: specs
             path: specs
+            secret_name_suffix: _SPECS
           - name: Build Docs docs image
             image: docs
             path: docs
+            secret_name_suffix: _DOCS
           - name: Build Dev docs image
             image: dev
             path: dev
+            secret_name_suffix: _DEV
 
     steps:
       - name: Checkout repo
@@ -45,6 +48,7 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: ${{ matrix.make.name }}
+        if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -55,3 +59,8 @@ jobs:
           cache-to: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/namada/${{ matrix.make.image }}-docs:buildcache,mode=max'
           build-args:
             path=${{ matrix.make.path }}
+      - name: Update image
+        if: github.ref == 'refs/heads/master'
+        run: curl -I -X POST ${{ secrets[env.SECRET_NAME] }} --fail
+        env:
+          SECRET_NAME: UPDATE_URL_${{ matrix.make.secret_name_suffix }}
