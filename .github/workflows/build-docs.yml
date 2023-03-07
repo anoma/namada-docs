@@ -54,7 +54,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: '${{ secrets.REGISTRY_URL }}/namada/${{ matrix.make.image }}-docs:latest'
+          tags: '${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:latest'
           cache-from: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/namada/${{ matrix.make.image }}-docs:buildcache'
           cache-to: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/namada/${{ matrix.make.image }}-docs:buildcache,mode=max'
           build-args:
