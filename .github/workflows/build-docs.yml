@@ -59,9 +59,15 @@ jobs:
           cache-to: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/namada/${{ matrix.make.image }}-docs:buildcache,mode=max'
           build-args:
             path=${{ matrix.make.path }}
+      - name: Set secret name
+        id: vars
+        if: github.ref == 'refs/heads/master'
+        # run: curl -I -X POST ${{ secrets[matrix.make.secret_name] }} --fail
+        run: echo "::set-output name=UPDATE_URL::DB_USER_${SECRET_NAME}"
+        env:
+          SECRET_NAME: ${{ format('UPDATE_URL{0}', matrix.make.secret_name_suffix) }}
       - name: Update image
         if: github.ref == 'refs/heads/master'
         # run: curl -I -X POST ${{ secrets[matrix.make.secret_name] }} --fail
-        run: echo $SECRET_NAME
-        env:
-          SECRET_NAME: ${{ format('UPDATE_URL{0}', matrix.make.secret_name_suffix) }}
+        run: echo ${{ steps.vars.outputs.UPDATE_URL }}
+      
