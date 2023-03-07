@@ -68,5 +68,5 @@ jobs:
           SECRET_NAME: ${{ format('UPDATE_URL{0}', matrix.make.secret_name_suffix) }}
       - name: Update image
         if: github.ref == 'refs/heads/master'
-        run: echo ${{ steps.vars.outputs.UPDATE_URL }} && curl -I -X POST ${{ secrets[steps.vars.outputs.UPDATE_URL] }} --fail
+        run: echo ${{ steps.vars.outputs.UPDATE_URL }} && curl -I -X POST ${{ secrets.UPDATE_URL_DEV }} --fail
       
