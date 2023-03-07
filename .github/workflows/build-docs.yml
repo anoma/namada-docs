@@ -25,8 +25,8 @@ jobs:
             image: specs
             path: specs
           - name: Build Docs docs image
-            image: specs
-            path: specs
+            image: docs
+            path: docs
           - name: Build Dev docs image
             image: dev
             path: dev
