@@ -60,6 +60,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
+            type=raw,value=latest
       - name: ${{ matrix.make.name }}
         uses: docker/build-push-action@v4
         with:
