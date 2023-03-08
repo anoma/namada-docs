@@ -59,4 +59,11 @@ jobs:
           cache-to: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:buildcache,mode=max'
           build-args:
             path=${{ matrix.make.path }}
+      - name: Create and push manifest images
+        if: github.ref == 'refs/heads/master'
+        uses: Noelware/docker-manifest-action@master
+        with:
+          inputs: '${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:latest'
+          images: '${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:latest-amd64'
+          push: true
       
