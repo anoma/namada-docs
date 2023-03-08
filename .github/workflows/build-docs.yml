@@ -64,6 +64,6 @@ jobs:
         uses: Noelware/docker-manifest-action@master
         with:
           inputs: '${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:latest'
-          images: '${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:latest-amd64'
+          images: '${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:latest'
           push: true
       
