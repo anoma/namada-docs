@@ -52,13 +52,21 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
       - name: ${{ matrix.make.name }}
         uses: docker/build-push-action@v4
         with:
           context: .
           file: Dockerfile
           push: ${{ github.ref == 'refs/heads/master' }}
-          tags: '${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:main'
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args:
             path=${{ matrix.make.path }}
