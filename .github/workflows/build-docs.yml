@@ -60,9 +60,7 @@ jobs:
           context: .
           file: Dockerfile
           push: ${{ github.ref == 'refs/heads/master' }}
-          tags: '${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:master'
-          cache-from: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:buildcache'
-          cache-to: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:buildcache,mode=max'
+          tags: '${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs:main'
           labels: ${{ steps.meta.outputs.labels }}
           build-args:
             path=${{ matrix.make.path }}
