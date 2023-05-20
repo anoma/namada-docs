@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 
 env:
   GIT_LFS_SKIP_SMUDGE: 1
@@ -24,15 +25,12 @@ jobs:
           - name: Build Specs docs image
             image: specs
             path: specs
-            secret_name_suffix: _SPECS
           - name: Build Docs docs image
             image: docs
             path: docs
-            secret_name_suffix: _DOCS
           - name: Build Dev docs image
             image: dev
             path: dev
-            secret_name_suffix: _DEV
 
     steps:
       - name: Checkout repo
