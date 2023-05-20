@@ -1,4 +1,4 @@
-# 1) Environment setup
+# Environment setup
 ```admonish note
 If you don't want to build Namada from source you can [install Namada from binaries](../user-guide/install/from-binary.md)
 ```
@@ -10,6 +10,7 @@ export NAMADA_TAG=v0.15.3
 export TM_HASH=v0.1.4-abciplus
 ```
 
+
 ## Installing Namada
 0. Install all pre-requisites
     - [Rust](https://www.rust-lang.org/tools/install)
@@ -18,7 +19,7 @@ export TM_HASH=v0.1.4-abciplus
 
 1. Clone namada repository and checkout the correct versions
 
-```bash
+```shell
 git clone https://github.com/anoma/namada && cd namada && git checkout $NAMADA_TAG
 ```
 2. Build binaries
