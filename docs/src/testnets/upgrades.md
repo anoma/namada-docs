@@ -4,8 +4,9 @@ This page covers all installation steps required by various upgrades to testnets
 
 ## Latest Upgrade
 
-TBD
+***19/05/2023*** `public-testnet-8` hot-fix
 
+Due to some issues with our mempool validation, the testnet halted starting at block height `8073`. We fixed this issue and released a hot-fix version to a subset of the validators. This was sufficient to keep the testnet going. It did require some validators to resync the testnet.
 
 ## Latest Testnet
 

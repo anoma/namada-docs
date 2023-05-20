@@ -1,5 +1,6 @@
 # From Source
 
+## Pre-requisites
 If you'd like to install Namada from source you will have to install some dependencies first: [Rust](https://www.rust-lang.org/tools/install), [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), Clang, OpenSSL and LLVM.
 
 First, [install Rust](https://www.rust-lang.org/tools/install) by following the instructions from the official page.
@@ -32,8 +33,18 @@ xcode-select --install
 brew install protobuf
 ```
 
+When running
+```shell
+protoc --version
+```
+It should output at least:
+```shell
+libprotoc 3.12.0
+```
+
 Please refer to [protoc-installation doc](https://grpc.io/docs/protoc-installation/) for other installation options.
 
+## Installing Namada
 Now that you have all the required dependencies installed, you can clone the source code from the [Namada repository](https://github.com/anoma/namada) and build it with:
 
 ```shell

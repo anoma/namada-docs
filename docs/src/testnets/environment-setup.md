@@ -11,6 +11,11 @@ export TM_HASH=v0.1.4-abciplus
 ```
 
 ## Installing Namada
+0. Install all pre-requisites
+    - [Rust](https://www.rust-lang.org/tools/install)
+    - [Tendermint](../user-guide/install/installing-tendermint.md)
+    - [Protobuf](../user-guide/install/from-source.md#pre-requisites)
+
 1. Clone namada repository and checkout the correct versions
 
 ```bash
