@@ -6,11 +6,16 @@ If you don't want to build Namada from source you can [install Namada from binar
 Export the following variables:
 
 ```bash
-export NAMADA_TAG=v0.13.3
+export NAMADA_TAG=v0.15.3
 export TM_HASH=v0.1.4-abciplus
 ```
 
 ## Installing Namada
+0. Install all pre-requisites
+    - [Rust](https://www.rust-lang.org/tools/install)
+    - [Tendermint](../user-guide/install/installing-tendermint.md)
+    - [Protobuf](../user-guide/install/from-source.md#pre-requisites)
+
 1. Clone namada repository and checkout the correct versions
 
 ```bash
@@ -62,4 +67,4 @@ In linux, this can be resolved by
 - Make sure you are using the correct tendermint version
     - `tendermint version` should output `0.1.4-abciplus`
 - Make sure you are using the correct Namada version
-    - `namada --version` should output `Namada v0.13.3`
+    - `namada --version` should output `Namada v0.15.3`
