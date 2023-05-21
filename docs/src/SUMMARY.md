@@ -26,6 +26,7 @@
       - [Shielded transfers](./users/shielded-transfers.md)
       - [Shielded Rewards](./users/shielded-rewards.md)
       - [Atomic Transactions](./users/atomic-transactions.md)
+      - [Proper Opsec for proper privacy](./users/privacy.md)
   - [Delegators](./delegators.md)   
   - [Full Nodes](./running-a-full-node.md)
   - [Cubic Proof-of-Stake](./pos.md)   
