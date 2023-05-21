@@ -1,4 +1,4 @@
-# Web wallet interface
+# Web Wallet Interface
 
 ## Application Features
 
