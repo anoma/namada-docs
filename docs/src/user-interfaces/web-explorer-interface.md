@@ -1,4 +1,4 @@
-# Web explorer interface
+# Web Explorer Interface
 
 * Block explorer
   * Display PoS state

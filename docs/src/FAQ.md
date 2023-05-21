@@ -35,10 +35,10 @@ HINT: `namadac balance`
 
 ### **Q: What requirements do I need to be a User/Validator on Namada**
 
-**A:**  See [hardware requirements](./install/hardware.md)
+**A:**  See [hardware requirements](./introduction/quick-start/install/hardware.md)
 
 In order to build binaries from source, at least 16GB RAM will be required
 
 ### Q: Where can I find the binaries to run Namada if I do not want to build from source?
 
-**A:** See [Installing Namada from binaries](./install/from-binary.md)
+**A:** See [Installing Namada from binaries](./introduction/quick-start/install/from-binary.md)

@@ -1,4 +1,4 @@
-# Genesis validator setup
+# Genesis Validator Setup
 
 A genesis validator is one which is a validator right from the first block of the chain - i.e. at genesis. The details of genesis validators are hardcoded into the genesis file that is distributed to all users who want to interact with a chain.
 

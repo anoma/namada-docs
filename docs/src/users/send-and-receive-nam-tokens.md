@@ -1,4 +1,4 @@
-## Send and Receive NAM tokens
+## Send & Receive NAM tokens
 
 In Namada, tokens are implemented as accounts with the [Token Validity Predicate](https://github.com/anoma/namada/blob/namada/wasm/wasm_source/src/vp_token.rs). The validity predicate (VP) checks that the total supply (of the token) is preserved in any transaction that uses this token. Your wallet will be pre-loaded with some token addresses that are initialized in the genesis block.
 

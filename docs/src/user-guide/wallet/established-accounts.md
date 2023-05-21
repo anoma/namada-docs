@@ -1,4 +1,4 @@
-# Established accounts
+# Established Accounts
 
 This assumes that you already have a key or an implicit account that can sign transactions. 
 

@@ -1,4 +1,4 @@
-# Overview of binaries
+# Overview of Binaries
 
 This guide assumes that the Namada binaries are [installed](./install/README.md) and available on path. These are:
 

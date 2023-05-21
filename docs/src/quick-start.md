@@ -1,4 +1,4 @@
-# Quickstart - How to run a validator on Namada
+# Quickstart 
 
 ## About this guide
 
