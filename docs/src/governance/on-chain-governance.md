@@ -44,7 +44,8 @@ You should change the value of:
 - `type` with the correct type for your proposal, which can be one of the followings:
     - `"type": {"Default":null}` for a default proposal without wasm code
     - `"type": {"Default":"$PATH_TO_WASM_CODE"}` for a default proposal with an associated wasm code
-    - `"type": "PGFCouncil"` to initiate a proposal for a new council
+    - `"type": "StewardProposal"` to initiate a proposal for a new pgf steward
+    - `"type": "PGFProposal"` for a public goods funding proposal
     - `"type": "ETHBridge"` for an ethereum bridge related proposal
 
 
