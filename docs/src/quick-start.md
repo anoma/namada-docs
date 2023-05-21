@@ -4,26 +4,21 @@
 
 This guide is for those interested in operating a Namada validator node and assumes basic knowledge of the terminal and how commands are used.
 
-* Comments start with `#`:
-
-```# this is a comment make sure you read them!```
-
-* Sample outputs start with an arrow:
-  
-```➜ this is an example command line output useful for comparing```
-
 ## Installing Namada
 
-See [the installation guide](./user-guide/install/) for details on installing the Namada binaries. Commands in this guide will assume you have the Namada binaries (`namada`, `namadan`, `namadaw`, `namadac`) on your $PATH.
+See [the installation guide](./user-guide/install/README.md) for details on installing the Namada binaries. Commands in this guide will assume you have the Namada binaries (`namada`, `namadan`, `namadaw`, `namadac`) on your $PATH.
 
-A simple way to add these binaries to one's path is to run
+If you the binaries stored somewhere, but are not on your path (perhaps you downloaded the binaries), you can add the binaries to to your $PATH with:
+
 ```shell
-cp namada/target/release/namada* /usr/local/bin/
+$ export PATH=$PATH:[path-to-namada-binaries]
 ```
+
+If you build from source, and run `make install`, the binaries will be installed to your `$PATH` by default.
 
 ## Joining a network
 
-See [the testnets page](./testnets) for details of how to join a testnet. The rest of this guide will assume you have joined a testnet chain using the `namadac utils join-network` command.
+See [the testnets page](./testnets/README.md) for details of how to join a testnet. The rest of this guide will assume you have joined a testnet chain using the `namadac utils join-network --chain-id [some-chain-id]` command.
 
 ## Run a ledger node
 
@@ -34,7 +29,7 @@ tmux
 
 # inside the tmux/or not
 
-namada ledger
+$ namada ledger
 
 # can detach the tmux (Ctrl-B then D)
 ```
@@ -60,11 +55,12 @@ An implicit account can be generated from the commands described below
 ```shell
 namadaw address gen \
   --alias example-implicit
-
+```
+```shell
 ➜ Enter encryption password: 
 Successfully added a key and an address with alias: "example-implicit"
-
 ```
+
 An implicit account with alias "example-implicit" has now been successfully generated and stored locally in the wallet.
 
 It is possible to derive an Established Account through submitting a transaction, signing it with the key for the implicit account. Note that this transaction, as with any transaction on Namada, will consume "gas", and will require a positive balance of NAM tokens.
@@ -76,7 +72,8 @@ namadac init-account \
   --source example-implicit \
   --public-key example-implicit \
   --alias example-established
-
+```
+```shell
 ➜ Jan 06 22:22:19.864  INFO namada_apps::cli::context: Chain ID: namada-testnet-1.2.bf0181d9f7e0
 Enter decryption password: 
 Last committed epoch: 22386
@@ -104,7 +101,8 @@ namadac transfer \
   --token NAM \
   --amount 1000 \
   --signer example-implicit
-
+```
+```shell
 ➜ Jan 06 22:24:32.926  INFO namada_apps::cli::context: Chain ID: namada-testnet-1.2.bf0181d9f7e0
 ➜ Looking-up public key of atest1v4ehgw36ggmyzwp5g9prgsekgsu5y32z8ycnsvpeggcnys35gv65yvzxg3zrjwphgcu5gde4lvmstw from the ledger...
 Enter decryption password: 
@@ -134,8 +132,12 @@ Initialize a validator account under any alias - in this example, "example-valid
 ```shell
 namadac init-validator \
   --alias example-validator \
+  --source example-established \
+  --commission-rate 0.01 \
+  --max-commission-rate-change 0.05 \
   --source example-established
-
+```
+```shell
 ➜  Jan 06 22:26:29.927  INFO namada_apps::cli::context: Chain ID: namada-testnet-1.2.bf0181d9f7e0
 Generating validator account key...
 ```
@@ -241,13 +243,13 @@ Bonds total: 1000
 Check the voting power - this will be 0 until the active-from epoch is reached (in this case `22395`):
 
 ```shell
-namadac voting-power \
+namadac bonded-stake \
   --validator example-validator
-
-➜ Jan 06 22:31:24.908  INFO namada_apps::cli::context: Chain ID: namada-testnet-1.2.bf0181d9f7e0
-Last committed epoch: 22395
-Validator atest1v4ehgw36g3prx3pjxapyvve3xvury3fkxg6nqsesxccnzw2rxdryg335xcmnysjzxdzyvd2pamfmwd is active, voting power: 1
-Total voting power: 44
+```
+  
+```shell
+➜ Bonded stake of validator atest1v4ehgw36gs6rjd69xaqnj33kxqcnv3pc8qmryd6z8yeygdjrxepygwzrg4z52dekg4rrzwz9m09dm8: 1000
+Total bonded stake: 301000
 ```
 
 Note that with the above command, you can also specify `--epoch` argument to check a future epoch.
