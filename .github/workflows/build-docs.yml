@@ -28,9 +28,6 @@ jobs:
           - name: Build Docs docs image
             image: docs
             path: docs
-          - name: Build Dev docs image
-            image: dev
-            path: dev
 
     steps:
       - name: Checkout repo
