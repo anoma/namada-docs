@@ -2,8 +2,6 @@
 
 - `docs` contains user, operator and developer documentation.
 
-- `dev` contains developer documentation for building on top of Namada.
-
 - `spec` contains the specifications for Namada.
 
 To build any of these, in its subdirectory:
