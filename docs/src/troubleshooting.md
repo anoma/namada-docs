@@ -6,7 +6,7 @@ This document addresses common issues users on Namada have faced, and what to do
 
 
 ### Not enough RAM
-[Building binaries locally](./user-guide/install/from-source.md) is a computationally heavy task and will put your computer to the test. The compilation usually requires at least 16 GB of RAM and depending on the optimisation of your machine, could require slightly more (for some machines slightly less). For this reason, compilation can sometimes fail and will require.
+[Building binaries locally](./introduction/quick-start/install/from-source.md) is a computationally heavy task and will put your computer to the test. The compilation usually requires at least 16 GB of RAM and depending on the optimisation of your machine, could require slightly more (for some machines slightly less). For this reason, compilation can sometimes fail and will require.
 
 The error `src/apps/namada lib could not compile due to previous errors. Exited with exit code: ` is a common error that can sometimes mean your computer ran out of memory when compiling. To resolve this, I have found closing all other applications and recompiling once or twice will do the trick. Otherwise more RAM will be needed.
 
@@ -102,7 +102,7 @@ If you missed setting up as a validator pre-genesis, this means you must set up 
 
 ### Tendermint
 
-When facing tendermint issues as a validator, the most common cause of the issue is that we are running the wrong version of tendermint. Keep an eye on the testnet docs [here](./testnets/README.md)
+When facing tendermint issues as a validator, the most common cause of the issue is that we are running the wrong version of tendermint. Keep an eye on the testnet docs [here](./introduction/quick-start/install/README.md)
 
 
 ```admonish note

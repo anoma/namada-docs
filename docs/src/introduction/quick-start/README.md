@@ -6,7 +6,7 @@ This guide is for those interested in operating a Namada validator node and assu
 
 ## Installing Namada
 
-See [the installation guide](./user-guide/install/README.md) for details on installing the Namada binaries. Commands in this guide will assume you have the Namada binaries (`namada`, `namadan`, `namadaw`, `namadac`) on your $PATH.
+See [the installation guide](./install/README.md) for details on installing the Namada binaries. Commands in this guide will assume you have the Namada binaries (`namada`, `namadan`, `namadaw`, `namadac`) on your $PATH.
 
 If you the binaries stored somewhere, but are not on your path (perhaps you downloaded the binaries), you can add the binaries to to your $PATH with:
 
@@ -171,7 +171,7 @@ The ledger node has been setup to use this validator's address and consensus key
 
 Once the `init-validator` transaction is applied in the block and the on-chain generated validator's address is stored in your wallet, you MUST restart the `namada ledger` node to start the node as a validator that you've just created.
 
-When you restart the node, you might notice log message "This node is not a validator" from Tendermint. This is expected, because your validator doesn't yet have any stake in the [PoS system](./user-guide/ledger/pos.md).
+When you restart the node, you might notice log message "This node is not a validator" from Tendermint. This is expected, because your validator doesn't yet have any stake in the [PoS system](../../pos.md).
 
 We will now add some stake to your validator account.
 
