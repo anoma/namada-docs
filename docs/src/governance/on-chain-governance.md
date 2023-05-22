@@ -12,24 +12,24 @@ Now, we need to create a json file `proposal.json` holding the content of our pr
 
 ```json
 {
-    "content": {
-        "title": "One Small Step for Namada, One Giant Leap for Memekind",
-        "authors": "email@proton.me",
-        "discussions-to": "forum.namada.net/t/namada-proposal/1",
-        "created": "2069-04-20T00:04:44Z",
-        "license": "MIT",
-        "abstract": "We present a proposal that will send our community to the moon. This proposal outlines all training necessary to accomplish this goal. All memers are welcome to join.",
-        "motivation": "When you think about it, the moon isn't actually that far away.The moon is only 384,400 km. We have not yet brought Namada to the moon, so it is only natural to use 101 as the prime number for our modular arithmetic operations. 384,400 (mod 101) = 95. 95 km is a distance that can be easily covered by a single person in a single day. Namada was produced by more than 100 people. So 95/100 = 0, rounded to the nearest integer. This means that Namada can reach the moon in no time.",
-        "details": "Bringing Namada to the moon in no time is easily achievable. We just need to pass this governance proposal and set the plan in action",
-        "requires": "420"
-    },
-    "author": "bengt",
-    "voting_start_epoch": 3,
-    "voting_end_epoch": 6,
-    "grace_epoch": 12,
-    "type": {
-        "Default":null
-        }
+    "proposal": {
+            "content": {
+                "title": "One Small Step for Namada, One Giant Leap for Memekind",
+                "authors": "email@proton.me",
+                "discussions-to": "forum.namada.net/t/namada-proposal/1",
+                "created": "2069-04-20T00:04:44Z",
+                "license": "MIT",
+                "abstract": "We present a proposal that will send our community to the moon. This proposal outlines all training necessary to accomplish this goal. All memers are welcome to join.",
+                "motivation": "When you think about it, the moon isn't actually that far away.The moon is only 384,400 km. We have not yet brought Namada to the moon, so it is only natural to use 101 as the prime number for our modular arithmetic operations. 384,400 (mod 101) = 95. 95 km is a distance that can be easily covered by a single person in a single day. Namada was produced by more than 100 people. So 95/100 = 0, rounded to the nearest integer. This means that Namada can reach the moon in no time.",
+                "details": "Bringing Namada to the moon in no time is easily achievable. We just need to pass this governance proposal and set the plan in action",
+                "requires": "420"
+            },
+            "author": "bengt",
+            "voting_start_epoch": 3,
+            "voting_end_epoch": 6,
+            "grace_epoch": 12,
+            },
+        "data": "<path/to/wasm.wasm>"
 }
 ```
 
@@ -41,13 +41,71 @@ You should change the value of:
 - `voting_start_epoch` with a future epoch (must be a multiple of 3) for which you want the voting to begin
 - `voting_end_epoch` with an epoch greater than `voting_start_epoch`, a multiple of 3, and by which no further votes will be accepted
 - `grace_epoch` with an epoch greater than `voting_end_epoch` + 6, in which the proposal, if passed, will come into effect
-- `type` with the correct type for your proposal, which can be one of the followings:
-    - `"type": {"Default":null}` for a default proposal without wasm code
-    - `"type": {"Default":"$PATH_TO_WASM_CODE"}` for a default proposal with an associated wasm code
-    - `"type": "PGFCouncil"` to initiate a proposal for a new council
-    - `"type": "ETHBridge"` for an ethereum bridge related proposal
 
+The `data` field and its structure is dependant on the type of proposal being submitted. Below we outline the structure of the "data" field for each type of proposal. The one given in the example above is for a `Default Proposal`.
 
+### Default Proposal 
+
+```json
+"data" : "<path/to/wasm.wasm>"
+```
+```admonish note
+The data field for default proposals is optional. This is in line with the nature of default proposals. If the proposals have code attached to them in order to change governance parameters, then this code will be represented as a wasm file and the path to this file will be given in the data field.
+```
+
+### ETH Bridge Proposal
+
+```json
+"data" : "<hex-encoded-bytes-of-what-will-be-signed-by-validators>"
+```
+```admonish note
+The encoding will be submitted as a string
+```
+
+### Steward Proposal
+
+```json
+"data" : [
+        {
+            "action" : "add",
+            "address" : "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+        }
+    ]     
+```
+
+```admonish note
+The data field for steward proposals is a list of actions to be taken. The actions can be either `add` or `remove` and the address is the address of the steward to be added or removed. In this way you can add or remove multiple stewards in a single proposal.
+```
+
+### PGF Proposal
+    
+```json
+"data" :
+        {
+            "continuous" : [
+                {
+                    "target": {
+                        "amount": 420,
+                        "address": "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+                    },
+                    "action" : "add",
+                },
+            ],
+            "retro" : [
+                {
+                    "target": {
+                        "amount": 1337,
+                        "address": "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+                    }
+                }
+            ]
+        },  
+```
+
+```admonish note
+The data field for PGF proposals contains both continuous and retroactive PGF funding actions. Within each action, the user can include multiple payments in the form of a vector. Within each payment, the target field contains the address of the recipient as well as the amount of NAM that they will receive. For continuous PGF funding, the amount specified will be sent at the end of each epoch. There is also the option to remove a recipient from the continuous PGF funding, by specifying an already existing continuous funding payment, and then also including the "remove" action. For retroactive PGF funding, the amount specified will be sent immediately.
+```
+## Submitting the proposal
 As soon as your `proposal.json` file is ready, you can submit the proposal with (making sure to be in the same directory as the `proposal.json` file):
 
 ```shell
@@ -68,18 +126,18 @@ namada client query-proposal --proposal-id 0
 
 where `0` is the proposal id.
 
-## Vote a proposal
+## Vote on a proposal
 
-Only validators and delegators can vote. Assuming you have a validator or a delegator account (in this example we are going to use `validator`), you can send a vote with the following command:
+Only delegators and delegates can vote on proposals. Assuming you fall into one of these categories, you can send a vote with the following command:
 
 ```shell
 namada client vote-proposal \
     --proposal-id 0 \
     --vote yay \
-    --signer validator
+    --signer <your-alias>
 ```
 
-where `--vote` can be either `yay` or `nay`. An optional `memo` field can be attached to the vote for pgf and eth bridge proposals.
+where `--vote` can be either `yay` or `nay`.
 
 ## Check the result
 
