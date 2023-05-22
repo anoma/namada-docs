@@ -29,6 +29,7 @@
       - [Shielded transfers](./users/shielded-transfers.md)
       - [Shielded Rewards](./users/shielded-rewards.md)
       - [Atomic Transactions](./users/atomic-transactions.md)
+      - [Proper Opsec for proper privacy](./users/privacy.md)
   - [Public Goods Stewards](./public-goods-stewards/README.md)
       - [Becoming a steward](./public-goods-stewards/electing.md)
       - [Voting for stewards and PGF proposals](./public-goods-stewards/voting.md)
