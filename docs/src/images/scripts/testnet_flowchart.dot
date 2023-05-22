@@ -1,0 +1,25 @@
+digraph Flowchart {
+    rankdir=UD;
+    node [shape=box];
+    A [label="Do you want to join a testnet"];
+    B [label="Nothing to do!"];
+    C [label="See Environment Setup"];
+    D [label="Do you want to join the testnet as a genesis validator?"];
+    E [label="See Applying as a Genesis Validator"];
+    F [label="Wait for the CHAIN_ID to be announced"];
+    G [label="Are you a genesis validator?"];
+    H [label="Do you want to reset the ledger state?"];
+    I [label="See running a full node"];
+    J [label="See migrating testnets"];
+    K [label="See genesis validator setup"];
+    A -> B [label="NO"];
+    A -> C [label="YES"];
+    C -> D;
+    D -> E [label="YES"];
+    D -> F [label="NO"];
+    F -> G;
+    G -> H [label="YES"];
+    G -> I [label="NO"];
+    H -> J [label="YES"];
+    H -> K [label="NO"];
+}

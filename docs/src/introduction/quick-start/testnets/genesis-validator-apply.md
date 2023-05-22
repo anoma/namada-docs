@@ -4,7 +4,7 @@ Before a testnet launches, you can apply to be a genesis validator.
 
 ## 1) Set up
 
-Follow [this guide](./genesis-validator-setup.md#pre-genesis) on how to generate your "pre-genesis" validator files.
+Follow [this guide](../../../validators/genesis-validator-setup.md#pre-genesis) on how to generate your "pre-genesis" validator files.
 
 After this, you'll have a `validator.toml` file, the contents of which will look something like the following:
 
