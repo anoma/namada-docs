@@ -63,4 +63,4 @@ Where `<path/to/steward_proposal.json>` is the path to the `steward_proposal.jso
 
 Once the proposal is submitted, it will be voted on by the community (see [voting](./voting.md)). If the proposal passes, the account will become a steward. If the proposal fails, the account will not become a steward.
 
-Once a multisignature account becomes elected (which will happen at the end of the `grace_epoch`), it will be able to submit proposals to the public goods funding pool (see [submitting proposals](./submitting-proposals.md)).
+Once a multisignature account becomes elected (which will happen at the end of the `grace_epoch`), it will be able to submit proposals to the public goods funding pool (see [submitting proposals](./proposing.md#proposing-funding).
