@@ -9,7 +9,7 @@ The cubic slash rate is a function of all infractions in a given epoch and its n
 
 $$9* (\sum_{i \in \text{infractions}} \frac{\text{vp}_{i}}{\text{vp}_{tot}})^2$$
 
-For each individual slash, the rate is ultimately determined as the maximum of the cubic slash rate and some nominal minimum rate that is dependent on the infraction type (see [system parameters](./bonding-mechanism.md#system-parameters)) and is capped at 1.0. The amount of slashed tokens is the rate multiplied by the stake (voting power) used to commit the infraction. The "cubic" in cubic slashing thus comes from the product of the rate, which is quadratic in the voting power, and the voting power itself.
+For each individual slash, the rate is ultimately determined as the maximum of the cubic slash rate and some nominal minimum rate that is dependent on the infraction type (see [system parameters](./objects-and-txs.md#system-parameters)) and is capped at 1.0. The amount of slashed tokens is the rate multiplied by the stake (voting power) used to commit the infraction. The "cubic" in cubic slashing thus comes from the product of the rate, which is quadratic in the voting power, and the voting power itself.
 
 Expressed in pseudocode:
 <!-- I want to make these two code blocks toggleable as in  https://rdmd.readme.io/docs/code-blocks#tabbed-code-blocks but can't seem to get it to work-->

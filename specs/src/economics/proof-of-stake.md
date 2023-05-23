@@ -2,7 +2,7 @@
 
 This section of the specification describes the proof-of-stake mechanism of Namada, which is largely modeled after [Cosmos bonded proof-of-stake](https://github.com/cosmos/cosmos-sdk/blob/master/x/staking/spec/README.md), but makes significant changes to bond storage representation, validator set change handling, reward distribution, and slashing, with the general aims of increased precision in reasoning about security, validator decentralisation, and avoiding unnecessary proof-of-stake-related transactions.
 
-This section is split into three subcomponents: the [bonding mechanism](./proof-of-stake/bonding-mechanism.md), [reward distribution](./proof-of-stake/reward-distribution.md), and [cubic slashing](./proof-of-stake/cubic-slashing.md).
+This section is split into three subcomponents: the [bonding mechanism](./proof-of-stake/objects-and-txs.md), [reward distribution](./proof-of-stake/reward-distribution.md), and [cubic slashing](./proof-of-stake/cubic-slashing.md).
 
 ## Context
 

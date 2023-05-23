@@ -50,7 +50,7 @@ Each proposal will be stored in a sub-key under the internal proposal address. T
 /\$GovernanceAddress/proposal/epoch/\$id: u64
 ```
 
-An epoch is a range of blocks or time that is defined by the base ledger and made available to the PoS system. This document assumes that epochs are identified by consecutive natural numbers. All the data relevant to PoS are [associated with epochs](../economics/proof-of-stake/bonding-mechanism.md#epoched-data).
+An epoch is a range of blocks or time that is defined by the base ledger and made available to the PoS system. This document assumes that epochs are identified by consecutive natural numbers. All the data relevant to PoS are [associated with epochs](../economics/proof-of-stake/objects-and-txs.md#epoched-data).
 
 Field semantics are as follows:
 
