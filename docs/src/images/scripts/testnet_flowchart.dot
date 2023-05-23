@@ -11,15 +11,17 @@ digraph Flowchart {
     H [label="Do you want to reset the ledger state?"];
     I [label="See running a full node"];
     J [label="See migrating testnets"];
-    K [label="See genesis validator setup"];
+    K [label="See running a genesis validator"];
     A -> B [label="NO"];
     A -> C [label="YES"];
     C -> D;
     D -> E [label="YES"];
     D -> F [label="NO"];
-    F -> G;
+    E -> F;
+    F -> G [label="CHAIN_ID ANNOUNCED!"];
     G -> H [label="YES"];
     G -> I [label="NO"];
     H -> J [label="YES"];
     H -> K [label="NO"];
+    J -> K;
 }
