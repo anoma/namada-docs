@@ -7,7 +7,7 @@ The cubic slash rate is a function of all infractions in a given epoch and its n
 2. Sum the fractional voting powers (relative to the total voting power of all consensus validators) of the misbehaving validator for each of the collected infractions. <!-- The total voting powers include all validators in one of the validator sets and all jailed validators (more on this later). -->
 3. The cubic slash rate is then proportional to this sum. Using $\text{vp}$ to indicate voting power, the cubic rate is expressed as:
 
-$$ 9* \left(\sum_{i \in \text{infractions}} \frac{\text{vp}_i}{\text{vp}_{\text{tot}}}\right)^2 $$
+$$9* (\sum_{i \in \text{infractions}} \frac{\text{vp}_{i}}{\text{vp}_{tot}})^2$$
 
 For each individual slash, the rate is ultimately determined as the maximum of the cubic slash rate and some nominal minimum rate that is dependent on the infraction type (see [system parameters](./bonding-mechanism.md#system-parameters)) and is capped at 1.0. The amount of slashed tokens is the rate multiplied by the stake (voting power) used to commit the infraction. The "cubic" in cubic slashing thus comes from the product of the rate, which is quadratic in the voting power, and the voting power itself.
 
@@ -98,7 +98,7 @@ fn calculate_cubic_slash_rate(
 }
 ```
 
-As a function, it can be drawn as (assuming $r_{\text{min}} = 1\text{\%}$):
+As a function, it can be drawn as (assuming $r_{ \text{min} } = 1\text{\%}$ ):
 
 [<img src="../images/cubic_slash.png" width="500"/>](../images/cubic_slash.png)
 
