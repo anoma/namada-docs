@@ -86,7 +86,7 @@ The tokens put into a bond are immediately deducted from the source account.
 
 An unbonding action (validator *unbond* or delegator *undelegate*) requested by the bond's source account in epoch `n` creates an "unbond" with withdrawable epoch set to `n + pipeline_length + unbounding_length + cubic_slash_window_width`. We also store the epoch of the bond(s) from which the unbond is created in order to determine if the unbond should be slashed if a fault occurred within the range of bond epoch (inclusive) and withdrawable epoch (exclusive). The "bond" from which the tokens are being unbonded is decremented in-place (in whatever epoch it was created in).
 
-Any unbond that is initiated in epoch `n` decrements the bond validator's stake (voting power) starting at epoch `n + pipeline_length`, with slashing applied. The token amount that is decremented is equal to the unbonded token amount, minus the amount of tokens that has already been previously slashed.
+Any unbond that is initiated in epoch `n` decrements the bond validator's stake (voting power) starting at epoch `n + pipeline_length`, with slashing applied. The token amount that is decremented is equal to the unbonded token amount, minus the amount of tokens that has already been slashed.
 
 An "unbond" with withdrawable epoch set to `n` may be withdrawn by the bond's source address in or any time after the epoch `n`. Once withdrawn, the unbond is deleted and the tokens are credited to the source account. Slashed tokens for the relevant unbond are also recomputed during withdrawing, as it is possible that new slashes that affect the unbond were discovered after the initialization of the unbond. After computing the number of tokens to be slashed from the total unbonded token amount, the slashed token amount is transferred from the PoS address to the slash pool address, while the remaining token amount is transferred from the PoS address to the bond's source address.
 
@@ -103,7 +103,7 @@ These are the types of offenses:
   - block production: a block producer has created two different blocks for the same height
 - Invalidity:
   - voting: validators have voted on invalid block
-  - block production: a block producer has produced invalid block
+  - block production: a block producer has produced invalid block (when supported by Comet)
 
 Unavailability is not considered an offense, but a validator who hasn't voted will not receive rewards.
 
