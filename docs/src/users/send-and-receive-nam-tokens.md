@@ -12,7 +12,9 @@ Then, send a transaction to initialize your new established account and save its
 namada client init-account \
   --alias my-new-acc \
   --public-key my-key \
-  --source my-key
+  --source my-key \
+  --signing-keys my-key \
+  --threshold 1
 ```
 
 Once this transaction has been applied, the client will automatically see the new address created by the transaction and add it to your Wallet with the chosen alias `my-new-acc`.
@@ -28,7 +30,8 @@ namada client transfer \
   --source my-new-acc \
   --target validator-1 \
   --token NAM \
-  --amount 10
+  --amount 10 \
+  --signers my-key
 ```
 
 This command will attempt to find and use the key of the source address to sign the transaction.

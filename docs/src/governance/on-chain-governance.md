@@ -134,7 +134,7 @@ Only delegators and delegates can vote on proposals. Assuming you fall into one 
 namada client vote-proposal \
     --proposal-id 0 \
     --vote yay \
-    --signer <your-alias>
+    --signers <your-alias>
 ```
 
 where `--vote` can be either `yay` or `nay`.

@@ -27,7 +27,7 @@ transparent account with some token balance.
 You can randomly generate a new Spending Key with:
 
 ```shell
-namadaw masp gen-key --alias [your-spending-key-alias]
+namadaw masp gen-key --alias <your-spending-key-alias>
 ```
 
 ```admonish info
@@ -41,8 +41,8 @@ To create a payment address from your Spending key, use:
 
 ```shell
 namadaw masp gen-addr \
-    --key [your-spending-key-alias] \
-    --alias [your-payment-address-alias]
+    --key <your-spending-key-alias> \
+    --alias <your-payment-address-alias>
 ```
 
 ```admonish note
@@ -56,8 +56,8 @@ transparent account to your shielded account with something like:
 
 ```shell
 namadac transfer \
-    --source [your-established-account-alias] \
-    --target [your-payment-address-alias] \
+    --source <your-established-account-alias> \
+    --target <your-payment-address-alias> \
     --token btc \
     --amount 100
 ```
@@ -68,7 +68,7 @@ Once this transfer has been broadcasted, validated, and executed on the blockcha
 balance:
 
 ```shell
-namadac balance --owner [your-spending-key-alias]
+namadac balance --owner <your-spending-key-alias>
 ```
 
 ### Shielded transfers
@@ -78,11 +78,11 @@ another shielded address:
 
 ```shell
 namadac transfer \
-    --source [your-spending-key-alias] \
-    --target [some-payment-address] \
+    --source <your-spending-key-alias> \
+    --target <some-payment-address] \
     --token btc \
     --amount 50 \
-    --signer [your-implicit-account-alias]
+    --signers <your-implicit-account-alias>
 ```
 
 ### Unshielding transfers
@@ -91,11 +91,11 @@ You can also transfer back your balance to a transparent account:
 
 ```shell
 namadac transfer \
-    --source [your-spending-key-alias] \
-    --target [some-transparent-address-alias] \
+    --source <your-spending-key-alias> \
+    --target <some-transparent-address-alias> \
     --token btc \
     --amount 50 \
-    --signer [your-implicit-account-alias]
+    --signers <your-implicit-account-alias>
 ```
 
 ### Shielded Address/Key Generation

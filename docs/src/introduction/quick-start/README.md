@@ -18,7 +18,7 @@ If you build from source, and run `make install`, the binaries will be installed
 
 ## Joining a network
 
-See [the testnets page](./testnets/README.md) for details of how to join a testnet. The rest of this guide will assume you have joined a testnet chain using the `namadac utils join-network --chain-id [some-chain-id]` command.
+See [the testnets page](./testnets/README.md) for details of how to join a testnet. The rest of this guide will assume you have joined a testnet chain using the `namadac utils join-network --chain-id <some-chain-id]` command.
 
 ## Run a ledger node
 
@@ -99,7 +99,7 @@ namadac transfer \
   --target example-established \
   --token NAM \
   --amount 1000 \
-  --signer example-implicit
+  --signers example-implicit
 ```
 ```shell
 ➜ Jan 06 22:24:32.926  INFO namada_apps::cli::context: Chain ID: namada-testnet-1.2.bf0181d9f7e0
