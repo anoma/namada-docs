@@ -1,7 +1,4 @@
-# 3) (OPTIONAL) Reset your validator node
-**You can skip to 3.1 if you don't need to reset the ledger state (most can skip to 3.1)**
-
-## 3.1) Run your node as a genesis validator
+# Run your node as a genesis validator
 
 #### 1. Wait for the genesis file to be ready, `CHAIN_ID`.
 #### 2. Join the network with the `CHAIN_ID`
