@@ -21,11 +21,11 @@ To vote on an offline proposal use the following command:
 ```shell
 namada client vote-proposal --data-path proposal \
     --vote yay \
-    --signerss validator \
+    --signers validator \
     --offline
 ```
 
-This command will create a `proposal-vote-${address}` file (where address is the `--signerss` address).
+This command will create a `proposal-vote-${address}` file (where address is the `--signers` address).
 
 ## Tally off-chain proposal
 

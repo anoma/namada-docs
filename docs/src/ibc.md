@@ -198,7 +198,7 @@ ${NAMADA_DIR}/target/release/namadac transfer \
   --target relayer \
   --token nam \
   --amount 1000 \
-  --signerss relayer \
+  --signers relayer \
   --ledger-address 127.0.0.1:26657
 ```
 
