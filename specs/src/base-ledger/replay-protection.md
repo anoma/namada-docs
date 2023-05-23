@@ -1,6 +1,8 @@
 # Replay Protection
 
-Replay protection is a mechanism to prevent _replay attacks_, which consist of a malicious user resubmitting an already executed transaction (often shortened to "tx" in this document) to the ledger.
+Replay protection is a mechanism to prevent _replay attacks_, which consist of a
+malicious user resubmitting an already executed transaction (often shortened to
+"tx" in this document) to the ledger.
 
 A replay attack causes the state of the machine to deviate from the intended one
 (from the perspective of the parties involved in the original transaction) and
@@ -72,18 +74,29 @@ carries the Wasm code to be executed and the associated data.
 A transaction is constructed as follows:
 
 1. The struct `Tx` is produced
-2. The hash of this transaction gets signed by the author, producing another `Tx` where the data field holds the concatenation of the original data and the signature (`SignedTxData`)
-3. The produced transaction is encrypted and embedded in a `WrapperTx`. The encryption step is there for a future implementation of threshold transaction decryption (see [Ferveo](https://github.com/anoma/ferveo))
-4. Finally, the `WrapperTx` gets converted to a `Tx` struct, signed over its hash (same as step 2, relying on `SignedTxData`), and submitted to the network
+2. The hash of this transaction gets signed by the author, producing another
+   `Tx` where the data field holds the concatenation of the original data and
+   the signature (`SignedTxData`)
+3. The produced transaction is encrypted and embedded in a `WrapperTx`. The
+   encryption step is there for a future implementation of threshold decryption
+   scheme (see [Ferveo](https://github.com/anoma/ferveo))
+4. Finally, the `WrapperTx` gets converted to a `Tx` struct, signed over its
+   hash (same as step 2, relying on `SignedTxData`), and submitted to the
+   network
 
 Note that the signer of the `WrapperTx` and that of the inner one don't need to
 coincide, but the signer of the wrapper will be charged with gas and fees. In
 the execution steps:
 
 1. The `WrapperTx` signature is verified and, only if valid, the tx is processed
-2. In the following height the proposer decrypts the inner tx, checks that the hash matches that of the `tx_hash` field and, if everything went well, includes the decrypted tx in the proposed block
+2. In the following height the proposer decrypts the inner tx, checks that the
+   hash matches that of the `tx_hash` field and, if everything went well,
+   includes the decrypted tx in the proposed block
 3. The inner tx will then be executed by the WASM runtime
-4. After the execution, the affected validity predicates (also mentioned as VPs in this document) will check the storage changes and (if relevant) the signature of the transaction: if the signature is not valid, the VP will deem the transaction invalid and the changes won't be applied to the storage
+4. After the execution, the affected validity predicates (also mentioned as VPs
+   in this document) will check the storage changes and (if relevant) the
+   signature of the transaction: if the signature is not valid, the VP will deem
+   the transaction invalid and the changes won't be applied to the storage
 
 The signature checks effectively prevent any tampering with the transaction data
 because that would cause the checks to fail and the transaction to be rejected.
@@ -180,52 +193,33 @@ the hash in storage (both in case of success or failure of the tx).
 #### Optional unshielding
 
 The optional `unshield` field is supposed to carry an unshielding masp
-`Transfer`. Given this assumption, there's no need to manage it since masp has
-an internal replay protection mechanism.
+`Transaction`. Given this assumption, there's no need to manage it since masp
+has an internal replay protection mechanism.
 
-Still, since this field represents a valid, signed `Tx`, there are three
-possible attacks that can be run by leveraging this field:
+Still, since this field represents a valid, `Transaction`, there is a possible
+attack that can be run by leveraging this field: a malicious user could extract
+this data before it makes it to a block, embedd it into a valid, masp signed
+`Tx` and apply it in advance.
 
-1. If the wrapper signer constructs an `unshield` tx that actually encodes
-   another type of transaction, then this one can be extracted and executed
-   separately
-2. A malicious user could extract this tx before it makes it to a block and play
-   it in advance
-3. A combination of the previous two
-
-In the first case, the unshielding operation would fail because of the checks
-run in protocol, but the tx itself could be extracted, wrapped and submitted to
-the network. This issue could be solved with the mechanism explained in the
-previous section.
-
-The second attack, instead, is performed before the original tx is placed in a
-block and, therefore, cannot be prevented with a replay protection mechanism.
-The only result of this attack would be that the original wrapper transaction
-would fail since it would attempt to replay a masp transfer: in this case, the
-submitter of the original tx can recreate it without the need for the
-unshielding operation since the attacker has already performed it.
-
-In the last case the unshielding transaction (which is not a masp transfer)
-could be encrypted, wrapped and executed before the original transaction is
-inserted in a block. When the latter gets executed the protocol checks detect
-that this is not a masp unshielding transfer and reject it.
+This attack is performed before the original tx is placed in a block and,
+therefore, cannot be prevented with a replay protection mechanism. The only
+result of this attack would be that the original wrapper transaction would fail
+since it would attempt to replay a masp transfer: in this case, the submitter of
+the original tx can recreate it without the need for the unshielding operation
+since the attacker has already performed it.
 
 Given that saving the hash of the unshielding transaction is redundant in case
-of a proper masp transfer and it doesn't prevent the second scenario in case of
-non-masp transaction, Namada does not implement the replay protection mechanism
-on the unshielding transaction, whose correctness is left to the wrapper signer
-and the masp validity predicate (in case the unshielding tx was indeed a correct
-masp unshield transfer). The combination of the fee system, the validity
-predicates set and the protocol checks on the unshielding operation guarantees
-that even if one of the attacks explained in this section is performed:
+of a proper masp transfer, Namada does not implement the replay protection
+mechanism on the unshielding transaction, whose correctness is left to the masp
+validity predicate. The combination of the fee system, the validity predicates
+set and the protocol checks on the unshielding operation guarantees that even if
+the attack explained in this section is performed:
 
 - The original wrapper signer doesn't suffer economic damage (the wrapper
   containing the invalid unshielding forces the block rejection without fee
   collection)
 - The attacker has to pay fees on the rewrapped tx preventing him to submit
   these transactions for free
-- The invalid unshielding transaction must still be a valid transaction per the
-  VPs triggered
 
 #### Governance proposals
 
