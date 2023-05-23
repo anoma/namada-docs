@@ -1,4 +1,4 @@
-# Bonding mechanism
+# Proof-of-stake objects and transactions
 
 ### Epoched data
 
