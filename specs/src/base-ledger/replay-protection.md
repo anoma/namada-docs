@@ -78,8 +78,8 @@ A transaction is constructed as follows:
    `Tx` where the data field holds the concatenation of the original data and
    the signature (`SignedTxData`)
 3. The produced transaction is encrypted and embedded in a `WrapperTx`. The
-   encryption step is there for a future implementation of threshold transaction
-   decryption (see [Ferveo](https://github.com/anoma/ferveo))
+   encryption step is there for a future implementation of threshold decryption
+   scheme (see [Ferveo](https://github.com/anoma/ferveo))
 4. Finally, the `WrapperTx` gets converted to a `Tx` struct, signed over its
    hash (same as step 2, relying on `SignedTxData`), and submitted to the
    network
