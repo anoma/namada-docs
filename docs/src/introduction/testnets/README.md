@@ -14,12 +14,12 @@ If you find a bug, please submit an issue with the `bug` [issue template](https:
 ## How to join a Namada testnet
   1. [Environment setup](./environment-setup.md)
   2. [Pre-genesis instructions](./pre-genesis.md)
-    1. [Pre-genesis validator setup](../../../validators/genesis-validator-setup.md)
+    1. [Pre-genesis validator setup](../../validators/genesis-validator-setup.md)
     2. [Pre-genesis validator apply](./genesis-validator-apply.md)
-  3. [Running your genesis validator](../../../validators/run-your-genesis-validator.md)
-  4. [Running a full node](../../../running-a-full-node.md)
+  3. [Running your genesis validator](../../validators/run-your-genesis-validator.md)
+  4. [Running a full node](../../running-a-full-node.md)
   5. [Becoming a validator post-genesis](./post-genesis-validator.md)
-![testnet_flowchart](../../../images/testnet_flowchart.png)
+![testnet_flowchart](../../images/testnet_flowchart.png)
 
 The Namada public testnet is permissionless, anyone can join without the authorisation of a centralised party. Expect frequent upgrades (every two weeks).
 
