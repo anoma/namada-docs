@@ -43,7 +43,6 @@
       - [Off-chain proposals](./governance/off-chain-governance.md)
   - [The Ledger](./ledger.md)
   - [Wallet guide](./wallet/README.md)
-    - [Namada addresses](./wallet/an-introduction-to-namada-addresses.md)
     - [Established Accounts](./wallet/established-accounts.md)
     - [File system wallet](./wallet/file-system-wallet.md)
     - [Web wallet](./wallet/web-wallet.md)

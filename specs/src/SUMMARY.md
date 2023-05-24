@@ -29,7 +29,7 @@
     - [Fee system](./economics/fee-system.md)
     - [Inflation system](./economics/inflation-system.md)
     - [Proof-of-stake](./economics/proof-of-stake.md)
-        - [Bonding mechanism](./economics/proof-of-stake/bonding-mechanism.md)
+        - [Objects and Transactions](./economics/proof-of-stake/objects-and-txs.md)
         - [Cubic slashing](./economics/proof-of-stake/cubic-slashing.md)
         - [Reward distribution](./economics/proof-of-stake/reward-distribution.md)
     - [Shielded pool incentives](./economics/shielded-pool-incentives.md)
