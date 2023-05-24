@@ -21,5 +21,8 @@ ADD $path .
 RUN mdbook-admonish install
 RUN make build
 
+# taken from https://github.com/rust-lang/mdBook/issues/984
+RUN find $MD_BOOK_ROOT/src/ -type f -name "*.md" ! -iname "SUMMARY.md" -exec sed -ri 's/(\[.*\])\((.*\/)?(readme\.md)(#.*)?\)/\1\(\2index\.md\4\)/gI' {} \;
+
 FROM devforth/spa-to-http:latest
 COPY --from=builder book/html/ . 
