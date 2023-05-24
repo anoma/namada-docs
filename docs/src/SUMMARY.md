@@ -46,7 +46,6 @@
     - [Established Accounts](./wallet/established-accounts.md)
     - [File system wallet](./wallet/file-system-wallet.md)
     - [Web wallet](./wallet/web-wallet.md)
-    - [Paper wallet](./wallet/paper-wallet.md)
     - [Hardware wallet](./wallet/hardware-wallet.md)
     - [Fees on Namada](./wallet/fees.md)  
 - [Troubleshooting](./troubleshooting.md)

@@ -12,11 +12,12 @@ The base directory has been moved from `.namada` to `.local/share/namada` on Lin
 This is the right time to save any logs file you want to share with us!
 
 
-### 0. Locate the namada base directory
+### Locate the namada base directory
 
 Depending on the testnet you are migrating from, the base directory will be located in different places.
 For this reason, we will save the base directory path to a variable.
 
+#### Before `v0.15.3`
 If you are migrating from a testnet BEFORE `v0.15.3`, then your home directory and relevant files will be located in a `.namada`. The location of this directory depends where you initially ran the command `namadac utils join-network --chain-id <CHAIN_ID> --genesis-validator <ALIAS>`. It will be located in the directory in which that command was executed.
 
 Once located, you can save the base directory path to a variable. For example, if the join-network command was ran from your home directory, you can run:
@@ -24,6 +25,7 @@ Once located, you can save the base directory path to a variable. For example, i
 export BASE_DIR=$HOME/.namada
 ```
 
+#### After `v0.15.3`
 If you are migrating from a testnet AFTER `v0.15.3`, then your base directory and relevant files will be located in `.local/share/namada` on Linux and `Library/Application Support/Namada` on MacOS.
 
 ```admonish note
