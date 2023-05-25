@@ -35,8 +35,7 @@
     - [Voting for stewards and PGF proposals](./public-goods-stewards/voting.md)
     - [PGF proposals (stewards only)](./public-goods-stewards/proposing.md)
 <!-- - [Delegators](./delegators/README.md)    -->
-- [Cubic Proof-of-Stake](./pos.md)   
-- [IBC](./ibc.md)
+- [Cubic Proof-of-Stake](./pos.md)
 - [Governance](./governance/README.md)
     - [On-chain proposals](./governance/on-chain-governance.md)
     - [Off-chain proposals](./governance/off-chain-governance.md)
@@ -46,7 +45,10 @@
   - [File system wallet](./wallet/file-system-wallet.md)
   - [Web wallet](./wallet/web-wallet.md)
   - [Hardware wallet](./wallet/hardware-wallet.md)
-  - [Fees on Namada](./wallet/fees.md)  
+  - [Fees on Namada](./wallet/fees.md)
+- [Experimenting with Namada](./experimental/README.md)
+  - [Spinning up a local network](./experimental/local-network.md)
+  - [IBC](./ibc.md)
 - [Troubleshooting](./troubleshooting.md)
 - [FAQ](./FAQ.md)
   
