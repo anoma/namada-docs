@@ -94,7 +94,7 @@ The wallet web app should accept a configuration per-environment that will conta
 - [Namada Ledger IBC Rust Docs](https://docs.namada.network/master/rustdoc/namada/ledger/ibc/)
 - [HackMD IBC Summary](https://hackmd.io/H2yGO3IQRLiWCPWwQQdVow)
 - [ibc-rs](https://github.com/informalsystems/ibc-rs/)
-- [ICS020 - Fungible Token Transfers](https://github.com/cosmos/ibc/blob/master/spec/app/ics-020-fungible-token-transfer/README.md)
+- [ICS020 - Fungible Token Transfers](https://github.com/cosmos/ibc/blob/master/spec/app/ics-020-fungible-token-transfer/intro.md)
 - <https://spec.namada.network/master/architecture/namada/ibc.html>
 - <https://ibc.cosmos.network/main/ibc/overview.html>
 - <https://ibcprotocol.org/>

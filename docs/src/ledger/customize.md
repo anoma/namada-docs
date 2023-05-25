@@ -28,7 +28,7 @@ In fact, most of the functionality in the Namada ledger is being built leveragin
 
 ## ☑ Validity predicates
 
-A custom validity predicates can be built from scratch using `vp_template` (from root directory [`wasm/vp_template`](https://github.com/anoma/namada/tree/v0.5.0/wasm/vp_template)), which is Rust code compiled to WASM. Consult its `README.md` to find out more.
+A custom validity predicates can be built from scratch using `vp_template` (from root directory [`wasm/vp_template`](https://github.com/anoma/namada/tree/v0.5.0/wasm/vp_template)), which is Rust code compiled to WASM. Consult its `intro.md` to find out more.
 
 You can also check out the pre-built validity predicates' source code in the [`wasm/wasm_source`](https://github.com/anoma/namada/tree/v0.5.0/wasm/wasm_source), where each sub-module that begins with `vp_` implements a validity predicate. For example the [`vp_user`](https://github.com/namada/namada/blob/v0.5.0/wasm/wasm_source/src/vp_user.rs) is the default validity predicate used for established accounts (created with `init-account` command).
 
@@ -89,7 +89,7 @@ namada client update --address my-new-acc --code-path my_vp.wasm
 
 A transaction must contain a WASM code that can perform arbitrary storage changes. It can also contain arbitrary data, which will be passed onto the transaction and validity predicates when the transaction is being applied.
 
-A custom transaction can be built from scratch using `tx_template` (from root directory [`wasm/tx_template`](https://github.com/anoma/namada/tree/v0.5.0/wasm/tx_template)), which is Rust code compiled to WASM. Consult its `README.md` to find out more.
+A custom transaction can be built from scratch using `tx_template` (from root directory [`wasm/tx_template`](https://github.com/anoma/namada/tree/v0.5.0/wasm/tx_template)), which is Rust code compiled to WASM. Consult its `intro.md` to find out more.
 
 For some inspiration, check out the pre-built transactions source code in the [`wasm/wasm_source`](https://github.com/anoma/namada/tree/v0.5.0/wasm/wasm_source), where each sub-module that begins with `tx_` implements a transaction.
 
