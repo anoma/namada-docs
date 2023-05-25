@@ -48,7 +48,7 @@
   - [Fees on Namada](./wallet/fees.md)
 - [Experimenting with Namada](./experimental/intro.md)
   - [Spinning up a local network](./experimental/local-network.md)
-  - [IBC](./ibc.md)
+  - [IBC](./experimental/ibc.md)
 - [Troubleshooting](./troubleshooting.md)
 - [FAQ](./FAQ.md)
   
