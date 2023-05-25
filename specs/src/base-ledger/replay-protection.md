@@ -30,7 +30,7 @@ implement the replay protection mechanism.
 
 ### Encryption-Authentication
 
-The current implementation of Namada is built on top of Tendermint which
+The current implementation of Namada is built on top of CometBFT which
 provides an encrypted and authenticated communication channel between every two
 nodes to prevent a _man-in-the-middle_ attack (see the detailed
 [spec](https://github.com/tendermint/tendermint/blob/29e5fbcc648510e4763bd0af0b461aed92c21f30/spec/p2p/peer.md)).
@@ -971,7 +971,7 @@ All these checks are also run in `process_proposal` with an addition: validators
 also check that the wrapper signer has enough funds to pay the fee. This check
 should not be done in mempool because the funds available for a certain address
 are variable in time and should only be checked at block inclusion time. If any
-of the checks fail here, the entire block is rejected forcing a new Tendermint
+of the checks fail here, the entire block is rejected forcing a new CometBFT
 round to begin (see a better explanation of this choice in the
 [relative](#block-rejection) section).
 

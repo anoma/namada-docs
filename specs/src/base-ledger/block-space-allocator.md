@@ -1,6 +1,6 @@
 # Block space allocator
 
-Block space in Tendermint is a resource whose management is relinquished to the 
+Block space in CometBFT is a resource whose management is relinquished to the 
 running application. This section covers the design of an abstraction that 
 facilitates the process of transparently allocating space for transactions in a 
 block at some height $H$, whilst upholding the safety and liveness properties 
@@ -143,7 +143,7 @@ validated at the `ProcessProposal` phase. The validation conditions are
 relaxed, compared to the rigid block structure imposed on blocks during 
 `PrepareProposal` (i.e. with decrypted, protocol and encrypted transactions 
 appearing in this order, as [examplified above](#example)). Let us fix $H$ as 
-the height of the block $B$ currently being decided through Tendermint's 
+the height of the block $B$ currently being decided through CometBFT's 
 consensus mechanism, $P$ as the batch of transactions proposed at $H$ as $B$'s 
 payload and $V$ as the current set of active validators. To vote on $P$, each 
 validator $v \in V$ checks:

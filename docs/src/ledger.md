@@ -29,8 +29,8 @@ that file to change the configuration of your node. All values can also be set
 via environment variables. Names of the recognized environment variables are
 derived from the configuration keys by: uppercase every letter of the key,
 insert `.` or `__` for each nested value and prepend `NAMADA_`. For example,
-option `p2p_pex` in `[ledger.tendermint]` can be set by
-`NAMADA_LEDGER__TENDERMINT__P2P_PEX=true|false` or
-`NAMADA_LEDGER.TENDERMINT.P2P_PEX=true|false` in the environment (Note: only the
+option `p2p_pex` in `[ledger.cometbft]` can be set by
+`NAMADA_LEDGER__COMETBFT_P2P_PEX=true|false` or
+`NAMADA_LEDGER.COMETBFT.P2P_PEX=true|false` in the environment (Note: only the
 double underscore form can be used in Bash, because Bash doesn't allow dots in
 environment variable names).
