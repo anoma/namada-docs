@@ -22,7 +22,7 @@ Over HTTP, using the `abci_query` endpoint, we can query the ledger by providing
 - Query epoch: `epoch`
 - Is known address?: `has_key/#{address}/?`
 
-There are many other types of queries in addition to `abci_query` that can be issued to Tendermint. See [https://docs.tendermint.com/master/rpc/](https://docs.tendermint.com/master/rpc/) for more information.
+There are many other types of queries in addition to `abci_query` that can be issued to CometBFT. See [their docs](https://docs.cometbft.com/v0.37/) for more information.
 
 ### WebSocket Client
 

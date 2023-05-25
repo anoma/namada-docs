@@ -275,7 +275,7 @@ If the proposal outcome is positive and current epoch is equal to the proposal `
 In case the proposal was rejected or if any error, in the `finalize_block` function:
 - Burn the locked funds
 
-The result is then signaled by creating and inserting a [`Tendermint Event`](https://github.com/tendermint/tendermint/blob/ab0835463f1f89dcadf83f9492e98d85583b0e71/docs/spec/abci/abci.md#events.
+The result is then signaled by creating and inserting a [`CometBFT Event`](https://github.com/tendermint/tendermint/blob/ab0835463f1f89dcadf83f9492e98d85583b0e71/docs/spec/abci/abci.md#events.
 
 
 ## Off-chain protocol

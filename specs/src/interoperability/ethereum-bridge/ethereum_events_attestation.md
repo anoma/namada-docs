@@ -62,7 +62,7 @@ nodes as part of the ledger code based on the aggregate of votes
 by validators for specific events. That is, changes to
 `/eth_msgs` happen
 in block `n` in a deterministic manner based on the votes included in the
-block proposal for block `n`. Depending on the underlying Tendermint
+block proposal for block `n`. Depending on the underlying CometBFT
 version, these votes will either be included as vote extensions or as
 protocol transactions.
 
@@ -73,7 +73,7 @@ this storage from wasm transactions.
 ### Including events into storage
 
 For every Namada block proposal, block proposer should include the votes for
-events from other validators into their proposal. If the underlying Tendermint
+events from other validators into their proposal. If the underlying CometBFT
 version supports vote extensions, consensus invariants guarantee that a
 quorum of votes from the previous block height can be included. Otherwise,
 validators can only submit votes by broadcasting protocol transactions,
@@ -93,7 +93,7 @@ the following.
 ```rust
 /// This struct will be created and signed over by each
 /// active validator, to be included as a vote extension at the end of a
-/// Tendermint PreCommit phase or as Protocol Tx.
+/// CometBFT PreCommit phase or as Protocol Tx.
 pub struct Vext {
     /// The block height for which this [`Vext`] was made.
     pub block_height: BlockHeight,

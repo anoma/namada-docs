@@ -6,7 +6,7 @@
     - [Binaries](./introduction/install/from-binary.md)
       - [Overview](./introduction/install/binaries/overview-of-binaries.md)
     - [Docker](./introduction/install/from-docker.md)
-  - [Install Tendermint](./introduction/install/installing-tendermint.md)
+  - [Install CometBFT (formerly Tendermint)](./introduction/install/installing-cometbft.md)
   - [Testnets](./introduction/testnets/intro.md)
     - [Environment setup](./introduction/testnets/environment-setup.md)
     - [Migrating testnets](./introduction/testnets/migrating-testnets.md)

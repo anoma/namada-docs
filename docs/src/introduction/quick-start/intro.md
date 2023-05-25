@@ -170,7 +170,7 @@ The ledger node has been setup to use this validator's address and consensus key
 
 Once the `init-validator` transaction is applied in the block and the on-chain generated validator's address is stored in your wallet, you MUST restart the `namada ledger` node to start the node as a validator that you've just created.
 
-When you restart the node, you might notice log message "This node is not a validator" from Tendermint. This is expected, because your validator doesn't yet have any stake in the [PoS system](../../pos.md).
+When you restart the node, you might notice log message "This node is not a validator" from CometBFT. This is expected, because your validator doesn't yet have any stake in the [PoS system](../../pos.md).
 
 We will now add some stake to your validator account.
 

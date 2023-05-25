@@ -44,7 +44,7 @@ Fees are not distributed among the validators who actively participate in the
 block validation process. This is because a tx submitter could be side-paying
 the block proposer for tx inclusion which would prevent the correct distribution
 of fees among validators. The fair distribution of fees is enforced by the
-stake-proportional block proposer rotation policy of Tendermint.
+stake-proportional block proposer rotation policy of CometBFT.
 
 By requesting an upfront payment, fees also serve as prevention against DOS
 attacks since the signer needs to pay for all the submitted transactions. More
@@ -113,10 +113,10 @@ balance itself which would cause a late rejection of the block in
 If enough funds are available, these are deducted from the unshielded storage
 balances of the fee payers and directed to the balance of the block proposer. If
 instead, the balance is not enough to cover fees, then the proposed block is
-considered invalid and rejected, the WAL is discarded and a new Tendermint round
+considered invalid and rejected, the WAL is discarded and a new CometBFT round
 is initiated.
 
-From the consensus block proposer's address (included in the Tendermint
+From the consensus block proposer's address (included in the CometBFT
 request), it is possible to derive the relative Namada address for the payment:
 should, for any reason, the proposer's address be missing in the incoming
 request, fees for that block will be burned.
@@ -305,13 +305,13 @@ This constraint is given by the following two:
 - The compliance of the cumulative wrapper transactions' `GasLimit` with the
   maximum gas allowed for a block
 
-Tendermint provides a `BlockSize.MaxGas` parameter, and applies some optional
+CometBFT provides a `BlockSize.MaxGas` parameter, and applies some optional
 validation in mempool if this parameter is initialized. It doesn't instead
 perform any check in consensus, leaving this task to the application itself (see
-[tendermint app spec](https://github.com/heliaxdev/tendermint/blob/78c705573710d5b41d0213080260f9eeb6b04ca7/spec/abci/apps.md#gas),
-[tendermint spec](https://github.com/heliaxdev/tendermint/blob/78c705573710d5b41d0213080260f9eeb6b04ca7/spec/core/data_structures.md#blockparams)
+[cometbft app spec](https://github.com/heliaxdev/tendermint/blob/78c705573710d5b41d0213080260f9eeb6b04ca7/spec/abci/apps.md#gas),
+[cometbft spec](https://github.com/heliaxdev/tendermint/blob/78c705573710d5b41d0213080260f9eeb6b04ca7/spec/core/data_structures.md#blockparams)
 and [this issue](https://github.com/tendermint/tendermint/issues/2310)).
-Therefore, instead of using the Tendermint provided param (and its mempool
+Therefore, instead of using the CometBFT provided param (and its mempool
 validation), Namada introduces a `MaxBlockGas` protocol parameter. This limit is
 checked during mempool and block validation, in `process_proposal`: if the block
 exceeds the maximum amount of gas allowed, the validators will reject it.

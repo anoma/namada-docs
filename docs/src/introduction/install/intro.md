@@ -7,9 +7,9 @@ At the moment, Namada only supports Linux and macOS.
 ## Pre-requisites
 There are certain pre-requisites that need to be installed before installing Namada. 
 
-### Installing Tendermint
+### Installing CometBFT
 
-Follow [these instructions](./installing-tendermint.md) in order to setup Tendermint.
+Follow [these instructions](./installing-cometbft.md) in order to setup CometBFT.
 
 ### Installing GLIBC
 

@@ -100,9 +100,9 @@ sudo apt-get install libssl-dev
 
 If you missed setting up as a validator pre-genesis, this means you must set up to become one post-genesis. It is not possible to add pre-genesis validators once the chain has been launched (as by definition). Instead, any full-node can become a validator through self-bonding NAM tokens.
 
-### Tendermint
+### CometBFT (tendermint) issues
 
-When facing tendermint issues as a validator, the most common cause of the issue is that we are running the wrong version of tendermint. Keep an eye on the testnet docs [here](./introduction/install/intro.md)
+When facing CometBFT issues as a validator, the most common cause of the issue is that we are running the wrong version of CometBFT. Keep an eye on the testnet docs [here](./introduction/install/intro.md)
 
 
 ```admonish note

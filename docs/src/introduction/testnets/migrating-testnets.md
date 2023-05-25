@@ -60,7 +60,7 @@ mkdir $HOME/backup-pregenesis && cp -r $BASE_DIR/pre-genesis $HOME/backup-pregen
 rm -rf $BASE_DIR
 ```
 
-### 4. Check that namada and tendermint binaries are correct. `namada --version` should give `v0.15.3` and `tendermint version` should give `0.1.4-abciplus`
+### 4. Check that namada and cometbft binaries are correct. `namada --version` should give `v0.15.3` and `cometbft version` should give `0.37.1`
 
 ### 5. Create a base directory for the ledger
 #### Linux

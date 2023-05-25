@@ -16,7 +16,7 @@ The commission rate charged by the validator for delegation rewards and the maxi
 
 This command will generate the keys required for running a validator:
 
-- Consensus key, which is used in [signing blocks in Tendermint](https://docs.tendermint.com/master/nodes/validators.html#validator-keys).
+- Consensus key, which is used in [signing blocks in CometBFT](https://docs.tendermint.com/master/nodes/validators.html#validator-keys).
 - Validator account key for signing transactions on the validator account, such as token self-bonding, unbonding and withdrawal, validator keys, validity predicate, state and metadata updates.
 
 Then, it submits a transaction to the ledger that generates the new validator account with established address, which can be used to receive new delegations.

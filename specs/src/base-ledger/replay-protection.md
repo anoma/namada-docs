@@ -103,10 +103,10 @@ because that would cause the checks to fail and the transaction to be rejected.
 For a more in-depth view, please refer to the
 [Namada execution spec](./execution.md).
 
-### Tendermint replay protection
+### CometBFT replay protection
 
 The underlying consensus engine,
-[Tendermint](https://github.com/tendermint/tendermint/blob/29e5fbcc648510e4763bd0af0b461aed92c21f30/spec/abci/apps.md),
+[CometBFT](https://github.com/tendermint/tendermint/blob/29e5fbcc648510e4763bd0af0b461aed92c21f30/spec/abci/apps.md),
 provides a first layer of protection in its mempool which is based on a cache of
 previously seen transactions. This mechanism is actually aimed at preventing a
 block proposer from including an already processed transaction in the next
@@ -183,7 +183,7 @@ committed to storage in `finalize_block` and the transaction is executed.
 
 In the next block we deserialize the inner transaction, check the validity of
 the decrypted txs and their correct order: if the order is off a new round of
-tendermint will start. If instead an error is found in any single decrypted tx,
+cometbft will start. If instead an error is found in any single decrypted tx,
 we remove from storage the previously inserted hash of the inner tx to allow it
 to be rewrapped, and discard the tx itself. Finally, in `finalize_block` we
 execute the tx: if it runs out of gas then we'll remove its hash from storage,

@@ -82,7 +82,7 @@ The hotfixed testnet ran during the week, when a strange bug caused the network 
 
 ***25/01/2023***
 
-At around 06:15 UTC 25/01/2023, a validator with very little stake was scheduled to become part of the active validator set. From this tx, we discovered a conversion bug between the Namada state machine and Tendermint, which lead to a crash in the node.
+At around 06:15 UTC 25/01/2023, a validator with very little stake was scheduled to become part of the active validator set. From this tx, we discovered a conversion bug between the Namada state machine and CometBFT, which lead to a crash in the node.
 A patch was released [v0.13.3](https://github.com/anoma/namada/releases/tag/v0.13.3) in order to deal with this issue.
 
 

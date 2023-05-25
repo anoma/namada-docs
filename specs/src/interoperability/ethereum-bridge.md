@@ -87,12 +87,12 @@ keys involved are:
 
 Changes to this `/eth_msgs` storage subspace are only ever made by internal 
 transactions crafted and applied by all nodes based on the aggregate of vote 
-extensions for the last Tendermint round. That is, changes to `/eth_msgs` happen 
+extensions for the last CometBFT round. That is, changes to `/eth_msgs` happen 
 in block `n+1` in a deterministic manner based on the vote extensions of the 
-Tendermint round for block `n`.
+CometBFT round for block `n`.
 
 The `/eth_msgs` storage subspace does not belong to any account and cannot be 
-modified by transactions submitted from outside of the ledger via Tendermint. 
+modified by transactions submitted from outside of the ledger via CometBFT. 
 The storage will be guarded by a special validity predicate - `EthSentinel` - 
 that is part of the verifier set by default for every transaction, but will be 
 removed by the ledger code for the specific permitted transactions that are 

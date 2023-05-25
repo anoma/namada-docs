@@ -6,9 +6,9 @@ facilitates the process of transparently allocating space for transactions in a
 block at some height $H$, whilst upholding the safety and liveness properties 
 of Namada.
 
-## On block sizes in Tendermint and Namada
+## On block sizes in CometBFT and Namada
 
-[Block sizes in Tendermint]
+[Block sizes in CometBFT]
 (configured through the $MaxBytes$ consensus 
 parameter) have a minimum value of $1\ \text{byte}$, and a hard cap of $100\ 
 MiB$, reflecting the header, evidence of misbehavior (used to slash 
@@ -16,20 +16,20 @@ Byzantine validators) and transaction data, as well as any potential protobuf
 serialization overhead. Some of these data are dynamic in nature (e.g. 
 evidence of misbehavior), so the total size reserved to transactions in a block 
 at some height $H_0$ might not be the same as another block's, say, at some 
-height $H_1 : H_1 \ne H_0$. During Tendermint's `PrepareProposal` ABCI phase, 
+height $H_1 : H_1 \ne H_0$. During CometBFT's `PrepareProposal` ABCI phase, 
 applications receive a $MaxTxBytes$ parameter whose value already accounts for 
 the total space available for transactions at some height $H$. Namada does not 
 rely on the $MaxTxBytes$ parameter of `RequestPrepareProposal`; instead, 
 app-side validators configure a $MaxProposalSize$ parameter at genesis (or
-through governance) and set Tendermint blocks' $MaxBytes$ parameter to its 
+through governance) and set CometBFT blocks' $MaxBytes$ parameter to its 
 upper bound.
 
-[Block sizes in Tendermint]: <https://github.com/tendermint/tendermint/blob/v0.34.x/spec/abci/apps.md#blockparamsmaxbytes>
+[Block sizes in CometBFT]: <https://github.com/tendermint/tendermint/blob/v0.34.x/spec/abci/apps.md#blockparamsmaxbytes>
 
 ## Transaction batch construction
 
-During Tendermint's `PrepareProposal` ABCI phase, Namada (the ABCI server) is 
-fed a set of transactions $M = \{\ tx\ |\ tx\text{ in Tendermint's mempool}\ 
+During CometBFT's `PrepareProposal` ABCI phase, Namada (the ABCI server) is 
+fed a set of transactions $M = \{\ tx\ |\ tx\text{ in CometBFT's mempool}\ 
 \}$, whose total combined size (i.e. the sum of the bytes occupied by each $tx 
 : tx \in M$) may be greater than $MaxProposalBytes$. Therefore, consensus round 
 leaders are responsible for selecting a batch of transactions $P$ whose total 
