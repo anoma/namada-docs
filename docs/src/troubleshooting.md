@@ -102,7 +102,7 @@ If you missed setting up as a validator pre-genesis, this means you must set up 
 
 ### Tendermint
 
-When facing tendermint issues as a validator, the most common cause of the issue is that we are running the wrong version of tendermint. Keep an eye on the testnet docs [here](./introduction/install/README.md)
+When facing tendermint issues as a validator, the most common cause of the issue is that we are running the wrong version of tendermint. Keep an eye on the testnet docs [here](./introduction/install/intro.md)
 
 
 ```admonish note
