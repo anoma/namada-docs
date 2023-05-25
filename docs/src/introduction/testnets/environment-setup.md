@@ -33,7 +33,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 ## Installing CometBFT
-1. See the installing CometBFT section [here](../install/installing-tendermint.md) for instructions on how to install CometBFT
+1. See the installing CometBFT section [here](../install/installing-cometbft.md) for instructions on how to install CometBFT
 2. Copy both the namada and CometBFT binaries to somewhere on $PATH (or use the relative paths). This step may or may not be necessary.
     
 - namada binaries can be found in `/target/release`
