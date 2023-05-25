@@ -69,7 +69,7 @@ namada client utils join-network \
 ```
 4. Run the node. One can simply run the ledger again using the familiar command
 ```bash
-  NAMADA_TM_STDOUT=true namada node ledger run
+  NAMADA_CMT_STDOUT=true namada node ledger run
   ```
 
 Please reach out with any questions if you have any. This upgrade can be done asynchronously, but if you wish to continue validating the chain and testing our features, you must execute the above steps.
@@ -106,6 +106,6 @@ In order to install this upgrade, a user or validator must
 
 4. Install the binaries onto `$PATH` (this depends on your machine). This must be done after interrupting the ledger, as otherwise an error is likely to be thrown.
 
-5. As soon as possible, restart the ledger by running `NAMADA_TM_STDOUT=true namada node ledger run`
+5. As soon as possible, restart the ledger by running `NAMADA_CMT_STDOUT=true namada node ledger run`
 
 The ledger will then update correctly at the correct height. In order to ensure a smooth fork, please do this as soon as possible.

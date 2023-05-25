@@ -36,7 +36,7 @@ $ namada ledger
 
 For a more verbose output, one can run 
 ```shell
-NAMADA_LOG=info TM_LOG_LEVEL=p2p:none,pex:error NAMADA_TM_STDOUT=true namada ledger
+NAMADA_LOG=info TM_LOG_LEVEL=p2p:none,pex:error NAMADA_CMT_STDOUT=true namada ledger
 ```
 
 This should sync your node to the ledger and will take a while (depending on your computer). Subsequent commands (generating an account, etc.)  are unlikely to work until it is fully synced. Enquire the current block height with other participants to make sure you are synced in order to proceed.
