@@ -29,4 +29,4 @@ Namada can be installed through the following methods:
 2. [From binaries](./from-binary.md)
 3. [From a docker image](./from-docker.md)
 
-The hardware requirements for installing and running a Namada full node can be found [here](../../../validators/hardware.md)
+The hardware requirements for installing and running a Namada full node can be found [here](../../validators/hardware.md)

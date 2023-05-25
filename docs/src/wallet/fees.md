@@ -16,4 +16,4 @@ namada client transfer \
 
 the account associated with `my-key` will be required to pay the fee. This means that even though `my-new-account` may have a positive NAM balance, `my-key` will need to have the associated NAM in order to pay the transaction fee.
 
-For testnet purposes, we recommend [using the faucet](../introduction/quick-start/testnets/pow.md) to source NAM for transaction fees.
+For testnet purposes, we recommend [using the faucet](../introduction/testnets/pow.md) to source NAM for transaction fees.

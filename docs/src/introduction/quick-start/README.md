@@ -6,7 +6,7 @@ This guide is for those interested in operating a Namada validator node and assu
 
 ## Installing Namada
 
-See [the installation guide](./install/README.md) for details on installing the Namada binaries. Commands in this guide will assume you have the Namada binaries (`namada`, `namadan`, `namadaw`, `namadac`) on your $PATH.
+See [the installation guide](../install/README.md) for details on installing the Namada binaries. Commands in this guide will assume you have the Namada binaries (`namada`, `namadan`, `namadaw`, `namadac`) on your $PATH.
 
 If you the binaries stored somewhere, but are not on your path (perhaps you downloaded the binaries), you can add the binaries to to your $PATH with:
 
@@ -18,7 +18,7 @@ If you build from source, and run `make install`, the binaries will be installed
 
 ## Joining a network
 
-See [the testnets page](./testnets/README.md) for details of how to join a testnet. The rest of this guide will assume you have joined a testnet chain using the `namadac utils join-network --chain-id [some-chain-id]` command.
+See [the testnets page](../testnets/README.md) for details of how to join a testnet. The rest of this guide will assume you have joined a testnet chain using the `namadac utils join-network --chain-id [some-chain-id]` command.
 
 ## Run a ledger node
 
