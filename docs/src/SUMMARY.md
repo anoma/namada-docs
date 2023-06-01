@@ -16,6 +16,7 @@
     - [Becoming a validator (post-genesis)](./introduction/testnets/post-genesis-validator.md)
     - [Testnet Upgrades](./introduction/testnets/upgrades.md)
     - [Proof of Work on Namada](./introduction/testnets/pow.md)
+  - [Base Directory](./introduction/base-directory.md)
 - [Full Nodes](./running-a-full-node.md)
 - [Running the Ledger](./ledger.md)
 - [Validators](./validators/intro.md)
@@ -48,7 +49,7 @@
   - [Fees on Namada](./wallet/fees.md)
 - [Experimenting with Namada](./experimental/intro.md)
   - [Spinning up a local network](./experimental/local-network.md)
-  - [IBC](./ibc.md)
+  - [IBC](./experimental/ibc.md)
 - [Troubleshooting](./troubleshooting.md)
 - [FAQ](./FAQ.md)
   
