@@ -1,5 +1,23 @@
 # Installing Tendermint
 
+## From binaries
+
+We have binaries you could download from our [releases page](https://github.com/heliaxdev/tendermint/releases)
+
+![](../../images/Download_Tendermint_Binaries.png)
+
+### Adding to path
+
+By default, the binaries are downloaded to the `~/Downloads` folder. You can move them to a folder of your choice and add them to your path.
+
+For example, on an ARM based MacOS, you can run the following commands to add the binaries to your path
+
+```bash
+sudo mv ~/Downloads/tendermint_0.1.4-abciplus_darwin_arm64/tendermint /usr/local/bin
+```
+
+## From source
+
 Start by exporting the variable
 
 ```bash
