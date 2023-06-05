@@ -1,14 +1,19 @@
 # Run your node as a genesis validator
 
-#### 1. Wait for the genesis file to be ready, `CHAIN_ID`.
-#### 2. Join the network with the `CHAIN_ID`
+Once the `CHAIN_ID` has been released, it is possible to join the testnet. If the node joining is registered as a genesis-validator in the genesis file, it will be able to participate in the consensus and produce blocks from the start of the chain. 
+
+#### Joining the network
+As a genesis validator, it is then possible to join the network with the `CHAIN_ID` distributed. Let's say this `CHAIN_ID` is `namada-mainnet`.
+
+In this case, the genesis validator can join the network with:
+
 ``` bash
-export CHAIN_ID="public-testnet-8.0.b92ef72b820"
+export CHAIN_ID="namada-mainnet"
 namada client utils join-network \
 --chain-id $CHAIN_ID --genesis-validator $ALIAS
 ```
 
-#### 3. Start your node and sync
+#### Start your node and sync
 ```bash
 NAMADA_LOG=info TM_LOG_LEVEL=p2p:none,pex:error NAMADA_TM_STDOUT=true namada node ledger run
 ```
@@ -22,6 +27,6 @@ TIMESTAMP=$(date +%s)
 NAMADA_LOG=debug TM_LOG_LEVEL=p2p:none,pex:error NAMADA_TM_STDOUT=true namada node ledger run &> logs-${TIMESTAMP}.txt
 tail -f -n 20 logs-${TIMESTAMP}.txt ## (in another shell)
 ```
-#### 4. If started correctly you should see a the following log:
+#### If started correctly you should see a the following log:
 `[<timestamp>] This node is a validator ...`
     

@@ -161,8 +161,8 @@ The viewing key that is derived from a spending key allows any user holding that
 
 ```
 namadac balance
-namadac balance --owner my-key
-namadac balance --owner my-key --token BTC
+namadac balance --owner <the-spending-key-you-created>
+namadac balance --owner <the-spending-key-you-created> --token BTC
 namadac balance --token BTC
 ```
 

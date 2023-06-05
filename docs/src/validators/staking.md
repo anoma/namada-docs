@@ -1,33 +1,63 @@
-# Delegating (Staking)
+# Bonding (Staking)
 
-You can delegate to any number of validators at any time. When you delegate tokens, the delegation won't count towards the validator's stake (which in turn determines its voting power) until the beginning of epoch `n + 2` in the current epoch `n` (the literal `2` is set by PoS parameter `pipeline_len`). The delegated amount of tokens will be deducted from your account immediately, and will be credited to the PoS system's account.
+We discuss to types of bonding: 
+1. [Non-self bonding](#non-self-bonding-delegating) (referred to as delegating in many other ecosystems, but not to be confused with governance delegation on Namada)
+2. [Self-bonding](#self-bonding)
 
-To submit a delegation that bonds tokens from the source address to a validator with alias `validator-1`:
+## Non-self bonding (delegating)
+
+Users can bond to any number of validators at any time. When a user bond tokens, the bonds won't count towards the validator's stake (which in turn determines its voting power) until the beginning of epoch `n + 2` in the current epoch `n` (the literal `2` is set by PoS parameter `pipeline_len`). The bonded tokens will be deducted from the bonder's account immediately, and will be credited to the PoS system's account.
+
+To bond tokens from the source address with alias `aliace` to a validator with alias `validator-1`:
 
 ```shell
 namada client bond \
-  --source my-new-acc \
+  --source aliace \
   --validator validator-1 \
   --amount 12.34
 ```
 
-You can query your delegations:
+You can query your bonds:
 
 ```shell
-namada client bonds --owner my-new-acc
+namada client bonds --owner aliace
 ```
 
-The result of this query will inform the epoch from which your delegations will be active.
+The result of this query will inform the epoch from which your bonds will be active.
 
-Because the PoS system is just an account, you can query its balance, which is the sum of all staked tokens and unbonded tokens that have not yet been withdrawn:
+Because the PoS system is just an account, you can query its balance, which is the sum of all currently bonded tokens as well as the unbonded tokens that have not yet been withdrawn:
 
 ```shell
 namada client balance --owner PoS
 ```
 
+## Self-bonding
+
+It is also possible to increase a validator's voting power through bonding NAM from the validator's liquid balance to itself. A user can submit a self-bonding transaction of tokens from a validator account to the PoS system with:
+
+```shell
+namada client bond \
+  --validator my-validator \
+  --amount 3.3
+```
+
+## Query a validator's `bonded-stake`
+
+A validator's bonded-stake (voting-power in tendermint) is determined by the sum of all their active self-bonds and bonds from delegators, with slashes applied, if any.
+
+When tokens are un-bonded, the bonded amount does not count towards the validator's stake until the beginning of epoch `n + 2` in the current epoch `n`. The bonded amount of tokens will be deducted from the validator's account immediately and will be credited to the PoS system's account.
+
+To see all validators and their voting power, which is exactly equal to the amount of staked NAM tokens from their self-bonds and delegated bonds, you can query:
+
+```shell
+namada client bonded-stake
+```
+
+With this command, you can specify `--epoch` to find the voting powers at some future epoch. Note that only the voting powers for the current and the next epoch are final.
+
 ## Slashes
 
-Should a validator exhibit punishable behavior, the delegations towards this validator are also liable for slashing. Only the delegations that were active in the epoch in which the fault occurred will be slashed by the slash rate of the fault type. If any of your delegations have been slashed, this will be displayed in the `bonds` query. You can also find all the slashes applied with:
+Should a validator exhibit punishable behavior, the bonds towards this validator are also liable for slashing. Only the bonds that were active in the epoch in which the fault occurred will be slashed by the slash rate of the fault type. If any of your bonds have been slashed, this will be displayed in the `bonds` query. You can also find all the slashes applied with:
 
 ```shell
 namada client slashes
@@ -35,39 +65,43 @@ namada client slashes
 
 ## Unbonding
 
-While your tokens are being delegated, they are locked-in the PoS system and hence are not liquid until you withdraw them. To do that, you first need to send a transaction to “unbond” your tokens. You can unbond any amount, up to the sum of all your delegations to the given validator, even before they become active.
+While tokens are bonded, they are locked-in the PoS system and hence are not liquid until the bonder withdraw them. To do that, the bonder first need to send a transaction to “unbond” its tokens. A user can unbond any amount, up to the sum of all its bonds to the given validator, even before the bonds become active.
 
-To submit an unbonding of a delegation of tokens from a source address to the validator:
+### Non-self unbonding
+To submit an unbonding of tokens from a source address to the validator:
 
 ```shell
 namada client unbond \
-  --source my-new-acc \
+  --source aliace \
   --validator validator-1 \
   --amount 1.2
 ```
 
-When you unbond tokens, you won't be able to withdraw them immediately. Instead, tokens unbonded in the epoch `n` will be withdrawable starting from the epoch `n + 6` (the literal `6` is set by PoS parameter `unbonding_len`). After you unbond some tokens, you will be able to see when you can withdraw them via `bonds` query:
+### Self-unbonding
+
+To submit an unbonding of self-bonded tokens from a validator:
 
 ```shell
-namada client bonds --owner my-new-acc
+namada client unbond \
+  --validator my-validator \
+  --amount 0.3
 ```
 
-When the chain reaches the epoch in which you can withdraw the tokens (or anytime after), you can submit a withdrawal of unbonded delegation of tokens back to your account:
+## Withdrawing Unbonded Tokens
+When a user unbonds tokens, the user won't be able to withdraw them immediately. Instead, tokens unbonded in the epoch `n` will be withdrawable starting from the epoch `n + 6` (the literal `6` is set by PoS parameter `unbonding_len`). After tokens are unbonded, the user will be able to see when they can withdraw them via the `bonds` query:
+
+```shell
+namada client bonds --owner aliace
+```
+
+When the chain reaches the epoch in which you can withdraw the tokens (or anytime after), `aliace`` can submit a withdrawal of unbonded tokens back to her account:
 
 ```shell
 namada client withdraw \
-  --source my-new-acc \
+  --source aliace \
   --validator validator-1
 ```
 
-Upon success, the withdrawn tokens will be credited back your account and debited from the PoS system.
+Upon success, the withdrawn tokens will be credited back `aliace`'s account and debited from the PoS system.
 
-## Validators' Voting Power
 
-To see all validators and their voting power, which is exactly equal to the amount of staked NAM tokens from their self-bonds and delegations, you can query:
-
-```shell
-namada client bonded-stake
-```
-
-With this command, you can specify `--epoch` to find the voting powers at some future epoch. Note that only the voting powers for the current and the next epoch are final.

@@ -12,12 +12,12 @@ In order to avoid having to complete endless Proof of Work challenges, we recomm
 ```shell
 namada client transfer \
   --source faucet \
-  --target my-key \
+  --target keysha \
   --token NAM \
   --amount 1000 \
-  --signer my-key
+  --signer keysha
 ```
-which will allow `my-key` to sign future transactions and pay for any further fees.
+which will allow the key with alias `keysha` to sign future transactions and pay for any further fees.
 
 
 # The PoW Faucet

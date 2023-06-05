@@ -30,5 +30,8 @@ namadac bond --validator <validator-address> --amount <amount> --signer <account
 
 If you have the alias saved in your wallet, you can also pass `<validator-alias>` instead of `<validator-address>`.
 
+## Redelegating
+Redelegating is the process of changing the delegate you have bonded to. This process takes 4 epochs, after which your NAM will be redelegated.
+
 ## Unbonding
-Unbonding is the process of removing your bonded NAM from a delegate. This process takes 21 days, after which your NAM will be available to withdraw.
+Unbonding is the process of removing your bonded NAM from a delegate. This process is identical to [unbonding tokens from a validator](../validators/staking.md).
