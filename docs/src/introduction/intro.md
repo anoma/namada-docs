@@ -12,14 +12,9 @@ Here are some useful tips for reading this book:
   
 ```➜ this is an example command line output useful for comparing```
 
-* Commands you should run are prefixed with a `$`:
+* User-defined inputs are in angle brackets:
 
-```$ this is a command you should run```
-
-* User-defined inputs are in square brackets:
-
-```$ this is a command you should run [with your own input]```
-
+```$ this is a command you should run <with your own input>```
 
 ## About this documentation
 

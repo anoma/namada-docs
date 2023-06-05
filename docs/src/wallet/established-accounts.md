@@ -7,16 +7,16 @@ This assumes that you already have a key or an implicit account that can sign tr
 Generate an implicit account:
 
 ```shell
-namadaw address gen --alias [your-implicit-account-alias]
+namadaw address gen --alias <your-implicit-account-alias>
 ```
 
 Then, create an established account on-chain using the implicit account you've just generated:
 
 ```shell
 namadac init-account \
-    --source [your-implicit-account-alias] \
-    --public-key [your-implicit-account-alias] \
-    --alias [your-established-account-alias]
+    --source <your-implicit-account-alias> \
+    --public-key <your-implicit-account-alias> \
+    --alias <your-established-account-alias>
 ```
 
 
@@ -34,8 +34,8 @@ namadac transfer \
     --token btc \
     --amount 1000 \
     --source faucet \
-    --target [your-established-account-alias] \
-    --signer [your-implicit-account-alias]
+    --target <your-established-account-alias> \
+    --signer <your-implicit-account-alias>
 ```
 
 Now that you have a transparent account with some tokens, you can generate a Spending Key to hold your shielded balances.
