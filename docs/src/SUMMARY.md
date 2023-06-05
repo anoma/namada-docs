@@ -25,6 +25,7 @@
     - [Generate Account (Post-Genesis)](./validators/generate-account.md)
     - [Running a Genesis Validator](./validators/run-your-genesis-validator.md)
     - [Staking](./validators/staking.md)
+- [Delegators](./delegators/intro.md)
 - [Power Users](./users/intro.md)
     - [Namada addresses](./users/an-introduction-to-namada-addresses.md) 
     - [Sending and receiving NAM](./users/send-and-receive-nam-tokens.md)
