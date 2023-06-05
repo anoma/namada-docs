@@ -1,1 +1,34 @@
 # Delegators
+
+## Delegators vs Delegates
+All accounts on Namada with any amount of *bonded* NAM, is by definition, either a delegator or a delegate. 
+
+#### What is a deleagtor?
+A delegator is an account that has bonded NAM to a delegate. 
+
+#### What is a delegate?
+A delegate is an account that has been bonded to by a delegator.
+
+## Becoming a delegator
+In order to become a delegator, you must first have an account with positive NAM balance. If you do not have an account, you can follow the instructions [here](../users/an-introduction-to-namada-addresses.md) to create one.
+
+Once you have an account, you can bond your NAM to a delegate. At the time of writing, the only possible delegates are validators. In future Namada versions, there will be the option to delegate to other, non-validating accounts as well.
+
+Delegating to a validator is the same as [staking with a validator](../validators/staking.md).
+
+First, you may want to list the available validators you can stake to:
+
+```bash
+namadac bonded-stake
+```
+
+Once you've found the address of your favourite validator, you can bond to them with the following command:
+
+```bash
+namadac bond --validator <validator-address> --amount <amount> --signer <account-alias>
+```
+
+If you have the alias saved in your wallet, you can also pass `<validator-alias>` instead of `<validator-address>`.
+
+## Unbonding
+Unbonding is the process of removing your bonded NAM from a delegate. This process takes 21 days, after which your NAM will be available to withdraw.
