@@ -6,16 +6,16 @@ In Namada, tokens are implemented as accounts with the [Token Validity Predicate
 
 If you already have a key in your wallet, you can skip this step. Otherwise, [generate a new keypair](./an-introduction-to-namada-addresses.md#generate-a-keypair) now.
 
-Then, send a transaction to initialize your new established account and save its address with the alias `my-new-acc`. The `my-key` public key will be written into the account's storage for authorizing future transactions. We also sign this transaction with `my-key`.
+Then, send a transaction to initialize your new established account and save its address with the alias `establishment`. The `keysha` public key will be written into the account's storage for authorizing future transactions. We also sign this transaction with `keysha`.
 
 ```shell
 namada client init-account \
-  --alias my-new-acc \
-  --public-key my-key \
-  --source my-key
+  --alias establishment \
+  --public-key keysha \
+  --source keysha
 ```
 
-Once this transaction has been applied, the client will automatically see the new address created by the transaction and add it to your Wallet with the chosen alias `my-new-acc`.
+Once this transaction has been applied, the client will automatically see the new address created by the transaction and add it to your Wallet with the chosen alias `establishment`.
 
 This command uses the prebuilt [User Validity Predicate](https://github.com/anoma/namada/blob/namada/wasm/wasm_source/src/vp_token.rs).
 
@@ -25,7 +25,7 @@ To submit a regular token transfer from your account to the `validator-1` addres
 
 ```shell
 namada client transfer \
-  --source my-new-acc \
+  --source establishment \
   --target validator-1 \
   --token NAM \
   --amount 10

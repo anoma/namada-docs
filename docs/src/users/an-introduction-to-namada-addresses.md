@@ -22,11 +22,11 @@ namada wallet key
 It is possible to generate keys using the CLI. By doing so, an implicit account address is also derived in the process and added to storage.
 
 ```shell
-namada wallet key gen --alias my-key
+namada wallet key gen --alias keysha
 ```
 
 ```admonish note
-The derived implicit address shares the same `my-key` alias. The previous command has the same effect as `namada wallet address gen --alias my-key`.
+The derived implicit address shares the same `keysha` alias. The previous command has the same effect as `namada wallet address gen --alias keysha`.
 ```
 
 ### List all known keys
@@ -46,13 +46,13 @@ namada wallet address
 
 ### Generate an implicit address
 
+Let's call the implicit address `accountant`:
 ```shell
-namada wallet address gen --alias my-account
+namada wallet address gen --alias accountant
 ```
 
 ```admonish note
-
-Note that this will also generate and save a key from which the address was derived and save it under the same `my-account` alias. Thus, this command has the same effect as `namada wallet key gen --alias my-account`.
+Note that this will also generate and save a key from which the address was derived and save it under the same `accountant` alias. Thus, this command has the same effect as `namada wallet key gen --alias accountant`.
 ```
 
 ### List all known addresses
