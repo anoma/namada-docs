@@ -6,7 +6,7 @@ const config: DocsThemeConfig = {
   primaryHue: 180,
   useNextSeoProps() {
     return {
-      titleTemplate: "Namada Documentation - %s",
+      titleTemplate: "Namada Specs - %s",
     };
   },
   logo: <Logo />,
