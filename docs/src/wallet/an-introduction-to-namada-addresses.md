@@ -1,1 +1,0 @@
-# Namada addresses

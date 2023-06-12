@@ -1,11 +1,9 @@
-# Documentation
+# Introduction
 
-- `docs` contains user, operator and developer documentation.
+This documentation uses [Nextra](https://nextra.site/) and [NextJS](https://nextjs.org/).
 
-- `spec` contains the specifications for Namada.
+## Local Development
 
-To build any of these, in its subdirectory:
-
-- `make dev-deps` installs the dependencies (mdbook and its plugins).
-
-- `make serve` builds and opens the mdbook.
+1. You need to install [NodeJS](https://nodejs.org/en) >= 16 and [PNPM](https://pnpm.io/).
+2. Run `pnpm i` to install the dependencies.
+3. Run `pnpm dev` to start the development server and visit `http://localhost:3000` .
