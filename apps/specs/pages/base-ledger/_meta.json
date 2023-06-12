@@ -1,0 +1,9 @@
+{
+  "consensus": "Consensus",
+  "execution": "Execution",
+  "governance": "Governance",
+  "multisignature": "Multisignature",
+  "fungible-token": "Fungible token",
+  "replay-protection": "Replay protection",
+  "block-space-allocator": "Block space allocator"
+}
