@@ -65,6 +65,5 @@ jobs:
           push: ${{ github.ref == 'refs/heads/master' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args:
-            path=${{ matrix.make.path }}
-      
+          build-args: |
+            "TARGET=${{ matrix.make.path }}"
