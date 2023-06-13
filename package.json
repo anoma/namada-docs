@@ -1,9 +1,16 @@
 {
+  "workspaces": [
+    "packages/docs",
+    "packages/specs"
+  ],
   "scripts": {
-    "dev:docs": "pnpm -r --filter=\"./apps/docs\" run dev",
-    "dev:specs": "pnpm -r --filter=\"./apps/specs\" run dev",
-    "build:docs": "pnpm -r --filter=\"./apps/docs\" run build",
-    "build:specs": "pnpm -r --filter=\"./apps/specs\" run build",
-    "build": "pnpm -r --filter=\"./apps/*\" run build"
+    "dev:docs": "npm run dev --workspace=packages/docs",
+    "dev:specs": "npm run dev --workspace=packages/docs",
+    "build:docs": "npm run build --workspace=packages/docs",
+    "build:specs": "npm run build --workspace=packages/specs",
+    "build": "npm run build --workspaces"
+  },
+  "dependencies": {
+    "ci": "^2.2.0"
   }
 }
