@@ -5,7 +5,7 @@
   ],
   "scripts": {
     "dev:docs": "npm run dev --workspace=packages/docs",
-    "dev:specs": "npm run dev --workspace=packages/docs",
+    "dev:specs": "npm run dev --workspace=packages/specs",
     "build:docs": "npm run build --workspace=packages/docs",
     "build:specs": "npm run build --workspace=packages/specs",
     "build": "npm run build --workspaces"
