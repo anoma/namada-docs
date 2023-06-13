@@ -1,10 +1,14 @@
+ARG TARGET
+
 FROM node:18-alpine AS base
+
+ARG TARGET
 
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY apps/docs/package.json apps/docs/
+COPY apps/docs/package.json apps/${TARGET}/
 
 # Install dependencies
 COPY pnpm-lock.yaml package.json pnpm-workspace.yaml ./
@@ -14,10 +18,13 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN pnpm build:docs
+RUN pnpm build:${TARGET}
 
 # Production image, copy all the files and run next
 FROM devforth/spa-to-http:latest
+
+ARG TARGET
+
 WORKDIR /app
 
 ENV NODE_ENV production
@@ -27,7 +34,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/apps/docs/out .
+COPY --from=builder /app/apps/${TARGET}/out .
 
 USER nextjs
 
