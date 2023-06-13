@@ -66,5 +66,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            "path=${{ matrix.make.path }}"
             "TARGET=${{ matrix.make.path }}"
