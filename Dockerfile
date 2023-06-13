@@ -6,13 +6,14 @@ ARG TARGET
 
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
 
 COPY apps/docs/package.json apps/${TARGET}/
 
 # Install dependencies
 COPY pnpm-lock.yaml package.json pnpm-workspace.yaml ./
-RUN npm install -g pnpm && pnpm install
+RUN npm install -g npm@^9.7.1 && npm install -g pnpm@^8.6.2 && pnpm install --frozen-lockfile
 
 COPY . .
 
@@ -26,10 +27,6 @@ FROM devforth/spa-to-http:latest
 ARG TARGET
 
 WORKDIR /app
-
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
