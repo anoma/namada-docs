@@ -1,30 +1,35 @@
 # IBC integration
 
 * [IBC (Inter-blockchain communication protocol) spec](https://github.com/cosmos/ibc)
-* [IBC integration in Namada](https://github.com/anoma/namada/blob/yuji/design_ibc/docs/src/explore/design/ledger/ibc.md)
 
 ## IBC transaction
-An IBC transaction [`tx_ibc.wasm`](https://github.com/anoma/namada/blob/e3c2bd0b463b35d66fcc6d2643fd0e6509e03d99/wasm/wasm_source/src/tx_ibc.rs) is provided. We have to set an IBC message to the transaction data corresponding to execute an IBC operation.
+An IBC transaction [`tx_ibc.wasm`](https://github.com/anoma/namada/blob/a5bad396992e5f66351088bde3bec73d83e769ba/wasm/wasm_source/src/tx_ibc.rs) is provided. We have to set an IBC message to the transaction data corresponding to execute an IBC operation.
 
-The transaction decodes the data to an IBC message and handles IBC-related data, e.g. it makes a new connection ID and writes a new connection end for `MsgConnectionOpenTry`. The operations are implemented in [`IbcActions`](https://github.com/anoma/namada/blob/e3c2bd0b463b35d66fcc6d2643fd0e6509e03d99/core/src/ledger/ibc/actions.rs). The transaction doesn't check the validity for the state changes. IBC validity predicate and IBC token validity predicate are in charge of the validity.
+The transaction decodes the data to an IBC message and handles IBC-related data, e.g. it makes a new connection ID and writes a new connection end for `MsgConnectionOpenTry`. The operations are implemented in [`IbcActions`](https://github.com/anoma/namada/blob/a5bad396992e5f66351088bde3bec73d83e769ba/core/src/ledger/ibc/mod.rs#L63). The transaction doesn't check the validity for the state changes. IBC validity predicate is in charge of the validity for IBC-related data.
 
 ## IBC validity predicate
-[IBC validity predicate](https://github.com/anoma/namada/blob/e3c2bd0b463b35d66fcc6d2643fd0e6509e03d99/shared/src/ledger/ibc/vp/mod.rs) checks if an IBC transaction satisfies IBC protocol. When an IBC transaction is executed, i.e. a transaction changes the state of the key that contains [`InternalAddress::Ibc`](https://github.com/anoma/namada/blob/e3c2bd0b463b35d66fcc6d2643fd0e6509e03d99/core/src/types/address.rs#L446), IBC validity predicate (one of the native validity predicates) is executed. For example, if an IBC connection end is created in the transaction, IBC validity predicate validates the creation. If the creation with `MsgConnectionOpenTry` is invalid, e.g. the counterpart connection end doesn't exist, the validity predicate makes the transaction fail.
+[IBC validity predicate](https://github.com/anoma/namada/blob/a5bad396992e5f66351088bde3bec73d83e769ba/shared/src/ledger/ibc/vp/mod.rs) checks if an IBC transaction satisfies IBC protocol. When an IBC transaction is executed, i.e. a transaction changes the state of the key that contains [`InternalAddress::Ibc`](https://github.com/anoma/namada/blob/a5bad396992e5f66351088bde3bec73d83e769ba/core/src/types/address.rs#L481), IBC validity predicate (one of the native validity predicates) is executed. For example, if an IBC connection end is created in the transaction, IBC validity predicate validates the creation. If the creation with `MsgConnectionOpenTry` is invalid, e.g. the counterpart connection end doesn't exist, the validity predicate makes the transaction fail.
+
+Specifically, the validity predicate mainly consists of two parts.
+* Checking the state changes with the psuedo-execution
+* Validating the IBC-related data
+
+The first part is the state change check. It executes the corresponding IBC operation and gets the post-states of the IBC-related data. Then, it checks whether the actual states of IBC-related data by the transaction are equal to the result of the pseudo execution. The second part is the validation of the IBC-related data. It validates that the corresponding data conforms to the IBC protocol. The psuedo-execution and the validation functions are imported from `ibc-rs`.
 
 ## Fungible Token Transfer
 The transfer of fungible tokens over an IBC channel on separate chains is defined in [ICS20](https://github.com/cosmos/ibc/blob/master/spec/app/ics-020-fungible-token-transfer/README.md).
 
-In Namada, the sending tokens is triggered by a transaction having [MsgTransfer](https://github.com/informalsystems/ibc-rs/blob/0a952b295dbcf67bcabb79ce57ce92c9c8d7e5c6/modules/src/applications/ics20_fungible_token_transfer/msgs/transfer.rs#L20-L37) as transaction data. A packet including [`FungibleTokenPacketData`](https://github.com/anoma/namada/blob/e3c2bd0b463b35d66fcc6d2643fd0e6509e03d99/core/src/ledger/ibc/data.rs#L392) is made from the message in the transaction execution.
+In Namada, the sending tokens is triggered by a transaction having [MsgTransfer](https://github.com/cosmos/ibc-rs/blob/014fec6958fedcfe9ed6ebfb2d0c28c2cb6487af/crates/ibc/src/applications/transfer/msgs/transfer.rs) as transaction data. A packet including [`PacketData`](https://github.com/cosmos/ibc-rs/blob/014fec6958fedcfe9ed6ebfb2d0c28c2cb6487af/crates/ibc/src/applications/transfer/packet.rs) for the transfer is made from the message in the transaction execution.
 
-Namada chain receives the tokens by a transaction having [MsgRecvPacket](https://github.com/informalsystems/ibc-rs/blob/0a952b295dbcf67bcabb79ce57ce92c9c8d7e5c6/modules/src/core/ics04_channel/msgs/recv_packet.rs#L19-L23) which has the packet including `FungibleTokenPacketData`.
+A Namada instance receives the tokens by a transaction having [MsgRecvPacket](https://github.com/cosmos/ibc-rs/blob/014fec6958fedcfe9ed6ebfb2d0c28c2cb6487af/crates/ibc/src/core/ics04_channel/msgs/recv_packet.rs) which has the packet including `PacketData` for the transfer.
 
-The sending and receiving tokens in a transaction are validated by not only IBC validity predicate but also [IBC token validity predicate](https://github.com/anoma/namada/blob/e3c2bd0b463b35d66fcc6d2643fd0e6509e03d99/shared/src/ledger/ibc/vp/token.rs). IBC validity predicate validates if sending and receiving the packet is proper. IBC token validity predicate is also one of the native validity predicates and checks if the token transfer is valid. If the transfer is not valid, e.g. an unexpected amount is minted, the validity predicate makes the transaction fail.
+The sending and receiving tokens in a transaction are validated by not only IBC validity predicate but also [IBC token validity predicate](https://github.com/anoma/namada/blob/e3c2bd0b463b35d66fcc6d2643fd0e6509e03d99/shared/src/ledger/ibc/vp/token.rs). IBC validity predicate validates if sending and receiving the packet is proper. If the transfer is not valid, e.g. an unexpected amount is minted, the validity predicate makes the transaction fail.
 
-A transaction escrowing/unescrowing a token changes the escrow account's balance of the token. The key is `{token_addr}/ibc/{port_id}/{channel_id}/balance/IbcEscrow`. A transaction burning a token changes the burn account's balance of the token. The key is `{token_addr}/ibc/{port_id}/{channel_id}/balance/IbcBurn`. A transaction minting a token changes the mint account's balance of the token. The key is `{token_addr}/ibc/{port_id}/{channel_id}/balance/IbcMint`.  The key including `IbcBurn` or `IbcMint` have the balance temporarily for validity predicates. It isn't committed to a block. `IbcEscrow`, `IbcBurn`, and `IbcMint` are addresses of [`InternalAddress`](https://github.com/anoma/namada/blob/e3c2bd0b463b35d66fcc6d2643fd0e6509e03d99/core/src/types/address.rs#L446) and actually they are encoded in the storage key. When these addresses are included in the changed keys after transaction execution, IBC token validity predicate is triggered.
+A transaction escrowing/unescrowing a token changes the escrow account's balance of the token. The key is `#Multitoken/{token_addr}/balance/#Ibc`. A transaction burning a token decreases the minted balance of the token. The key is `#Multitoken/{token_addr}/balance/#Mint`. A transaction minting a token increases the minted balance of the token. The key is `#Multitoken/{token_addr}/balance/#Mint`. `#Multitoken`, `#Mint` and `#Ibc` are addresses of [`InternalAddress`](https://github.com/anoma/namada/blob/a5bad396992e5f66351088bde3bec73d83e769ba/core/src/types/address.rs#L473) and actually they are encoded in the storage key. Also, the multitoken validity predicate will be triggered and check the balance changes.
 
-The receiver's account is `{token_addr}/ibc/{ibc_token_hash}/balance/{receiver_addr}`. `{ibc_token_hash}` is a hash calculated with the denomination prefixed with the port ID and channel ID. It is NOT the same as the normal account `{token_addr}/balance/{receiver_addr}`. That's because it should be origin-specific for transferring back to the source chain. We can transfer back the received token by setting `ibc/{ibc_token_hash}` or `{port_id}/{channel_id}/{token_addr}` as `denom` in `MsgTransfer`.
+The receiver's account is `#Multitoken/{ibc_token}/balance/{receiver_addr}`. `{ibc_token}` is [`IbcToken(hash)`](https://github.com/anoma/namada/blob/a5bad396992e5f66351088bde3bec73d83e769ba/core/src/types/address.rs#L483) which has a hash calculated with the denomination prefixed with the port ID and channel ID. It is NOT the same as the normal account `#Multitoken/{src_token_addr}/balance/{receiver_addr}` of the token address on the source chain. That's because it should be origin-specific for transferring back to the source chain by binding the token address with the port and channel ID. We can transfer back the received token by setting `{ibc_token}` as `denom` in `MsgTransfer`.
 
-For example, we transfer a token `#my_token` from a user `#user_a` on Chain A to a user `#user_b` on Chain B, then transfer back the token from `#user_b` to `#user_a`. The port ID and channel ID on Chain A for Chain B are `transfer` and `channel_42`, those on Chain B for Chain A are `transfer` and `channel_24`. The denomination in the `FungibleTokenTransferData` at the first transfer should be `#my_token`.
+For example, we transfer a token `#my_token` from a user `#user_a` on Chain A to a user `#user_b` on Chain B, then transfer back the token from `#user_b` to `#user_a`. The port ID and channel ID on Chain A for Chain B are `transfer` and `channel_42`, those on Chain B for Chain A are `transfer` and `channel_24`. The denomination in the `PacketData` at the first transfer should be `#my_token`.
 1. User A makes `MsgTransfer` as a transaction data and submits a transaction from Chain A
 ```rust
     let token = Some(Coin {
@@ -32,40 +37,39 @@ For example, we transfer a token `#my_token` from a user `#user_a` on Chain A to
         amount: "100000".to_string(),
     });
     let msg = MsgTransfer {
-        source_port,    // transfer
-        source_channel, // channel_42
+        port_id_on_a, // transfer
+        chan_id_on_a, // channel_42
         token,
-        sender,   // #user_a
-        receiver, // #user_b
-        timeout_height: Height::new(0, 1000),
-        timeout_timestamp: (Timestamp::now() + Duration::new(100, 0)).unwrap(),
+        sender,       // #user_a
+        receiver,     // #user_b
+        timeout_height_on_b,
+        timeout_timestamp_on_b,
     };
 ```
-2. On Chain A, the specified amount of the token is transferred from the sender's account `#my_token/balance/#user_a` to the escrow account `#my_token/ibc/transfer/channel_42/balance/IbcEscrow`
-3. On Chain B, the amount of the token is transferred from `#my_token/ibc/transfer/channel_24/balance/IbcMint` to `#my_token/ibc/{hash}/balance/#user_b`
-    - The `{hash}` is calculated from a string `transfer/channel_24/#my_token` with SHA256
-    - The `{hash}` is a fixed length because of hashing even if the original denomination becomes too long with many prefixes after transferring through many chains
+2. On Chain A, the specified amount of the token is transferred from the sender's account `#Multitoken/#my_token/balance/#user_a` to the escrow account `#Multitoken/#my_token/balance/#Ibc`
+3. On Chain B, `#Multitoken/#my_token/balance/#Mint` is increased by the amount of the token, and `#Multitoken/{ibc_token}/balance/#user_b`
+    - The `{ibc_token}` is made with a hash calculated from a string `transfer/channel_24/#my_token` with SHA256
 4. To transfer back, User B makes `MsgTransfer` and submits a transaction from Chain B
 ```rust
     let token = Some(Coin {
-        denom, // ibc/{hash} or transfer/channel_24/#my_token
+        denom, // {ibc_token}
         amount: "100000".to_string(),
     });
     let msg = MsgTransfer {
-        source_port,    // transfer
-        source_channel, // channel_24
+        port_id_on_a, // transfer
+        chan_id_on_a, // channel_24
         token,
-        sender,   // #user_b
-        receiver, // #user_a
-        timeout_height: Height::new(0, 1000),
-        timeout_timestamp: (Timestamp::now() + Duration::new(100, 0)).unwrap(),
+        sender,       // #user_b
+        receiver,     // #user_a
+        timeout_height_on_b,
+        timeout_timestamp_on_b,
     };
 ```
-5. On Chain B, the amount of the token is transferred from `#my_token/ibc/{hash}/balance/#user_b` to `#my_token/ibc/transfer/channel_24/IbcBurn`
-6. On Chain A, the amount of the token is transferred from `#my_token/ibc/transfer/channel_42/balance/IbcEscrow` to `#my_token/balance/#user_a`
+5. On Chain B, `#Multitoken/{ibc_token}/balance/#user_b` and `#Multitoken/{ibc_token}/balance/#Mint` are decreased by the amount of the token
+6. On Chain A, the amount of the token is transferred from `#Multitoken/#my_token/balance/#Ibc` to `#Multitoken/#my_token/balance/#user_a`
 
 ## IBC message
-
+Basically, you don't need to make each IBC message. Namada CLI has `ibc-transfer` to transfer tokens over IBC. For other IBC operations, [Hermes](https://github.com/heliaxdev/hermes/tree/1.3.0-namada) can submit Namada transactions with [Hermes commands](https://hermes.informal.systems/documentation/commands/index.html).
 IBC messages are defined in `ibc-rs`. The message should be encoded with Protobuf (NOT with Borsh) as the following code to set it as a transaction data.
 
 ```rust
@@ -78,30 +82,3 @@ pub fn make_ibc_data(message: impl Msg) -> Vec<u8> {
     tx_data
 }
 ```
-
-* Client
-  - [MsgCreateAnyClient](https://github.com/informalsystems/ibc-rs/blob/5ddec6d2571b1376de7d9ebe7e353b3cd726c2d3/modules/src/core/ics02_client/msgs/create_client.rs#L19-L23)
-  - [MsgSubmitAnyMisbehaviour](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics02_client/msgs/misbehavior.rs#L17-L24) (NOT supported yet)
-  - [MsgUpdateAnyClient](https://github.com/informalsystems/ibc-rs/blob/5ddec6d2571b1376de7d9ebe7e353b3cd726c2d3/modules/src/core/ics02_client/msgs/update_client.rs#L20-L24)
-  - [MsgUpgradeAnyClient](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics02_client/msgs/upgrade_client.rs#L24-L31)
-
-* Connection
-  - [MsgConnectionOpenInit](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics03_connection/msgs/conn_open_init.rs#L21-L27)
-  - [MsgConnectionOpenTry](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics03_connection/msgs/conn_open_try.rs#L29-L38)
-  - [MsgConnectionOpenAck](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics03_connection/msgs/conn_open_ack.rs#L20-L27)
-  - [MsgConnectionOpenConfirm](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics03_connection/msgs/conn_open_confirm.rs#L19-L23)
-
-* Channel
-  - [MsgChannelOpenInit](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/chan_open_init.rs#L17-L21)
-  - [MsgChannelOpenTry](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/chan_open_try.rs#L22-L29)
-  - [MsgChannelOpenAck](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/chan_open_ack.rs#L18-L25)
-  - [MsgChannelOpenConfirm](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/chan_open_confirm.rs#L18-L23)
-  - [MsgRecvPacket](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/recv_packet.rs#L19-L23)
-  - [MsgAcknowledgement](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/acknowledgement.rs#L19-L24)
-  - [MsgChannelCloseInit](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/chan_close_init.rs#L18-L22)
-  - [MsgChannelCloseConfirm](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/chan_close_confirm.rs#L20-L25)
-  - [MsgTimeout](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/timeout.rs#L19-L24)
-  - [MsgTimeoutOnClose](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/core/ics04_channel/msgs/timeout_on_close.rs#L18-L23)
-
-* ICS20 FungibleTokenTransfer
-  - [MsgTransfer](https://github.com/informalsystems/ibc-rs/blob/1448a2bbc817da10b183b8479548a12344ba0e9c/modules/src/applications/ics20_fungible_token_transfer/msgs/transfer.rs#L20-L37)
