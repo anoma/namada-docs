@@ -1,0 +1,51 @@
+# Pre-requisites
+If you'd like to install Namada from source you will have to install some dependencies first: 
+
+1. [Rust](https://www.rust-lang.org/tools/install), 
+2. [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+3. [Clang](https://clang.llvm.org/get_started.html)
+4. [OpenSSL](https://www.openssl.org/source/)
+5. [LLVM](https://releases.llvm.org/download.html)
+
+## Rust
+At the end of the installation, make sure that Cargo's bin directory `$HOME/.cargo/bin` is available on your PATH environment variable. You can either restart your shell or run `source $HOME/.cargo/env` to continue.
+
+If you already have Rust installed, make sure you're using the latest version by running:
+
+```shell
+rustup update
+```
+
+## Remaining dependencies
+Then, install the remaining dependencies.
+
+<!-- TODO: Turn these into code boxes with toggles for OS -->
+
+**Ubuntu:** running the following command should install everything needed:
+
+```shell
+sudo apt-get install -y make git-core libssl-dev pkg-config libclang-12-dev build-essential protobuf-compiler
+```
+
+**Mac:** installing the Xcode command line tools should provide you with almost everything you need:
+
+```shell
+xcode-select --install
+```
+
+`protoc` is also required. On Mac, you can install it with `Homebrew`:
+
+```shell
+brew install protobuf
+```
+
+When running
+```shell
+protoc --version
+```
+It should output at least:
+```shell
+libprotoc 3.12.0
+```
+
+Please refer to [protoc-installation doc](https://grpc.io/docs/protoc-installation/) for other installation options.

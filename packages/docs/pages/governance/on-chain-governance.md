@@ -49,9 +49,9 @@ The `data` field and its structure is dependant on the type of proposal being su
 ```json
 "data" : "<path/to/wasm.wasm>"
 ```
-```admonish note
-The data field for default proposals is optional. This is in line with the nature of default proposals. If the proposals have code attached to them in order to change governance parameters, then this code will be represented as a wasm file and the path to this file will be given in the data field.
-```
+
+> The data field for default proposals is optional. This is in line with the nature of default proposals. If the proposals have code attached to them in order to change governance parameters, then this code will be represented as a wasm file and the path to this file will be given in the data field.
+
 
 ### ETH Bridge Proposal
 

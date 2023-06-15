@@ -4,7 +4,7 @@ Welcome to the Namada specification!
 
 ## What is Namada?
 
-Namada is a sovereign proof-of-stake blockchain, using Tendermint BFT consensus,
+Namada is a sovereign proof-of-stake blockchain, using Cometbft BFT consensus,
 which enables multi-asset private transfers for any native or non-native asset
 using a [multi-asset shielded pool](https://research.metastate.dev/multi-asset_shielded_pool/) derived from the [Sapling circuit](https://z.cash/upgrade/sapling/).
 Namada features full IBC protocol support, a natively integrated Ethereum bridge, a modern proof-of-stake system with automatic reward compounding and cubic slashing,

@@ -43,7 +43,7 @@ namada client bond \
 
 ## Query a validator's `bonded-stake`
 
-A validator's bonded-stake (voting-power in tendermint) is determined by the sum of all their active self-bonds and bonds from delegators, with slashes applied, if any.
+A validator's bonded-stake (voting-power in cometbft) is determined by the sum of all their active self-bonds and bonds from delegators, with slashes applied, if any.
 
 When tokens are un-bonded, the bonded amount does not count towards the validator's stake until the beginning of epoch `n + 2` in the current epoch `n`. The bonded amount of tokens will be deducted from the validator's account immediately and will be credited to the PoS system's account.
 

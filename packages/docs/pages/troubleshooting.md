@@ -100,13 +100,13 @@ sudo apt-get install libssl-dev
 
 If you missed setting up as a validator pre-genesis, this means you must set up to become one post-genesis. It is not possible to add pre-genesis validators once the chain has been launched (as by definition). Instead, any full-node can become a validator through self-bonding NAM tokens.
 
-### Tendermint
+### Cometbft
 
-When facing tendermint issues as a validator, the most common cause of the issue is that we are running the wrong version of tendermint. Keep an eye on the testnet docs [here](./introduction/install/intro.md)
+When facing cometbft issues as a validator, the most common cause of the issue is that we are running the wrong version of cometbft. Keep an eye on the testnet docs [here](./introduction/install/intro.md)
 
 
-```admonish note
-Note that the common debug statement `Error reconnecting to peers` does not mean that your node is not working properly. Instead, it means there *exists at least one* validator on the network not working properly. To check whether this is a problem on your end, note the block height and see if it corresponds to the blockheight at [https://namada.world](https://namada.world)
-```
+
+>Note that the common debug statement `Error reconnecting to peers` does not mean that your node is not working properly. Instead, it means there *exists at least one* validator on the network not working properly. To check whether this is a problem on your end, note the block height and see if it corresponds to the blockheight at [https://namada.world](https://namada.world)
+
 
 

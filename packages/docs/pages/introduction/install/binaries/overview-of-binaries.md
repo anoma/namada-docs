@@ -1,6 +1,6 @@
 # Overview of Binaries
 
-This guide assumes that the Namada binaries are [installed](../intro.md) and available on path. These are:
+Once installed, you should have the following binaries:
 
 - `namada`: The main binary that can be used to interact with all the components of Namada
 - `namadan`: The ledger node
@@ -15,8 +15,17 @@ The main binary `namada` has sub-commands for all of the other binaries:
 
 To explore the command-line interface, add `--help` argument at any sub-command level to find out any possible sub-commands and/or arguments.
 
+
+>The binaries should be added to `$PATH` from the `make install` command. However, if this for some reason did not work, a solution may be to copy the binaries from `namada/target/release` to `$HOME/.local/bin/` for example: 
+> ```bash 
+> sudo cp namada/target/release/namada* $HOME/.local/bin/
+> ```
+
+<!-- 
+TODO: fix this!
+
 ```admonish tip title="Adding binaries to path" collapsible=true
 The binaries should be added to `$PATH` from the `make install` command. However, if this for some reason did not work, a solution may be to copy the binaries from `namada/target/release` to `home/$USER/.local/bin/` for example:
 
 `sudo cp namada/target/release/namada* /home/alice/.local/bin/`
-```
+``` -->

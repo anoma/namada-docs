@@ -47,6 +47,4 @@ namada client query-proposal-result \
 which will tell you the proposal result.
 
 ## Submit off-chain proposal
-```admonish note
-The community may decide to post data of their off-chain voting to another censorship resistant blockchain to preserve the decision reached by social consensus.
-```
+> The community may decide to post data of their off-chain voting to another censorship resistant blockchain to preserve the decision reached by social consensus.

@@ -18,7 +18,7 @@ dkg_public_key = "6000000054eafa7320ddebf00c9487e5f7ea5107a8444f042b74caf9ed5679
 commission_rate = "0.05"
 max_commission_rate_change = "0.01"
 net_address = "1.2.3.4:26656"
-tendermint_node_key = "00e1a8fe1abceb700063ab4558baec680b64247e2fd9891962af552b9e49318d8d"
+cometbft_node_key = "00e1a8fe1abceb700063ab4558baec680b64247e2fd9891962af552b9e49318d8d"
 ```
 
 This file contains only public information and is safe to share publicly.

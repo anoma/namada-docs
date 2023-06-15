@@ -65,5 +65,5 @@ Note that the wallet containing your private keys will also be written into this
 - Staking rewards key: Can be used to sign transactions on the PoS staking rewards account.
 - Protocol key: This key is used by the validator's ledger itself to sign protocol transaction on behalf of the validator.
 - DKG key: Special key needed for participation in the DKG protocol
-- Consensus key: Used in Tendermint consensus layer. Currently, this key is written to a file which is read by Tendermint.
-- Tendermint node key: This key is used to derive Tendermint node ID for P2P connection authentication. This key is also written to a file which is read by Tendermint.
+- Consensus key: Used in Cometbft consensus layer. Currently, this key is written to a file which is read by Cometbft.
+- Cometbft node key: This key is used to derive Cometbft node ID for P2P connection authentication. This key is also written to a file which is read by Cometbft.

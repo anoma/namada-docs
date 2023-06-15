@@ -4,12 +4,9 @@ This guide will help you migrate your validator node from one testnet to another
 
 ## Resetting your validator node (optional)
 
-```admonish note
-With the release of `v0.15.3` we have introduced a new base directory. This means that you will need to reset your validator node to use the new base directory. This is a one time operation.
-The base directory has been moved from `.namada` to `.local/share/namada` on Linux and `Library/Application Support/Namada` on MacOS.
-```
 
-This is the right time to save any logs file you want to share with us!
+> With the release of `v0.15.3` we have introduced a new base directory. This means that you will need to reset your validator node to use the new base directory. This is a one time operation.
+>The base directory has been moved from `.namada` to `.local/share/namada` on Linux and `Library/Application Support/Namada` on MacOS.
 
 
 ### Locate the namada base directory
@@ -26,21 +23,14 @@ export BASE_DIR=$HOME/.namada
 ```
 
 #### After `v0.15.3`
-If you are migrating from a testnet AFTER `v0.15.3`, then your base directory and relevant files will be located in `.local/share/namada` on Linux and `Library/Application Support/Namada` on MacOS.
-
-```admonish note
-Technically, the correct directory will be the one assigned to `$XDG_DATA_HOME`, but if you haven't set that variable, it will default to the above.
-```
-
-If you are running linux, you can run:
+If you are migrating from a testnet AFTER `v0.15.3`, then your base directory and relevant files will be located in `.local/share/namada` on Linux and `Library/Application Support/Namada` on MacOS. You can verify the default directory on your machine by running:
 ```bash
-export BASE_DIR=$HOME/.local/share/namada
+export BASE_DIR=$(namadac utils default-dir)
 ```
 
-Whereas if you are running MacOS, you can run:
-```bash
-export BASE_DIR=$HOME/Library/Application\ Support/Namada
-```
+
+>Technically, the correct directory will be the one assigned to `$XDG_DATA_HOME`, but if you haven't set that variable, it will default to the above.
+
 
 ### 1. IMPORTANT! Save your `pre-genesis` folder in the ledger base directory
 
@@ -57,33 +47,22 @@ mkdir $HOME/backup-pregenesis && cp -r $BASE_DIR/pre-genesis $HOME/backup-pregen
 ### 3. Delete the base directory
 
 ```bash
-rm -rf $BASE_DIR
+rm -rf $BASE_DIR/*
 ```
 
-### 4. Check that namada and tendermint binaries are correct. `namada --version` should give `v0.15.3` and `tendermint version` should give `0.1.4-abciplus`
+### 4. Check that namada and cometbft binaries are correct. 
 
-### 5. Create a base directory for the ledger
-#### Linux
-`mkdir $HOME/.local/share/namada`
-#### MacOS 
-`mkdir '$HOME/Library/Application Support/Namada' `
+`namada --version` should yield `v0.15.3` and `cometbft version` should output `0.37.2`
 
-### 6. Save the base directory path to a variable
-#### Linux:
+
+
+### 5. Create a pre-genesis directory
+
 ```bash
-export BASE_DIR=$HOME/.local/share/namada
+mkdir $BASE_DIR/pre-genesis
 ```
-#### MacOS:
-```bash
-export BASE_DIR=$HOME/Library/Application\ Support/Namada
-```
-### 7. Create a pre-genesis directory
-#### Linux: 
-`mkdir $HOME/.local/share/namada/pre-genesis`
-#### MacOS: 
-`mkdir $HOME/Library/Application\ Support/Namada/pre-genesis`
 
-### 8. Copy the backuped file back to `$BASE_DIR/pre-genesis` folder
+### 6. Copy the backuped file back to `$BASE_DIR/pre-genesis` folder
 ```bash
 cp -r backup-pregenesis/* $BASE_DIR/pre-genesis/
 ```
