@@ -25,7 +25,7 @@ A Namada instance receives the tokens by a transaction having [MsgRecvPacket](ht
 
 The sending and receiving tokens in a transaction are validated by not only IBC validity predicate but also [IBC token validity predicate](https://github.com/anoma/namada/blob/e3c2bd0b463b35d66fcc6d2643fd0e6509e03d99/shared/src/ledger/ibc/vp/token.rs). IBC validity predicate validates if sending and receiving the packet is proper. If the transfer is not valid, e.g. an unexpected amount is minted, the validity predicate makes the transaction fail.
 
-A transaction escrowing/unescrowing a token changes the escrow account's balance of the token. The key is `#Multitoken/{token_addr}/balance/#Ibc`. A transaction burning a token decreases the minted balance of the token. The key is `#Multitoken/{token_addr}/balance/#Mint`. A transaction minting a token increases the minted balance of the token. The key is `#Multitoken/{token_addr}/balance/#Mint`. `#Multitoken`, `#Mint` and `#Ibc` are addresses of [`InternalAddress`](https://github.com/anoma/namada/blob/a5bad396992e5f66351088bde3bec73d83e769ba/core/src/types/address.rs#L473) and actually they are encoded in the storage key. Also, the multitoken validity predicate will be triggered and check the balance changes.
+A transaction escrowing/unescrowing a token changes the escrow account's balance of the token. The key is `#Multitoken/{token_addr}/balance/#Ibc`. A transaction burning a token decreases the minted balance of the token. The key is `#Multitoken/{token_addr}/balance/#Minted`. A transaction minting a token increases the minted balance of the token. The key is `#Multitoken/{token_addr}/balance/#Minted`. `#Multitoken`, `#Minted` and `#Ibc` are addresses of [`InternalAddress`](https://github.com/anoma/namada/blob/a5bad396992e5f66351088bde3bec73d83e769ba/core/src/types/address.rs#L473) and actually they are encoded in the storage key. Also, the multitoken validity predicate will be triggered and check the balance changes.
 
 The receiver's account is `#Multitoken/{ibc_token}/balance/{receiver_addr}`. `{ibc_token}` is [`IbcToken(hash)`](https://github.com/anoma/namada/blob/a5bad396992e5f66351088bde3bec73d83e769ba/core/src/types/address.rs#L483) which has a hash calculated with the denomination prefixed with the port ID and channel ID. It is NOT the same as the normal account `#Multitoken/{src_token_addr}/balance/{receiver_addr}` of the token address on the source chain. That's because it should be origin-specific for transferring back to the source chain by binding the token address with the port and channel ID. We can transfer back the received token by setting `{ibc_token}` as `denom` in `MsgTransfer`.
 
@@ -47,7 +47,7 @@ For example, we transfer a token `#my_token` from a user `#user_a` on Chain A to
     };
 ```
 2. On Chain A, the specified amount of the token is transferred from the sender's account `#Multitoken/#my_token/balance/#user_a` to the escrow account `#Multitoken/#my_token/balance/#Ibc`
-3. On Chain B, `#Multitoken/#my_token/balance/#Mint` is increased by the amount of the token, and `#Multitoken/{ibc_token}/balance/#user_b`
+3. On Chain B, `#Multitoken/#my_token/balance/#Minted` is increased by the amount of the token, and `#Multitoken/{ibc_token}/balance/#user_b`
     - The `{ibc_token}` is made with a hash calculated from a string `transfer/channel_24/#my_token` with SHA256
 4. To transfer back, User B makes `MsgTransfer` and submits a transaction from Chain B
 ```rust
@@ -65,7 +65,7 @@ For example, we transfer a token `#my_token` from a user `#user_a` on Chain A to
         timeout_timestamp_on_b,
     };
 ```
-5. On Chain B, `#Multitoken/{ibc_token}/balance/#user_b` and `#Multitoken/{ibc_token}/balance/#Mint` are decreased by the amount of the token
+5. On Chain B, `#Multitoken/{ibc_token}/balance/#user_b` and `#Multitoken/{ibc_token}/balance/#Minted` are decreased by the amount of the token
 6. On Chain A, the amount of the token is transferred from `#Multitoken/#my_token/balance/#Ibc` to `#Multitoken/#my_token/balance/#user_a`
 
 ## IBC message
