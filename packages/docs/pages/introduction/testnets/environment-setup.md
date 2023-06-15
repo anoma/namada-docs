@@ -6,15 +6,14 @@ If you don't want to build Namada from source you can [install Namada from binar
 Export the following variables:
 
 ```bash
-export NAMADA_TAG=v0.15.3
-export TM_HASH=v0.1.4-abciplus
+export NAMADA_TAG=v0.17.4
 ```
 
 
 ## Installing Namada
 0. Install all pre-requisites
     - [Rust](https://www.rust-lang.org/tools/install)
-    - [Tendermint](../install/installing-tendermint.md)
+    - [CometBFT](../install/installing-cometbft.md)
     - [Protobuf](../install/from-source.md#pre-requisites)
 
 1. Clone namada repository and checkout the correct versions
@@ -33,22 +32,12 @@ sudo apt-get install build-essential make pkg-config libssl-dev libclang-dev -y
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-## Installing Tendermint
-1. Install the heliaxdev/tendermint fork
-```bash
-git clone https://github.com/heliaxdev/tendermint && cd tendermint && git checkout $TM_HASH
-make build
-```
-The above requires that golang is correctly installed with the correct $PATH setup
-```admonish note
-In linux, this can be resolved by
-`sudo snap install go --channel=1.18/stable --classic`
-```
-2. Copy both the namada and tendermint binaries to somewhere on $PATH (or use the relative paths). This step may or may not be necessary.
+## Installing CometBFT
+1. See the installing CometBFT section [here](../install/installing-cometbft.md) for instructions on how to install CometBFT
+2. Copy both the namada and CometBFT binaries to somewhere on $PATH (or use the relative paths). This step may or may not be necessary.
     
 - namada binaries can be found in `/target/release`
-- tendermint is in `build/tendermint`
-
+- CometBFT is likely in `$HOME/Downloads/cometbft`
 
 ## Check ports
 1. Open ports on your machine:
@@ -65,7 +54,7 @@ In linux, this can be resolved by
     - `curl $IP:$PORT >/dev/null`
 
 ## Verifying your installation
-- Make sure you are using the correct tendermint version
-    - `tendermint version` should output `0.1.4-abciplus`
+- Make sure you are using the correct cometbft version
+    - `cometbft version` should output `0.37.2`
 - Make sure you are using the correct Namada version
-    - `namada --version` should output `Namada v0.15.3`
+    - `namada --version` should output `Namada v0.17.4`

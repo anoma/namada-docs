@@ -3,11 +3,11 @@
 ## Delegators vs Delegates
 All accounts on Namada with any amount of *bonded* NAM, is by definition, either a delegator or a delegate. 
 
-#### What is a deleagtor?
-A delegator is an account that has bonded NAM to a delegate. 
+#### What is a delegator?
+> A delegator is an account that has bonded NAM to a delegate. 
 
 #### What is a delegate?
-A delegate is an account that has been bonded to by a delegator.
+> A delegate is an account that has been bonded to by a delegator.
 
 ## Becoming a delegator
 In order to become a delegator, you must first have an account with positive NAM balance. If you do not have an account, you can follow the instructions [here](../users/an-introduction-to-namada-addresses.md) to create one.

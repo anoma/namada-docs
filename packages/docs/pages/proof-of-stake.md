@@ -1,6 +1,6 @@
-# 🔏 Interacting with the Cubic Proof-of-Stake system
+# Cubic Proof-of-Stake system
 
-The Namada Proof of Stake system uses the NAM token as the staking token. It features delegation to any number of validators and customizable validator validity predicates.
+The Namada Proof of Stake (PoS) system uses the NAM token as the staking token. It features delegation to any number of validators and customizable validator validity predicates.
 
 ## PoS Validity Predicate
 
@@ -22,7 +22,6 @@ namadac query-protocol-parameters
 
 In order to query the current epoch, the following command can be run:
 
-```shell
 ```shell
 namada client epoch
 ```

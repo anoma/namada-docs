@@ -6,13 +6,13 @@ namada wallet address gen --alias aliace
 
 Now choose a name for your validator:
 
-```bash!
+```bash
 export VALIDATOR_ALIAS="<your-validator-name>"
 ```
 
 A validator account requires additional keys compared to a user account, so start by initialising a validator account:
 
-```bash!
+```bash
 namada client init-validator \
   --alias $VALIDATOR_ALIAS \
   --source aliace \
@@ -24,12 +24,16 @@ When initialising a validator account, it is also mandatory to specify both the 
 
 This command will generate the keys required for running a validator:
 
-- Consensus key, which is used in [signing blocks in Tendermint](https://docs.tendermint.com/master/nodes/validators.html#validator-keys).
+- Consensus key, which is used in [signing blocks in Cometbft](https://docs.cometbft.com/master/nodes/validators.html#validator-keys).
 - Validator account key for signing transactions on the validator account, such as token self-bonding, unbonding and withdrawal, validator keys, validity predicate, state and metadata updates.
 
 Then, it submits a transaction to the ledger that generates the new validator account with established address, which can be used to receive new delegations.
 
-The keys and the alias of the address will be saved in your wallet. Your local ledger node will also be setup to run this validator, you just have to shut it down with e.g. `Ctrl + C`, then start it again with the same command:
+The keys and the alias of the address will be saved in your wallet. 
+
+> ***IMPORTANT***
+>
+> Our local ledger node will also be setup to run this validator, you just have to shut it down with e.g. `Ctrl + C`, then start it again with the same command as before.
 
 ```shell
 namadan ledger run
