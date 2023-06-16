@@ -2,7 +2,7 @@
 
 ## Pre-requisites
 
-Make sure you have the correct pre-requisites downloaded and installed. You can find the pre-requisites [here](./source/pre-requisites.md)
+Make sure you have the correct pre-requisites downloaded and installed. You can find the pre-requisites [here](./source/pre-requisites.md).
 
 ## Installing Namada
 Now that you have all the required dependencies installed, you can clone the source code from the [Namada repository](https://github.com/anoma/namada) and build it with:
