@@ -6,7 +6,7 @@ For more context read:
 
 ## Namada protocol versions
 
-A testnet might deploy different versions of the Namada protocol. To see in-detail what each protocol version includes, refer to the [Github changelog](https://github.com/anoma/namada/tree/main/.changelog), which specifies what changes have been made in between versions.
+A testnet might deploy different versions of the Namada protocol. To see in-detail what each protocol version includes, refer to the [GitHub changelog](https://github.com/anoma/namada/tree/main/.changelog), which specifies what changes have been made in between versions.
 
 ## Report a bug
 
@@ -14,13 +14,13 @@ If you find a bug, please submit an issue with the `bug` [issue template](https:
 
 ## How to join a Namada testnet
 
-1. [Environment setup](./environment-setup.md)
-2. [Pre-genesis instructions](./pre-genesis.md)
+1. [Environment setup](./testnets/environment-setup.md)
+2. [Pre-genesis instructions](./testnets/pre-genesis.md)
 3. [Pre-genesis validator setup](../../validators/genesis-validator-setup.md)
-4. [Pre-genesis validator apply](./genesis-validator-apply.md)
+4. [Pre-genesis validator apply](./testnets/genesis-validator-apply.md)
 5. [Running your genesis validator](../../validators/run-your-genesis-validator.md)
 6. [Running a full node](../../running-a-full-node.md)
-7. [Becoming a validator post-genesis](./post-genesis-validator.md)
+7. [Becoming a validator post-genesis](./testnets/post-genesis-validator.md)
    ![testnet_flowchart](/images/testnet_flowchart.png)
 
 The Namada public testnet is permissionless, anyone can join without the authorisation of a centralised party. Expect frequent upgrades (every two weeks).
@@ -126,4 +126,4 @@ The block explorer is currently in development. The latest version can be found 
 
 ## Community
 
-For questions or feedback, feel free to post or comment on [Reddit](https://www.reddit.com/r/namada) or [Github](https://github.com/anoma/namada/issues). Don't forget to [follow Namada](https://twitter.com/namadanetwork) on Twitter for testnet relevant updates and to join [Discord](https://discord.gg/namada) for questions and support for validators.
+For questions or feedback, feel free to post or comment on [Reddit](https://www.reddit.com/r/namada) or [GitHub](https://github.com/anoma/namada/issues). Don't forget to [follow Namada](https://twitter.com/namadanetwork) on Twitter for testnet relevant updates and to join [Discord](https://discord.gg/namada) for questions and support for validators.
