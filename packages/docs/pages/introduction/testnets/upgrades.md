@@ -10,7 +10,7 @@ No upgrade needed on `public-testnet-9` (yet).
 
 ***17/05/2023*** `public-testnet-9` 
 
-The testnet launches on 20/06/2023 at 17:00 UTC with the genesis validators from `public-testnet-9`. It launches with [version v0.17.4](https://github.com/anoma/namada/releases/tag/v0.17.4) and chain-id `TBD`. 
+The testnet launches on 20/06/2023 at 17:00 UTC with the genesis validators from `public-testnet-9`. It launches with [version v0.17.3](https://github.com/anoma/namada/releases/tag/v0.17.3) and chain-id `TBD`. 
 If your genesis transaction is contained in [this folder](https://github.com/anoma/namada-testnets/tree/main/namada-public-testnet-9), you are one of the genesis validators. In order for the testnet to come online, at least 2/3 of those validators need to be online.
 
 The installation docs are updated and can be found [here](./environment-setup.md). The running docs for validators/fullnodes can be found [here](../../running-a-full-node.md).
