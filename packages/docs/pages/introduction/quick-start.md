@@ -6,7 +6,7 @@ This guide is for those interested in getting Namada up and running as quickly a
 
 ## Installing Namada
 
-See [the installation guide](../install/intro.md) for details on installing the Namada binaries. Commands in this guide will assume you have the Namada binaries (`namada`, `namadan`, `namadaw`, `namadac`) on your `$PATH`.
+See [the installation guide](./install.md) for details on installing the Namada binaries. Commands in this guide will assume you have the Namada binaries (`namada`, `namadan`, `namadaw`, `namadac`) on your `$PATH`.
 
 If the binaries are stored somewhere, but are not on your path (perhaps you downloaded the binaries), you can add the binaries to to your $PATH with:
 
@@ -18,7 +18,7 @@ If you build from source, and run `make install`, the binaries will be installed
 
 ## Joining a network
 
-See [the testnets page](../testnets/intro.md) for details of how to join a testnet. The rest of this guide will assume you have joined a testnet chain using the `namadac utils join-network --chain-id <some-chain-id>` command.
+See [the testnets page](./testnets.md) for details on how to join a testnet. The rest of this guide will assume you have joined a testnet chain using the `namadac utils join-network --chain-id <some-chain-id>` command.
 
 ## Run a ledger node
 
@@ -39,24 +39,24 @@ For a more verbose output, one can run
 NAMADA_LOG=info CMT_LOG_LEVEL=p2p:none,pex:error NAMADA_CMT_STDOUT=true namada ledger
 ```
 
-This should sync your node to the ledger and will take a while (depending on your machine's hardware as well as the time between genesis and the start of sync). Subsequent commands (generating an account, etc.)  are unlikely to work until it is fully synced. Enquire the current block height with other participants to make sure you are synced in order to proceed.
+This should sync your node to the ledger and will take a while (depending on your machine's hardware as well as the time between genesis and the start of sync). Subsequent commands (generating an account, etc.) are unlikely to work until your node is fully synced. Enquire the current block height with other participants to make sure you are synced in order to proceed.
 
 ## Generate an account and grab some tokens
 First you will need an implicit account in order to receive tokens. You can generate one with:
 
 ```shell
-namadaw account gen --alias <your-go-to-alias>
+namadaw address gen --alias <your-go-to-alias>
 ```
 For the remainder of this introduction, let's assume your go-to alias is `stanley`.
 
 This will generate a new account and store it in the default keychain. You can see the account with:
 
 ```shell
-namadaw account list
+namadaw address list
 ```
 
 <!-- #TODO: ADD some output-->
-.
+
 ## Grabbing the tokens (testnet only)
 The "faucet" is a native established account on Namada that is willing to give a maximum of 1000 tokens to any user at request. Let's transfer ourselves `1000 NAM` from the faucet with the same alias using:
 
@@ -77,4 +77,4 @@ namadac balance \
 ```
 
 ## From here
-From here, you can do a variety of cool things. Perhaps try [shielding your NAM](../../users/shielded-transfers.md), bonding your tokens to a validator for [delegating purposes](../../delegators/intro.md), or [becoming a validator](../../validators/intro.md).
+From here, you can do a variety of cool things. Perhaps try [shielding your NAM](../../users/shielded-transfers.md), bonding your tokens to a validator for [delegating purposes](../../delegators.md), or [becoming a validator](../../validators.md).

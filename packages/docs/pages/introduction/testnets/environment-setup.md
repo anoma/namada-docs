@@ -1,7 +1,6 @@
 # Environment setup
-```admonish note
-If you don't want to build Namada from source you can [install Namada from binaries](../user-guide/install/from-binary.md)
-```
+
+> If you don't want to build Namada from source you can [install Namada from binaries](../user-guide/install/from-binary.md).
 
 Export the following variables:
 
@@ -13,8 +12,8 @@ export NAMADA_TAG=v0.17.4
 ## Installing Namada
 0. Install all pre-requisites
     - [Rust](https://www.rust-lang.org/tools/install)
-    - [CometBFT](../install/installing-cometbft.md)
-    - [Protobuf](../install/from-source.md#pre-requisites)
+    - [CometBFT](../installing-cometbft.md)
+    - [Protobuf](../install/source/pre-requisites.md)
 
 1. Clone namada repository and checkout the correct versions
 
@@ -33,7 +32,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 ## Installing CometBFT
-1. See the installing CometBFT section [here](../install/installing-cometbft.md) for instructions on how to install CometBFT
+1. See the installing CometBFT section [here](../installing-cometbft.md) for instructions on how to install CometBFT.
 2. Copy both the namada and CometBFT binaries to somewhere on $PATH (or use the relative paths). This step may or may not be necessary.
     
 - namada binaries can be found in `/target/release`
@@ -54,7 +53,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     - `curl $IP:$PORT >/dev/null`
 
 ## Verifying your installation
-- Make sure you are using the correct cometbft version
+- Make sure you are using the correct CometBFT version
     - `cometbft version` should output `0.37.2`
 - Make sure you are using the correct Namada version
     - `namada --version` should output `Namada v0.17.4`
