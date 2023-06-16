@@ -5,7 +5,7 @@
 In order to run any docker images, you need to have docker installed. You can find instructions on how to install docker for your machine [here](https://docs.docker.com/get-docker/).
 
 ## Downloading the docker image
-The Namada docker image can be found [here](https://github.com/anoma/namada/pkgs/container/namada)
+The Namada docker image can be found [here](https://github.com/anoma/namada/pkgs/container/namada).
 
 Under the `Tags` tab, you can find the latest version of the docker image. Click on the link for the correct version of Namada that you are trying to install. For example, if you are trying to install Namada v0.16.0, you would click on the link for `v0.16.0`.
 
