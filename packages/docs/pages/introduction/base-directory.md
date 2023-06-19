@@ -11,7 +11,7 @@ As of the latest version of Namada, the base directory is located in the followi
 You can find the base directory by running the following command:
 
 ```bash
-namadac utils default-dir
+namadac utils default-base-dir
 ```
 
 Which should correspond to one of the following directories:
