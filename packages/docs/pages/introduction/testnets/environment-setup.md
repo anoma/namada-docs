@@ -5,7 +5,7 @@
 Export the following variables:
 
 ```bash
-export NAMADA_TAG=v0.17.4
+export NAMADA_TAG=v0.17.3
 ```
 
 
@@ -56,4 +56,4 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 - Make sure you are using the correct CometBFT version
     - `cometbft version` should output `0.37.2`
 - Make sure you are using the correct Namada version
-    - `namada --version` should output `Namada v0.17.4`
+    - `namada --version` should output `Namada v0.17.3`

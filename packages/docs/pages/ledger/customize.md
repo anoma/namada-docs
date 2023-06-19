@@ -1,4 +1,6 @@
 # Customize accounts and transactions
+> Note that these features are still a work in progress. At the time of writing, Namada does not allow for custom validity predicates (as there is a whitelist). Custom transactions are possible in certain cases (e.g governance proposals)
+
 
 On this page, we'll cover how to tailor your account(s) to your use-case with custom-made validity predicates and transactions.
 
