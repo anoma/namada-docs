@@ -25,7 +25,7 @@ export BASE_DIR=$HOME/.namada
 #### After `v0.15.3`
 If you are migrating from a testnet AFTER `v0.15.3`, then your base directory and relevant files will be located in `.local/share/namada` on Linux and `Library/Application Support/Namada` on MacOS. You can verify the default directory on your machine by running:
 ```bash
-export BASE_DIR=$(namadac utils default-dir)
+export BASE_DIR=$(namadac utils default-base-dir)
 ```
 
 
