@@ -1,5 +1,5 @@
 # Customize accounts and transactions
-> Note that these features are still a work in progress. At the time of writing, Namada does not allow for custom validity predicates (as there is a whitelist). Custom transactions are possible in certain cases (e.g governance proposals)
+> Note that these features are still a work in progress. At the time of writing, Namada does not allow for custom validity predicates (as there is a whitelist). Custom transactions are possible in certain cases (e.g governance proposals).
 
 
 On this page, we'll cover how to tailor your account(s) to your use-case with custom-made validity predicates and transactions.
@@ -22,9 +22,9 @@ To illustrate with an example storage key used for fungible tokens (with address
   #atest1v4ehgw36x3prs.../balance/#atest1v4ehgw36xvcyy...
   ```
 
-Any transaction can attempt to make changes to the storage of any account(s). Only if all the involved accounts accept, the transaction will it be committed. Otherwise, the transaction is rejected and its modifications discarded.
+Any transaction can attempt to make changes to the storage of any account(s). Only if all the involved accounts accept, the transaction will be committed. Otherwise, the transaction is rejected and its modifications discarded.
 
-This approach allows multiparty transactions to be applied atomically, without any a priority coordination. It also gives accounts complete and fine-grained control over how they can be used in transactions in themselves and in relation to other accounts.
+This approach allows multiparty transactions to be applied atomically, without any prior coordination. It also gives accounts complete and fine-grained control over how they can be used in transactions in relation to themselves and other accounts.
 
 In fact, most of the functionality in the Namada ledger is being built leveraging the simplicity and flexibility of this account system, from a simple fungible token to more complex accounts that integrate the Inter-blockchain Communication protocol and the Proof of Stake system.
 
