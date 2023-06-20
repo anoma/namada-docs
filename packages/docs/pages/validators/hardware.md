@@ -1,6 +1,6 @@
 # Hardware Requirements
 
-This section covers the recommended hardware requirements for engaging with Namada for validators, full nodes & light nodes. 
+This section covers the recommended hardware requirements for engaging with Namada for validators, full nodes and light nodes. 
 
 ## Resource Requirements
 

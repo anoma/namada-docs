@@ -1,7 +1,7 @@
 {
   "quick-start": "Quick start",
   "install": "Install Namada",
-  "installing-cometbft": "Install Cometbft",
+  "installing-cometbft": "Install CometBFT",
   "testnets": "Testnets",
   "base-directory": "Base directory"
 }

@@ -34,4 +34,4 @@ If you have the alias saved in your wallet, you can also pass `<validator-alias>
 Redelegating is the process of changing the delegate you have bonded to. This process takes 4 epochs, after which your NAM will be redelegated.
 
 ## Unbonding
-Unbonding is the process of removing your bonded NAM from a delegate. This process is identical to [unbonding tokens from a validator](../validators/staking.md).
+Unbonding is the process of removing your bonded NAM from a delegate. This process is identical to [unbonding tokens from a validator](../validators/staking.md#unbonding).

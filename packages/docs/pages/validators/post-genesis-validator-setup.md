@@ -24,7 +24,7 @@ When initialising a validator account, it is also mandatory to specify both the 
 
 This command will generate the keys required for running a validator:
 
-- Consensus key, which is used in [signing blocks in Cometbft](https://docs.cometbft.com/master/nodes/validators.html#validator-keys).
+- Consensus key, which is used in [signing blocks in CometBFT](https://docs.cometbft.com/v0.37/core/validators#validator-keys).
 - Validator account key for signing transactions on the validator account, such as token self-bonding, unbonding and withdrawal, validator keys, validity predicate, state and metadata updates.
 
 Then, it submits a transaction to the ledger that generates the new validator account with established address, which can be used to receive new delegations.
@@ -47,5 +47,5 @@ Note that the balance of NAM tokens that is in your validator account does not c
 namada client balance --owner my-validator --token NAM
 ```
 
-That is, the balance of your account's address is a regular liquid balance that you can transfer using your validator account key, depending on the rules of the validator account's validity predicate. The default validity predicate allows you to transfer it with a signed transaction and/or stake it in the PoS system. Therefore, in order to increase the voting power of your validator, you need to accrue [some stake](./staking.md)
+That is, the balance of your account's address is a regular liquid balance that you can transfer using your validator account key, depending on the rules of the validator account's validity predicate. The default validity predicate allows you to transfer it with a signed transaction and/or stake it in the PoS system. Therefore, in order to increase the voting power of your validator, you need to accrue [some stake](./staking.md).
 
