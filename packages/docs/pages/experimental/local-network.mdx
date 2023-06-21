@@ -16,12 +16,12 @@ The script has some dependencies that must be installed in order to run it succe
 
 `trash` can be installed via:
 
-```shell
+```shell copy
 # Linux
 sudo apt install trash-cli
 ```
 
-```shell
+```shell copy
 # MacOS
 brew install trash
 ```
@@ -40,7 +40,7 @@ The below image shows an example of a genesis configuration file that has been m
 
 The script will also require all `wasm` files for txs to be built. This can be done by running the following command (whilst in the namada directory):
 
-```shell
+```shell copy
 make build-wasm-scripts
 ```
 
@@ -48,7 +48,7 @@ make build-wasm-scripts
 
 The script is called `build_network.sh` and can be run with the following command:
 
-```shell
+```shell copy
 ./scripts/build_network.sh <config_toml> <base_dir> <namada_dir>
 ```
 
@@ -60,7 +60,7 @@ More specifically, the script takes three arguments:
 
 For example, a MacOS user would run something along the lines of:
 
-```shell
+```shell copy
 ./scripts/build_network.sh ~/anoma-network-config/templates/edited_genesis_config.toml "$HOME/Library/Application Support/Namada" ./target/release
 ```
 
@@ -69,7 +69,7 @@ For example, a MacOS user would run something along the lines of:
 After the script has been run, a python process will have started in the background.
 The ledger can be run through the familiar command:
 
-```shell
+```shell copy
 target/release/namada ledger
 ```
 
@@ -77,7 +77,7 @@ target/release/namada ledger
 
 After the local network has fulfilled its purpose, it can be cleaned up by running the following commands found in the cleanup function of the script:
 
-```shell
+```shell copy
     pkill -f ".hack/chains"
     rm -r .hack/chains
     rm local.*.tar.gz

@@ -4,7 +4,7 @@
 
 Export the following variables:
 
-```bash
+```bash copy
 export NAMADA_TAG=v0.17.3
 ```
 
@@ -17,15 +17,15 @@ export NAMADA_TAG=v0.17.3
 
 1. Clone namada repository and checkout the correct versions
 
-```shell
+```shell copy
 git clone https://github.com/anoma/namada && cd namada && git checkout $NAMADA_TAG
 ```
 2. Build binaries
-```bash
+```bash copy
 make build-release
 ```
 - There may be some additional requirements you may have to install (linux):
-```bash
+```bash copy
 sudo apt-get update -y
 sudo apt-get install build-essential make pkg-config libssl-dev libclang-dev -y
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh

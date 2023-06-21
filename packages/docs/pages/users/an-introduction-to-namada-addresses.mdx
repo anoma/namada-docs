@@ -13,7 +13,7 @@ Namada uses [ed25519](https://en.wikipedia.org/wiki/EdDSA#Ed25519) keypairs for 
 
 To manage your keys, various sub-commands are available under:
 
-```shell
+```shell copy
 namada wallet key
 ```
 
@@ -21,7 +21,7 @@ namada wallet key
 
 It is possible to generate keys using the CLI. By doing so, an implicit account address is also derived in the process and added to storage.
 
-```shell
+```shell copy
 namada wallet key gen --alias keysha
 ```
 
@@ -32,7 +32,7 @@ The encryption password is _not_ a part of key generation randomness.
 
 Namada wallet supports keypair generation using a [mnemonic code](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) and [HD derivation path](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 To generate a keypair for a default path use
-```shell
+```shell copy
 namada wallet key gen --alias keysha --hd-path default
 ```
 
@@ -46,13 +46,13 @@ Optionally, the user may specialize an additional passphrase that _is used_ as a
 ### Restore the keypair
 
 To recover the keypair from your mnemonic code and passphrase use
-```shell
+```shell copy
 namada wallet key restore --alias keysha --hd-path default
 ```
 
 ### List all known keys
 
-```shell
+```shell copy
 namada wallet key list
 ```
 
@@ -61,31 +61,31 @@ namada wallet key list
 
 To manage addresses, similar to keys, various sub-commands are available:
 
-```shell
+```shell copy
 namada wallet address
 ```
 
 ### Generate an implicit address
 
 Let's call the implicit address `accountant`:
-```shell
+```shell copy
 namada wallet address gen --alias accountant
 ```
 
 > Note that this will also generate and save a key from which the address was derived and save it under the same `accountant` alias. Thus, this command has the same effect as `namada wallet key gen --alias accountant`.
 
-```shell
+```shell copy
 namada wallet address gen --alias keysha --hd-path default
 ```
 generates an address using a [mnemonic code](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) and [HD derivation path](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 
 ### Restore the keypair
 
-```shell
+```shell copy
 namada wallet address restore --alias keysha --hd-path default
 ```
 ### List all known addresses
 
-```shell
+```shell copy
 namada wallet address list
 ```

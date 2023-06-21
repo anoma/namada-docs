@@ -6,7 +6,7 @@ If for any reason issuing an on-chain proposal is not adequate to your needs, yo
 
 Create the same json file as in the on-chain proposal and use the following command:
 
-```shell
+```shell copy
 namada client init-proposal \
     --data-path proposal.json \
     --offline
@@ -18,7 +18,7 @@ This command will create a `proposal` file same directory where the command was 
 
 To vote on an offline proposal use the following command:
 
-```shell
+```shell copy
 namada client vote-proposal --data-path proposal \
     --vote yay \
     --signer validator \
@@ -38,7 +38,7 @@ All those files will have to be in a folder (lets call it `offline-proposal`).
 
 Now you can use the following command:
 
-```shell
+```shell copy
 namada client query-proposal-result \
     --offline \
     --data-path `offline-proposal`

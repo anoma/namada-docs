@@ -7,7 +7,7 @@ import { Callout } from 'nextra-theme-docs'
 
 Assuming you have an account with at least 500 NAM token (in this example we are going to use `my-new-acc`), lets get the corresponding address
 
-```shell
+```shell copy
 namada wallet address find --alias `my-new-acc`
 ```
 
@@ -114,19 +114,19 @@ The data field for PGF proposals contains both continuous and retroactive PGF fu
 ## Submitting the proposal
 As soon as your `proposal.json` file is ready, you can submit the proposal with (making sure to be in the same directory as the `proposal.json` file):
 
-```shell
+```shell copy
 namada client init-proposal --data-path proposal.json 
 ```
 
 The transaction should have been accepted. You can query all the proposals with:
 
-```shell
+```shell copy
 namada client query-proposal
 ```
 
 or a single proposal with
 
-```shell
+```shell copy
 namada client query-proposal --proposal-id 0
 ```
 
@@ -136,7 +136,7 @@ where `0` is the proposal id.
 
 Only delegators and delegates can vote on proposals. Assuming you fall into one of these categories, you can send a vote with the following command:
 
-```shell
+```shell copy
 namada client vote-proposal \
     --proposal-id 0 \
     --vote yay \
@@ -149,12 +149,12 @@ where `--vote` can be either `yay` or `nay`.
 
 As soon as the ledger reaches the epoch defined in the json as `voting_end_epoch`, no votes will be accepted. The code definied in `proposal_code` json field will be executed at the beginning of `grace_epoch` epoch. You can use the following commands to check the status of a proposal:
 
-```shell
+```shell copy
 namada client query-proposal --proposal-id 0
 ```
 
 or to just check the result:
 
-```shell
+```shell copy
 namada client query-proposal-result --proposal-id 0
 ```

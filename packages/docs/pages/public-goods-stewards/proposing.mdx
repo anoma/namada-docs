@@ -55,7 +55,7 @@ Save this file as `PGF_proposal.json` to some memorable path on your machine.
 
 In order to submit the proposal, the steward can use the following command:
 
-```shell
+```shell copy
 namada client init-proposal \
     --pgf-proposal \
     --data-path PGF_proposal.json \
@@ -67,7 +67,7 @@ The proposal will then be given a `proposal-id` which can be used to query the p
 
 The command for querying the proposal is as follows:
 
-```shell
+```shell copy
 namada client query-proposal \
     --proposal-id <the-proposal-id> \
 ```

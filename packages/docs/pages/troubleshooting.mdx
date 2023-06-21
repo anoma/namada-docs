@@ -34,13 +34,13 @@ error: could not compile `proc-macro2` due to previous error
 
 It may be resolved by running
 
-```bash
+```bash copy
 sudo apt install build-essential
 ```
 
 Another solution can sometimes be installing `libcland-dev`. This can be achieved through:
 
-```bash
+```bash copy
 sudo apt-get update -y
 sudo apt-get install -y libclang-dev
 ```
@@ -49,7 +49,7 @@ sudo apt-get install -y libclang-dev
 #### WASM32-unknown-unknown
 Another issue the compiler may run into is that it cannot find the wasm32-unknown-unknown target.
 
-```bash
+```bash copy
 error[E0463]: can't find crate for `core`
   |
   = note: the `wasm32-unknown-unknown` target may not be installed
@@ -63,7 +63,7 @@ error: could not compile `cfg-if` due to 2 previous errors
 
 This issue can be resolved by running 
 
-```bash
+```bash copy
 rustup target add wasm32-unknown-unknown
 ```
 (Yes the name of the target is `wasm32-unknown-unknown`. This is not the compiler unable to tell which version/release it is).
@@ -72,7 +72,7 @@ rustup target add wasm32-unknown-unknown
 
 If you run into the error
 
-```bash
+```bash copy
 Could not find directory of OpenSSL installation, and this `-sys` crate cannot
   proceed without this knowledge. If OpenSSL is installed and this crate had
   trouble finding it,  you can set the `OPENSSL_DIR` environment variable for the
@@ -90,7 +90,7 @@ Then the solution is spelled out for you. You need to install the development pa
 
 For ubuntu, this can be achieved through
 
-```bash
+```bash copy
 sudo apt-get install libssl-dev
 ```
 

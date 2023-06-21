@@ -10,7 +10,7 @@ See [the installation guide](./install.md) for details on installing the Namada 
 
 If the binaries are stored somewhere, but are not on your path (perhaps you downloaded the binaries), you can add the binaries to to your $PATH with:
 
-```shell
+```shell copy
 export PATH=$PATH:<path-to-namada-binaries>
 ```
 
@@ -24,7 +24,7 @@ See [the testnets page](./testnets.md) for details on how to join a testnet. The
 
 We recommend this step with [tmux](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/), which allows the node to keep running without needing the terminal to be open indefinitely. If not, skip to the subsequent step.
 
-```shell
+```shell copy
 tmux
 
 # inside the tmux/or not
@@ -35,7 +35,7 @@ namadan ledger run
 ```
 
 For a more verbose output, one can run 
-```shell
+```shell copy
 NAMADA_LOG=info TM_LOG_LEVEL=p2p:none,pex:error NAMADA_CMT_STDOUT=true namada ledger
 ```
 
@@ -44,14 +44,14 @@ This should sync your node to the ledger and will take a while (depending on you
 ## Generate an account and grab some tokens
 First you will need an implicit account in order to receive tokens. You can generate one with:
 
-```shell
+```shell copy
 namadaw address gen --alias <your-go-to-alias>
 ```
 For the remainder of this introduction, let's assume your go-to alias is `stanley`.
 
 This will generate a new account and store it in the default keychain. You can see the account with:
 
-```shell
+```shell copy
 namadaw address list
 ```
 
@@ -60,7 +60,7 @@ namadaw address list
 ## Grabbing the tokens (testnet only)
 The "faucet" is a native established account on Namada that is willing to give a maximum of 1000 tokens to any user at request. Let's transfer ourselves `1000 NAM` from the faucet with the same alias using:
 
-```shell
+```shell copy
 namadac transfer \
   --source faucet \
   --target stanley \
@@ -71,7 +71,7 @@ namadac transfer \
 
 To query the balance of `stanley`, run:
 
-```shell
+```shell copy
 namadac balance \
   --owner stanley
 ```
