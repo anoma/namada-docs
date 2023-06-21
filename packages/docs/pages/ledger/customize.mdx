@@ -67,7 +67,7 @@ To find out about the host interface available in a validity predicate, please c
 
 To compile the validity predicate's code from the template:
 
-```shell
+```shell copy
 make -C wasm/vp_template
 ```
 
@@ -75,7 +75,7 @@ This will output a WASM file that can be found in `wasm/vp_template/target/wasm3
 
 You can, for example, copy it into your `wasm` directory (the default directory used by the ledger's node and the client, which can be changed with `--wasm-dir` global argument or `NAMADA_WASM_DIR`):
 
-```shell
+```shell copy
 cp \
   wasm/vp_template/target/wasm32-unknown-unknown/release/vp_template.wasm \
   wasm/my_vp.wasm
@@ -83,7 +83,7 @@ cp \
 
 To submit a transaction that updates an account's validity predicate:
 
-```shell
+```shell copy
 namada client update --address my-new-acc --code-path my_vp.wasm
 ```
 
@@ -112,7 +112,7 @@ To find out about the interface available in a transaction, please check out [Ru
 
 Compile the transaction's code from the template:
 
-```shell
+```shell copy
 make -C wasm/tx_template
 ```
 
@@ -120,7 +120,7 @@ This will output a WASM file that can be found in `wasm/tx_template/target/wasm3
 
 Submit the transaction to the ledger:
 
-```shell
+```shell copy
 namada client tx --code-path tx_template/tx.wasm
 ```
 

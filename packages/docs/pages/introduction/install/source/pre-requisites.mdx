@@ -12,7 +12,7 @@ At the end of the installation, make sure that Cargo's bin directory `$HOME/.car
 
 If you already have Rust installed, make sure you're using the latest version by running:
 
-```shell
+```shell copy
 rustup update
 ```
 
@@ -23,28 +23,28 @@ Then, install the remaining dependencies.
 
 **Ubuntu:** running the following command should install everything needed:
 
-```shell
+```shell copy
 sudo apt-get install -y make git-core libssl-dev pkg-config libclang-12-dev build-essential protobuf-compiler
 ```
 
 **Mac:** installing the Xcode command line tools should provide you with almost everything you need:
 
-```shell
+```shell copy
 xcode-select --install
 ```
 
 `protoc` is also required. On Mac, you can install it with `Homebrew`:
 
-```shell
+```shell copy
 brew install protobuf
 ```
 
 When running
-```shell
+```shell copy
 protoc --version
 ```
 It should output at least:
-```shell
+```shell copy
 libprotoc 3.12.0
 ```
 

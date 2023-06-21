@@ -6,7 +6,7 @@ The Namada Proof of Stake (PoS) system uses the NAM token as the staking token. 
 
 The PoS system is implemented as an account with the [PoS Validity Predicate](https://github.com/anoma/namada/blob/main/shared/src/ledger/pos/vp.rs) that governs the rules of the system. You can find its address in your wallet:
 
-```shell
+```shell copy
 namada wallet address find --alias PoS
 ```
 
@@ -16,12 +16,12 @@ The system relies on the concept of epochs. An epoch is a range of consecutive b
 
 To query the current epoch, the following command can be run:
 
-```shell
+```shell copy
 namadac query-protocol-parameters
 ```
 
 In order to query the current epoch, the following command can be run:
 
-```shell
+```shell copy
 namada client epoch
 ```

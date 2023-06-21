@@ -28,7 +28,7 @@ transparent account with some token balance.
 
 You can randomly generate a new Spending Key with:
 
-```shell
+```shell copy
 namadaw masp gen-key --alias <your-spending-key-alias>
 ```
 
@@ -41,7 +41,7 @@ the same alias.
 
 To create a payment address from your Spending key, use:
 
-```shell
+```shell copy
 namadaw masp gen-addr \
     --key <your-spending-key-alias> \
     --alias <your-payment-address-alias>
@@ -56,7 +56,7 @@ This command will generate a different payment address each time you run it. Pay
 Once you have a payment address, transfer a balance from your
 transparent account to your shielded account with something like:
 
-```shell
+```shell copy
 namadac transfer \
     --source <your-established-account-alias> \
     --target <your-payment-address-alias> \
@@ -69,7 +69,7 @@ namadac transfer \
 Once this transfer has been broadcasted, validated, and executed on the blockchain, you can view your Spending Key's
 balance:
 
-```shell
+```shell copy
 namadac balance --owner <your-spending-key-alias>
 ```
 
@@ -78,7 +78,7 @@ namadac balance --owner <your-spending-key-alias>
 Now that you have a shielded balance, it can be transferred to a
 another shielded address:
 
-```shell
+```shell copy
 namadac transfer \
     --source <your-spending-key-alias> \
     --target [some-payment-address] \
@@ -91,7 +91,7 @@ namadac transfer \
 
 You can also transfer back your balance to a transparent account:
 
-```shell
+```shell copy
 namadac transfer \
     --source <your-spending-key-alias> \
     --target [some-transparent-address-alias> \

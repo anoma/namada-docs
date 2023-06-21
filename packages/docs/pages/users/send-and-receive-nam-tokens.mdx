@@ -10,7 +10,7 @@ If you already have a key in your wallet, you can skip this step. Otherwise, [ge
 
 Then, send a transaction to initialize your new established account and save its address with the alias `establishment`. The `keysha` public key will be written into the account's storage for authorizing future transactions. We also sign this transaction with `keysha`.
 
-```shell
+```shell copy
 namada client init-account \
   --alias establishment \
   --public-key keysha \
@@ -25,7 +25,7 @@ This command uses the prebuilt [User Validity Predicate](https://github.com/anom
 
 To submit a regular token transfer from your account to the `validator-1` address:
 
-```shell
+```shell copy
 namada client transfer \
   --source establishment \
   --target validator-1 \
@@ -39,7 +39,7 @@ This command will attempt to find and use the key of the source address to sign 
 
 To query token balances for a specific token and/or owner:
 
-```shell
+```shell copy
 namada client balance --token NAM --owner my-new-acc
 ```
 
@@ -51,6 +51,6 @@ For any client command that submits a transaction (`init-account`, `transfer`, `
 
 You can see the token's addresses known by the client when you query all tokens balances:
 
-```shell
+```shell copy
 namada client balance
 ```
