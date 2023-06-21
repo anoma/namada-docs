@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Genesis validator setup
 
 A genesis validator is one which is a validator right from the first block of the chain - i.e. at genesis. The details of genesis validators are hardcoded into the genesis file that is distributed to all users who want to interact with a chain.
@@ -24,9 +26,9 @@ namada client utils init-genesis-validator --alias $ALIAS \
 
 ### 2. After generating your keys, the command will print something like this:
 
-```admonish note
+<Callout>
 If you have set the variable $XDG_DATA_HOME this is where the pre-genesis TOML will be written to. Otherwise see below for the default locations.
-```
+</Callout>
 
 #### Linux 
 ```shell

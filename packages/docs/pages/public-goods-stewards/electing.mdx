@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Becoming a steward
 
 A public goods steward can consist of an arbitrary number of people, and can be a single person. The only requirement is that the steward's multisignature account is elected by the community, through a governance proposal.
@@ -41,9 +43,9 @@ The `steward_proposal.json` file contains the information about the proposal. It
 
 The `"data"` field contains the structure that allows either the addition or removal of a multisignature account from the list of stewards. In this case, the `"action"` is `"add"`, and the `"address"` is the address of the multisignature account that will be elected as a steward. If the `"action"` was `"remove"`, the `"address"` would be the address of the multisignature account that would be removed from the list of stewards.
 
-```admonish note
+<Callout>
 In the motivation and abstract field, it is important to make clear what type of public goods funding the steward will be focusing on. The *areas of public goods funding* can be found in the [public goods funding specs](https://specs.namada.net/economics/public-goods-funding.html#funding-focuses).
-```
+</Callout>
 
 ### Submitting the proposal to the ledger
 
@@ -55,9 +57,9 @@ namadac init-proposal \
         --data-path <path/to/steward_proposal.json> \
 ```
 
-```admonish note
+<Callout>
 Where `<path/to/steward_proposal.json>` is the path to the `steward_proposal.json` file.
-```
+</Callout>
 
 ### Becoming elected
 

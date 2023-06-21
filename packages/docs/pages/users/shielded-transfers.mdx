@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Shielded Transfers
 
 In Namada, shielded transfers are enabled by the [Multi-Asset Shielded Pool](https://specs.namada.net/masp/ledger-integration.html?highlight=MASP#masp-integration-spec) (MASP). The MASP is a zero-knowledge circuit (zk-SNARK) that extends the Zcash Sapling circuit to add support for sending arbitrary assets. All assets in the pool share the same anonymity set, this means that the more transactions are issued to MASP, the stronger are the privacity guarantees.
@@ -45,9 +47,9 @@ namadaw masp gen-addr \
     --alias <your-payment-address-alias>
 ```
 
-```admonish note
+<Callout>
 This command will generate a different payment address each time you run it. Payment addresses can be reused or discarded as you like, and any relationship between addresses cannot be deciphered by any user without the spending key.
-```
+</Callout>
 
 #### Send your shielding transfer
 
