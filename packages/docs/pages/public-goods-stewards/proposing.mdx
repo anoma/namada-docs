@@ -29,7 +29,7 @@ Below is an example of a `PGFProposal` that a steward could submit. Note that on
                 {
                     "target": {
                         "amount": 420,
-                        "address": "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+                        "address": "<address-of-recipient>"
                     }
                     "action" : "add",
                 },
@@ -38,16 +38,14 @@ Below is an example of a `PGFProposal` that a steward could submit. Note that on
                 {
                     "target": {
                         "amount": 1337,
-                        "address": "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+                        "address": "<address-of-recipient>"
                     }
                 }
             ]
         },  
 }
 ```
-<Callout>
-The address in target should be changed to the address of the recipient of the funds.
-</Callout>
+where `<address-of-recipient>` should be changed to the address of the recipient of the funds.
 
 Save this file as `PGF_proposal.json` to some memorable path on your machine.
 
@@ -58,7 +56,7 @@ In order to submit the proposal, the steward can use the following command:
 ```shell copy
 namada client init-proposal \
     --pgf-proposal \
-    --data-path PGF_proposal.json \
+    --data-path PGF_proposal.json
 ```
 
 The proposal will then be given a `proposal-id` which can be used to query the proposal.
@@ -69,5 +67,5 @@ The command for querying the proposal is as follows:
 
 ```shell copy
 namada client query-proposal \
-    --proposal-id <the-proposal-id> \
+    --proposal-id <the-proposal-id>
 ```

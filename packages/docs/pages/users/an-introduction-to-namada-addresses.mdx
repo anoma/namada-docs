@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # An Introduction to Namada Addresses
 
 All accounts in Namada have a unique address, exactly one Validity Predicate and optionally any additional data in its dynamic storage sub-space.
@@ -25,9 +27,11 @@ It is possible to generate keys using the CLI. By doing so, an implicit account 
 namada wallet key gen --alias keysha
 ```
 
-> The derived implicit address shares the same `keysha` alias. The previous command has the same effect as `namada wallet address gen --alias keysha`.
+<Callout type="info">
+The derived implicit address shares the same `keysha` alias. The previous command has the same effect as `namada wallet address gen --alias keysha`.
+</Callout>
 
-By default, the keys are stored in encrypted form.
+By default, the keys are stored encrypted.
 The encryption password is _not_ a part of key generation randomness.
 
 Namada wallet supports keypair generation using a [mnemonic code](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) and [HD derivation path](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
@@ -36,12 +40,16 @@ To generate a keypair for a default path use
 namada wallet key gen --alias keysha --hd-path default
 ```
 
-> The default HD path for Namada is `m/44'/877'/0'/0'/0'`.
+<Callout type="info">
+The default HD path for Namada is `m/44'/877'/0'/0'/0'`.
+</Callout>
 
-Optionally, the user may specialize an additional passphrase that _is used_ as a part of keypair generation randomness.
+Optionally, the user may specify an additional passphrase that _is used_ as a part of keypair generation randomness.
 
-> WARNING: Keep your mnemonic code and passphrase safe.
-> Loss of any of them would inevitably lead to the impossibility of the account recovery.
+<Callout type="error" emoji="🚨">
+WARNING: Keep your mnemonic code and passphrase safe.
+Loss of any of them would inevitably lead to the impossibility of the account recovery.
+</Callout>
 
 ### Restore the keypair
 
@@ -72,14 +80,16 @@ Let's call the implicit address `accountant`:
 namada wallet address gen --alias accountant
 ```
 
-> Note that this will also generate and save a key from which the address was derived and save it under the same `accountant` alias. Thus, this command has the same effect as `namada wallet key gen --alias accountant`.
+<Callout type="info">
+Note that this will also generate and save a key from which the address was derived and save it under the same `accountant` alias. Thus, this command has the same effect as `namada wallet key gen --alias accountant`.
+</Callout>
 
 ```shell copy
 namada wallet address gen --alias keysha --hd-path default
 ```
 generates an address using a [mnemonic code](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) and [HD derivation path](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 
-### Restore the keypair
+### Restore the address
 
 ```shell copy
 namada wallet address restore --alias keysha --hd-path default

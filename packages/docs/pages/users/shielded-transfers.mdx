@@ -2,7 +2,8 @@ import { Callout } from 'nextra-theme-docs'
 
 # Shielded Transfers
 
-In Namada, shielded transfers are enabled by the [Multi-Asset Shielded Pool](https://specs.namada.net/masp/ledger-integration.html?highlight=MASP#masp-integration-spec) (MASP). The MASP is a zero-knowledge circuit (zk-SNARK) that extends the Zcash Sapling circuit to add support for sending arbitrary assets. All assets in the pool share the same anonymity set, this means that the more transactions are issued to MASP, the stronger are the privacity guarantees.
+In Namada, shielded transfers are enabled by the [Multi-Asset Shielded Pool](https://specs.namada.net/masp/ledger-integration.html?highlight=MASP#masp-integration-spec) (MASP).
+The MASP is a zero-knowledge circuit ([zk-SNARK](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)) that extends the [Zcash Sapling circuit](https://raw.githubusercontent.com/zcash/zips/master/protocol/sapling.pdf) to add support for sending arbitrary assets. All assets in the pool share the same anonymity set, this means that the more transactions are issued to MASP, the stronger are the privacity guarantees.
 
 ## Using MASP
 
@@ -12,17 +13,14 @@ If you are familiar with Zcash, the set of interactions you can execute with the
 - [**Shielded transfers:** shielded to shielded addresses](#shielded-transfers)
 - [**Unshielding transfers:** shielded to transparent addresses](#unshielding-transfers)
 
-```admonish info "Lexicon"
+We distinguish two kinds of keys:
 - A **Spending Key** is a type of private key that allows any user in possession of it to spend the balance of the associated address. For shielded addresses, possessing the Spending Key also allows the user to view the address’ balance and transaction data.
 - A **Viewing Key** allows any user in possession of it to view and disclose transaction details. It is derived from the Spending Key and hold the same alias. 
-```
 
-### Shielded transfers
+### Shielding transfers
 
 To try out shielded transfers, you first need to be in possession of a
 transparent account with some token balance.
-
-
 
 #### Generate your Spending Key
 
@@ -32,10 +30,10 @@ You can randomly generate a new Spending Key with:
 namadaw masp gen-key --alias <your-spending-key-alias>
 ```
 
-```admonish info
+<Callout>
 This command will also generate a corresponding Viewing Key sharing
 the same alias.
-```
+</Callout>
 
 #### Create a new payment address
 
@@ -61,7 +59,7 @@ namadac transfer \
     --source <your-established-account-alias> \
     --target <your-payment-address-alias> \
     --token btc \
-    --amount 100
+    --amount <amount-to-shield>
 ```
 
 #### View your balance
@@ -81,9 +79,9 @@ another shielded address:
 ```shell copy
 namadac transfer \
     --source <your-spending-key-alias> \
-    --target [some-payment-address] \
+    --target <destination-payment-address> \
     --token btc \
-    --amount 50 \
+    --amount <amount-to-transfer> \
     --signer <your-implicit-account-alias>
 ```
 
@@ -94,9 +92,9 @@ You can also transfer back your balance to a transparent account:
 ```shell copy
 namadac transfer \
     --source <your-spending-key-alias> \
-    --target [some-transparent-address-alias> \
+    --target <some-transparent-address-alias> \
     --token btc \
-    --amount 50 \
+    --amount <amount-to-unshield> \
     --signer <your-implicit-account-alias>
 ```
 
@@ -109,7 +107,7 @@ When the client generates a spending key, it automatically derives a viewing key
 
 #### Payment Address Generation
 
-Payment addresses can be derived from both spending keys as well as viewing keys. The payment address acts as a destination address in which any tokens received by this address is spendable by the corresponding spending key. Only the payment address's spending key and viewing key are able to spend and view the payment address's balance, respectively. Below are examples of how payment addresses can be
+Payment addresses can be derived from both spending keys as well as viewing keys. The payment address acts as a destination address in which any tokens received by this address is spendable by the corresponding spending key. Only the payment address' spending key and viewing key are able to spend and view the payment address's balance, respectively. Below are examples of how payment addresses can be
 generated:
 
 ```

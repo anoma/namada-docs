@@ -1,8 +1,9 @@
 import { Callout } from 'nextra-theme-docs'
 
-# Send & Receive NAM tokens
+# Send and Receive NAM tokens
 
-In Namada, tokens are implemented as accounts with the [Token Validity Predicate](https://github.com/anoma/namada/blob/namada/wasm/wasm_source/src/vp_token.rs). The validity predicate (VP) checks that the total supply (of the token) is preserved in any transaction that uses this token. Your wallet will be pre-loaded with some token addresses that are initialized in the genesis block.
+In Namada, tokens are implemented as accounts with the [Token Validity Predicate](https://github.com/anoma/namada/blob/main/wasm/wasm_source/src/vp_token.rs).
+The validity predicate (VP) checks, in particular, that the total supply (of the token) is preserved in any transaction that uses this token. Your wallet will be pre-loaded with some token addresses that are initialized in the genesis block.
 
 ### Initialize an established account
 
@@ -17,9 +18,9 @@ namada client init-account \
   --source keysha
 ```
 
-Once this transaction has been applied, the client will automatically see the new address created by the transaction and add it to your Wallet with the chosen alias `establishment`.
+Once this transaction has been applied, the client will automatically see the new address created by the transaction and add it to your wallet with the chosen alias `establishment`.
 
-This command uses the prebuilt [User Validity Predicate](https://github.com/anoma/namada/blob/namada/wasm/wasm_source/src/vp_token.rs).
+This command uses the prebuilt [User Validity Predicate](https://github.com/anoma/namada/blob/main/wasm/wasm_source/src/vp_user.rs).
 
 ### Send a Payment
 
