@@ -2,7 +2,7 @@ import { Callout } from 'nextra-theme-docs'
 
 # Genesis validator setup
 
-A genesis validator is one which is a validator right from the first block of the chain - i.e. at genesis. The details of genesis validators are hardcoded into the genesis file that is distributed to all users who want to interact with a chain.
+A genesis validator is one which is a validator right from the first block of the chain, i.e., at genesis. The details of genesis validators are hardcoded into the genesis file that is distributed to all users who want to interact with a chain.
 
 ### Prerequisites
 
@@ -26,16 +26,17 @@ namada client utils init-genesis-validator --alias $ALIAS \
 
 ### 2. After generating your keys, the command will print something like this:
 
-<Callout>
+<Callout type="info">
 If you have set the variable $XDG_DATA_HOME this is where the pre-genesis TOML will be written to. Otherwise see below for the default locations.
 </Callout>
 
 #### Linux 
-```shell copy
+```text copy
 Pre-genesis TOML written to $HOME/.local/share/namada
 ```
+
 #### MacOS
-```shell copy
+```text copy
 Pre-genesis TOML written to /Users/$USER/Library/Application\ Support/Namada
 ```
 
@@ -57,15 +58,20 @@ Note that the wallet containing your private keys will also be written into this
 ### 4. You can print the validator.toml by running: 
 
 ### Linux 
-`cat $HOME/.local/share/namada/pre-genesis/$ALIAS/validator.toml`
+```shell copy
+cat $HOME/.local/share/namada/pre-genesis/$ALIAS/validator.toml
+```
+
 ### MacOS 
-`cat $HOME/Library/Application\ Support/Namada/pre-genesis/$ALIAS/validator.toml`
+```shell copy
+cat $HOME/Library/Application\ Support/Namada/pre-genesis/$ALIAS/validator.toml
+```
 
 ## Required keys
 
 - Account key: Can be used to sign transactions that require authorization in the default validator validity predicate, such as a balance transfer.
 - Staking rewards key: Can be used to sign transactions on the PoS staking rewards account.
 - Protocol key: This key is used by the validator's ledger itself to sign protocol transaction on behalf of the validator.
-- DKG key: Special key needed for participation in the DKG protocol
-- Consensus key: Used in Cometbft consensus layer. Currently, this key is written to a file which is read by Cometbft.
-- Cometbft node key: This key is used to derive Cometbft node ID for P2P connection authentication. This key is also written to a file which is read by Cometbft.
+- DKG key: Special key needed for participation in the DKG protocol.
+- Consensus key: Used in CometBFT consensus layer. Currently, this key is written to a file which is read by CometBFT.
+- CometBFT node key: This key is used to derive CometBFT node ID for P2P connection authentication. This key is also written to a file which is read by CometBFT.
