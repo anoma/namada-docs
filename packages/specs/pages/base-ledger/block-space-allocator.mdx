@@ -1,3 +1,6 @@
+import blockSpaceEx from './images/block-space-allocator-example.svg'
+import blockSpaceBins from './images/block-space-allocator-bins.svg'
+
 # Block space allocator
 
 Block space in Tendermint is a resource whose management is relinquished to the 
@@ -48,7 +51,7 @@ in $M$. The `BlockSpaceAllocator` contains three `TxBin` instances, responsible
 for holding decrypted, protocol and encrypted transactions.
 
 <img
-  src="images/block-space-allocator-bins.svg"
+  src={blockSpaceBins.src}
   alt="block space allocator tx bins"
   height="400"
   width="500"
@@ -110,7 +113,7 @@ of the available block space.
 Consider the following diagram:
 
 <img
-  src="images/block-space-allocator-example.svg"
+  src={blockSpaceEx.src}
   alt="block space allocator example"
   height="400"
   width="600"
