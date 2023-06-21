@@ -1,3 +1,6 @@
+import blockSpaceEx from './images/block-space-allocator-example.svg'
+import blockSpaceBins from './images/block-space-allocator-bins.svg'
+
 # Block space allocator
 
 Block space in Tendermint is a resource whose management is relinquished to the 
@@ -24,7 +27,7 @@ app-side validators configure a $MaxProposalSize$ parameter at genesis (or
 through governance) and set Tendermint blocks' $MaxBytes$ parameter to its 
 upper bound.
 
-[Block sizes in Tendermint]: <https://github.com/tendermint/tendermint/blob/v0.34.x/spec/abci/apps.md#blockparamsmaxbytes>
+[Block sizes in Tendermint](https://github.com/tendermint/tendermint/blob/v0.34.x/spec/abci/apps.md#blockparamsmaxbytes)
 
 ## Transaction batch construction
 
@@ -48,11 +51,11 @@ in $M$. The `BlockSpaceAllocator` contains three `TxBin` instances, responsible
 for holding decrypted, protocol and encrypted transactions.
 
 <img
-  src="images/block-space-allocator-bins.svg"
+  src={blockSpaceBins.src}
   alt="block space allocator tx bins"
   height="400"
   width="500"
-  style="display: block; margin: 0 auto" />
+  style={{ display: 'block', margin: '0 auto' }} />
 
 During occasional Namada protocol events, such as DKG parameter negotiation, 
 all available block space should be reserved to protocol transactions, 
@@ -110,11 +113,12 @@ of the available block space.
 Consider the following diagram:
 
 <img
-  src="images/block-space-allocator-example.svg"
+  src={blockSpaceEx.src}
   alt="block space allocator example"
   height="400"
   width="600"
-  style="display: block; margin: 0 auto" />
+  style={{ display: 'block', margin: '0 auto' }}
+/>
 
 We denote `D`, `P` and `E` as decrypted, protocol and encrypted transactions, 
 respectively.
@@ -194,7 +198,7 @@ constructed.
 
 We cover validator set updates in detail in [the Ethereum bridge section].
 
-[the Ethereum bridge section]: ../interoperability/ethereum-bridge.md
+[the Ethereum bridge section](../interoperability/ethereum-bridge.md)
 
 ## Governance
 

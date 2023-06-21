@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Using IBC with Namada
 
 This document describes using the inter-blockchain communication (IBC) protocol with Namada. This documentation covers being able to create connections through IBC as well as setting up local instances of Namada for testing purposes.
@@ -36,18 +38,17 @@ You can find an example of the config file [here](https://hackmd.io/l6HNSqJmQt6Q
 
 The path to the config file, which is is saved in the variable `$HERMES_CONFIG` will be useful later.
 
-```admonish note
 
- **Interpreting the toml**
+<Callout> 
+**Interpreting the toml**
 
- Each chain configuration is specified under the `[[chains]]` object.
-
- These are the pieces of this puzzle you want to keep your 👀 on:
+Each chain configuration is specified under the `[[chains]]` object.
+These are the pieces of this puzzle you want to keep your 👀 on:
  - `chains.id` is the name of the chain
  - `chains.rpc_address` specifies the port that the channel is communicating through, and will be the argument for the `ledger_address` of Namada when interacting with the ledger (will become clearer later)
      - Make sure to change the IP address to the IP address of your local machine that is running this node!
  - `chains.key_name` specifies the key of the signer who signs a transaction from the relayer. The key should be generated before starting the relayer.
-```
+</Callout>
 
 ### Create IBC client/connection/channel between instances
 Hermes CLI has commands to create them. Before the creation, a node of each instance should be running.
@@ -68,13 +69,13 @@ Check the binary:
 ./target/release/hermes --version
 ```
 
-````admonish note
+<Callout>
 It is recommended to now add hermes to `$PATH` such that it is callable without any pre-fixes.
 For ubuntu users, this can be achieved by
 ```bash
 cp ./target/release/hermes /usr/local/bin/
 ```
-````
+</Callout>
 
 ### Create IBC channel
 The "create channel" command (below) creates not only the IBC channel but also the necessary IBC client connection.
@@ -88,9 +89,9 @@ hermes -c $HERMES_CONFIG \
   --new-client-connection
 ```
 
-```admonish note
+<Callout>
 Note that the above `CHAIN_IDs` will depend on your own setup, so do check this for yourself!
-```
+</Callout>
 
 This command will ask you with the following message. You can continue with `y`.
 ```
@@ -262,7 +263,7 @@ In order to do this by Namada's `ibc-transfer` command, we will need to know the
 One can run `grep "rpc_addr" ${HERMES_CONFIG}`.
 
 
-````admonish note
+<Callout>
  **For the local node ONLY**
 
  To find your ledger address for Chain A, you can run the following command
@@ -270,7 +271,7 @@ One can run `grep "rpc_addr" ${HERMES_CONFIG}`.
  export BASE_DIR_A = "${IBC_RS}/data/namada-a/.namada"
  export LEDGER_ADDRESS_A = "$(grep "rpc_address" ${BASE_DIR_A}/${CHAIN_A_ID}/setup/validator-0/.namada/${CHAIN_A_ID}/config.toml)"
  ```
-````
+</Callout>
 
 And then the channel ID for this chain will depend on the order in which one created the channel. Since we have only opened one channel, the `channel-id` is `channel-0`, but as more are created, these increase by index incremented by 1. Please refer to [here](#create-ibc-channel).
 

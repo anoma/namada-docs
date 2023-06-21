@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # PGF specs
 
 ## Motivation
@@ -125,7 +127,7 @@ Once the decision has been made on whether to elect (or remove) the intended ste
 
 The below example hopefully demonstrates the mechanism more clearly.
 
-````admonish note
+<Callout>
 The governance set consists of Alice, Bob, Charlie, Dave, and Elsa. Each member has 20% voting power.
 
 The current PGF stewards are Dave and Elsa.
@@ -165,7 +167,7 @@ Where the proposalVote is simply the enum `Yay` with an empty memo field.
 - At epoch 54, the voting period ends and the votes are tallied. Since 80% > 66% of the voting power voted on this proposal (everyone except Charlie, who forgot to vote on her own proposal), the intitial condition is passed and the Proposal is active. Further, because out of the total votes, most were `Yay`, (75% > 50% threshold), the new Steward consisting of Bob and Charlie will be added to the Steward set. 
 
 - At epoch 57, Bob and Charlie have the effective power to propose Public Goods Funding transactions (that may or may not be vetoed).
-````
+</Callout>
 
 ## Mechanism
 

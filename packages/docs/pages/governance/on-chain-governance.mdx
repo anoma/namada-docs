@@ -1,3 +1,6 @@
+import { Callout } from 'nextra-theme-docs'
+
+
 # On-chain proposals
 
 ## Create a proposal
@@ -58,9 +61,11 @@ The `data` field and its structure is dependant on the type of proposal being su
 ```json
 "data" : "<hex-encoded-bytes-of-what-will-be-signed-by-validators>"
 ```
-```admonish note
+
+<Callout>
+**Note**:
 The encoding will be submitted as a string
-```
+</Callout>
 
 ### Steward Proposal
 
@@ -73,9 +78,9 @@ The encoding will be submitted as a string
     ]     
 ```
 
-```admonish note
+<Callout>
 The data field for steward proposals is a list of actions to be taken. The actions can be either `add` or `remove` and the address is the address of the steward to be added or removed. In this way you can add or remove multiple stewards in a single proposal.
-```
+</Callout>
 
 ### PGF Proposal
     
@@ -102,9 +107,10 @@ The data field for steward proposals is a list of actions to be taken. The actio
         },  
 ```
 
-```admonish note
+<Callout>
 The data field for PGF proposals contains both continuous and retroactive PGF funding actions. Within each action, the user can include multiple payments in the form of a vector. Within each payment, the target field contains the address of the recipient as well as the amount of NAM that they will receive. For continuous PGF funding, the amount specified will be sent at the end of each epoch. There is also the option to remove a recipient from the continuous PGF funding, by specifying an already existing continuous funding payment, and then also including the "remove" action. For retroactive PGF funding, the amount specified will be sent immediately.
-```
+</Callout>
+
 ## Submitting the proposal
 As soon as your `proposal.json` file is ready, you can submit the proposal with (making sure to be in the same directory as the `proposal.json` file):
 

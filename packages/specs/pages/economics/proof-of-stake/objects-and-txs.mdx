@@ -135,7 +135,7 @@ The default values that are relative to epoch duration assume that an epoch last
 
 - `max_validator_slots`: Maximum consensus validators, default `128`
 - `min_validator_stake`: Minimum stake of a validator that allows the validator to enter the `consensus` or `below_capacity` [sets](#validator-sets), in number of native tokens. Because the [inflation system](../inflation-system.md#proof-of-stake-rewards) targets a bonding ratio of 2/3, the minimum should be somewhere around `total_supply * 2/3 / max_validator_slots`, but it can and should be much lower to lower the entry cost, as long as it's enough to prevent validation account creation spam that could slow down PoS system update on epoch change
-- `pipeline_len`: Pipeline length in number of epochs, default `2` (see <https://github.com/cosmos/cosmos-sdk/blob/019444ae4328beaca32f2f8416ee5edbac2ef30b/docs/architecture/adr-039-epoched-staking.md#pipelining-the-epochs>)
+- `pipeline_len`: Pipeline length in number of epochs, default `2`, [see this link](https://github.com/cosmos/cosmos-sdk/blob/019444ae4328beaca32f2f8416ee5edbac2ef30b/docs/architecture/adr-039-epoched-staking.md#pipelining-the-epochs)
 - `unboding_len`: Unbonding duration in number of epochs, default `6`
 - `cubic_slash_window_width`: The number of epochs above and below the current one in which to collect misbehaviors for use in computing the cubic slash rate, default `1`.
 - `votes_per_token`: Used in validators' voting power calculation, default 100‱ (1 voting power unit per 1000 tokens)

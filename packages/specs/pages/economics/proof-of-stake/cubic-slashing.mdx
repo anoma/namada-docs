@@ -4,7 +4,7 @@ Namada implements a slashing scheme, coined "cubic slashing," in which the amoun
 
 The cubic slash rate is a function of all infractions in a given epoch and its neighboring epochs. Therefore, the cubic slash rate is the same for any infraction within a given epoch. The slash rate is determined as follows:
 1. Collect all known infractions committed within a range of `[- window_width, + window_width]` epochs around the infraction in question. By default, `window_width = 1`.
-2. Sum the fractional voting powers (relative to the total voting power of all consensus validators) of the misbehaving validator for each of the collected infractions. <!-- The total voting powers include all validators in one of the validator sets and all jailed validators (more on this later). -->
+2. Sum the fractional voting powers (relative to the total voting power of all consensus validators) of the misbehaving validator for each of the collected infractions. {/* The total voting powers include all validators in one of the validator sets and all jailed validators (more on this later). */}
 3. The cubic slash rate is then proportional to this sum. Using $\text{vp}_i$ to indicate the validator voting power used to commit the infraction $i$ and $\text{vp}_{\text{tot}}^i$ to indicate the total consensus voting power at the epoch of infraction $i$, the cubic rate is expressed as:
 
 $$  9*\left(\sum_{i \in \text{infractions}}\frac{\text{vp}_i}{\text{vp}_{\text{tot}}^i}\right)^2. $$
@@ -12,8 +12,8 @@ $$  9*\left(\sum_{i \in \text{infractions}}\frac{\text{vp}_i}{\text{vp}_{\text{t
 For each individual slash, the rate is ultimately determined as the maximum of the cubic slash rate and some nominal minimum rate that is dependent on the infraction type (see [system parameters](./objects-and-txs.md#system-parameters)) and is capped at 1.0. The amount of slashed tokens is the rate multiplied by the stake (voting power) used to commit the infraction. The "cubic" in cubic slashing thus comes from the product of the rate, which is quadratic in the voting power, and the voting power itself.
 
 Expressed in pseudocode:
-<!-- I want to make these two code blocks toggleable as in  https://rdmd.readme.io/docs/code-blocks#tabbed-code-blocks but can't seem to get it to work-->
-<!-- ```haskell =
+{/*I want to make these two code blocks toggleable as in  https://rdmd.readme.io/docs/code-blocks#tabbed-code-blocks but can't seem to get it to work */}
+{/* ```haskell =
 calculateSlashRate :: [Slash] -> Float
 
 calculateSlashRate slashes = 
@@ -22,9 +22,9 @@ calculateSlashRate slashes =
   -- minimum slash rate is 1%
   -- then exponential between 0 & 1/3 voting power
   -- we can make this a more complex function later
-``` -->
+``` */}
 
-<!-- ```python
+{/*```python
 class PoS:
     def __init__(self, genesis_validators : list):
         self.update_validators(genesis_validators)
@@ -47,7 +47,7 @@ class PoS:
     def calc_slash_rate(voting_power_fraction):
         slash_rate = max(0.01, (voting_power_fraction ** 2) * 9)
         return slash_rate
-``` -->
+``` */}
 ```rust
 // Infraction type, where inner field is the slash rate for the type
 enum Infraction {
