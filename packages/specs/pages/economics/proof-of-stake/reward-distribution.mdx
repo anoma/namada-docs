@@ -84,7 +84,7 @@ updateProducts validatorProducts activeSet currentEpoch =
  in insert currentEpoch (lastProduct*(1+rsratio)) entries
 ```
 
-<!--
+{/*
 ```rust=
 	pub update_products (validator_products: HashMap<Address, HashMap <Epoch, Product>>, active_set: HashSet<Address>, current_epoch: Epoch ) ->  HashMap<Epoch, HashMap<BondId, Token::amount>> {
 	    for validator in active_set {
@@ -101,7 +101,7 @@ updateProducts validatorProducts activeSet currentEpoch =
 	    product*(1+ rsratio.reward/rsratio.stake)
 	}
 ```
--->
+*/}
 
 In case a delegator wishes to withdraw delegation(s), then the proportionate rewards are appropriated using the aforementioned scheme, which is implemented by the following function.
 
@@ -122,7 +122,7 @@ withdrawalAmount validatorProducts bondId unbonds =
                             let stake =  delegation unbond]
  
 ```
-<!-- ```rust=
+{/* ```rust=
   pub fn withdrawal_amount (validator_products: HashMap<Address, HashMap <Epoch, Product>>,  bond_id: BondId, unbonds: Iterator<(Epoch, Delegation)>) -> Token::amount {
 	let mut withdrawn = 0;
 	for (end_epoch, unbond) in unbonds {
@@ -134,7 +134,7 @@ withdrawalAmount validatorProducts bondId unbonds =
 	withdrawn
     }
 ```
--->
+*/}
 
 ## Commission
 
