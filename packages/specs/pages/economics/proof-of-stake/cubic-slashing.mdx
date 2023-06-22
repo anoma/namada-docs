@@ -1,6 +1,7 @@
 import { Callout } from 'nextra-theme-docs'
 import CubicSlashImage from '../images/cubic_slash.png'
 import Image from 'next/image'
+import { Tab, Tabs } from 'nextra-theme-docs'
 
 # Cubic slashing
 
@@ -16,44 +17,49 @@ $$  9*\left(\sum_{i \in \text{infractions}}\frac{\text{vp}_i}{\text{vp}_{\text{t
 For each individual slash, the rate is ultimately determined as the maximum of the cubic slash rate and some nominal minimum rate that is dependent on the infraction type (see [system parameters](./objects-and-txs.md#system-parameters)) and is capped at 1.0. The amount of slashed tokens is the rate multiplied by the stake (voting power) used to commit the infraction. The "cubic" in cubic slashing thus comes from the product of the rate, which is quadratic in the voting power, and the voting power itself.
 
 Expressed in pseudocode:
-{/*I want to make these two code blocks toggleable as in  https://rdmd.readme.io/docs/code-blocks#tabbed-code-blocks but can't seem to get it to work */}
-```haskell =
-calculateSlashRate :: [Slash] -> Float
+<Tabs items={['haskell', 'python']}>
+    <Tab>
+            ```haskell =
+            calculateSlashRate :: [Slash] -> Float
 
-calculateSlashRate slashes = 
-    let votingPowerFraction = sum [ votingPowerFraction (validator slash) | slash <- slashes]
-	in max 0.01 (min 1 (votingPowerFraction**2)*9)
-  -- minimum slash rate is 1%
-  -- then exponential between 0 & 1/3 voting power
-  -- we can make this a more complex function later
-```
+            calculateSlashRate slashes = 
+                let votingPowerFraction = sum [ votingPowerFraction (validator slash) | slash <- slashes]
+                in max 0.01 (min 1 (votingPowerFraction**2)*9)
+            -- minimum slash rate is 1%
+            -- then exponential between 0 & 1/3 voting power
+            -- we can make this a more complex function later
+            ```
+    </Tab>
+    <Tab>
+        ```python
+        class PoS:
+        def __init__(self, genesis_validators : list):
+            self.update_validators(genesis_validators)
+        
+        def update_validators(self, new_validators):
+            self.validators = new_validators
+            self.total_voting_power = sum(validator.voting_power for validator in self.validators)
+        
+        def slash(self, slashed_validators : list):
+            for slashed_validator in slashed_validators: 
+                voting_power_fraction = slashed_validator.voting_power / self.total_voting_power
+                slash_rate = calc_slash_rate(voting_power_fraction)
+                slashed_validator.voting_power *= (1 - slash_rate)
 
-{/*```python
-class PoS:
-    def __init__(self, genesis_validators : list):
-        self.update_validators(genesis_validators)
-    
-    def update_validators(self, new_validators):
-        self.validators = new_validators
-        self.total_voting_power = sum(validator.voting_power for validator in self.validators)
-    
-    def slash(self, slashed_validators : list):
-        for slashed_validator in slashed_validators: 
-            voting_power_fraction = slashed_validator.voting_power / self.total_voting_power
-            slash_rate = calc_slash_rate(voting_power_fraction)
-            slashed_validator.voting_power *= (1 - slash_rate)
+        def get_voting_power(self):
+            for i in range(min(10, len(self.validators))):
+                print(self.validators[i])
+        
+        @staticmethod
+        def calc_slash_rate(voting_power_fraction):
+            slash_rate = max(0.01, (voting_power_fraction ** 2) * 9)
+            return slash_rate
+        ```
+    </Tab>
+</Tabs>
 
-    def get_voting_power(self):
-        for i in range(min(10, len(self.validators))):
-            print(self.validators[i])
-    
-    @staticmethod
-    def calc_slash_rate(voting_power_fraction):
-        slash_rate = max(0.01, (voting_power_fraction ** 2) * 9)
-        return slash_rate
-``` */}
 
-## Rust implementation
+### Rust implementation
 ```rust
 // Infraction type, where inner field is the slash rate for the type
 enum Infraction {
