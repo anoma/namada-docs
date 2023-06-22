@@ -1,12 +1,14 @@
 # Full Node Setup
 Before starting a full node, the unique identifier of the `chain-id` wll be needed, which will be released as soon as the genesis file is ready. 
 
+### Join the network
 Once the `chain-id` has been distributed, it is possible to join the network with the `CHAIN_ID`:
 ```bash copy
   export CHAIN_ID="namada-mainnet" ## (replace with the actual chain-id)
   namada client utils join-network --chain-id $CHAIN_ID
   ```
-3. Start your node and sync
+
+### Start your node and sync
 ```bash copy
   TM_LOG_LEVEL=p2p:none,pex:error namada node ledger run
 ```
