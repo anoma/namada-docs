@@ -1,6 +1,5 @@
 import { Callout } from 'nextra-theme-docs'
 
-
 # On-chain proposals
 
 ## Create a proposal
@@ -53,8 +52,11 @@ The `data` field and its structure is dependant on the type of proposal being su
 "data" : "<path/to/wasm.wasm>"
 ```
 
-> The data field for default proposals is optional. This is in line with the nature of default proposals. If the proposals have code attached to them in order to change governance parameters, then this code will be represented as a wasm file and the path to this file will be given in the data field.
-
+<Callout type="info">
+The data field for default proposals is optional. This is in line with the nature of default proposals. 
+If the proposals have code attached to them in order to change governance parameters, then this code 
+will be represented as a wasm file and the path to this file will be given in the data field.
+</Callout>
 
 ### ETH Bridge Proposal
 
@@ -62,7 +64,7 @@ The `data` field and its structure is dependant on the type of proposal being su
 "data" : "<hex-encoded-bytes-of-what-will-be-signed-by-validators>"
 ```
 
-<Callout>
+<Callout type="warning">
 **Note**:
 The encoding will be submitted as a string
 </Callout>
@@ -79,7 +81,10 @@ The encoding will be submitted as a string
 ```
 
 <Callout>
-The data field for steward proposals is a list of actions to be taken. The actions can be either `add` or `remove` and the address is the address of the steward to be added or removed. In this way you can add or remove multiple stewards in a single proposal.
+The data field for steward proposals is a **list** of actions to be taken. 
+The actions can be either `add` or `remove` and the address is the address of 
+the steward to be added or removed. In this way you can add or remove multiple 
+stewards in a single proposal.
 </Callout>
 
 ### PGF Proposal
@@ -108,7 +113,14 @@ The data field for steward proposals is a list of actions to be taken. The actio
 ```
 
 <Callout>
-The data field for PGF proposals contains both continuous and retroactive PGF funding actions. Within each action, the user can include multiple payments in the form of a vector. Within each payment, the target field contains the address of the recipient as well as the amount of NAM that they will receive. For continuous PGF funding, the amount specified will be sent at the end of each epoch. There is also the option to remove a recipient from the continuous PGF funding, by specifying an already existing continuous funding payment, and then also including the "remove" action. For retroactive PGF funding, the amount specified will be sent immediately.
+The data field for PGF proposals contains both continuous and retroactive PGF funding actions. 
+Within each action, the user can include multiple payments in the form of a vector. 
+Within each payment, the target field contains the address of the recipient as well 
+as the amount of NAM that they will receive. For continuous PGF funding, the amount 
+specified will be sent at the end of each epoch. There is also the option to remove a 
+recipient from the continuous PGF funding, by specifying an already existing continuous 
+funding payment, and then also including the "remove" action. For retroactive PGF funding, 
+the amount specified will be sent immediately.
 </Callout>
 
 ## Submitting the proposal

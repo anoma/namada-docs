@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Generating a validator account
 
 ```bash copy
@@ -31,9 +33,11 @@ Then, it submits a transaction to the ledger that generates the new validator ac
 
 The keys and the alias of the address will be saved in your wallet. 
 
-> ***IMPORTANT***
->
-> Our local ledger node will also be setup to run this validator, you just have to shut it down with e.g. `Ctrl + C`, then start it again with the same command as before.
+<Callout type="warning" emoji="🛎️">
+**IMPORTANT**
+
+Our local ledger node will also be setup to run this validator, you just have to shut it down with e.g. `Ctrl + C`, then start it again with the same command as before.
+</Callout>
 
 ```shell copy
 namadan ledger run
