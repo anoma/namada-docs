@@ -1,5 +1,6 @@
 import { Callout } from 'nextra-theme-docs'
-import { CubicSlashImage } from '../images/cubic_slash.png'
+import CubicSlashImage from '../images/cubic_slash.png'
+import Image from 'next/image'
 
 # Cubic slashing
 
@@ -106,7 +107,7 @@ fn calculate_cubic_slash_rate(
 As a function, it can be drawn as (assuming $r_{ \text{min} } = 1\% $):
 
 {/* TODO: FIX THIS IMAGE */}
-<img src={ CubicSlashImage } width="500"/>
+<Image src={CubicSlashImage} width="800" />
 
 <Callout type="info">
 The voting power associated with a slash is the voting power of the validator **when they violated the protocol**. 
