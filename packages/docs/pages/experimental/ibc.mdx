@@ -39,7 +39,7 @@ You can find an example of the config file [here](https://hackmd.io/l6HNSqJmQt6Q
 The path to the config file, which is is saved in the variable `$HERMES_CONFIG` will be useful later.
 
 
-<Callout> 
+<Callout type="info" emoji="🧩"> 
 **Interpreting the toml**
 
 Each chain configuration is specified under the `[[chains]]` object.
@@ -69,7 +69,7 @@ Check the binary:
 ./target/release/hermes --version
 ```
 
-<Callout>
+<Callout type="info">
 It is recommended to now add hermes to `$PATH` such that it is callable without any pre-fixes.
 For ubuntu users, this can be achieved by
 ```bash copy
@@ -89,7 +89,7 @@ hermes -c $HERMES_CONFIG \
   --new-client-connection
 ```
 
-<Callout>
+<Callout type="info">
 Note that the above `CHAIN_IDs` will depend on your own setup, so do check this for yourself!
 </Callout>
 

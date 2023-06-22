@@ -1,13 +1,15 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Steps for migrating testnets
 
 This guide will help you migrate your validator node from one testnet to another. These steps are optional, and for most testnets, these steps will not be needed.
 
 ## Resetting your validator node (optional)
 
-
-> With the release of `v0.15.3` we have introduced a new base directory. This means that you will need to reset your validator node to use the new base directory. This is a one time operation.
->The base directory has been moved from `.namada` to `.local/share/namada` on Linux and `Library/Application Support/Namada` on MacOS.
-
+<Callout type="info">
+With the release of `v0.15.3` we have introduced a new base directory. This means that you will need to reset your validator node to use the new base directory. This is a one time operation.
+The base directory has been moved from `.namada` to `.local/share/namada` on Linux and `Library/Application Support/Namada` on MacOS.
+</Callout>
 
 ### Locate the namada base directory
 
@@ -29,7 +31,10 @@ export BASE_DIR=$(namadac utils default-base-dir)
 ```
 
 
->Technically, the correct directory will be the one assigned to `$XDG_DATA_HOME`, but if you haven't set that variable, it will default to the above.
+<Callout type="info" emoji="🤓">
+Technically, the correct directory will be the one assigned to `$XDG_DATA_HOME`, 
+but if you haven't set that variable, it will default to the one given above.
+</Callout>
 
 
 ### 1. IMPORTANT! Save your `pre-genesis` folder in the ledger base directory
