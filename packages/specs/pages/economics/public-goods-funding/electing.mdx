@@ -1,0 +1,77 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Electing the stewards
+
+## Voting for the stewards
+
+After the `StewardProposal` has been submitted, and once the steward's address has been constructed and broadcasted, the steward address can be voted on by governance participants. All voting must occur between `votingStartEpoch` and `votingEndEpoch`.
+
+
+The vote for a new steward nomination will be constructed as follows:
+
+
+Each participant submits a vote through governance:
+```rust
+struct OnChainVote {
+    id: u64,
+    voter: Address,
+    yay: proposalVote,
+}
+```
+
+Where the proposalVote is simply an enum dictating whether the voter voted `Yay` or `Nay` to the proposed candidate change.
+
+
+#### Dealing with ties
+In the rare occurance of a tie, the steward retains membership by default.
+
+
+## Electing stewards
+
+Once the decision has been made on whether to elect (or remove) the intended steward, the established address corresponding to the multisig is added to (removed from) the `PGF` internal address.
+
+### Example
+
+The below example hopefully demonstrates the mechanism more clearly.
+
+<Callout type="info" emoji="🧑‍🏫">
+The governance set consists of Alice, Bob, Charlie, Dave, and Elsa. Each member has 20% voting power.
+
+The current PGF stewards are Dave and Elsa.
+
+- At epoch 42, Bob and Charlie decide to put themselves forward as a joint PGF Steward. They construct a multisig with address `0xBobCharlieMultisig`. 
+- At epoch 42, Bob proposes his and Charlie's candidacy through a `StewardProposal`:
+
+```rust
+struct StewardProposal{
+  id: 2
+  content: Vec<32,54,01,24,13,37>, // (Just the byte representation of the content (description) of the proposal)
+  author: 0xCharlie,
+  r#type: StewardProposal,
+  votingStartEpoch: Epoch(45),
+  votingEndEpoch: Epoch(54),
+  graceEpoch: Epoch(57),
+}
+```
+
+This proposal proposes the candidate 0xBobCharlieMultisig as a Steward. 
+
+- At epoch 49, Alice submits the vote:
+
+```rust
+struct OnChainVote {
+    id: 2,
+    voter: 0xalice,
+    yay: proposalVote,
+}
+```
+Where the proposalVote is simply the enum `Yay` with an empty memo field.
+
+- At epoch 49, Bob and Elsa submit an identical transaction.
+
+- At epoch 50, Dave votes `Nay` on the proposal.
+
+- At epoch 54, the voting period ends and the votes are tallied. Since 80% > 66% of the voting power voted on this proposal (everyone except Charlie, who forgot to vote on her own proposal), the intitial condition is passed and the Proposal is active. Further, because out of the total votes, most were `Yay`, (75% > 50% threshold), the new Steward consisting of Bob and Charlie will be added to the Steward set. 
+
+- At epoch 57, Bob and Charlie have the effective power to propose Public Goods Funding transactions (that may or may not be vetoed).
+</Callout>

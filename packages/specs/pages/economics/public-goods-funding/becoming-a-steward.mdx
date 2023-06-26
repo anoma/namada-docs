@@ -1,0 +1,64 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Becoming a steward
+The first step towards becoming a Steward is to instantiate a multisignature account.
+
+In order to propose candidacy as a PGF Steward, the steward must initiate a custom governance proposal. At the cost 
+of deposited NAM, the governance proposal is broadcast on-chain and governance is able to vote on whether the steward-applicant 
+will be accepted or not. Together with this proposal, the applicant is encouraged to provide a motivational statement as to why 
+they should be entrusted with the responsibility of proposing public goods candidates. This will also include a commitment to at 
+least one of the categories of public goods funding that social consensus has established (or propose their own category, which 
+would inherently introduce a new category into social consensus, should the proposal be accepted).
+
+Nominating oneself as a PGF steward may be done at any time.
+
+
+## Losing stewardship status
+
+There are 3 ways that a Steward may be removed from the steward set:
+
+1. Resign as a steward
+2. Have a failed funding proposal
+3. Become voted out through a governance proposal
+
+Resigning as a Steward is straight-forward. A simple interface is implemented to allow for the established account 
+representing the Steward to lose their priveleges as a PGF Steward.
+
+If a steward's PGF proposal receives a significant number of `Nay` votes ($\frac{2}{3}$ as a fraction of voting-power), 
+they will be removed from the steward set. It is likely that there would only be such wide-speread disagreement if the 
+proposal was misaligned with the users the stewards is attempting to cater to. This is described in more detail under 
+[its section](#proposing-funding).
+
+Finally, the steward can be "voted-out" from its responsibility through a custom governance proposal similar to the one
+used to elect the steward in the first place!
+
+### "Voting-out" the steward
+
+In the same way that a steward can be voted in by Namada governance through a custom proposal, the equal and opposite force exists. 
+Hence, any governance member (validator or delegate), is able to initiate a vote (for the relevant cost) in order to remove an arbitrary 
+number of current PGF stewards. If this proposal passes, it signals that the Steward(s) has/have not fulfilled their duty to the public, 
+which the stewards are meant to serve (hence the name).
+
+## Initiating the vote
+
+Before a new PGF steward can either be elected or removed, a governance proposal that specifies this objective must pass. The voting on this proposal is handled by the governance proposal type `StewardProposal`, which is a custom proposal type.
+
+
+The struct of `StewardProposal` is constructed as follows, and is explained in more detail in the [governance specs](../base-ledger/governance.md)
+
+```rust
+struct StewardProposal{
+  id: u64
+  content: Vec<u8>,
+  author: Address,
+  r#type: PGFSteward,
+  votingStartEpoch: Epoch,
+  votingEndEpoch: Epoch,
+  graceEpoch: Epoch,
+}
+```
+
+  In order for a new PGF steward to be elected (or removed), $\frac{2}{3}$ of validating power must vote on the `StewardProposal` and more than half of the votes must be in favor. If more than half of the votes are against the proposal, the steward set is kept the same, and the proposer of the proposal loses their escrowed funds.
+
+
+See the example below for more detail, as it may serve as the best medium for explaining the mechanism.

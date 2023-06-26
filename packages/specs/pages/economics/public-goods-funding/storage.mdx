@@ -1,0 +1,31 @@
+# Stewards in storage
+
+## Addresses
+Governance adds 1 internal address:
+
+`PGF` internal address
+
+The internal address VP will hold the allowance of 10% inflation of NAM. This funding is allocated to the internal address at the start of each epoch. It is important to note that it is this internal address which holds the funds, rather than any of the stewards' multisigs.
+
+The stewards should be able to propose the burning of funds, but this hopefully should not require additional functionality beyond what currently exists.
+
+### VP checks
+
+The VP must check that the steward's spending does not exceed the balance of the VP (in aggregate).
+
+The VP must also check that any spending is only done by the active PGF stewards.
+
+## Storage
+
+### Storage keys
+
+Each recipient will be listed under this storage space (for cPGF)
+- `/PGFAddress/cPGF_recipients/Address = Amount`
+- `/PGFAddress/active_stewards/address = Address`
+### Struct
+
+```rust
+struct Stewards {
+    addresses: Vec<Address>,
+}
+```
