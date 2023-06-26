@@ -1,0 +1,78 @@
+# From Docker
+
+## Pre-requisites
+
+In order to run any docker images, you need to have docker installed. You can find instructions on how to install docker for your machine [here](https://docs.docker.com/get-docker/).
+
+## Downloading the docker image
+The Namada docker image can be found [here](https://github.com/anoma/namada/pkgs/container/namada).
+
+Under the `Tags` tab, you can find the latest version of the docker image. Click on the link for the correct version of Namada that you are trying to install. For example, if you are trying to install Namada v0.16.0, you would click on the link for `v0.16.0`.
+
+You can find the tag of the downloaded docker image by running `docker images`. The tag will be the first column of the output.
+
+
+## Running the docker image
+
+Once you have downloaded the docker image, it will be useful to export some environment variables:
+
+```bash copy
+export CHAIN_ID=<chain-id>
+```
+
+The following docker run command will run the ledger node:
+
+```bash copy
+docker run -P -i -t $DOCKER_IMAGE <namada command>
+```
+
+Where `<namada command>` is any command you would run after `namada` in the terminal. For example, if you wanted to run `namada client utils join-network --chain-id $CHAIN_ID`, you would run:
+
+```bash copy
+docker run -P -i -t $DOCKER_IMAGE client utils join-network --chain-id $CHAIN_ID
+```
+
+Then in order to run any other ledger commands, one can run:
+
+```bash copy
+docker /bin/bash -c "/bin/bash","-c", "<namada command>"
+```
+
+## Alternative method (building the docker image yourself)
+
+Alternatively, you can build the docker image yourself!
+
+Begin by exporting some environment variables:
+
+```bash copy
+export CHAIN_ID=<chain-id>
+export BRANCH=<namada-version>
+```
+
+For example if you wanted to build the docker image for Namada v0.16.0 and chain-id `public-testnet-69.0.b20a1337aa1`, you would run:
+
+```bash copy
+export CHAIN_ID=public-testnet-69.0.b20a1337aa1
+export BRANCH=v0.16.0
+```
+
+Then you can build the docker image by running:
+
+```bash copy
+git clone https://github.com/anoma/namada-sdk-starter.git
+cd namada-sdk-starter/docker/namada-with-chain/
+docker build --build-arg BRANCH=$BRANCH --build-arg CHAIN_ID=$CHAIN_ID -t namada_testnet_image .
+```
+
+Which will save the image to your local docker images. You can find the tag of the downloaded docker image by running `docker images`. The tag will be the first column of the output.
+
+Save this docker image as an environment variable 
+```bash copy
+export DOCKER_IMAGE=<tag>
+```
+
+Then you can run the docker image by running:
+
+```bash copy
+docker run -P -i -t $DOCKER_IMAGE
+```

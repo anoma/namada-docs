@@ -24,7 +24,7 @@ const config: DocsThemeConfig = {
     link: "https://github.com/anoma/namada",
   },
   chat: {
-    link: "https://discord.gg/jdZwNvxS",
+    link: "https://discord.gg/namada",
   },
   docsRepositoryBase:
     "https://github.com/anoma/namada-docs/blob/master/packages/specs",

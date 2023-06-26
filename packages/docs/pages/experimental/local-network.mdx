@@ -1,0 +1,77 @@
+# Spinning up a local network
+
+## Prerequisites
+
+Namada must be installed [from source](../introduction/install/source.md) in order to run a local network.
+
+There is a script that has been written specifically for this purpose, which can be found under `scripts` in the [Namada repository](https://github.com/anoma/namada).
+
+### Installing script dependencies
+
+The script has some dependencies that must be installed in order to run it successfully:
+
+1. python3 must be installed.
+2. toml Python pip library https://pypi.org/project/toml/ must be installed.
+
+The script will require a genesis configuration file, which is a TOML file that specifies the parameters of the network. Examples of such files can be found in the [anoma-network-config repo](https://github.com/heliaxdev/anoma-network-config) in the `templates` directory.
+
+### Modifying the genesis configuration file
+
+In order to run the script sucessfully, all sections of `validators` must be removed from the `toml` file. This is because the script will generate a new set of validators for the network.
+
+The below image shows an example of a genesis configuration file that has been modified to remove the `validators` section.
+
+![editing genesis config steps](/images/local_network_config_steps.png)
+
+### Building wasm
+
+The script will also require all `wasm` files for transactions to be built. This can be done by running the following command (whilst in the namada directory):
+
+```shell copy
+make build-wasm-scripts
+```
+
+## Running the script
+
+The script is called `build_network.sh` and can be run with the following command:
+
+```shell copy
+# Ensure you are in the root of the namada repository directory
+./scripts/build_network.sh <config_toml> <namada_dir> <OPTIONAL: base_dir>
+```
+
+More specifically, the script takes three arguments:
+
+1. `config_toml`: the path to the ([validator-free](#modifying-the-genesis-configuration-file)) genesis configuration file.
+2. `namada_dir`: the path to the Namada [binaries directory](../introduction/install/binaries/overview-of-binaries).
+   If the binaries were build using `make build-release` this would imply the `namada/target/release` directory. 
+   Otherwise, if they were built using `make build` it would be the `namada/target/debug` directory.
+3. `base_dir`: (optional argument) the path to the BASE_DIR directory, where all chain-data is stored. 
+   This is only necessary if the BASE_DIR is not the default given by `namadac utils default-base-dir` command.
+
+For example, a MacOS user would run something along the lines of:
+
+```shell copy
+./scripts/build_network.sh \
+~/anoma-network-config/templates/edited_genesis_config.toml \
+./target/release # Assuming the binaries were built using `make build-release`
+```
+
+## Running the ledger
+
+After the script has been run, a python process will have started in the background.
+The ledger can be run through the familiar command:
+
+```shell copy
+target/release/namada ledger # Assuming the binaries were built using `make build-release`
+```
+
+## Cleaning up
+
+After the local network has fulfilled its purpose, it can be cleaned up by running the following commands found in the cleanup function of the script:
+
+```shell copy
+    pkill -f ".hack/chains"
+    rm -r .hack/chains
+    rm local.*.tar.gz
+```
