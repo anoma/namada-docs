@@ -1,0 +1,53 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Mechanism
+
+Once elected and instantiated, PGF stewards will then unilaterally be able to sign transactions that propose either RPGF or CPGF funding. The PGF stewards as a whole will have an "allowance" to spend up to the `PGF` internal address's balance.
+
+## Proposing Funding
+In order to propose funding, any steward will be able to propose a PGFProposal through governance. Only stewards will be valid authors of these proposals. There will be a minimum voting period set specifically for these types of proposals and can be changed by Governance. 
+
+This governance proposal will be such that it **passes** by default **unless** the following conditions are met:
+
+Conditions to veto a PGF proposal:
+1. Out of the votes that voted for the proposal, more than $50\%$ voted `Nay` on the proposal
+2. At least $\frac{1}{3}$ of voting power voted on the proposal.
+  - Further, if at least $\frac{2}{3}$ of voting power voted `Nay` on the proposal, and the proposal was rejected, the Steward is removed from the set of stewards.
+
+
+The PGF stewards should be able to propose both retroactive and continuous public funding transactions. Retroactive public funding transactions are straightforward and implement no additional logic to a normal transfer.
+
+However, for continuous PGF (cPGF), the stewards should be able to submit a one time transaction which indicates the recipient addresses that should be eligble for receiveing cPGF. 
+
+The following data is attached to the PGF transaction and will allow the stewards to represent the projects they wish to be continously funded. Each tuple represent the address of the recipient and the respective amount of NAM that the recipient will receive every epoch.
+
+```rust
+struct cPgfRecipients {
+    recipients: HashSet<(Address, u64)>
+}
+```
+The mechanism for these transfers will be implemented in `finalize-block.rs`, which will send the addresses their respective amounts each end-of-epoch.
+Further, the following transactions:
+- add (recipient, amount) to cPgfRecipients (inserts the pair into the hashset above)
+- remove recipient from cPgfRecipients (removes the address and corresponding amount pair from the hashset above)
+ should be added in order to ease the management of cPGF recipients.
+
+```rust
+impl addRecipient for cPgfRecipients
+
+impl remRecipient for cPgfRecipients
+```
+
+## PGF stewards incentives
+
+Being a PGF steward is (should be) hard work. Stewards must invest their time in crafting proposals, being in touch with the opinions of the Namada community, and taking the risks associated with being voted out. 
+In order to incentivise this effort, Namada allocates a set amount of NAM inflation that is directed towards the stewards.
+
+This inflation is allocated towards the PGF internal address, in which each steward account has control over their respective share of the funds.
+The inflation is "streamed" to the PGF internal address, in an identical manner to how the cPGF is streamed to the recipients (i.e end of each epoch).
+The Steward account can then unilaterally (within the rules of a multisig transaction) either:
+    - Set up a "stream of income" to another account (e.g a personal account)
+    - Transfer collected funds in a lump sum transaction
+
+The parameter of inflation income is set by governance and is included in genesis by default. 
+That allocation is then allocated to each steward (more stewards = more total funding).
