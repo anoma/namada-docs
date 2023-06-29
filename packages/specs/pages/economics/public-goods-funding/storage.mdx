@@ -13,9 +13,9 @@ The stewards should be able to propose the burning of funds, but this hopefully 
 
 ### VP checks
 
-The VP must check that the steward's spending does not exceed the balance of the VP (in aggregate).
+The VP must check that any spending in the form of `FundingProposals` or `StewardFundingProposal`s does not exceed the balance of the VP (in aggregate).
 
-The VP must also check that any spending is only done by the active PGF stewards.
+The VP must also check that any `StewardFundingProposal` spending is only done by the active PGF stewards.
 
 ## Storage
 
@@ -24,6 +24,7 @@ The VP must also check that any spending is only done by the active PGF stewards
 Each recipient will be listed under this storage space (for cPGF)
 - `/PGFAddress/cPGF_recipients/Address = Amount`
 - `/PGFAddress/active_stewards/address = Address`
+
 ### Struct
 
 ```rust
