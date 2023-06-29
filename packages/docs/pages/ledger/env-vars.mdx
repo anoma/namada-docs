@@ -1,5 +1,5 @@
 import { Callout } from 'nextra-theme-docs'
-// import ExpandableToml from "../../components/ExpandableToml"; #TODO: Use this component when properly css'd
+import Expandable from "../../components/Expandable"; // TODO: Use this component when properly css'd
 
 # Environment variables
 
@@ -7,6 +7,7 @@ By default, whenever the namada ledger is started, it will apply the confirgurat
 
 An example of a ledger configuration file is displayed below.
 
+<Expandable>
 ```toml
 wasm_dir = "wasm"
 
@@ -38,6 +39,7 @@ priv_validator_laddr = ""
 
 ...
 ```
+</Expandable>
 
 However, it is possible to override the configuration by setting environment variables.
 Any variable found in the config can be accessed through environment variables that are constructed in the below manner.
