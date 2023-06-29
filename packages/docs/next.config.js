@@ -1,7 +1,17 @@
 const withNextra = require("nextra")({
   theme: "nextra-theme-docs",
   themeConfig: "./theme.config.tsx",
-  latex: true
+  latex: true,
+  markdown: {
+    // options for markdown-it-anchor
+    anchor: { permalink: false },
+    // options for markdown-it-toc
+    toc: { includeLevel: [1, 2] },
+    extendMarkdown: (md) => {
+      // use more markdown-it plugins!
+      md.use(require("markdown-it-xxx"));
+    },
+  },
 });
 
 module.exports = {
@@ -9,14 +19,4 @@ module.exports = {
   images: {
     unoptimized: true,
   },
-  markdown: {
-    // options for markdown-it-anchor
-    anchor: { permalink: false },
-    // options for markdown-it-toc
-    toc: { includeLevel: [1, 2] },
-    extendMarkdown: md => {
-      // use more markdown-it plugins!
-      md.use(require('markdown-it-xxx'))
-    }
-  }
 };
