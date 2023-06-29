@@ -4,10 +4,10 @@ import { Callout } from 'nextra-theme-docs'
 
 ## Voting for the stewards
 
-After the `StewardProposal` has been submitted, and once the steward's address has been constructed and broadcasted, the steward address can be voted on by governance participants. All voting must occur between `votingStartEpoch` and `votingEndEpoch`.
+After the `StewardProposal` has been submitted, the steward address can be voted on by governance participants. All voting must occur between `votingStartEpoch` and `votingEndEpoch`.
 
 
-The vote for a new steward nomination will be constructed as follows:
+The vote for a steward-set change will be constructed as follows:
 
 
 Each participant submits a vote through governance:
@@ -20,15 +20,16 @@ struct OnChainVote {
 ```
 
 Where the proposalVote is simply an enum dictating whether the voter voted `Yay` or `Nay` to the proposed candidate change.
+The `id` will correspond to the `id` of the `StewardProposal` that is being voted on.
 
 
 #### Dealing with ties
-In the rare occurance of a tie, the steward retains membership by default.
+In the rare occurance of a tie, the `StewardProposal` is rejected, i.e the current steward-set remains the same.
 
 
 ## Electing stewards
 
-Once the decision has been made on whether to elect (or remove) the intended steward, the established address corresponding to the multisig is added to (removed from) the `PGF` internal address.
+Once the decision has been made on whether to elect (or remove) the intended steward/s, the established address/es corresponding to the multisig/s is/are added to (removed from) the `PGF` internal address.
 
 ### Example
 
@@ -46,7 +47,7 @@ The current PGF stewards are Dave and Elsa.
 struct StewardProposal{
   id: 2
   content: Vec<32,54,01,24,13,37>, // (Just the byte representation of the content (description) of the proposal)
-  author: 0xCharlie,
+  author: 0xBobCharlieMultisig,
   r#type: StewardProposal,
   votingStartEpoch: Epoch(45),
   votingEndEpoch: Epoch(54),
