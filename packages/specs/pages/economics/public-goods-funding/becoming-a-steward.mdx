@@ -13,6 +13,40 @@ would inherently introduce a new category into social consensus, should the prop
 Nominating oneself as a PGF steward may be done at any time.
 
 
+## Initiating the StewardProposal
+
+Before a new PGF steward can either be elected or removed, a governance proposal that specifies this objective must pass. The voting on this proposal is handled by the governance proposal type `StewardProposal`, which is a custom proposal type.
+
+
+The struct of `StewardProposal` is constructed as follows, and is explained in more detail in the [governance specs](../base-ledger/governance.md)
+
+```rust
+struct StewardProposal{
+  id: u64
+  content: Vec<u8>,
+  author: Address,
+  r#type: PGFSteward,
+  votingStartEpoch: Epoch,
+  votingEndEpoch: Epoch,
+  graceEpoch: Epoch,
+}
+```
+
+The proposal may specify:
+  - Up to 1 account that will be added as a steward
+  - Up to any number of accounts that will be removed as stewards
+
+Before the proposal is submitted, the protocol will verify that ***if*** the proposal proposes a new steward, ***then*** the author of the proposal is the same 
+as the account that is being proposed as a steward. This is to prevent a malicious actor from proposing a steward that is not themselves.
+
+If the proposal specificies any set of stewards to be removed, the protocol will verify that the author of the proposal is a current steward, only AFTER the proposal has passed.
+If a proposal is passed that removes an account, and that account is not in the set of current stewards, the proposal will still execute, but no action will be taken with respect to that account.
+
+In order for a new PGF steward to be elected (or removed), $\frac{2}{3}$ of validating power must vote on the `StewardProposal` and more than half of the votes must be in favor. 
+If more than half of the votes are against the proposal, the steward set is kept the same, and the proposer of the proposal loses their escrowed funds.
+
+See the example under [electing a steward](./electing.mdx#example) for more detail, as it may serve as the best medium for explaining the mechanism.
+
 ## Losing stewardship status
 
 There are 3 ways that a Steward may be removed from the steward set:
@@ -38,27 +72,3 @@ In the same way that a steward can be voted in by Namada governance through a cu
 Hence, any governance member (validator or delegate), is able to initiate a vote (for the relevant cost) in order to remove an arbitrary 
 number of current PGF stewards. If this proposal passes, it signals that the Steward(s) has/have not fulfilled their duty to the public, 
 which the stewards are meant to serve (hence the name).
-
-## Initiating the vote
-
-Before a new PGF steward can either be elected or removed, a governance proposal that specifies this objective must pass. The voting on this proposal is handled by the governance proposal type `StewardProposal`, which is a custom proposal type.
-
-
-The struct of `StewardProposal` is constructed as follows, and is explained in more detail in the [governance specs](../base-ledger/governance.md)
-
-```rust
-struct StewardProposal{
-  id: u64
-  content: Vec<u8>,
-  author: Address,
-  r#type: PGFSteward,
-  votingStartEpoch: Epoch,
-  votingEndEpoch: Epoch,
-  graceEpoch: Epoch,
-}
-```
-
-  In order for a new PGF steward to be elected (or removed), $\frac{2}{3}$ of validating power must vote on the `StewardProposal` and more than half of the votes must be in favor. If more than half of the votes are against the proposal, the steward set is kept the same, and the proposer of the proposal loses their escrowed funds.
-
-
-See the example below for more detail, as it may serve as the best medium for explaining the mechanism.
