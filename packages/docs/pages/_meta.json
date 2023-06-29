@@ -1,8 +1,7 @@
 {
   "index": "Namada",
   "introduction": "Introduction",
-  "running-a-full-node": "Full nodes",
-  "ledger": "Running the ledger",
+  "ledger": "Full nodes",
   "validators": "Validators",
   "delegators": "Delegators",
   "users": "(Power) Users",
