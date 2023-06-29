@@ -19,8 +19,6 @@ const Expandable = ({ children }) => {
     },
   };
 
-  console.log(">>>", styles.expanded);
-
   return (
     <div className="nx-mt-4 nx-mb-12 nx-relative">
       <div
