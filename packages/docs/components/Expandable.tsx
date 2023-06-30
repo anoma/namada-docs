@@ -10,9 +10,26 @@ const Expandable = ({ children }) => {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const elementTop = rect.top + scrollTop;
     const paddingTop = 100;
-    window.scrollTo({
-      top: elementTop - paddingTop,
-    });
+
+    const start = performance.now();
+    const duration = 500; // Adjust the duration as desired
+
+    const animateScroll = (timestamp) => {
+      const elapsed = timestamp - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const scrollTop = elementTop - paddingTop * progress;
+
+      window.scrollTo({
+        top: scrollTop,
+        behavior: "auto",
+      });
+
+      if (progress < 1) {
+        window.requestAnimationFrame(animateScroll);
+      }
+    };
+
+    window.requestAnimationFrame(animateScroll);
   };
 
   const toggleExpand = () => {
