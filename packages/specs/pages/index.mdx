@@ -4,30 +4,25 @@ Welcome to the Namada specification!
 
 ## What is Namada?
 
-Namada is a sovereign proof-of-stake blockchain, using Cometbft BFT consensus,
+Namada is a sovereign proof-of-stake blockchain, using [CometBFT](https://cometbft.com/) (nee Tendermint) BFT consensus,
 which enables multi-asset private transfers for any native or non-native asset
 using a [multi-asset shielded pool](https://research.metastate.dev/multi-asset_shielded_pool/) derived from the [Sapling circuit](https://z.cash/upgrade/sapling/).
 Namada features full IBC protocol support, a natively integrated Ethereum bridge, a modern proof-of-stake system with automatic reward compounding and cubic slashing,
 a stake-weighted governance signalling mechanism, and a dual proactive/retroactive public goods funding system.
 Users of shielded transfers are rewarded for their contributions to the privacy set in the form of native protocol tokens.
-A multi-asset shielded transfer wallet is provided in order to facilitate safe and private user interaction with the protocol.
+A multi-asset shielded transfer wallet is provided in order to facilitate safe and private user interaction with the protocol. Namada supports a feature called Shielded Actions, which allows users to hold their assets privately on Namada most of the time while occaisionally unshielding specific assets in order to interact with existing applications on transparent chains.
 
 You can learn more about Namada [here](https://blog.namada.net/introducing-namada-interchain-asset-agnostic-privacy/).
 
 ### What is Anoma?
 
-The Anoma protocol is designed to facilitate the operation of networked fractal instances, which intercommunicate but can utilise varied state machines and security models.
-A fractal instance is an instance of the Anoma consensus and execution protocols operated by a set of networked validators.
-Anoma’s fractal instance architecture is an attempt to build a platform which is architecturally homogeneous but with a heterogeneous security model.
-Thus, different fractal instances may specialise in different tasks and serve different communities.
+Anoma is an intent-centric, privacy-preserving architecture for decentralised counterparty discovery, solving, and settlement. You can find the Anoma specs [here](https://specs.anoma.net).
 
 ### How does Namada relate to Anoma?
 
-The Namada instance is the first such fractal instance, focused exclusively on the use-case of private asset transfers.
-Namada is also a helpful stepping stone to finalise, test, and launch a protocol version that is simpler than the full
-Anoma protocol but still encapsulates a unified and useful set of features.
+Anoma is a full-stack architecture designed for the long term, while Namada is a specific chain and featureset designed to provide practical privacy now. Anoma and Namada have both been initially developed by [Heliax](https://heliax.dev).
 
-### Raison d'être
+### Why Namada?
 
 Privacy should be default and inherent in the systems we use for transacting, yet safe and user-friendly multi-asset privacy doesn't yet exist in the blockchain ecosystem.
 Up until now users have had the choice of either a sovereign chain that reissues assets (e.g. [Zcash](https://z.cash/))
