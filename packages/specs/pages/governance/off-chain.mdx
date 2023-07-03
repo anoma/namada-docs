@@ -1,0 +1,38 @@
+# Off-chain protocol
+
+## Create proposal
+
+A CLI command to create a signed JSON representation of the proposal. The
+JSON will have the following structure:
+
+```
+{
+  content: Base64<Vec<u8>>,
+  author: Address,
+  votingStart: TimeStamp,
+  votingEnd: TimeStamp,
+  signature: Base64<Vec<u8>>
+}
+```
+
+The signature is produced over the hash of the concatenation of: `content`, `author`, `votingStart` and `votingEnd`. Proposal types are not supported off-chain. 
+
+## Create vote
+
+A CLI command to create a signed JSON representation of a vote. The JSON
+will have the following structure:
+
+```
+{
+  proposalHash: Base64<Vec<u8>>,
+  voter: Address,
+  signature: Base64<Self.proposalHash>,
+  vote: Enum(yay|nay)
+}
+```
+
+The proposalHash is produced over the concatenation of: `content`, `author`, `votingStart`, `votingEnd`, `voter` and `vote`. Vote memos are not supported off-chain. 
+
+## Tally
+
+Same mechanism as [on chain](#tally) tally but instead of reading the data from storage it will require a list of serialized json votes.
