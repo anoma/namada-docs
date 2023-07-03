@@ -27,7 +27,7 @@ The below image shows an example of a genesis configuration file that has been m
 
 The script will also require all `wasm` files for transactions to be built. This can be done by running the following command (whilst in the namada directory):
 
-```shell copy
+```shell
 make build-wasm-scripts
 ```
 
@@ -35,7 +35,7 @@ make build-wasm-scripts
 
 The script is called `build_network.sh` and can be run with the following command:
 
-```shell copy
+```shell
 # Ensure you are in the root of the namada repository directory
 ./scripts/build_network.sh <config_toml> <namada_dir> <OPTIONAL: base_dir>
 ```
@@ -44,14 +44,14 @@ More specifically, the script takes three arguments:
 
 1. `config_toml`: the path to the ([validator-free](#modifying-the-genesis-configuration-file)) genesis configuration file.
 2. `namada_dir`: the path to the Namada [binaries directory](../introduction/install/binaries/overview-of-binaries).
-   If the binaries were build using `make build-release` this would imply the `namada/target/release` directory. 
+   If the binaries were build using `make build-release` this would imply the `namada/target/release` directory.
    Otherwise, if they were built using `make build` it would be the `namada/target/debug` directory.
-3. `base_dir`: (optional argument) the path to the BASE_DIR directory, where all chain-data is stored. 
+3. `base_dir`: (optional argument) the path to the BASE_DIR directory, where all chain-data is stored.
    This is only necessary if the BASE_DIR is not the default given by `namadac utils default-base-dir` command.
 
 For example, a MacOS user would run something along the lines of:
 
-```shell copy
+```shell
 ./scripts/build_network.sh \
 ~/anoma-network-config/templates/edited_genesis_config.toml \
 ./target/release # Assuming the binaries were built using `make build-release`
@@ -62,7 +62,7 @@ For example, a MacOS user would run something along the lines of:
 After the script has been run, a python process will have started in the background.
 The ledger can be run through the familiar command:
 
-```shell copy
+```shell
 target/release/namada ledger # Assuming the binaries were built using `make build-release`
 ```
 
@@ -70,7 +70,7 @@ target/release/namada ledger # Assuming the binaries were built using `make buil
 
 After the local network has fulfilled its purpose, it can be cleaned up by running the following commands found in the cleanup function of the script:
 
-```shell copy
+```shell
     pkill -f ".hack/chains"
     rm -r .hack/chains
     rm local.*.tar.gz

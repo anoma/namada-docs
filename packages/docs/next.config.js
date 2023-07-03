@@ -2,6 +2,7 @@ const withNextra = require("nextra")({
   theme: "nextra-theme-docs",
   themeConfig: "./theme.config.tsx",
   latex: true,
+  defaultShowCopyCode: true,
   markdown: {
     // options for markdown-it-anchor
     anchor: { permalink: false },
