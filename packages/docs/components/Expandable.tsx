@@ -44,15 +44,16 @@ const Expandable = ({ children }) => {
 
       <button
         onClick={toggleExpand}
-        style={{ bottom: expanded ? "-0.2em" : "-1.35em" }}
+        style={{ bottom: "0", marginTop: "-1.35em" }}
         className={clsx(
-          "nx-absolute nx-w-full nx-text-center nx-left-0",
+          "nx-sticky nx-absolute nx-w-full nx-text-center nx-left-0",
           "nx-uppercase nx-text-sm"
         )}
       >
         <span
+          style={{ top: expanded ? "-2em" : "-1.5em" }}
           className={clsx(
-            "nx-px-4 nx-py-2 nx-text-primary-800 nx-inline-block",
+            "nx-relative nx-px-4 nx-py-2 nx-text-primary-800 nx-inline-block",
             "nx-bg-primary-100 dark:nx-bg-primary-400/10 nx-font-semibold nx-rounded"
           )}
         >
