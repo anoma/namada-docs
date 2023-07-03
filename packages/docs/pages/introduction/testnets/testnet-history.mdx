@@ -4,7 +4,7 @@ This page covers all installation steps required by various upgrades to testnets
 
 ## Latest Upgrade
 
-No upgrade needed on `public-testnet-9` (yet).
+No upgrade needed on `public-testnet-10` (yet).
 
 ## Latest Testnet
 
@@ -15,14 +15,111 @@ If your genesis transaction is contained in [this folder](https://github.com/ano
 
 The installation docs are updated and can be found [here](./environment-setup.md). The running docs for validators/full nodes can be found [here](../../ledger/running-a-full-node.md).
 
-## Previous upgrades:
+## Testnet History
 
-***20/06/2023*** `public-testnet-9` 
+## Testnet History Timeline
 
-The testnet launched on 20/06/2023 at 17:00 UTC with the genesis validators from `public-testnet-9`. It launched with [version v0.17.3](https://github.com/anoma/namada/releases/tag/v0.17.3) and chain-id `public-testnet-9.0.c2d503c57dc`. 
-If your genesis transaction is contained in [this folder](https://github.com/anoma/namada-testnets/tree/main/namada-public-testnet-9), you are one of the genesis validators. In order for the testnet to come online, at least 2/3 of those validators need to be online.
+- Namada public testnet 10:
+  - From date: 29th of June 2023 17.00 UTC
+  - Namada protocol version: `v0.17.5`
+  - Cometbft version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-10.3718993c3648`
 
-The installation docs are updated and can be found [here](./environment-setup.md). The running docs for validators/full nodes can be found [here](../../ledger/running-a-full-node.md).
+- Namada public testnet 9:
+  - From date: 20th of June 2023 17.00 UTC
+  - Namada protocol version: `v0.17.3`
+  - Cometbft version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-9.3718993c3648`
+
+- Namada public testnet 8:
+  - From date: 17th of May 2023 17.00 UTC
+  - Namada protocol version: `v0.15.3`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-8.0.b92ef72b820`
+
+- Namada public testnet 7:
+
+  - From date: 24th of April 2023 17.00 UTC
+  - Namada protocol version: `v0.15.1`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-7.0.3c5a38dc983`
+
+- Namada public testnet 6:
+
+  - From date: 29th of March 2023 17.00 UTC
+  - Namada protocol version: `v0.14.3`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-6.0.a0266444b06`
+
+- Namada public testnet 5:
+
+  - From date: 15th of March 2023
+  - Namada protocol version: `v0.14.2`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-5.0.d25aa64ace6`
+
+- Namada public testnet 4:
+
+  - From date: 22nd of February 2023
+  - Namada protocol version: `v0.14.1`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-4.0.16a35d789f4`
+
+- Namada public testnet 3 hotfix (did not suffice):
+
+  - From date: 13th of February 2023
+  - Namada protocol version: `v0.13.4`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-3.0.81edd4d6eb6`
+
+- Namada public testnet 3:
+
+  - From date: 9th of February 2023
+  - Namada protocol version: `v0.13.3`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-3.0.81edd4d6eb6`
+
+- Namada public testnet 2.1.2 hotfix:
+
+  - From date: 25th of January 2023
+  - Namada protocol version: `v0.13.3`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-2.1.4014f207f6d`
+
+  Due to a bug, a [hotfix](https://github.com/anoma/namada/releases/tag/v0.13.3) was released.
+  This needed to be installed and applied before `18:00:00 UTC` on `2023-01-25`.
+
+- Namada public testnet 2.1.2:
+
+  - From date: 24th of January 2023
+  - Namada protocol version: `v0.13.2`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-2.1.4014f207f6d`
+
+- Namada public testnet 2.1:
+  - From date: 17th of January 2023
+  - Namada protocol version: `v0.13.1-hardfork` (hardfork)
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-2.0.2feaf2d718c`
+
+The above hardfork was meant to take effect on Block Height `37370`, but some issues arose. You can read more [here](https://blog.namada.net/namada-testnet-v0-13-0-upgrade-postmortem).
+
+- Namada public testnet 2.0:
+
+  - From date: 12th of January 2023
+  - Namada protocol version: `v0.13.0`
+  - Tendermint version: `v0.1.4-abciplus`
+  - CHAIN_ID: `public-testnet-2.0.2feaf2d718c`
+
+- Namada public testnet 1:
+  - Namada protocol version: `v0.12.0`
+  - Tendermint version: `v0.1.4-abciplus`
+  - Genesis time: 20th of December 2022 at 17:00 UTC
+  - CHAIN_ID: `public-testnet-1.0.05ab4adb9db`
+
+
+## Upgrade History:
+
 
 ***19/05/2023*** `public-testnet-8` hot-fix
 
@@ -36,12 +133,6 @@ The chain was launched with chain-id `public-testnet-7.0.3c5a38dc983`.
 
 The intended fix to solve the storage issue was only partially solved. This led to `v0.15.3` which intended to fix these issues.
 
-***29/03/2023*** `public-testnet-6` (offline)
-
-The testnet launched on 29/03/2023 at 17:00 UTC with the genesis validators from `public-testnet-6`. It launched with [version v0.14.3](https://github.com/anoma/namada/releases/tag/v0.14.3) and chain-id `public-testnet-6.0.a0266444b06`. 
-If your genesis transaction is contained in [this folder](https://github.com/anoma/namada-testnets/tree/main/namada-public-testnet-5), you are one of the genesis validators. In order for the testnet to come online, at least 2/3 of those validators need to be online.
-
-The installation docs are updated and can be found [here](./environment-setup.md). The running docs for validators/full nodes can be found [here](../../ledger/running-a-full-node.md).
 
 ***13/02/2023*** `public-testnet-3`
 
@@ -120,3 +211,4 @@ In order to install this upgrade, a user or validator must
 5. As soon as possible, restart the ledger by running `NAMADA_CMT_STDOUT=true namada node ledger run`
 
 The ledger will then update correctly at the correct height. In order to ensure a smooth fork, please do this as soon as possible.
+

@@ -32,8 +32,8 @@ To perform the validity checks, the VP will need to access two types of informat
 This data defines the requirements of a valid transaction operating on the multisignature address and it will be written in storage when the account is created: 
 
 ```
-/\$Address/threshold/: u8
-/\$Address/pubkeys/: LazyVec<PublicKey>
+/$Address/threshold/: u8
+/$Address/pubkeys/: LazyVec<PublicKey>
 ```
 
 The `LazyVec` struct will split all of its elements on different subkeys in storage so that we won't need to load the entire vector of public keys in memory for validation but just the ones pointed by the indexes in the `SignedTxData` struct.

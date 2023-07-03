@@ -21,6 +21,13 @@ Finally, you should have GLIBC `v2.29` or higher.
 
 Now that you have all dependencies installed, you can download the latest binary release from our [releases page](https://github.com/anoma/namada/releases) by choosing the appropriate architecture.
 
+The below code will download all the binaries for the latest release for all supported operating systems.
+```shell copy
+OPERATING_SYSTEM="Linux" # or "Darwin" for MacOS
+latest_release_url=$(curl -s "https://api.github.com/repos/anoma/namada/releases/latest" | grep "browser_download_url" | cut -d '"' -f 4 | grep "$OPERATING_SYSTEM")
+wget "$latest_release_url"
+```
+
 ## Placing the binaries onto `$PATH`
 For ubuntu and mac machines, the following command should work for placing namada into path.
 
