@@ -7,7 +7,7 @@ Instead, social consensus may be reached off-chain through any obscure mechanism
 These commands exist simply as a tool to facilitate the process of reaching social consensus off-chain, according to the ruleset predefined by the protocol.
 It is expected that the community will use the offline proposal mechanism primarily for when the chain is halted.
 
-## Create proposal
+## Creating an offline proposal
 
 A CLI command to create a signed JSON representation of the proposal. The
 JSON will have the following structure:
@@ -31,7 +31,7 @@ Proposal types are not supported off-chain.
 - `tallyEpoch`: The epoch in which the proposal will be tallied. This epoch must already exist when tallying occurs. If the chain is halted, this means choosing an epoch in the past (e.g. the most recent epoch).
 - `signature`: The signature of the proposal author over the hash of the concatenation of: `content`, `author`, and `tallyEpoch`
 
-## Create vote
+## Voting offline
 
 A CLI command to create a signed JSON representation of a vote. The JSON
 will have the following structure:
@@ -47,7 +47,7 @@ will have the following structure:
 
 The proposalHash is produced over the concatenation of: `content`, `author`, `votingStart`, `votingEnd`, `voter` and `vote`.
 
-## Tallying votes
+## Tallying votes offline
 
 Same mechanism as the [on chain voting](./on-chain.md#tally) tally but instead of reading the data from storage it will require a list of serialized json votes.
 The voting power for each delegate/delegator is calculated based on their respective bonded-stake from the latest block in that epoch (in principle it could be any block in the epoch, since voting-power does not change within an epoch).

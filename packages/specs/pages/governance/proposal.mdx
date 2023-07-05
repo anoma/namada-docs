@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Namada Proposals
 
 ## Proposal JSON
@@ -9,16 +11,20 @@ We leverage a similar format to what is described in the [BIP2](https://github.c
 ```json
 {
     "title": "<text>",
-    "authors": "<authors email addresses> ",
+    "authors": "<authors' email addresses> ",
     "discussions-to": "<email address / link>",
     "created": "<date created on, in ISO 8601 (yyyy-mm-dd) format>",
     "license": "<abbreviation for approved license(s)>",
     "abstract": "<text>",
     "motivation": "<text>",
-    "details": "<AIP number(s)> - optional field",
-    "requires": "<AIP number(s)> - optional field",
+    "details": "<NIP number(s)> - optional field",
+    "requires": "<proposal id of any proposals that need to occur before this proposal can be implemented> -optional field",
 }
 ```
+
+<Callout type="info" emoji="">
+    Acronym **NIP** == Namada Improvement Proposal
+</Callout>
 
 The `Author` address field will be used to credit the locked funds if the proposal is approved.
 The `ProposalType` imply different combinations of:
