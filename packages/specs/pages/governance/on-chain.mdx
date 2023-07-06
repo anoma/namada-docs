@@ -64,8 +64,6 @@ Examples of such code execution could be:
 
 This means that corresponding VPs will also be invoked.
 
-It is possible to check the actual implementation [here](https://github.com/anoma/namada/blob/main/shared/src/ledger/governance/mod.rs#L69)
-
 ## Proposal transaction
 
 The on-chain proposal transaction will have the following structure, where `author` address will be address of the account submitting the proposal, and hence the address which receives any deposited funds.
@@ -100,7 +98,7 @@ where `ProposalVote` is an enum representing a `Yay` or `Nay` vote: the yay vari
 Storage writes for a vote transaction are described [here](./storage.md#votes).
 
 If non-validating accounts are allowed to vote, delegates will be able to vote only for 2/3 of the total voting period, while delegators can vote until the end of the voting period. 
-If only validators are allowed to vote for the `ProposalType` in exam, they are allowed to vote for the entire voting window.
+If only validators are allowed to vote for the `ProposalType` in question, they are allowed to vote for the entire voting window.
 
 If a delegator votes differently to its delegate, the delegate's vote will be *overriden* 
 (e.g. if a delegator has a voting power of 200 and votes opposite to the delegate, then 200 will be subtracted from the voting power of the involved delegate).
@@ -108,10 +106,15 @@ If a delegator votes differently to its delegate, the delegate's vote will be *o
 
 ## Tallying votes
 
-At the beginning of each new epoch (and only then), in the `finalize_block` function, tallying will occur for all the proposals that have a `grace_epoch` matching the current epoch.
-The proposal has a positive outcome if the threshold specified by the `ProposalType` is reached. 
-This means that enough `Yay` votes must have been collected: the threshold is relative to the total staked `NAM`.
-E.g if the threshold is $\frac{1}{2}$, then at least 50% of the total staked `NAM` must have voted `Yay` for the proposal to be accepted.
+Proposals are tallied at the start of their `grace_epoch` during the `finalize_block` function.
+The tallying is based off of the votes collected at the end of the `voting_end` epoch.
+If the threshold specified by the ProposalType is reached, the proposal will be considered successful.
+
+There are two types of thresholds:
+    - Fraction of total staked `NAM` that voted - This checks whether enough staked `NAM` voted for the proposal at all.
+    - Fraction of votes in favor of the proposal - This checks whether enough votes (weighted by their staked `NAM`) voted in favor of the proposal, out of the staked `NAM` that did vote.
+
+E.g if the thresholds, respectively, are $\frac{1}{2}$ and $\frac{1}{3}, then at least 50% of the total staked `NAM` must have voted for the proposal AND out of this NAM, to be accepted.
 
 Tallying, is computed with the following rules:
 
@@ -119,6 +122,7 @@ Tallying, is computed with the following rules:
 
 1. Sum all the voting power of delegates that voted `Yay`, call this sum `SumYay`
 2. Sum all the voting power of delegates that voted `Nay`, call this sum `SumNay`
+3. Check if the sum `SumYay` + `SumNay` meets the first threshold, if not, the proposal outcome is negative
 3. For any delegate that voted `Yay`, subtract the voting power of any delegator that voted `Nay` from `SumYay`
 4. For any delegate that voted `Nay`, subtract the voting power of any delegator that voted `Yay` from `SumNay`
 5. Add voting power for any delegation that voted `Yay` (whose corresponding delegate didn't vote `Yay`) to `SumYay`
@@ -127,15 +131,15 @@ Tallying, is computed with the following rules:
 
 </Steps>
 
-All the computation will be done on data collected at the epoch specified in the `voting-end` field of the proposal.
+All the computation is done at the start of `grace_epoch` on data collected at the epoch specified in the `voting-end` field of the proposal.
 
 
 ### Refund and Proposal Execution mechanism
 
 In parallel to tallying, the protocol manages the execution of accepted proposals and refunding in the `finalize_block` function. 
-If the proposals `grace_epoch` matches with the current epoch, AND the proposal had a positive outcome, the protocol will refund the locked funds from `GovernanceAddress` to the proposal author address (specified in the proposal `author` field).  
+If the proposals `grace_epoch` matches with the current epoch, AND the proposal had a positive outcome, the protocol refunds the locked funds from `GovernanceAddress` to the proposal author address (specified in the proposal `author` field).  
 Moreover, if the proposal had a positive outcome and had attached WASM code, the code is executed immidiately.
 
-On the other hand, should the proposal be rejected (negative outcome), any locked funds will be burnt (removed from total supply).
+On the other hand, should the proposal be rejected (negative outcome), any locked funds is burnt (removed from total supply).
 
 The result is then signaled by creating and inserting a [`CometBFT Event`](https://github.com/cometbft/cometbft/blob/main/spec/abci/abci%2B%2B_basic_concepts.md#events).

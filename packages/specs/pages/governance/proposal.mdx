@@ -17,13 +17,14 @@ We leverage a similar format to what is described in the [BIP2](https://github.c
     "license": "<abbreviation for approved license(s)>",
     "abstract": "<text>",
     "motivation": "<text>",
-    "details": "<NIP number(s)> - optional field",
+    "details": "<Proposal Number> - optional field",
     "requires": "<proposal id of any proposals that need to occur before this proposal can be implemented> -optional field",
 }
 ```
 
 <Callout type="info" emoji="">
-    Acronym **NIP** == Namada Improvement Proposal
+    The proposal number is different from the proposal id. The id is a counter that does not include offline proposals. The proposal number is a counter that includes offline proposals. 
+    The proposal id is a unique identifier that is assigned to each proposal when it is submitted. The proposal id is used to reference a proposal in the Namada blockchain.
 </Callout>
 
 The `Author` address field will be used to credit the locked funds if the proposal is approved.
