@@ -13,7 +13,7 @@ Proposals are submitted through the client, and are verified by the `GovernanceA
 The structure of proposals is outlined [here](./proposal.md).
 
 
-The correct logic to handle these different types will be hardcoded in protocol. 
+The correct logic to handle these different types is hardcoded in protocol. 
 We'll also rely on type checking to strictly enforce the correctness of a proposal given its type. 
 These two approaches combined will prevent a user from deviating from the intended logic for a certain proposal type (e.g. providing a wasm code when it's not needed or allowing only validators to vote when also delegators should, etc...). 
 More details on the specific types supported can be found in the [relative](#supported-proposal-types) section of the [proposals page](./proposal.md).
