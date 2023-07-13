@@ -1,6 +1,7 @@
 import React from "react";
 import { Logo } from "./components/Logo";
 import { DocsThemeConfig } from "nextra-theme-docs";
+import { PageHead } from "./components/PageHead";
 
 const description = `Documentation for Namada, a Proof-of-Stake L1 for interchain asset-agnostic privacy.`;
 
@@ -14,11 +15,7 @@ const config: DocsThemeConfig = {
       canonical: "https://docs.namada.net",
     };
   },
-  head: (
-    <>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    </>
-  ),
+  head: <PageHead />,
   logo: <Logo />,
   project: {
     link: "https://github.com/anoma/namada",
