@@ -18,7 +18,7 @@ The validator's voting-power is proportional to the sum of its self-bonded token
 
 #### Delegation in terms of ***governance***:
 
-With the above definitions in mind, we can now define the following terms:
+With the above definitions in mind, we define the following terms:
 
 > A Namada ***delegator*** is an account that delegates some tokens to a _delegate_ for governance voting purposes. 
 Any address is either a delegator or a delegate, but not both.
@@ -32,12 +32,11 @@ Similarly, a delegate's `voting-power` (now in terms of voting on governance pro
 
 ## Motivation
 Namada introduces a governance mechanism to propose and apply protocol changes without the need for a hard fork, and to signal stakeholder approval for potential hard forks. 
-Anyone holding some `NAM` is able to propose some changes in a proposal for which delegators and validators cast their `yay` or `nay` votes. 
+Any user able to deposit the correct amount of `NAM` is able to propose some changes in a proposal for which delegators and validators cast their `yay` or `nay` votes. 
 It is also possible to attach some payloads to proposals, in specific cases, to embed additional information. 
 
 Governance on Namada supports both `signaling` and `voting` mechanisms. 
-The signaling mechanism is used for changes which require a hard fork, while the voting mechanism is used for changes which merely alter state. 
-In cases where the chain is not able to produce blocks anymore, Namada relies on [off-chain signaling](#off-chain-protocol) to agree on a common move.
+The signaling mechanism is used for changes which require a hard fork, while the voting mechanism is used for changes which merely alter state. In cases where the chain is not able to produce blocks anymore, Namada relies on [off-chain signaling](#off-chain-protocol) to agree on a common move.
 
 Further information about delegators, validators, and NAM can be found in the [economics section](../economics.md).
 

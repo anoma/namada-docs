@@ -9,8 +9,7 @@ It is expected that the community will use the offline proposal mechanism primar
 
 ## Creating an offline proposal
 
-A CLI command to create a signed JSON representation of the proposal. The
-JSON has the following structure:
+Offline proposals are represented as JSON objects with the following structure:
 
 ```
 {
@@ -33,8 +32,7 @@ Proposal types are not supported off-chain.
 
 ## Voting offline
 
-A CLI command to create a signed JSON representation of a vote. The JSON
-will have the following structure:
+Offline votes are represented as JSON objects with the following structure:
 
 ```
 {
@@ -46,8 +44,9 @@ will have the following structure:
 ```
 
 The proposalHash is produced over the concatenation of: `content`, `author`, `votingStart`, `votingEnd`, `voter` and `vote`.
+The signature is produced over the hash of the concatenation of: `proposalHash`, `voter` and `vote`.
 
 ## Tallying votes offline
 
-Same mechanism as the [on chain voting](./on-chain.md#tally) tally but instead of reading the data from storage it will require a list of serialized json votes.
+Offline votes are tallied under the same mechanism as [on chain vote tallying](./on-chain.md#tally), but instead of reading the data from storage it will require a list of serialized json votes.
 The voting power for each delegate/delegator is calculated based on their respective bonded-stake from the latest block in that epoch (in principle it could be any block in the epoch, since voting-power does not change within an epoch).
