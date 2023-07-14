@@ -9,21 +9,57 @@ export const Logo = () => {
     setDark(theme === "dark");
   }, [theme]);
 
+  const fill = isDark ? "#ffff00" : "currentColor";
   return (
     <div>
       <svg
-        className="nx-w-full nx-py-4 nx-max-w-[200px] "
-        style={{ maxWidth: "100px" }}
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 751 208.9"
-        fill={isDark ? "#ffff00" : "currentColor"}
+        className="nx-w-full nx-py-4"
+        style={{ maxWidth: "120px" }}
+        version="1.1"
+        viewBox="0 0 415.2 153.4"
       >
-        <rect width="61.5" height="208.9" x="689.5" />
-        <rect width="61.5" height="208.9" x="609.5" />
-        <rect width="61.5" height="208.9" x="529" />
-        <polygon points="476.9 208.9 409.8 208.9 409.8 70.1 332.4 70.1 332.4 208.9 265.3 208.9 265.3 0 476.9 0 476.9 208.9" />
-        <circle cx="371.1" cy="111.5" r="28.8" />
-        <polygon points="211.5 208.9 144.5 208.9 144.5 70.1 67 70.1 67 208.9 0 208.9 0 0 211.5 0 211.5 208.9" />
+        <g id="g148" transform="translate(-87 -48.3)">
+          <g id="g144">
+            <rect
+              fill={fill}
+              id="rect136"
+              width="28.7"
+              height="28.7"
+              x="164.7"
+              y="125"
+            />
+            <path
+              fill={fill}
+              id="path138"
+              d="M136 96.3a28.7 28.7 0 0 1 28.7 28.7H136z"
+            />
+            <polygon
+              fill={fill}
+              id="polygon140"
+              points="152.6 153.7 136 125 119.4 153.7"
+            />
+            <circle fill={fill} id="circle142" cx="193.5" cy="110.7" r="14.3" />
+          </g>
+          <path
+            fill={fill}
+            id="path146"
+            d="M163.6 201.7c-20.5 0-39.7-8-54.2-22.5A76.2 76.2 0 0 1 86.9 125a76 76 0 0 1 22.5-54.2 76.2 76.2 0 0 1 54.2-22.5c20.5 0 39.8 8 54.3 22.5a76.2 76.2 0 0 1 22.4 54.2 76.2 76.2 0 0 1-76.7 76.7zm0-144A66.8 66.8 0 0 0 96.4 125a66.8 66.8 0 0 0 67.2 67.2 66.8 66.8 0 0 0 67.2-67.2 66.8 66.8 0 0 0-67.2-67.2Z"
+          />
+        </g>
+        <text
+          id="text152"
+          x="191"
+          y="105.4"
+          fill={fill}
+          font-family='SpaceGrotesk-Medium,"Space Grotesk"'
+          font-size="77.8"
+          font-weight="500"
+        >
+          <tspan id="tspan150" x="191" y="105.4">
+            DOCS
+          </tspan>
+        </text>
       </svg>
     </div>
   );
