@@ -52,7 +52,7 @@ export const Logo = () => {
           fill={fill}
           fontFamily='SpaceGrotesk-Medium,"Space Grotesk"'
           fontSize="77.8"
-          font-weight="500"
+          fontWeight="500"
         >
           <tspan id="tspan150" x="191" y="105.4">
             SPECS
