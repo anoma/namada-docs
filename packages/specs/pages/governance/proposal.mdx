@@ -44,8 +44,7 @@ pub enum ProposalType {
   Default(Option<String>),
   StewardProposal,
   StewardFundingProposal,
-  FundingProposal,
-  ETHBridge,
+  FundingProposal
 }
 ```
 
@@ -57,7 +56,6 @@ pub enum ProposalType {
 - Doesn't expect any memo attached to the votes
 
 `StewardProposal` is a proposal to change the StewardSet for _Public Goods Funding_:
-
 - Doesn't carry any WASM code
 - Allows both validators and delegators to vote
 - Requires $\frac{1}{3}$ of the total voting power to vote
@@ -74,12 +72,13 @@ pub enum ProposalType {
 - Requires $\frac{1}{3}$ of the total voting power to vote
 - Requires $\frac{1}{2}$ of the total votes to be `Yay`
 
-
-`ETHBridge` is aimed at regulating actions on the bridge like the update of the Ethereum smart contracts or the withdrawing of all the funds from the `Vault` :
-
-- Doesn't carry any wasm code
-- Allows only validators to vote
-- Requires $\frac{2}{3}$ of the total voting power to succeed
-- Expect every vote to carry a memo in the form of a `Signature` over some bytes provided in the proposal
-
 `PGFProposal` is a specific proposal to propose transfers for _Public Goods Funding_:
+- Doesn't carry any WASM code
+- Allows both validators and delegators to vote
+If the proposer is not a steward:
+- Requires $\frac{1}{3}$ of the total voting power to vote
+- Requires $\frac{1}{2}$ of the total votes to be `Yay`
+If the proposer is a steward, passes unless:
+- $\frac{1}{3}$ of the total voting power votes on the proposal, **AND** out of the votes, at least $\frac{1}{2}$ are `Nay`
+- Causes the steward to lose steward status if $\frac{2}{3}$ of the total voting power votes on the proposal **AND** out of the votes, at least $\frac{2}{3}$ are `Nay`
+
