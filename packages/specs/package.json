@@ -2,6 +2,7 @@
   "name": "namada-specs",
   "version": "0.0.1",
   "description": "Namada Docs",
+  "license": "GPL-3.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build && next export",
