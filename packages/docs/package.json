@@ -2,13 +2,14 @@
   "name": "namada-docs",
   "version": "0.0.1",
   "description": "Namada Specs",
+  "license": "GPL-3.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build && next export",
     "start": "next start"
   },
   "dependencies": {
-    "next": "^13.0.6",
+    "next": "^13.4.8",
     "nextra": "latest",
     "nextra-theme-docs": "latest",
     "react": "^18.2.0",
