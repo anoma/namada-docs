@@ -1,0 +1,52 @@
+# Off-chain protocol
+
+At the end of the day, social consensus is what matters. 
+The on-chain governance process exists to assist in reaching social consensus in a structured, well-defined way. 
+However, it is clearly not the only way for people to coordinate and reach consensus.
+Instead, social consensus may be reached off-chain through any community-selected mechanism.
+These commands exist simply as a tool to facilitate the process of reaching social consensus off-chain, according to the ruleset predefined by the protocol.
+It is expected that the community will use the offline proposal mechanism primarily for when the chain is halted.
+
+## Creating an offline proposal
+
+Offline proposals are represented as JSON objects with the following structure:
+
+```
+{
+  content: Base64<Vec<u8>>,
+  author: Address,
+  tallyEpoch: Epoch,
+  signature: Base64<Vec<u8>>
+}
+```
+
+The signature is produced over the hash of the concatenation of: `content`, `author`, and `tallyEpoch`. 
+Proposal types are not supported off-chain.
+
+### Proposal fields
+
+- `content`: The proposal content (encoded). This is the actual proposal that will be voted on.
+- `author`: The address of the proposal author.
+- `tallyEpoch`: The epoch in which the proposal will be tallied. This epoch must already exist when tallying occurs. If the chain is halted, this means choosing an epoch in the past (e.g. the most recent epoch).
+- `signature`: The signature of the proposal author over the hash of the concatenation of: `content`, `author`, and `tallyEpoch`
+
+## Voting offline
+
+Offline votes are represented as JSON objects with the following structure:
+
+```
+{
+  proposalHash: Base64<Vec<u8>>,
+  voter: Address,
+  signature: Base64<Self.proposalHash>,
+  vote: Enum(yay|nay)
+}
+```
+
+The proposalHash is produced over the concatenation of: `content`, `author`, `votingStart`, `votingEnd`, `voter` and `vote`.
+The signature is produced over the hash of the concatenation of: `proposalHash`, `voter` and `vote`.
+
+## Tallying votes offline
+
+Offline votes are tallied under the same mechanism as [on chain vote tallying](./on-chain.md#tally), but instead of reading the data from storage it will require a list of serialized json votes.
+The voting power for each delegate/delegator is calculated based on their respective bonded-stake from the latest block in that epoch (in principle it could be any block in the epoch, since voting-power does not change within an epoch).

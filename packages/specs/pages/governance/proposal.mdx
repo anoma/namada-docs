@@ -1,0 +1,84 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Namada Proposals
+
+## Proposal JSON
+Field semantics are as follows:
+
+- The `content` value should follow a standard format. 
+We leverage a similar format to what is described in the [BIP2](https://github.com/bitcoin/bips/blob/master/bip-0002.mediawiki#bip-format-and-structure) document:
+
+```json
+{
+    "title": "<text>",
+    "authors": "<authors' email addresses> ",
+    "discussions-to": "<email address / link>",
+    "created": "<date created on, in ISO 8601 (yyyy-mm-dd) format>",
+    "license": "<abbreviation for approved license(s)>",
+    "abstract": "<text>",
+    "motivation": "<text>",
+    "details": "<Proposal Number> - optional field",
+    "requires": "<proposal id of any proposals that need to occur before this proposal can be implemented> -optional field",
+}
+```
+
+<Callout type="info" emoji="">
+    The proposal number is different from the proposal id. The id is a counter that does not include offline proposals. The proposal number is a counter that includes offline proposals. 
+    The proposal id is a unique identifier that is assigned to each proposal when it is submitted. The proposal id is used to reference a proposal in the Namada blockchain.
+</Callout>
+
+The `Author` address field will be used to credit the locked funds if the proposal is approved.
+The `ProposalType` imply different combinations of:
+    - the optional wasm code attached to the proposal
+    - which actors should be allowed to vote (delegators and validators or validators only)
+    - the threshold to be used in the tally process
+    - the optional payload (memo) attached to the vote
+
+## Supported proposal types
+
+At the moment, Namada supports 5 types of governance proposals:
+
+```rust
+pub enum ProposalType {
+  /// Carries the optional proposal code path
+  Default(Option<String>),
+  StewardProposal,
+  StewardFundingProposal,
+  FundingProposal
+}
+```
+
+`Default` represents a generic proposal with the following properties:
+
+- Can carry a WASM code to be executed in case the proposal passes
+- Allows both validators and delegators to vote
+- Requires $\frac{2}{3}$ of the total voting power to succeed
+- Doesn't expect any memo attached to the votes
+
+`StewardProposal` is a proposal to change the StewardSet for _Public Goods Funding_:
+- Doesn't carry any WASM code
+- Allows both validators and delegators to vote
+- Requires $\frac{1}{3}$ of the total voting power to vote
+- Requires $\frac{1}{2}$ of the total votes to be `Yay`
+
+`StewardFundingProposal` is a proposal to *conduct* _Public Goods Funding_ **by a steward**:
+- Can only be submitted by PGF stewards
+- Allows both validators and delegators to vote
+- Passes by default **UNLESS** $\frac{1}{3}$ of the total voting power votes on the proposal, **AND** out of the votes, at least $\frac{1}{2}$ are `Nay`
+- Causes the steward to lose steward status if $\frac{2}{3}$ of the total voting power votes on the proposal **AND** out of the votes, at least $\frac{2}{3}$ are `Nay`
+
+`FundingProposal` is a proposal to *conduct* _Public Goods Funding_ **by anyone**:
+- Allows both validators and delegators to vote
+- Requires $\frac{1}{3}$ of the total voting power to vote
+- Requires $\frac{1}{2}$ of the total votes to be `Yay`
+
+`PGFProposal` is a specific proposal to propose transfers for _Public Goods Funding_:
+- Doesn't carry any WASM code
+- Allows both validators and delegators to vote
+If the proposer is not a steward:
+- Requires $\frac{1}{3}$ of the total voting power to vote
+- Requires $\frac{1}{2}$ of the total votes to be `Yay`
+If the proposer is a steward, passes unless:
+- $\frac{1}{3}$ of the total voting power votes on the proposal, **AND** out of the votes, at least $\frac{1}{2}$ are `Nay`
+- Causes the steward to lose steward status if $\frac{2}{3}$ of the total voting power votes on the proposal **AND** out of the votes, at least $\frac{2}{3}$ are `Nay`
+
