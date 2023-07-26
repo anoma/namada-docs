@@ -7,8 +7,7 @@ This guide will help you migrate your validator node from one testnet to another
 ## Resetting your validator node (optional)
 
 <Callout type="info">
-With the release of `v0.15.3` we have introduced a new base directory. This means that you will need to reset your validator node to use the new base directory. This is a one time operation.
-The base directory has been moved from `.namada` to `.local/share/namada` on Linux and `Library/Application Support/Namada` on MacOS.
+With the release of `v0.19.0` we have introduced mandatory keys for validators. These keys are `eth_hot_key` and `eth_cold_key` that are used for Ethereum bridge purposes.
 </Callout>
 
 ### Locate the namada base directory
