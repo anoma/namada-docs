@@ -74,4 +74,5 @@ cat $HOME/Library/Application\ Support/Namada/pre-genesis/$ALIAS/validator.toml
 - Protocol key: This key is used by the validator's ledger itself to sign protocol transaction on behalf of the validator.
 - DKG key: Special key needed for participation in the DKG protocol.
 - Consensus key: Used in CometBFT consensus layer. Currently, this key is written to a file which is read by CometBFT.
-- CometBFT node key: This key is used to derive CometBFT node ID for P2P connection authentication. This key is also written to a file which is read by CometBFT.
+- Eth hot key: Used for validating eth-bridge transactions.
+- Eth cold key: Used for emergency eth-bridge operations. 
