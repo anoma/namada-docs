@@ -1,3 +1,5 @@
+import {Steps} from 'nextra-theme-docs'
+
 # Environment setup
 
 > If you don't want to build Namada from source you can [install Namada from binaries](../user-guide/install/from-binary.md).
@@ -10,17 +12,18 @@ export NAMADA_TAG=v0.20.1
 
 
 ## Installing Namada
-0. Install all pre-requisites
+<Steps>
+### Install all pre-requisites
     - [Rust](https://www.rust-lang.org/tools/install)
     - [CometBFT](../installing-cometbft.md)
     - [Protobuf](../install/source/pre-requisites.md)
 
-1. Clone namada repository and checkout the correct versions
+### Clone namada repository and checkout the correct versions
 
 ```shell copy
 git clone https://github.com/anoma/namada && cd namada && git checkout $NAMADA_TAG
 ```
-2. Build binaries
+###  Build binaries
 ```bash copy
 make build-release
 ```
@@ -30,30 +33,35 @@ sudo apt-get update -y
 sudo apt-get install build-essential make pkg-config libssl-dev libclang-dev -y
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-
+</Steps>
 ## Installing CometBFT
-1. See the installing CometBFT section [here](../installing-cometbft.md) for instructions on how to install CometBFT.
-2. Copy both the namada and CometBFT binaries to somewhere on $PATH (or use the relative paths). This step may or may not be necessary.
+<Steps>
+### See the installing CometBFT section [here](../installing-cometbft.md) for instructions on how to install CometBFT.
+### Copy both the namada and CometBFT binaries to somewhere on $PATH (or use the relative paths). This step may or may not be necessary.
     
 - namada binaries can be found in `/target/release`
 - CometBFT is likely in `$HOME/Downloads/cometbft`
-
+</Steps>
 ## Check ports
-1. Open ports on your machine:
+<Steps>
+### Open ports on your machine:
     - 26656
     - 26657
-2. To check if ports are open you can setup a simple server and curl the port from another host
+### To check if ports are open you can setup a simple server and curl the port from another host
         
 - Inside the namada folder, run 
 ``` bash
-{ printf 'HTTP/1.0 200 OK\r\nContent-Length: %d\r\n\r\n' "$(wc -c < namada)"; cat namada; } | nc -l $PORT`
+{ printf 'HTTP/1.0 200 OK\r\nContent-Length: %d\r\n\r\n' "$(wc -c < namada)"; cat namada; } | nc -l $PORT
 ```
+
 - From another host run one of the two commands:
     - `nmap $IP -p$PORT`
     - `curl $IP:$PORT >/dev/null`
 
-## Verifying your installation
+### Verifying your installation
 - Make sure you are using the correct CometBFT version
     - `cometbft version` should output `0.37.2`
 - Make sure you are using the correct Namada version
     - `namada --version` should output `Namada v0.20.1`
+
+</Steps>

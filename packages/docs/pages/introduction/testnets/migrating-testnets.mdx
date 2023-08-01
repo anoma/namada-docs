@@ -1,4 +1,4 @@
-import { Callout } from 'nextra-theme-docs'
+import { Callout, Steps } from 'nextra-theme-docs'
 
 # Steps for migrating testnets
 
@@ -35,8 +35,8 @@ Technically, the correct directory will be the one assigned to `$XDG_DATA_HOME`,
 but if you haven't set that variable, it will default to the one given above.
 </Callout>
 
-
-### 1. IMPORTANT! Save your `pre-genesis` folder in the ledger base directory
+<Steps>
+### IMPORTANT! Save your `pre-genesis` folder in the ledger base directory
 
 Before we delete any folders, we want to make sure we save our `pre-genesis` folder. This folder contains your validator keys, and we want to make sure we don't lose them.
 
@@ -44,31 +44,32 @@ Before we delete any folders, we want to make sure we save our `pre-genesis` fol
 mkdir $HOME/backup-pregenesis && cp -r $BASE_DIR/pre-genesis $HOME/backup-pregenesis/
 ```
 
-### 2. **Ensure keys are saved**
+### **Ensure keys are saved**
 
 `ls backup-pregenesis` should output a saved `wallet.toml`.
 
-### 3. Delete the base directory
+###  Delete the base directory
 
 ```bash copy
 rm -rf $BASE_DIR/*
 ```
 
-### 4. Check that namada and cometbft binaries are correct. 
+### Check that namada and cometbft binaries are correct. 
 
 `namada --version` should yield `v0.15.3` and `cometbft version` should output `0.37.2`
 
 
 
-### 5. Create a pre-genesis directory
+### Create a pre-genesis directory
 
 ```bash copy
 mkdir $BASE_DIR/pre-genesis
 ```
 
-### 6. Copy the backuped file back to `$BASE_DIR/pre-genesis` folder
+### Copy the backuped file back to `$BASE_DIR/pre-genesis` folder
 ```bash copy
 cp -r backup-pregenesis/* $BASE_DIR/pre-genesis/
 ```
+</Steps>
 
-You should now be ready to go!
+**You should now be ready to go!**
