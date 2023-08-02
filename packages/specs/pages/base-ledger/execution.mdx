@@ -12,7 +12,7 @@ The Namada ledger is built on top of [Tendermint](https://docs.tendermint.com/ma
 
 The ledger features an account-based system (in which UTXO-based systems such as the MASP can be internally implemented as specific accounts), where each account has a unique address and a dynamic key-value storage sub-space. Every account in Namada is associated with exactly one validity predicate. Fungible tokens, for example, are accounts, whose rules are governed by their validity predicates. Many of the base ledger subsystems specified here are themselves just special Namada accounts too (e.g. PoS, IBC and MASP). This model is broadly similar to that of Ethereum, where each account is associated with contract code, but differs in the execution model.
 
-Interactions with the Namada ledger are made possible via transactions. In Namada, transactions are allowed to perform arbitrary modifications to the storage of any account, but the transaction will be accepted and state changes applied only if all the validity predicates that were triggered by the transaction accept it. That is, the accounts whose storage sub-spaces were touched by the transaction and/or an account that was explicitly elected by the transaction as the verifier will all have their validity predicates verifying the transaction. A transaction can add any number of additional verifiers, but cannot remove the ones determined by the protocol. For example, a transparent fungible token transfer would typically trigger 3 validity predicates - those of the token, source and target addresses.
+Interactions with the Namada ledger are made possible via transactions. In Namada, transactions are allowed to perform arbitrary modifications to the storage of any account, but the transaction will be accepted and state changes applied only if all the validity predicates that were triggered by the transaction accept it. That is, the accounts whose storage sub-spaces were touched by the transaction and/or an account that was explicitly elected by the transaction as the verifier will all have their validity predicates verifying the transaction. A transaction can add any number of additional verifiers, but cannot remove the ones determined by the protocol. For example, a transparent fungible token transfer would typically trigger 3 validity predicates - those of the multitoken, source and target addresses.
 
 ## Supported validity predicates
 
@@ -22,11 +22,12 @@ There are some native VPs for internal transparent addresses that are built into
 
 Supported validity predicates for Namada:
 - Native
-    - Proof-of-stake (see [spec](../economics/proof-of-stake.md))
-    - IBC & IbcToken (see [spec](../interoperability/ibc.md))
-    - Governance (see [spec](./governance.md))
+    - Proof-of-stake (see [spec](../economics/proof-of-stake.mdx))
+    - Ethereum bridge (see [spec](../interoperability/ethereum-bridge.mdx))
+    - IBC & IbcToken (see [spec](../interoperability/ibc.mdx))
+    - Governance (see [spec](../governance.mdx))
     - Protocol parameters (part of governance)
+    - Multitoken (see [spec](./fungible-token.mdx))
 - WASM
-    - Fungible token (see [spec](./fungible-token.md))
-    - MASP (see [spec](../masp.md))
-    - k-of-n multisignature (see [spec](./multisignature.md))
+    - MASP (see [spec](../masp.mdx))
+    - k-of-n multisignature (see [spec](./multisignature.mdx))
