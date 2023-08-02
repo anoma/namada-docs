@@ -22,19 +22,14 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build:${TARGET}
 
 # Production image, copy all the files and run next
-FROM devforth/spa-to-http:latest
+FROM nginx:alpine
 
 ARG TARGET
-
-WORKDIR /app
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
 COPY --from=builder /app/packages/${TARGET}/out .
-
-USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+CMD ["nginx", "-g", "daemon off;"]
