@@ -1,3 +1,17 @@
 # Consensus
 
-Namada uses [CometBFT](https://github.com/cometbft/cometbft/) (nee Tendermint Go) through the [cometbft-rs](https://github.com/heliaxdev/tendermint-rs) (nee tendermint-rs) bindings in order to provide peer-to-peer transaction gossip, BFT consensus, and state machine replication for Namada's custom state machine. CometBFT implements the Tendermint consensus algorithm, which you can read more about [here](https://arxiv.org/abs/1807.04938).
+Namada uses [CometBFT](https://github.com/cometbft/cometbft/) (nee Tendermint Go) through the [cometbft-rs](https://github.com/heliaxdev/tendermint-rs) (nee tendermint-rs) bindings in order to provide peer-to-peer transaction gossip, Byzantine fault tolerant (BFT) consensus, and state machine replication for Namada's custom state machine. CometBFT implements the Tendermint consensus algorithm, which you can read more about [here](https://arxiv.org/abs/1807.04938).
+
+{/* Maybe we want to leave out the below section. I just felt we should give a brief summary of CometBFT */}
+## The benefits of using CometBFT
+
+Using the CometBFT consensus algorithm comes with a number of benefits including but not limited to:
+
+- Fast finality 
+    - Simplifying cross-blockchain communication
+- Inter-blockchain communication system (IBC)
+    - Composability with all other Tendermint based blockchains, such as Cosmos-ecosystem blockchains
+- Battle tested
+    {/* - TODO: enter number of blockchains that have been using Tendermint */}
+- Customisable
+    - Allows the setting of various of parameters, including the ability to implement a custom proof of stake algorithm
