@@ -85,7 +85,7 @@ A transaction is constructed as follows:
    network
 
 Note that the signer of the `WrapperTx` and that of the inner one don't need to
-coincide, but the signer of the wrapper will be charged with gas and fees. In
+coincide, but the signer of the wrapper is charged with gas and fees. In
 the execution steps:
 
 1. The `WrapperTx` signature is verified and, only if valid, the tx is processed
@@ -98,31 +98,19 @@ the execution steps:
    signature of the transaction: if the signature is not valid, the VP will deem
    the transaction invalid and the changes won't be applied to the storage
 
-The signature checks effectively prevent any tampering with the transaction data
-because that would cause the checks to fail and the transaction to be rejected.
+The transaction data is effectively prevented from being tampered with by the signature checks, since any such tampering would cause the checks to fail and the transaction to be rejected.
 For a more in-depth view, please refer to the
 [Namada execution spec](./execution.md).
 
-### Tendermint replay protection
+### CometBFT replay protection
 
-The underlying consensus engine,
+A first layer of protection is provided in the mempool of the underlying consensus engine, 
 [CometBFT](https://github.com/cometbft/cometbft/blob/main/spec/abci/abci%2B%2B_app_requirements.md#connection-state),
-provides a first layer of protection in its mempool which is based on a cache of
-previously seen transactions. This mechanism is actually aimed at preventing a
-block proposer from including an already processed transaction in the next
-block, which can happen when the transaction has been received late. Of course,
-this also acts as a countermeasure against intentional replay attacks. This
-check though, like all the checks performed in `CheckTx`, is weak, since a
-malicious validator could always propose a block containing invalid
-transactions. There's therefore the need for a more robust replay protection
-mechanism implemented directly in the application.
+which is based on a cache of transactions previously seen. This mechanism is aimed at preventing an already processed transaction from being included in the next block by a block proposer, which can occur when the transaction is received late. Of course, this also acts as a countermeasure against intentional replay attacks. However, this check, like all the checks performed in CheckTx, is weak, as a block containing invalid transactions could still be proposed by a malicious validator. Therefore, there is a need for a more robust replay protection mechanism implemented directly in the application.
 
 ## Implementation
 
-Namada replay protection consists of three parts: the hash-based solution for
-both `EncryptedTx` (also called the `InnerTx`) and `WrapperTx`, a way to
-mitigate replay attacks in case of a fork and a concept of a lifetime for the
-transactions.
+Namada replay protection consists of three parts: the hash-based solution for both `EncryptedTx` (also referred to as the `InnerTx`) and `WrapperTx`, a way to mitigate replay attacks in case of a fork, and a concept of a lifetime for transactions.
 
 ### Hash register
 
@@ -130,65 +118,32 @@ The actual Wasm code and data for the transaction are encapsulated inside a
 struct `Tx`, which gets encrypted as an `EncryptedTx` and wrapped inside a
 `WrapperTx` (see the [relative](#encryption-authentication) section). This inner
 transaction must be protected from replay attacks because it carries the actual
-semantics of the state transition. Moreover, even if the wrapper transaction was
-protected from replay attacks, an attacker could extract the inner transaction,
-rewrap it, and replay it. Note that for this attack to work, the attacker will
-need to sign the outer transaction himself and pay gas and fees for that, but
-this could still cause much greater damage to the parties involved in the inner
-transaction.
+semantics of the state transition. This inner transaction must be protected from replay attacks, as it carries the actual semantics of the state transition. Furthermore, even if the wrapper transaction were protected from replay attacks, the inner transaction could still be extracted by an attacker, rewrapped, and replayed. It should be noted that for this attack to succeed, the attacker would need to sign the outer transaction themselves and pay gas and fees for it. However, this could still cause significant damage to the parties involved in the inner transaction.
 
-`WrapperTx` is the only type of transaction currently accepted by the ledger. It
-must be protected from replay attacks because, if it wasn't, a malicious user
-could replay the transaction as is. Even if the inner transaction implemented
-replay protection or, for any reason, wasn't accepted, the signer of the wrapper
-would still pay for gas and fees, effectively suffering economic damage.
+`WrapperTx` is the only type of transaction currently accepted by the ledger. It must be protected from replay attacks; otherwise, a malicious user could replay the transaction as is. Even if the inner transaction implemented replay protection or was not accepted for any reason, the signer of the wrapper would still incur gas and fees, resulting in economic damage.
 
-To prevent the replay of both these transactions we will rely on a set of
-already processed transactions' digests that will be kept in storage. These
-digests will be computed on the **unsigned** transactions, to support replay
-protection even for [multisigned](multisignature.md) transactions: in this case,
-if hashes were taken from the signed transactions, a different set of signatures
-on the same tx would produce a different hash, effectively allowing for a
-replay. To support this, we'll first need to update the `WrapperTx` hash field
-to contain the hash of the unsigned inner tx, instead of the signed one: this
-doesn't affect the overall safety of Namada (since the wrapper is still signed
-over all of its bytes, including the inner signature) and allows for early
-replay attack checks in mempool and at wrapper block-inclusion time.
-Additionally, we need a subspace in storage headed by a `ReplayProtection`
-internal address:
+To prevent the replay of both these transactions, reliance is placed on a set of digests from already processed transactions that are kept in storage. These digests are computed on the **unsigned** transactions, to support replay
+protection even for [multisigned](multisignature.md) transactions. In this case, using hashes from the signed transactions would result in a different hash for a different set of signatures on the same transaction, allowing for a replay. To achieve this, the `WrapperTx` hash field contins the hash of the unsigned inner transaction, instead of the signed one. This change does not impact the overall safety of Namada, as the wrapper is still signed over all its bytes, including the inner signature. The modification also allows for early replay attack checks in the mempool and during wrapper block-inclusion.
 
-```
+In addition, a subspace in storage is required, headed by a `ReplayProtection` internal address:
+``` bash
 /\$ReplayProtectionAddress/\$tx0_hash: None
 /\$ReplayProtectionAddress/\$tx1_hash: None
 /\$ReplayProtectionAddress/\$tx2_hash: None
 ...
 ```
 
-The hashes will form the last part of the path to allow for a fast storage
-lookup.
+The hashes are positioned at the end of the path to enable rapid storage lookups.
 
-The consistency of the storage subspace is of critical importance for the
-correct working of the replay protection mechanism. To protect it, a validity
-predicate will check that no changes to this subspace are applied by any wasm
-transaction, as those should only be available from protocol.
+The consistency of the storage subspace is critically important for the correct functioning of the replay protection mechanism. To safeguard it, a validity predicate will verify that no changes to this subspace are applied by any wasm transaction, as these changes should only originate from the protocol.
 
-Both in `mempool_validation` and `process_proposal` we will perform a check
-(together with others, see the [relative](#wrapper-checks) section) on both the
-digests against the storage to check that neither of the transactions has
-already been executed: if this doesn't hold, the `WrapperTx` will not be
-included into the mempool/block respectively. In `process_proposal` we'll use a
-temporary cache to prevent a replay of a transaction in the same block. If both
-checks pass then the transaction is included in the block. The hashes are
+In both `mempool_validation` and `process_proposal` a check is performed
+(in conjuction with other checks, as described in the [relative section](#wrapper-checks)) on the digests against the storage to ensure that neither of the transactions has already been executed. If this condition is not met, the `WrapperTx` is not included in the mempool or block, respectively. In `process_proposal` a
+temporary cache is used to prevent the replay of a transaction in the same block. If both
+checks pass, the transaction is included in the block. The hashes are
 committed to storage in `finalize_block` and the transaction is executed.
 
-In the next block we deserialize the inner transaction, check the validity of
-the decrypted txs and their correct order: if the order is off a new round of
-CometBFT will start. If instead an error is found in any single decrypted tx,
-we remove from storage the previously inserted hash of the inner tx to allow it
-to be rewrapped, and discard the tx itself. Finally, in `finalize_block` we
-execute the tx: if it runs out of gas then we'll remove its hash from storage,
-again to allow rewrapping and executing the transaction, otherwise we'll keep
-the hash in storage (both in case of success or failure of the tx).
+In the subsequent block, the inner transaction is deserialized, and the validity of the decrypted transactions and their correct order are verified. If the order is incorrect, a new round of CometBFT commences. If an error is found in any individual decrypted transaction, the previously inserted hash of the inner transaction is removed from storage to allow for rewrapping, and the transaction itself is discarded. Finally, in `finalize_block` the transaction is executed. If the transaction runs out of gas, its hash will be removed from storage to enable rewrapping and execution of the transaction. Otherwise, the hash will remain in storage, regardless of the success or failure of the transaction.
 
 #### Optional unshielding
 
@@ -246,12 +201,10 @@ case, a review of the replay protection mechanism might be required.
 
 ### Forks
 
-In the case of a fork, the transaction hash is not enough to prevent replay
-attacks. Transactions, in fact, could still be replayed on the other branch as
-long as their format is kept unchanged and the counters in storage match.
+In the case of a fork, replay attacks are not prevented by the transaction hash alone. Transactions could still be replayed on the other branch as long as their format remains unchanged and the counters in storage match.
 
-To mitigate this problem, transactions will need to carry a `ChainId` identifier
-to tie them to a specific fork. This field needs to be added to the `Tx` struct
+To mitigate this problem, transactions need to carry a `ChainId` identifier
+to tie them to a specific fork. This field must be added to the `Tx` struct
 so that it applies to both `WrapperTx` and `EncryptedTx`:
 
 ```rust
@@ -263,45 +216,25 @@ pub struct Tx {
 }
 ```
 
-This new field will be signed just like the other ones and is therefore subject
-to the same guarantees explained in the [initial](#encryption-authentication)
-section. The validity of this identifier will be checked in `process_proposal`
-for both the outer and inner tx: if a transaction carries an unexpected chain
-id, it won't be applied, meaning that no modifications will be applied to
-storage.
+This new field is signed just like the other ones and is therefore subject to the same guarantees explained in the [initial](#encryption-authentication) section. The validity of this identifier is checked in `process_proposal`
+for both the outer and inner tx: for both the outer and inner transactions. If a transaction carries an unexpected chain id, it won't be applied, meaning that no modifications will be applied to storage.
 
 ### Transaction lifetime
 
-In general, a transaction is valid at the moment of submission, but after that,
-a series of external factors (ledger state, etc.) might change the mind of the
-submitter who's now not interested in the execution of the transaction anymore.
+In general, a transaction is valid at the moment of submission, but after that, various external factors (ledger state, etc.) might change the submitter's intent. The submitter may no longer be interested in the execution of the transaction.
 
-We have to introduce the concept of a lifetime (or timeout) for the
-transactions: basically, the `Tx` struct will hold an optional extra field
-called `expiration` stating the maximum `DateTimeUtc` up until which the
-submitter is willing to see the transaction executed. After the specified time,
-the transaction will be considered invalid and discarded regardless of all the
-other checks.
+The concept of a lifetime (or timeout) for transactions needs to be introduced: the `Tx` struct will include an optional additional field called `expiration`, indicating the maximum `DateTimeUtc` by which the submitter is willing to see the transaction executed. After the specified time, the transaction is considered invalid and discarded, irrespective of other checks.
 
-By introducing this new field we are setting a new constraint in the
-transaction's contract, where the ledger will make sure to prevent the execution
-of the transaction after the deadline and, on the other side, the submitter
-commits himself to the result of the execution at least until its expiration. If
-the expiration is reached and the transaction has not been executed the
-submitter can decide to submit a new transaction if he's still interested in the
-changes carried by it.
+By introducing this new field, a new constraint is added to the transaction's contract. The ledger ensures that the transaction is prevented from execution after the deadline. On the other hand, the submitter commits to the execution outcome until its expiration. If the expiration is reached and the transaction has not been executed, the submitter can decide to submit a new transaction if still interested in the changes carried by it.
 
-In our design, the `expiration` will hold until the transaction is executed:
-once it's executed, either in case of success or failure, the tx hash will be
-written to storage and the transaction will not be replayable. In essence, the
-transaction submitter commits himself to one of these three conditions:
+In the current design, the `expiration` holds until the transaction is executed. Once executed, the transaction hash is committed to storage, preventing further replays (regardless of whether the tx was successful or not). Essentially, the transaction submitter commits to one of these three conditions:
 
 - Transaction is invalid regardless of the specific state
 - Transaction is executed (either with success or not) and the transaction hash
   is saved in the storage
 - Expiration time has passed
 
-The first condition satisfied will invalidate further executions of the same tx.
+Any satisfied condition invalidates further executions of the same transaction.
 
 ```rust
 pub struct Tx {
@@ -314,83 +247,44 @@ pub struct Tx {
 }
 ```
 
-The wrapper transaction will match the `expiration` of the inner (if any) for a
-correct execution. Note that we need this field also for the wrapper to
-anticipate the check at mempool/proposal evaluation time, but also to prevent
-someone from inserting a wrapper transaction after the corresponding inner has
-expired forcing the wrapper signer to pay for the fees.
+The wrapper transaction must match the `expiration` of the inner transaction (if any). This field is also needed for the wrapper to anticipate the check at mempool/proposal evaluation time. Additionally, it prevents someone from inserting a wrapper transaction after the corresponding inner transaction has expired, compelling the wrapper signer to pay the fees.
 
 ### Wrapper checks
 
-In `mempool_validation` we will perform some checks on the wrapper tx to
-validate it. These will involve:
+In mempool_validation, several checks are performed on the wrapper transaction to validate it. These checks include:
 
 - Signature
-- `GasLimit` is below the block gas limit
-- `Fees` are paid with an accepted token and match the minimum amount required
-- `ChainId`
+- GasLimit is below the block gas limit
+- Fees are paid with an accepted token and match the minimum required amount
+- ChainId
 - Transaction hash
 - Expiration
-- Wrapper signer has enough funds to pay the fee
-- Unshielding tx (if present), is indeed a masp unshielding transfer
-- The unshielding tx (if present) releases the minimum amount of tokens required
-  to pay fees
-- The unshielding tx (if present) runs succesfully
+- Sufficient funds for wrapper signer to pay the fee
+- Unshielding transaction (if present) is a valid masp unshielding transfer
+- Unshielding transaction (if present) releases the minimum required tokens for fee payment
+- Successful execution of the unshielding transaction (if present)
 
-For gas, fee and the unshielding tx more details can be found in the
-[fee specs](../economics/fee-system.md).
+More details about gas, fees, and the unshielding transaction can be found in the [fee specs](../economics/fee-system.md).
 
-These checks can all be done before executing the transactions themselves. If
-any of these fails, the transaction should be considered invalid and the action
-to take will be one of the followings:
+These checks can all be conducted before executing the transactions themselves. If any of these checks fail, the transaction is considered invalid, and the appropriate action is taken:
 
-1. If the checks fail on the signature, chainId, expiration, transaction hash,
-   balance or the unshielding tx, then this transaction will be forever invalid,
-   regardless of the possible evolution of the ledger's state. There's no need
-   to include the transaction in the block. Moreover, we **cannot** include this
-   transaction in the block to charge a fee (as a sort of punishment) because
-   these errors may not depend on the signer of the tx (could be due to
-   malicious users or simply a delay in the tx inclusion in the block)
-2. If the checks fail on `Fee` or `GasLimit` the transaction should be
-   discarded. In theory the gas limit of a block is a Namada parameter
-   controlled by governance, so there's a chance that the transaction could
-   become valid in the future should this limit be raised. The same applies to
-   the token whitelist and the minimum fee required. However we can expect a
-   slow rate of change of these parameters so we can reject the tx (the
-   submitter can always resubmit it at a future time)
+1. If the checks fail for signature, chainId, expiration, transaction hash, balance, or the unshielding transaction, the transaction is permanently invalid. It does not need to be included in the block. Furthermore, including the transaction in the block to impose a fee (as a form of punishment) is not possible, as these errors may not be due to the signer of the transaction (could be caused by malicious users or simply delayed transaction inclusion in the block).
+2. If the checks fail for `Fee` or `GasLimit`, the transaction is discarded. In theory, the gas limit of a block is a Namada parameter governed by governance. Thus, the transaction could become valid in the future if this limit is increased. The same principle applies to the token whitelist and the minimum required fee. However, these parameters are expected to change slowly, so rejecting the transaction is reasonable (the submitter can always resubmit it in the future).
 
-If instead all the checks pass validation we will include the transaction in the
-block to store the hash and charge the fee.
+If all checks pass validation, the transaction is included in the block to store the hash and apply the fee.
 
-All these checks are also run in `process_proposal`.
+All of these checks are also run in `process_proposal`.
 
-This mechanism can also be applied to another scenario. Suppose a transaction
-was not propagated to the network by a node (or a group of colluding nodes).
-Now, this tx might be valid, but it doesn't get inserted into a block. Without
-an expiration, this tx can be replayed (better, applied, since it was never
-executed in the first place) at a future moment in time when the submitter might
-not be willing to execute it any more.
+This mechanism can also be applied to another scenario. Suppose a transaction was not propagated to the network by a node (or a group of colluding nodes). This transaction might be valid, but it is not inserted into a block. Without an expiration, this transaction could be replayed (more accurately, applied, as it was never executed in the first place) at a later time when the submitter may no longer wish to execute it.
 
 ### Block rejection
 
-To prevent a block proposer from including invalid transactions in a block, the
-validators will reject the entire block in case they find a single invalid
-wrapper transaction.
+To prevent the inclusion of invalid transactions in a block by a block proposer, the validators reject the entire block if they encounter a single invalid wrapper transaction.
 
-Rejecting the single invalid transaction while still accepting the block is not
-a valid solution. In this case, in fact, the block proposer has no incentive to
-include invalid transactions in the block because these would gain him no fees
-but, at the same time, he doesn't really have a disincentive to not include
-them, since in this case the validators will simply discard the invalid tx but
-accept the rest of the block granting the proposer his fees on all the other
-transactions. This, of course, applies in case the proposer has no other valid
-tx to include. A malicious proposer could act like this to spam the block
-without suffering any penalty.
+Rejecting only the single invalid transaction while still allowing the acceptance of the entire block constitutes an inadequate solution. In this scenario, the block proposer lacks the motivation to incorporate invalid transactions into the block, as these do not yield any fees. However, simultaneously, there exists no real disincentive for the proposer to exclude such transactions. In such cases, validators simply discard the invalid transaction while approving the remainder of the block, thereby enabling the proposer to collect fees from all other transactions. This circumstance applies, of course, when the proposer lacks other valid transactions to include. A malicious proposer could employ this strategy to inundate the block with spam without facing any penalties.
 
-To recap, a block is rejected when at least one of the following conditions is
-met:
+In summary, a block faces rejection if at least one of the following conditions is satisfied:
 
-- At least one `WrapperTx` is invalid with respect to the checks listed in the
+- One or more `WrapperTx` transactions are invalid in accordance with the checks delineated in the
   [relative section](#wrapper-checks)
-- The order/number of decrypted txs differs from the order/number committed in
-  the previous block
+- The order or number of decrypted transactions differs from the order or number committed in the previous block
