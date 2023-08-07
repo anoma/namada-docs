@@ -8,7 +8,7 @@ The k-of-n multisignature validity predicate authorizes transactions on the basi
 
 Namada transactions are signed before being delivered to the network. This signature is checked by the invoked validity predicates to determine the validity of the transaction. To support multisignature, Namada's signed transaction data includes the plaintext data of what is being signed, as well as all valid signatures over that data.
 
-Inherently, this implies that all user accounts are 1-of-1 multisignature accounts.
+There are no special non-multisignature established accounts - all user accounts are just 1-of-1 multisignature accounts.
 
 ### Rust implementation
 
