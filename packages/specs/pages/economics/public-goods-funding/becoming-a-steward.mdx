@@ -4,11 +4,9 @@ import { Callout } from 'nextra-theme-docs'
 The first step towards becoming a Steward is to instantiate a multisignature account.
 
 In order to propose candidacy as a PGF Steward, the steward must initiate a custom governance proposal. At the cost 
-of deposited NAM, the governance proposal is broadcast on-chain and governance is able to vote on whether the steward-applicant 
-will be accepted or not. Together with this proposal, the applicant is encouraged to provide a motivational statement as to why 
-they should be entrusted with the responsibility of proposing public goods candidates. This will also include a commitment to at 
-least one of the categories of public goods funding that social consensus has established (or propose their own category, which 
-would inherently introduce a new category into social consensus, should the proposal be accepted).
+of deposited NAM, the governance proposal is broadcast on-chain and governance is able to vote on whether the steward-applicant will be accepted or not. Together with this proposal, the applicant is encouraged to provide a motivational statement as to why they should be entrusted with the responsibility of proposing public goods candidates. This will also include a commitment to at least one of the categories of public goods funding that social consensus has established (or propose their own category, which would inherently introduce a new category into social consensus, should the proposal be accepted).
+
+A Steward is elected by a governance proposal that is voted on by the Namada governance. Each Steward is elected for a term of `StewardTerm` epochs, which is a governance parameter. After this term, the Steward must be re-elected by the governance, if they wish to continue their role as a Steward.
 
 Nominating oneself as a PGF steward may be done at any time.
 
@@ -36,39 +34,35 @@ The proposal may specify:
   - Up to 1 account that will be added as a steward
   - Up to any number of accounts that will be removed as stewards
 
-Before the proposal is submitted, the protocol will verify that ***if*** the proposal proposes a new steward, ***then*** the author of the proposal is the same 
-as the account that is being proposed as a steward. This is to prevent a malicious actor from proposing a steward that is not themselves.
+Before the proposal is submitted, the protocol will verify that ***if*** the proposal proposes a new steward, ***then*** the author of the proposal is the same as the account that is being proposed as a steward. This is to prevent a malicious actor from proposing a steward that is not themselves.
 
-If the proposal specificies any set of stewards to be removed, the protocol will verify that the author of the proposal is a current steward, only AFTER the proposal has passed.
-If a proposal is passed that removes an account, and that account is not in the set of current stewards, the proposal will still execute, but no action will be taken with respect to that account.
+If a proposal is passed that removes at least one steward account, and an account within that list is not in the set of current stewards, the proposal will still execute, but no action will be taken with respect to that account.
 
-In order for a new PGF steward to be elected (or removed), $\frac{2}{3}$ of validating power must vote on the `StewardProposal` and more than half of the votes must be in favor. 
-If more than half of the votes are against the proposal, the steward set is kept the same, and the proposer of the proposal loses their escrowed funds.
+In order for a new PGF steward to be elected (or removed), $\frac{2}{3}$ of validating power must vote on the `StewardProposal` and more than half of the votes must be in favor. If more than half of the votes are against the proposal, the steward set is kept the same, and the proposer of the proposal loses their escrowed funds.
 
 See the example under [electing a steward](./electing.mdx#example) for more detail, as it may serve as the best medium for explaining the mechanism.
 
 ## Losing stewardship status
 
-There are 3 ways that a Steward may be removed from the steward set:
+There are 4 ways that a Steward may be removed from the steward set:
 
 1. Resign as a steward
 2. Have a failed funding proposal
 3. Become voted out through a governance proposal
+4. They reach the end of their term
 
 Resigning as a Steward is straight-forward. A simple interface is implemented to allow for the established account 
 representing the Steward to lose their priveleges as a PGF Steward.
 
 If a steward's PGF proposal receives a significant number of `Nay` votes ($\frac{2}{3}$ as a fraction of voting-power 
 voted and more than two-thirds of the votes are `Nay`), they will be removed from the steward set. 
-It is likely that there would only be such wide-spread disagreement if the proposal was misaligned with the users the stewards is attempting to cater to. 
-This is described in more detail under [its section](#proposing-funding).
+It is likely that there would only be such wide-spread disagreement if the proposal was misaligned with the users the stewards is attempting to cater to. This is described in more detail under [its section](#proposing-funding).
 
-Finally, the steward can be "voted-out" from its responsibility through a custom governance proposal similar to the one
-used to elect the steward in the first place!
+The steward can be "voted-out" from its responsibility through a custom governance proposal similar to the one
+used to elect the steward in the first place.
+
+Finally, the steward may be removed from the set if they reach the end of their term.
 
 ### "Voting-out" the steward
 
-In the same way that a steward can be voted in by Namada governance through a custom proposal, the equal and opposite force exists. 
-Hence, any governance member (validator or delegate), is able to initiate a vote (for the relevant cost) in order to remove an arbitrary 
-number of current PGF stewards. If this proposal passes, it signals that the Steward(s) has/have not fulfilled their duty to the public, 
-which the stewards are meant to serve (hence the name).
+In the same way that a steward can be voted in by Namada governance through a custom proposal, the equal and opposite force exists. Hence, any governance member (validator or delegate), is able to initiate a vote (for the relevant cost) in order to remove an arbitrary number of current PGF stewards. If this proposal passes, it signals that the Steward(s) has/have not fulfilled their duty to the public, which the stewards are meant to serve (hence the name).

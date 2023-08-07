@@ -70,13 +70,16 @@ $$T:= \sum_{\text{Entry} \in \text{CPgfSet}} {\text{Entry.amount}}$$
 
 $$\textit{Transfer to entry} \leftarrow \text{Entry.amount} \cdot \frac{\text{PGFInternalAddress.balance}}{T}$$
 
+## Applying funding
+
+For blocks of which both RPGF and CPGF funding is to be applied, RPGF is applied first. If there is not enough funds to pay an RPGF proposal, it is rejected. For RPGF proposals that have the same `graceEpoch`, the proposal with the lowest `proposalId` is applied first.
 
 ## Proposing funding as a non-PGF steward
 
 There is also the possibility to propose funding as a non-PGF steward. This is done by submitting the custom governance proposal `FundingProposal` through governance.
 The structure of the proposal is identical to the `StewardFundingProposal` except that the author of the proposal is not required to be a PGF steward, and the voting conditions differ.
 The proposal will be such that it **is rejected** by default **unless** the following conditions are met:
-  - $\frac{1}{3}$ of voting-power must vote on the `FundingProposal` 
+  - $\frac{2}{3}$ of voting-power must vote on the `FundingProposal` 
   - More than half of the votes must be in favor of the `FundingProposal`
 
 Note that these are the same voting conditions as the `StewardProposal`
