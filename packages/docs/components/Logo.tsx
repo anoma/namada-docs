@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useTheme } from "nextra-theme-docs";
 
 export const Logo = () => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [isDark, setDark] = useState(false);
 
   useEffect(() => {
-    setDark(theme === "dark");
-  }, [theme]);
+    setDark(resolvedTheme === "dark");
+  }, [resolvedTheme]);
 
   const fill = isDark ? "#ffff00" : "currentColor";
   return (
