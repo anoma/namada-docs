@@ -1,21 +1,23 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'nextra-theme-docs';
 
 export const DocsAscii = () => {
-  return(
+  const { theme } = useTheme();
+  const [isDarkMode, setDark] = useState(false);
+
+  useEffect(() => {
+    setDark(theme === "dark");
+  }, [theme]);
+
+  // Construct the image source paths based on theme mode
+  const imageSrc = isDarkMode
+    ? '/images/namada_docs_ascii_dark.png'
+    : '/images/namada_docs_ascii_light.png';
+
+  return (
     <div>
-      <pre className="ascii-art">
-          <code>
-  ________   ________  _____ ______   ________  ________  ________          ________  ________  ________  ________      
-  |\   ___  \|\   __  \|\   _ \  _   \|\   __  \|\   ___ \|\   __  \        |\   ___ \|\   __  \|\   ____\|\   ____\     
-  \ \  \\ \  \ \  \|\  \ \  \\\__\ \  \ \  \|\  \ \  \_|\ \ \  \|\  \       \ \  \_|\ \ \  \|\  \ \  \___|\ \  \___|_    
-  \ \  \\ \  \ \   __  \ \  \\|__| \  \ \   __  \ \  \ \\ \ \   __  \       \ \  \ \\ \ \  \\\  \ \  \    \ \_____  \   
-    \ \  \\ \  \ \  \ \  \ \  \    \ \  \ \  \ \  \ \  \_\\ \ \  \ \  \       \ \  \_\\ \ \  \\\  \ \  \____\|____|\  \  
-    \ \__\\ \__\ \__\ \__\ \__\    \ \__\ \__\ \__\ \_______\ \__\ \__\       \ \_______\ \_______\ \_______\____\_\  \ 
-      \|__| \|__|\|__|\|__|\|__|     \|__|\|__|\|__|\|_______|\|__|\|__|        \|_______|\|_______|\|_______|\_________\
-                                                                                                            \|_________|
-      
-          </code>                                                                                                                   
-      </pre>
+      {/* Conditional rendering based on theme mode */}
+      <img src={imageSrc} alt={isDarkMode ? 'Dark Mode' : 'Light Mode'} width={2000} height={200} />
     </div>
   );
 };
