@@ -21,7 +21,6 @@ The ledger features an account-based system (in which UTXO-based systems such as
 
 Interactions with the Namada ledger are made possible via transactions. In Namada, transactions are allowed to perform arbitrary modifications to the storage of any account, but the transaction will be accepted and state changes applied only if all the validity predicates that were triggered by the transaction accept it. That is, the accounts whose storage sub-spaces were touched by the transaction will all have their validity predicates verifying the transaction. A transaction may also explicitly elect an account as the verifier of that transaction, which will result in that validity predicate being invoked as well. A transaction can add any number of additional verifiers, but cannot remove the ones determined by the protocol. For example, a transparent fungible token transfer would typically trigger 3 validity predicates - those of the token, source and target addresses.
 
-{/* TODO: Explain how the ledger knows which validity predicates to invoke based on a transaction. This is not clear to me. */}
 The ledger knows what addresses are involved in a wasm transaction because of how the storage is constructed. Each variable in storage is inherently tied to a substorage owned by some account, and thus that VP is invoked.
 
 ## Supported validity predicates
