@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useTheme } from 'nextra-theme-docs';
 
 export const DocsAscii = () => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [isDarkMode, setDark] = useState(false);
 
   useEffect(() => {
-    setDark(theme === "dark");
-  }, [theme]);
+    setDark(resolvedTheme === "dark");
+  }, [resolvedTheme]);
 
   // Construct the image source paths based on theme mode
   const imageSrc = isDarkMode
