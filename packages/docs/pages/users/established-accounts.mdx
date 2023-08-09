@@ -1,3 +1,5 @@
+import { Callout } from "nextra-theme-docs"
+
 # Established Accounts
 
 This page assumes you have already [installed](../introduction/install.md) the Namada binaries and have a [node](../ledger.md) running.
@@ -23,11 +25,11 @@ namadac init-account \
 
 ## Get tokens from the testnet faucet (optional)
 
-```admonish info "Testnet Faucet Tokens"
+<Callout type="info">
 The testnet tokens which the faucet can provide you have the aliases `NAM`,
 `BTC`, `ETH`, `DOT`, `Schnitzel`, `Apfel`, and `Kartoffel`. The faucet
 will transfer these in increments of 1000 maximum at a time.
-```
+</Callout>
 
 ```shell copy
 namadac transfer \

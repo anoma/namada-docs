@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Multisignature accounts on Namada
 
 Multisignature accounts (multisigs) are accounts on Namada that allow for multiple signers. There are many benefits of having multisigs, including but not limited to 
@@ -64,9 +66,9 @@ namadac transfer \
 --offline-tx
 ```
 
-```admonish note
-The `--signing-keys` argument is still required, despite the fact that the transaction is offline. This has no effect on the transaction, but means if it was a 1-of-n multisig, the user could submit the transaction immediately.
-```
+<Callout type="info">
+The `--signing-keys` or the `--fee-payer` argument is still required, despite the fact that the transaction is offline. This just has an effect on who will pay the fee once it is submitted.
+</Callout>
 
 This will give some output similar to the following:
 ```shell
@@ -92,9 +94,9 @@ namadac sign-tx \
 --signing-keys [my-key1]
 ```
 
-```admonish note
-Note that only one key could sign a transaction at a time. The `--signing-keys` method does not accept multiple arguments in this instance
-```
+<Callout type="info">
+Note that any number of `--signing-keys` could sign the transaction in this stage. This will produce multiple signatures, which can be used to submit the transaction.
+</Callout>
 
 This will give some output similar to the following:
 ```shell
@@ -121,13 +123,11 @@ namadac tx \
 --data-path a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2-data.tx \
 --timestamp 2077-04-20T13:37:69.108000+00:00 \
 --signatures $SIGNATURE_ONE $SIGNATURE_TWO \
---signing-keys my-key1
 ```
 
-```admonish note
-1. Note the lack of commas used in the `--signatures` argument. This is because the argument is a list of files, not a list of signatures.
-2. The `--signing-keys` argument is still required, despite the fact that the transaction is already signed. 
-```
+<Callout type="info">
+Note the lack of commas used in the `--signatures` argument. This is because the argument is a list of files, not a list of signatures.
+</Callout>
 
 ## Changing the multisig threshold
 It is possible to change the multisig threshold of an account. This can be done through the following method:

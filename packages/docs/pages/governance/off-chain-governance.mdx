@@ -23,11 +23,10 @@ To vote on an offline proposal use the following command:
 ```shell copy
 namada client vote-proposal --data-path proposal \
     --vote yay \
-    --signing-keys validator \
+    --signing-keys your-signing-keys-for-voter \
+    --voter your-established-account \
     --offline
 ```
-
-This command will create a `proposal-vote-${address}` file (where address is the `--signing-keys` address).
 
 ## Tally off-chain proposal
 

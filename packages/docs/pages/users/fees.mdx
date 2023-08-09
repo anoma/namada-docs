@@ -4,7 +4,7 @@ In order to settle the market for Namada blockspace demand, fees are coupled wit
 
 ## How fees are paid
 
-Fees on Namada are paid by the implicit address corresponding to the `--signing-keys` of the transaction. This means that in the transaction 
+Fees on Namada are paid by the public key corresponding to first key that appears in the list of  `--signing-keys` of the transaction. This means that in the transaction 
 ```shell copy
 namada client transfer \
   --source my-new-acc \
@@ -15,5 +15,19 @@ namada client transfer \
 ```
 
 the account associated with key `keysha` will be required to pay the fee. This means that even though the account `accountant` may have a positive NAM balance, `keysha` will need to have the associated NAM in order to pay the transaction fee.
+
+A user can also specify a `--fee-payer` flag to specify a different account to pay the fee. This is useful in cases where the account that is signing the transaction does not have enough NAM to pay the fee. For example, if `keysha` has a balance of 5 NAM, but `accountant` has a balance of 100 NAM, then the following transaction will be valid:
+
+```shell copy
+namada client transfer \
+  --source my-new-acc \
+  --target validator-1 \
+  --token NAM \
+  --amount 10 \
+  --signing-keys keysha
+  --fee-payer keysha2
+  ```
+
+(Assuming that `keysha2` exists and is in the wallet of the user)
 
 For testnet purposes, we recommend [using the faucet](../introduction/testnets/pow.md) to source NAM for transaction fees.
