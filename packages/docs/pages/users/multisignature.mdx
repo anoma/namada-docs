@@ -132,7 +132,7 @@ Note the lack of commas used in the `--signatures` argument. This is because the
 ## Changing the multisig threshold
 It is possible to change the multisig threshold of an account. This can be done through the following method:
 ```shell
-namadac update \
+namadac update-account \
 --address my-multisig-address \
 --threshold 1 \
 --signing-keys my-key1,my-key2
@@ -148,7 +148,7 @@ Which will yield the threshold of 1, together with the two public keys.
 ## Changing the public keys of a multisig account
 It is possible to change the public keys of a multisig account. This can be done through the following method:
 ```shell
-namadac update \
+namadac update-account \
 --address my-multisig-address \
 --public-keys my-key3,my-key4,my-key5 \
 --signing-keys my-key1,my-key2
