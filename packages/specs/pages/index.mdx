@@ -1,16 +1,20 @@
-## Namada
+import { SpecsAscii } from '../components/SpecsAscii'
 
-Welcome to the Namada specification!
+# Namada
+
+<SpecsAscii/>
 
 ## What is Namada?
 
-Namada is a sovereign proof-of-stake blockchain, using [CometBFT](https://cometbft.com/) (nee Tendermint) BFT consensus,
-which enables multi-asset private transfers for any native or non-native asset
-using a [multi-asset shielded pool](https://research.metastate.dev/multi-asset_shielded_pool/) derived from the [Sapling circuit](https://z.cash/upgrade/sapling/).
-Namada features full IBC protocol support, a natively integrated Ethereum bridge, a modern proof-of-stake system with automatic reward compounding and cubic slashing,
-a stake-weighted governance signalling mechanism, and a dual proactive/retroactive public goods funding system.
-Users of shielded transfers are rewarded for their contributions to the privacy set in the form of native protocol tokens.
-A multi-asset shielded transfer wallet is provided in order to facilitate safe and private user interaction with the protocol. Namada supports a feature called Shielded Actions, which allows users to hold their assets privately on Namada most of the time while occaisionally unshielding specific assets in order to interact with existing applications on transparent chains.
+Namada is a sovereign proof-of-stake blockchain, using the [CometBFT](https://cometbft.com/) (nee Tendermint) BFT consensus algorithm. Namada enables multi-asset private transfers for any native or non-native asset using a [multi-asset shielded pool](https://research.metastate.dev/multi-asset_shielded_pool/) derived from the [Sapling circuit](https://z.cash/upgrade/sapling/).
+
+Namada features full IBC protocol support, a natively integrated [Ethereum bridge](./interoperability.mdx), a modern [proof-of-stake system](./economics/proof-of-stake.mdx) with automatic reward compounding and cubic slashing, a [stake-weighted governance signalling mechanism](./governance.mdx), and a dual continuous/retroactive [public goods funding system](./economics/public-goods-funding.mdx).
+
+Users of the MASP are [rewarded](./economics/shielded-pool-incentives.mdx) for their contributions to the privacy set in the form of native protocol tokens (NAM). 
+
+Namada supports a variety of different wallets. One of these wallets is the native wallet, that exists in order to facilitate interacting with the protocol in a safe and private manner. 
+
+Furhter, Namada supports Shielded Actions, which allows users to hold their assets privately on Namada most of the time while occaisionally unshielding specific assets in order to interact with existing applications on transparent chains.
 
 You can learn more about Namada [here](https://blog.namada.net/introducing-namada-interchain-asset-agnostic-privacy/).
 
@@ -20,33 +24,29 @@ Anoma is an intent-centric, privacy-preserving architecture for decentralised co
 
 ### How does Namada relate to Anoma?
 
-Anoma is a full-stack architecture designed for the long term, while Namada is a specific chain and featureset designed to provide practical privacy now. Anoma and Namada have both been initially developed by [Heliax](https://heliax.dev).
+Anoma is a full-stack architecture designed with a long term perspective, while Namada is a specific chain and featureset designed to provide practical privacy now. Anoma and Namada have both been initially developed by [Heliax](https://heliax.dev).
 
 ### Why Namada?
 
 Privacy should be default and inherent in the systems we use for transacting, yet safe and user-friendly multi-asset privacy doesn't yet exist in the blockchain ecosystem.
-Up until now users have had the choice of either a sovereign chain that reissues assets (e.g. [Zcash](https://z.cash/))
-or a privacy preserving solution built on an existing smart contract chain. Both have large trade-offs: in the former case, users don't have
-assets that they actually want to transact with, and in the latter case, the restrictions
-of existing platforms mean that users leak a ton of metadata
-and the protocols are expensive and clunky to use.
+Up until now, users have had the choice of either a sovereign chain that reissues assets (e.g. [Zcash](https://z.cash/))
+or a privacy preserving solution built on an existing smart contract chain. Both have large trade-offs: in the former case, users don't have assets that they actually want to transact with, and in the latter case, the restrictions of existing platforms mean that users leak (non-trivial) metadata, and the protocols may be expensive and clunky to use.
 
-Namada can support any fungible or non-fungible asset on an IBC-compatible blockchain
-and fungible or non-fungible assets (such as ERC20 tokens) sent over a custom Ethereum bridge that
-reduces transfer costs and streamlines UX as much as possible. Once assets are on Namada,
-shielded transfers are cheap and all assets contribute to the same anonymity set.
+Namada supports any fungible or non-fungible asset on an IBC-compatible blockchain
+as well as fungible or non-fungible assets sent over a custom Ethereum bridge (such as ERC20 tokens and ERC721 tokens, respectively). Once assets are on Namada, shielded transfers are cheap and all assets contribute to the same anonymity set.
 
-Users on Namada can earn rewards, retain privacy of assets, and contribute to shared privacy.
+Users on Namada earn rewards, retain privacy of assets, and contribute to shared privacy.
 
 ### Layout of this specification
 
 The Namada specification documents are organised into four sub-sections:
 
 - [Base ledger](./base-ledger.md)
+- [Governance](./governance.md)
 - [Multi-asset shielded pool](./masp.md)
 - [Interoperability](./interoperability.md)
 - [Economics](./economics.md)
 
-This book is written using [mdBook](https://rust-lang.github.io/mdBook/). The source can be found in the [Namada repository](https://github.com/anoma/namada/tree/main/documentation/specs).
+This book is written using [NextraJS](https://nextra.site/). The source can be found in the [Namada Docs repository](https://github.com/anoma/namada-docs/tree/main/packages/specs).
 
-[Contributions](https://github.com/anoma/namada/blob/main/CONTRIBUTING.md) to the contents and the structure of this book should be made via pull requests.
+Contributions to the contents and the structure of this book should be made via [pull requests](https://github.com/anoma/namada-docs/pulls).
