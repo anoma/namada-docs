@@ -62,16 +62,16 @@ namadac transfer \
 --target some-established-account-alias \
 --token NAM \
 --amount 100 \
---signing-keys [my-key1] \
+--signing-keys my-key1 \
 --offline-tx
 ```
 
 <Callout type="info">
-The `--signing-keys` or the `--fee-payer` argument is still required, despite the fact that the transaction is offline. This just has an effect on who will pay the fee once it is submitted.
+The `--signing-keys` or the `--gas-payer` argument is still required, despite the fact that the transaction is offline. This just has an effect on who will pay the fee once it is submitted.
 </Callout>
 
-This will give some output similar to the following:
-```shell
+The executed command gives some output similar to the following:
+```md
 Transaction code, data and timestmamp have been written to files code.tx and data.tx.
 You can share the following blob with the other signers:
 3032baacfe6b87e2c59caa2ffa928924463dca2054df88575dec7cf6df865c5c01920000000028000000443439374537413946363031364438383632374239324436433642443843454545373645463138450028000000454244464534413936383236414536383032423733434339333444434245323933413245394330440028000000344238384642393133413037363645333041303042324642384141323934394137313045323445360000ca9a3b00000000000020000000323032332d30352d31395431303a33393a34372e3836303637342b30303a30301e0000006c6f63616c2e36646162326265336531303265383937356564643132373000
@@ -90,16 +90,16 @@ There will be 2 files created in the current directory. One ending in `-code.tx`
 The next step is to sign the transaction. `my-key1` can sign the transaction through the following method:
 ```shell
 namadac sign-tx \
---signing-tx 3032baacfe6b87e2c59caa2ffa928924463dca2054df88575dec7cf6df865c5c01920000000028000000443439374537413946363031364438383632374239324436433642443843454545373645463138450028000000454244464534413936383236414536383032423733434339333444434245323933413245394330440028000000344238384642393133413037363645333041303042324642384141323934394137313045323445360000ca9a3b00000000000020000000323032332d30352d31395431303a33393a34372e3836303637342b30303a30301e0000006c6f63616c2e36646162326265336531303265383937356564643132373000 \
---signing-keys [my-key1]
+--signing-tx "3032baacfe6b87e2c59caa2ffa928924463dca2054df88575dec7cf6df865c5c01920000000028000000443439374537413946363031364438383632374239324436433642443843454545373645463138450028000000454244464534413936383236414536383032423733434339333444434245323933413245394330440028000000344238384642393133413037363645333041303042324642384141323934394137313045323445360000ca9a3b00000000000020000000323032332d30352d31395431303a33393a34372e3836303637342b30303a30301e0000006c6f63616c2e36646162326265336531303265383937356564643132373000" \
+--signing-keys my-key1
 ```
 
 <Callout type="info">
 Note that any number of `--signing-keys` could sign the transaction in this stage. This will produce multiple signatures, which can be used to submit the transaction.
 </Callout>
 
-This will give some output similar to the following:
-```shell
+This executed command will give some output similar to the following:
+```md
 Signature has been serialized to 4821284c3ad966d615016c10fdcd64d848895b119b2c94812b8b65c949ac62d4-000ac93185f02fc69883392bb270b2f040c8219c255a7c24016f6a820ed6afe24f-signature.tx
 ```
 
@@ -107,7 +107,7 @@ Which means that the signature has been saved to this file (located in the curre
 
 Let's save this as an alias:
 ```shell
-export SIGNATURE_ONE=4821284c3ad966d615016c10fdcd64d848895b119b2c94812b8b65c949ac62d4-000ac93185f02fc69883392bb270b2f040c8219c255a7c24016f6a820ed6afe24f-signature.tx
+export SIGNATURE_ONE="4821284c3ad966d615016c10fdcd64d848895b119b2c94812b8b65c949ac62d4-000ac93185f02fc69883392bb270b2f040c8219c255a7c24016f6a820ed6afe24f-signature.tx"
 ```
 
 Ensure to sign the transaction with at least k-of-n keys, where k is the minimum number of signatures required to submit a transaction, and n is the total number of keys. In this example, k=2 and n=2.
@@ -119,9 +119,9 @@ Then let's say this signing produces another signature which we save to the alia
 The final step is to submit the transaction. This can be done through the following method:
 ```shell
 namadac tx \
---code-path a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2-code.tx \
---data-path a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2-data.tx \
---timestamp 2077-04-20T13:37:69.108000+00:00 \
+--code-path "a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2-code.tx" \
+--data-path "a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2-data.tx" \
+--timestamp "2077-04-20T13:37:69.108000+00:00" \
 --signatures $SIGNATURE_ONE $SIGNATURE_TWO \
 ```
 

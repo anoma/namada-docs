@@ -16,7 +16,7 @@ namada client transfer \
 
 the account associated with key `keysha` will be required to pay the fee. This means that even though the account `accountant` may have a positive NAM balance, `keysha` will need to have the associated NAM in order to pay the transaction fee.
 
-A user can also specify a `--fee-payer` flag to specify a different account to pay the fee. This is useful in cases where the account that is signing the transaction does not have enough NAM to pay the fee. For example, if `keysha` has a balance of 5 NAM, but `accountant` has a balance of 100 NAM, then the following transaction will be valid:
+A user can also specify a `--gas-payer` flag to specify a different account to pay the fee. This is useful in cases where the account that is signing the transaction does not have enough NAM to pay the fee. For example, if `keysha` has a balance of 5 NAM, but `accountant` has a balance of 100 NAM, then the following transaction will be valid:
 
 ```shell copy
 namada client transfer \
@@ -24,8 +24,8 @@ namada client transfer \
   --target validator-1 \
   --token NAM \
   --amount 10 \
-  --signing-keys keysha
-  --fee-payer keysha2
+  --signing-keys keysha \
+  --gas-payer keysha2
   ```
 
 (Assuming that `keysha2` exists and is in the wallet of the user)
