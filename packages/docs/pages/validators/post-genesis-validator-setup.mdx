@@ -17,7 +17,8 @@ A validator account requires additional keys compared to a user account, so star
 ```bash copy
 namada client init-validator \
   --alias $VALIDATOR_ALIAS \
-  --source aliace \
+  --account-keys aliace \
+  --signing-keys aliace \
   --commission-rate <enter-your-commission-rate> \
   --max-commission-rate-change <enter-decimal-rate>
 ```
