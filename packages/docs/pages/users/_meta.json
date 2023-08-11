@@ -1,10 +1,9 @@
 {
-  "an-introduction-to-namada-addresses": "Namada addresses",
-  "multisignature": "Multisignature accounts",
-  "send-and-receive-nam-tokens": "Sending and receiving NAM",
-  "established-accounts": "Established accounts",
+  "transparent-accounts": "Transparent Accounts",
+  "shielded-accounts": "The MASP",
   "fees": "Fees on Namada",
-  "shielded-transfers": "Shielded transfers",
-  "shielded-rewards": "Shield rewards",
-  "privacy": "Proper OpSec for proper privacy"
+  "delegators": "Delegating on Namada",
+  "governance": "Governance and Public Goods Funding",
+  "wallet": "Using the Namada wallet",
+  "experimental": "Experimental Features"
 }
