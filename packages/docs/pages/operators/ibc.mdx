@@ -42,7 +42,7 @@ You can find an example of the config file below. Essentially, you change only t
 <summary>Example: config.toml</summary>
 ```toml copy
 [global]
-log_level = 'debug'
+log_level = 'info'
 
 [mode]
 
@@ -95,7 +95,7 @@ gas_price = { price = 0.001, denom = 'nam' }
 The path to the config file, which is is saved in the variable `$HERMES_CONFIG` will be useful later.
 
 
-<Callout type="info" emoji="🧩"> 
+<Callout type="info" emoji="🧩">
 **Interpreting the toml**
 
 Each chain configuration is specified under the `[[chains]]` object.
@@ -113,13 +113,21 @@ Hermes CLI has commands to create them. Before the creation, a node of each inst
 Before conducting any IBC operations, we download Heliax's fork Hermes binary or build it from source.
 
 ##### From binaries
- We can download the latest binary release from our [releases page](https://github.com/heliaxdev/hermes/releases) by choosing the appropriate architecture.
+We can download the latest binary release from our [releases page](https://github.com/heliaxdev/hermes/releases) by choosing the appropriate architecture.
+
+E.g.
+```bash copy
+export TAG="v1.6.0-namada-beta1"
+export ARCH="x86_64-unknown-linux-gnu" # or "aarch64-apple-darwin"
+curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/download/${TAG}/hermes-${TAG}-${ARCH}.tar.gz
+tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
+```
 
 ##### From source
 ```bash copy
-export COMMIT="124fc3cb0802f56f2e9ceae3b3fd6745f73b88ac"
+export TAG="v1.6.0-namada-beta1"
 git clone git@github.com:heliaxdev/hermes.git
-git checkout $COMMIT
+git checkout $TAG
 cd hermes
 cargo build --release --bin hermes
 export HERMES=$(pwd) # if needed
@@ -243,7 +251,7 @@ The script `join-namada` will set up two nodes for two instances, copy necessary
 The script requires the Namada directory path and chain IDs.
 ```bash copy
 git clone git@github.com:heliaxdev/hermes.git
-git checkout $COMMIT # The branch is the same as our Hermes
+git checkout $TAG # The branch is the same as our Hermes
 cd hermes
 ./scripts/join-namada $NAMADA_DIR $CHAIN_ID_A $CHAIN_ID_B
 ```
@@ -287,7 +295,7 @@ killall namadan
 The script `setup-namada` will set up two instances with one validator node, copy necessary files for Hermes, and make an account for Hermes on each ledger. Also, it will make a Hermes' config file `config_for_namada.toml` in the `hermes` directory.
 ```bash copy
 git clone git@github.com:heliaxdev/hermes.git
-git checkout $COMMIT # The branch is the same as our Hermes
+git checkout $TAG # The branch is the same as our Hermes
 cd hermes
 ./scripts/setup-namada $NAMADA_DIR $CHAIN_ID_A $CHAIN_ID_B
 ```
