@@ -14,7 +14,7 @@ Then, send a transaction to initialize your new established account and save its
 ```shell copy
 namada client init-account \
   --alias establishment \
-  --public-key keysha \
+  --public-keys keysha \
   --source keysha
 ```
 
@@ -45,7 +45,7 @@ namada client balance --token NAM --owner my-new-acc
 ```
 
 <Callout type="info">
-For any client command that submits a transaction (`init-account`, `transfer`, `tx`, `update` and [PoS transactions](../ledger/pos.md)), 
+For any client command that submits a transaction (`init-account`, `transfer`, `tx`, `update` and [PoS transactions](../../operators/validators/proof-of-stake.mdx)), 
 you can use the `--dry-run` flag to simulate the transaction being applied in the block and see what would be the result.
 </Callout>
 
