@@ -1,7 +1,7 @@
 {
   "quick-start": "Quick start",
-  "install": "Install Namada",
-  "installing-cometbft": "Install CometBFT",
-  "testnets": "Testnets",
-  "base-directory": "Base directory"
+  "install": "Installing Namada",
+  "installing-cometbft": "Installing CometBFT",
+  "privacy": "Privacy and Opsec",
+  "troubleshooting": "Troubleshooting"
 }

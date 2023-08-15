@@ -1,15 +1,8 @@
 {
   "index": "Namada",
   "introduction": "Introduction",
-  "ledger": "Full nodes",
-  "validators": "Validators",
-  "delegators": "Delegators",
-  "users": "(Power) Users",
-  "public-goods-stewards": "Public goods stewards",
-  "proof-of-stake": "Cubic Proof-of-Stake",
-  "governance": "Governance",
-  "wallet": "Wallet guide",
-  "experimental": "Experimenting with Namada",
-  "troubleshooting": "Troubleshooting",
-  "faq": "FAQ"
+  "users": "User Guide",
+  "operators": "Operator Guide",
+  "integrating-with-namada" : "Integration Guide",
+  "networks": "Networks"
 }
