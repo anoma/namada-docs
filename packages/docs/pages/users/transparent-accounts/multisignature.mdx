@@ -55,7 +55,17 @@ namadac init-account \
 In order to submit a multisignature transaction, an offline transaction must first be constructed. 
 
 ### Constructing an offline transaction
-The `--offline-tx` argument allows a user to do this. This can be done through the following method:
+<Callout type="warning">
+For `v0.21.1` there are certain limitations to the offline transaction construction. Please be weary of any bugs that may arise.
+</Callout>
+
+The `--dump-tx` argument allows a user to do this. A folder is required to be specified where the transaction will be dumped.
+
+```shell
+mkdir tx_dumps
+```
+
+This can be done through the following method:
 ```shell
 namadac transfer \
 --source my-multisig-alias \
@@ -63,51 +73,34 @@ namadac transfer \
 --token NAM \
 --amount 100 \
 --signing-keys my-key1 \
---offline-tx
-```
-
-<Callout type="info">
-The `--signing-keys` or the `--gas-payer` argument is still required, despite the fact that the transaction is offline. This just has an effect on who will pay the fee once it is submitted.
-</Callout>
-
-The executed command gives some output similar to the following:
-```md
-Transaction code, data and timestmamp have been written to files code.tx and data.tx.
-You can share the following blob with the other signers:
-3032baacfe6b87e2c59caa2ffa928924463dca2054df88575dec7cf6df865c5c01920000000028000000443439374537413946363031364438383632374239324436433642443843454545373645463138450028000000454244464534413936383236414536383032423733434339333444434245323933413245394330440028000000344238384642393133413037363645333041303042324642384141323934394137313045323445360000ca9a3b00000000000020000000323032332d30352d31395431303a33393a34372e3836303637342b30303a30301e0000006c6f63616c2e36646162326265336531303265383937356564643132373000
-
-You can later submit the tx with:
-namada client tx --code-path code.tx --data-path data.tx --timestamp 
-2077-04-20T13:37:69.108000+00:00
+--dump-tx \
+--output-folder-path tx_dumps
 ```
 
 What this means is that the transaction has been constructed, and is ready to be signed. 
 
-There will be 2 files created in the current directory. One ending in `-code.tx` and another ending in `-data.tx`. For the purposes of this example, let's say these files are `a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2-code.tx` and `a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2-data.tx`. The first file contains the code for the transaction, and the second file contains the data for the transaction. The timestamp argument describes the time at which the transaction was created. This is important, as the signature is also computed over the timestamp, so should be saved.
+Within the specified folder, a `.tx` file will be created. This file contains the hexidecimal representation of the transaction bytes. This file can be used to sign the transaction.
 
 ### Signing the transaction
 
 The next step is to sign the transaction. `my-key1` can sign the transaction through the following method:
 ```shell
 namadac sign-tx \
---signing-tx "3032baacfe6b87e2c59caa2ffa928924463dca2054df88575dec7cf6df865c5c01920000000028000000443439374537413946363031364438383632374239324436433642443843454545373645463138450028000000454244464534413936383236414536383032423733434339333444434245323933413245394330440028000000344238384642393133413037363645333041303042324642384141323934394137313045323445360000ca9a3b00000000000020000000323032332d30352d31395431303a33393a34372e3836303637342b30303a30301e0000006c6f63616c2e36646162326265336531303265383937356564643132373000" \
+--tx-path "<path-to-file>" \
 --signing-keys my-key1
+--owner my-multisig-alias
 ```
 
 <Callout type="info">
 Note that any number of `--signing-keys` could sign the transaction in this stage. This will produce multiple signatures, which can be used to submit the transaction.
 </Callout>
 
-This executed command will give some output similar to the following:
-```md
-Signature has been serialized to 4821284c3ad966d615016c10fdcd64d848895b119b2c94812b8b65c949ac62d4-000ac93185f02fc69883392bb270b2f040c8219c255a7c24016f6a820ed6afe24f-signature.tx
-```
 
 Which means that the signature has been saved to this file (located in the current directory). 
 
 Let's save this as an alias:
 ```shell
-export SIGNATURE_ONE="4821284c3ad966d615016c10fdcd64d848895b119b2c94812b8b65c949ac62d4-000ac93185f02fc69883392bb270b2f040c8219c255a7c24016f6a820ed6afe24f-signature.tx"
+export SIGNATURE_ONE="offline_signature_FB7246E3FC43F59D8AEEC234EBFDB9DF1AC9BB7B14E536D05A7E2617CA41D4CD_0.tx"
 ```
 
 Ensure to sign the transaction with at least k-of-n keys, where k is the minimum number of signatures required to submit a transaction, and n is the total number of keys. In this example, k=2 and n=2.
@@ -119,14 +112,15 @@ Then let's say this signing produces another signature which we save to the alia
 The final step is to submit the transaction. This can be done through the following method:
 ```shell
 namadac tx \
---code-path "a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2-code.tx" \
---data-path "a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2-data.tx" \
---timestamp "2077-04-20T13:37:69.108000+00:00" \
+--tx-path "tx_dumps/a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2.tx" \
 --signatures $SIGNATURE_ONE $SIGNATURE_TWO \
+--owner my-multisig-alias \
+--gas-payer my-key1
 ```
 
 <Callout type="info">
 Note the lack of commas used in the `--signatures` argument. This is because the argument is a list of files, not a list of signatures.
+Also note teh `tx_dumps` folder. This is the folder where the transaction was dumped to as specified in `--output-folder-path` in the previous step.
 </Callout>
 
 ## Changing the multisig threshold
@@ -141,7 +135,7 @@ namadac update-account \
 One can check that the threshold has been updated correctly by running:
 ```shell
 namadac query-account \
---address my-multisig-address
+--owner my-multisig-address
 ```
 Which will yield the threshold of 1, together with the two public keys.
 
