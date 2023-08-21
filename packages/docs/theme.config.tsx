@@ -31,6 +31,10 @@ const config: DocsThemeConfig = {
   footer: {
     text: "Namada",
   },
+  navigation: {
+    prev: true,
+    next: true
+  }
 };
 
 export default config;

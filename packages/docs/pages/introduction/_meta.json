@@ -3,5 +3,5 @@
   "install": "Installing Namada",
   "installing-cometbft": "Installing CometBFT",
   "privacy": "Privacy and Opsec",
-  "troubleshooting": "Troubleshooting"
+  "security": "Security"
 }
