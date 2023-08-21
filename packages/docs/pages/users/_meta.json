@@ -1,9 +1,9 @@
 {
-  "transparent-accounts": "Transparent Accounts",
+  "wallet": "Using the Namada wallet",
+  "transparent-accounts": "Transparent accounts",
   "shielded-accounts": "The MASP",
   "fees": "Fees on Namada",
-  "delegators": "Delegating on Namada",
+  "delegators": "Delegating stake on Namada",
   "governance": "Governance and Public Goods Funding",
-  "wallet": "Using the Namada wallet",
-  "experimental": "Experimental Features"
+  "experimental": "Experimental features"
 }
