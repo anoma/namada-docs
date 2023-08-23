@@ -2,11 +2,20 @@ import { Callout } from 'nextra-theme-docs'
 
 # k-of-n multisignature
 
+
 The k-of-n multisignature validity predicate authorizes transactions on the basis of k out of n parties approving them. This document targets the encrypted (inner) WASM transactions. Namada does not support multiple signers on wrapper or protocol transactions. The signer of the wrapper transaction is the fee-payer of that transaction. 
+{/* Why do we want multisignatures? */}
+{/* What do encrypted (inner) WASM transactions have to do with k-of-n multisignatures? */}
+{/* Why don't we call them threshold signatures? */}
+{/* Why is not supporting multiple signers important? */}
+{/* What are wrapper/protocol transactions?  */}
 
 ## Protocol
 
-Namada transactions are signed before being delivered to the network. This signature is checked by the invoked validity predicates to determine the validity of the transaction. To support multisignature, Namada's signed transaction data includes the plaintext data of what is being signed, as well as all valid signatures over that data.
+Namada transactions are signed before being delivered to the network. This signature is checked by the invoked validity predicates to determine the validity of the transaction. To support multisignature, Namada's signed transaction data include the plaintext data of what is being signed, as well as all valid signatures over that data.
+{/* Who signs a transaction? */}
+{/* Which validity predicates check the signature? */}
+{/* How many signatures do we need? And why? */}
 
 There are no special non-multisignature established accounts - all user accounts are just 1-of-1 multisignature accounts.
 
@@ -26,23 +35,28 @@ pub struct SignedTxData {
 
 The `sig` field holds a vector of tuples where the first element is an 8-bit integer and the second one is a signature. The integer serves as an index to match a specific signature to one of the public keys in the list of accepted ones for efficiency purposes. This implementation improves the verification algorithm reducing execution complexity to ($\mathcal{O}(n)$), without the need to cycle on all of them which would be $\mathcal{O}(n^2)$.
 
+{/* How does the algorithm look like? Is the execution complexity reduced because of this key-value table instead of a list? */}
+
 ## VPs
 
 All user-owner accounts use the default `vp_user` validity predicate for verifying state changes.
 The `vp_user` validity predicate asserts that at least `k` out of `n` valid signatures are present in the signed transaction data for every transaction originating from the user.
+{/* What is a user-owner account? */}
 
 To perform the validity checks, the VP requires two pieces of information:
-
 1. The multisignature threshold
 2. A list of valid signers' public keys
+{/* Does this apply to only this vp_user or to all vps? */}
 
 This data defines the requirements of a valid transaction operating on the multisignature address and is written in storage when the account is created. 
+{/* What is a multisignature address? */}
 
 A rust storage implementation is shown below:
 ```rust
 /$Address/threshold/: u8
 /$Address/pubkeys/: LazyVec<PublicKey>
 ```
+{/* Where does this storage live? I'd like to see a wider picture. This doesn't tell me much */}
 
 To verify the correctness of the signatures, the VP checks the following conditions:
 
@@ -51,6 +65,7 @@ To verify the correctness of the signatures, the VP checks the following conditi
 
 If implemented in this fashion, a couple efficiency gains are made:
 Step 1 allows for short-circuiting the validation process and avoid unnecessary processing and storage access. Each signature is validated **only** against the public key found in the list at the specified index. Step 2 halts as soon as it retrieves enough valid signatures to match the threshold, meaning that the remaining signatures are not unnecessarily verified.
+{/* Can we point to the file where this is done? */}
 
 ## Addresses
 
