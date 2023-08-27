@@ -6,13 +6,12 @@ import { SpecsAscii } from '../components/SpecsAscii'
 
 ### Abstract
 
-{/* Make privacy practical */}
-Privacy should be default and inherent in the systems we use for transacting, yet safe and user-friendly multi-asset privacy doesn't yet exist in the blockchain ecosystem.
+We believe that privacy should be default, practical and inherent in the systems we use for transacting, yet safe. User-friendly multi-asset privacy systems don't yet exist in the blockchain ecosystem.
 Up until now, users have had the choice of either a sovereign chain that reissues assets (e.g. [Zcash](https://z.cash/))
-or a privacy preserving solution built on an existing smart contract chain (e.g. Tornado Cash). Both have large trade-offs: in the former case, users don't have assets that they actually want to transact with, and in the latter case, the restrictions of existing platforms mean that users leak (non-trivial) metadata, and the protocols may be expensive and clunky to use.
+or a privacy preserving solution built on an existing smart contract chain (e.g. Tornado Cash). Both have large trade-offs: in the former case, users may not have assets that they actually want to transact with, and in the latter case, the restrictions of existing platforms such as Ethereum mean that users may leak (non-trivial) metadata, and the protocols may be expensive and clunky to use. Namada is an integral privacy solution built from the ground up addressing these issues.
+{/* What do we mean by safe? Is it clear for anyone reading this? */}
 {/* Is this true in other solution like Aztec? */}
-{/* Can we be more precise with "expensive and clunky to use"? */}
-{/* How does Namada do it differently? Maybe we can introduce the Namada philosophy of "one click button", i.e. click one button to do many steps: unshielding, swapping on osmosis, shielding */}
+{/* Maybe we can introduce the Namada philosophy of "one click button", i.e. click one button to do many steps: unshielding, swapping on osmosis, shielding */}
 
 Namada supports any fungible or non-fungible asset on an IBC-compatible blockchain
 as well as fungible or non-fungible assets sent over a custom Ethereum bridge (such as ERC20 tokens and ERC721 tokens, respectively). Once assets are on Namada, shielded transfers are cheap and all assets contribute to the same anonymity set.

@@ -21,7 +21,9 @@ of Namada.
 parameter) have a minimum value of $1\ \text{byte}$, and a hard cap of $100\ 
 \text{MiB}$, reflecting the header, evidence of misbehavior (used to slash 
 Byzantine validators) and transaction data, as well as any potential protobuf 
-serialization overhead. Some of this data is dynamic in nature (e.g. 
+serialization overhead. 
+{/* What is evidence of misbehaviour? */}
+Some of this data is dynamic in nature (e.g. 
 evidence of misbehavior), so the total size reserved to transactions in a block 
 at some height $H_0$ might not be the same as another block's, say, at some 
 height $H_1 : H_1 \ne H_0$. During CometBFT's `PrepareProposal` ABCI phase, 
@@ -31,6 +33,7 @@ rely on the `MaxTxBytes` parameter of `RequestPrepareProposal`; instead,
 app-side validators configure a `MaxProposalSize` parameter at genesis (or
 through governance) and set CometBFT blocks' `MaxBytes` parameter to its 
 upper bound.
+{/* Why is this way preferrable over setting `MaxTxBytes` at `RequestPrepareProposal`? */}
 
 ## Transaction batch construction
 
@@ -65,6 +68,7 @@ all available block space should be reserved to protocol transactions,
 therefore the `BlockSpaceAllocator` was designed as a state machine, whose 
 state transitions depend on the state of Namada. The states of the 
 `BlockSpaceAllocator` are the following:
+{/* Link to DKG parameter negotiation */}
 
 1. `BuildingDecryptedTxBatch` - As the name implies, during this state the 
 decrypted transactions `TxBin` is filled with transactions of the same type. 

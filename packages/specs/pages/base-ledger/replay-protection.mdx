@@ -34,7 +34,7 @@ provides an encrypted and authenticated communication channel between every two
 nodes to prevent a _man-in-the-middle_ attack (see the detailed {/* TODO: Fix link to be cometbft is possible*/}
 [spec](https://github.com/cometbft/cometbft/blob/main/spec/p2p/legacy-docs/peer.md)).
 
-The Namada protocol relies on this substrate to exchange transactions (messages)
+The Namada protocol relies on the CometBFT substrate to exchange transactions (messages)
 that defines the state transition of the ledger. More specifically, a
 transaction is composed of two parts: a `WrapperTx` and an inner `Tx`
 
@@ -69,6 +69,7 @@ pub struct Tx {
 The wrapper transaction is composed of some metadata, an optional unshielding tx
 for fee payment (see [fee specs](../economics/fee-system.md)), the encrypted
 inner transaction itself and the hash of the concatenation of these values. {/* TODO: Ensure that the hash of concatentation statement is as accurate as possible. It could be values, it could be the object (which consists of keys + values)*/}
+{/* Where is the metadata in the WrapperTx struct? */}
 The inner `Tx` transaction carries the Wasm code to be executed and the associated data.
 
 A transaction is constructed as follows:
@@ -77,21 +78,24 @@ A transaction is constructed as follows:
 2. The hash of this transaction gets signed by the author, producing another
    `Tx` where the data field holds the concatenation of the original data and
    the signature (`SignedTxData`)
+   {/* Do we have two Tx for each transaction? */}
 3. The produced transaction is encrypted and embedded in a `WrapperTx`. The
    encryption step exists for a future implementation of threshold decryption
    scheme (see [Ferveo](https://github.com/anoma/ferveo))
 4. Finally, the `WrapperTx` is converted to a `Tx` struct, signed over its
    hash (same as step 2, relying on `SignedTxData`), and submitted to the
    network
+   {/* Do we have three Tx (or 4, since step 2 is repeated here) for each transaction? Do they all get submitted? */}
 
 Note that the signer of the `WrapperTx` and that of the inner one don't need to
 coincide, but the signer of the wrapper is charged with gas and fees. In
 the execution steps:
 
-1. The `WrapperTx` signature is verified and, only if valid, the tx is processed
+1. The `WrapperTx` signature is verified and, if valid, the tx is processed
 2. In the following height the proposer decrypts the inner tx, checks that the
    hash matches that of the `tx_hash` field and, if everything went well,
    includes the decrypted tx in the proposed block
+   {/* What is the following height? */}
 3. The inner tx will then be executed by the WASM runtime
 4. After the execution, the affected validity predicates (also mentioned as VPs
    in this document) will check the storage changes and (if relevant) the
@@ -101,6 +105,9 @@ the execution steps:
 The transaction data is effectively prevented from being tampered with by the signature checks, since any such tampering would cause the checks to fail and the transaction to be rejected.
 For a more in-depth view, please refer to the
 [Namada execution spec](./execution.md).
+{/* I don't think execution.md provides a more in-depth view */}
+{/* What prevents a malicious user to submit an already signed transaction? I.e. to replay it? */}
+{/* Don't we need a nonce to avoid double spending? */}
 
 ### CometBFT replay protection
 
@@ -110,6 +117,7 @@ which is based on a cache of transactions previously seen. This mechanism is aim
 
 ## Implementation
 
+{/* Weren't we explaining the implementation earlier? */}
 Namada replay protection consists of three parts: the hash-based solution for both `EncryptedTx` (also referred to as the `InnerTx`) and `WrapperTx`, a way to mitigate replay attacks in case of a fork, and a concept of a lifetime for transactions.
 
 ### Hash register
@@ -121,9 +129,11 @@ transaction must be protected from replay attacks because it carries the actual
 semantics of the state transition. This inner transaction must be protected from replay attacks, as it carries the actual semantics of the state transition. Furthermore, even if the wrapper transaction were protected from replay attacks, the inner transaction could still be extracted by an attacker, rewrapped, and replayed. It should be noted that for this attack to succeed, the attacker would need to sign the outer transaction themselves and pay gas and fees for it. However, this could still cause significant damage to the parties involved in the inner transaction.
 
 `WrapperTx` is the only type of transaction currently accepted by the ledger. It must be protected from replay attacks; otherwise, a malicious user could replay the transaction as is. Even if the inner transaction implemented replay protection or was not accepted for any reason, the signer of the wrapper would still incur gas and fees, resulting in economic damage.
+{/* How does the ledger look like? */}
 
 To prevent the replay of both these transactions, reliance is placed on a set of digests from already processed transactions that are kept in storage. These digests are computed on the **unsigned** transactions, to support replay
-protection even for [multisigned](multisignature.md) transactions. In this case, using hashes from the signed transactions would result in a different hash for a different set of signatures on the same transaction, allowing for a replay. To achieve this, the `WrapperTx` hash field contins the hash of the unsigned inner transaction, instead of the signed one. This change does not impact the overall safety of Namada, as the wrapper is still signed over all its bytes, including the inner signature. The modification also allows for early replay attack checks in the mempool and during wrapper block-inclusion.
+protection even for [multisigned](multisignature.md) transactions. In this case, using hashes from the signed transactions would result in a different hash for a different set of signatures on the same transaction, allowing for a replay. To achieve this, the `WrapperTx` hash field contains the hash of the unsigned inner transaction, instead of the signed one. This change does not impact the overall safety of Namada, as the wrapper is still signed over all its bytes, including the inner signature. The modification also allows for early replay attack checks in the mempool and during wrapper block-inclusion.
+{/* "The modification also..." which modification? */}
 
 In addition, a subspace in storage is required, headed by a `ReplayProtection` internal address:
 ``` bash
@@ -132,6 +142,7 @@ In addition, a subspace in storage is required, headed by a `ReplayProtection` i
 /\$ReplayProtectionAddress/\$tx2_hash: None
 ...
 ```
+{/* I don't understand this. Why is a subspace in storage required? */}
 
 The hashes are positioned at the end of the path to enable rapid storage lookups.
 
