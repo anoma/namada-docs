@@ -60,8 +60,8 @@ The Namada Trusted Setup (TS) consists of running the phase 2 of the MPC which i
 Our implementation of the TS consists of the following subcomponents:
 
 1. A fork of the [Aleo Trusted Setup](https://github.com/AleoHQ/aleo-setup/) where we re-used the Coordinator Library (CL) contained in the `phase1-coordinator` folder.
-2. A [HTTP REST API](https://github.com/anoma/trusted-setup-ceremony/blob/master/phase1-coordinator/src/rest.rs) that interfaces with the CL.
-3. A [CLI implementation](https://github.com/anoma/trusted-setup-ceremony/tree/master/phase1-cli) that communicates with the HTTP REST API endpoints.
+2. A [HTTP REST API](https://github.com/anoma/namada-trusted-setup/blob/9c3e6c63c0279b0dc9b1ab5ce698548ee8ada766/phase2-coordinator/src/rest.rs) that interfaces with the CL.
+3. A [CLI implementation](https://github.com/anoma/namada-trusted-setup/tree/main/phase2-cli) that communicates with the HTTP REST API endpoints.
 4. An integration of the [`masp-mpc`](https://github.com/heliaxdev/masp-mpc) crypto functions (`initialize`, `contribute` and `verify`) in the CL.
 
 Let's go through each subcomponents and describe them.
@@ -85,7 +85,7 @@ To be able to re-use the CL without heavy refactoring, we decided to keep most o
 
 ### Description
 
-The [HTTP REST API](https://github.com/anoma/namada-trusted-setup/blob/main/phase1-coordinator/src/rest.rs) is a rocket web server that interfaces with the CL. All requests need to be signed to be accepted by the endpoints. It's the core of the ceremony where the Coordinator is started together with utility functions like `verify_contributions`  and `update_coordinator`.
+The [HTTP REST API](https://github.com/anoma/namada-trusted-setup/blob/9c3e6c63c0279b0dc9b1ab5ce698548ee8ada766/phase2-coordinator/src/rest.rs) is a rocket web server that interfaces with the CL. All requests need to be signed to be accepted by the endpoints. It's the core of the ceremony where the Coordinator is started together with utility functions like `verify_contributions`  and `update_coordinator`.
 
 ### Endpoints
 
