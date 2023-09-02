@@ -113,7 +113,8 @@ The final step is to submit the transaction. This can be done through the follow
 ```shell
 namadac tx \
 --tx-path "tx_dumps/a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2.tx" \
---signatures $SIGNATURE_ONE $SIGNATURE_TWO \
+--signatures $SIGNATURE_ONE \
+--signatures $SIGNATURE_TWO \
 --owner my-multisig-alias \
 --gas-payer my-key1
 ```
