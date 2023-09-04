@@ -38,7 +38,7 @@ In fact, most of the functionality in the Namada ledger is being built leveragin
 
 A custom validity predicates can be built from scratch using `vp_template` (from root directory [`wasm/vp_template`](https://github.com/anoma/namada/tree/main/wasm/vp_template)), which is Rust code compiled to WASM. Consult its `README.md` to find out more.
 
-You can also check out the pre-built validity predicates' source code in the [`wasm/wasm_source`](https://github.com/anoma/namada/tree/v0.5.0/wasm/wasm_source), where each sub-module that begins with `vp_` implements a validity predicate. For example the [`vp_user`](https://github.com/anoma/namada/blob/main/wasm/wasm_source/src/vp_user.rs) is the default validity predicate used for established accounts (created with `init-account` command).
+You can also check out the pre-built validity predicates' source code in the [`wasm/wasm_source`](https://github.com/anoma/namada/tree/71d8153be5931725acde0e62af947022c85cd79b/wasm/wasm_source), where each sub-module that begins with `vp_` implements a validity predicate. For example the [`vp_user`](https://github.com/anoma/namada/blob/main/wasm/wasm_source/src/vp_user.rs) is the default validity predicate used for established accounts (created with `init-account` command).
 
 A validity predicate's must contain the following function:
 
