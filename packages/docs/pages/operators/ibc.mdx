@@ -117,7 +117,7 @@ We can download the latest binary release from our [releases page](https://githu
 
 E.g.
 ```bash copy
-export TAG="v1.6.0-namada-beta1"
+export TAG="v1.6.0-namada-beta2"
 export ARCH="x86_64-unknown-linux-gnu" # or "aarch64-apple-darwin"
 curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/download/${TAG}/hermes-${TAG}-${ARCH}.tar.gz
 tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
@@ -125,7 +125,7 @@ tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
 
 ##### From source
 ```bash copy
-export TAG="v1.6.0-namada-beta1"
+export TAG="v1.6.0-namada-beta2"
 git clone git@github.com:heliaxdev/hermes.git
 git checkout $TAG
 cd hermes
@@ -237,7 +237,7 @@ Before running the following scripts, you have to build Namada and wasm.
 ```bash copy
 git clone git@github.com:anoma/namada.git
 cd namada
-git checkout v0.21.0
+git checkout v0.22.0
 make build-release
 make build-wasm-scripts
 export NAMADA_DIR=$(pwd) # if needed
@@ -257,7 +257,7 @@ cd hermes
 ```
 
 You need to wait to sync each node with the corresponding instance.
-And, you have to transfer NAM token to the relayer account (the script will make an alias `relayer`) from the faucet or others on each instance because the fee for IBC transactions should be charged. For example, the following command transfers NAM from the faucet for `namada-a` instance which is created by the script. You can refer to [here](#transferring-assets-over-ibc) about `--base-dir` and `--ledger-address`.
+And, you have to transfer NAM token to the relayer account (the script will make an alias `relayer`) from the faucet or others on each instance because the fee for IBC transactions should be charged. For example, the following command transfers NAM from the faucet for `namada-a` instance which is created by the script. You can refer to [here](#transferring-assets-over-ibc) about `--base-dir` and `--node`.
 ```bash copy
 ${NAMADA_DIR}/target/release/namadac transfer \
   --base-dir ${HERMES}/data/namada-a/.namada \
@@ -266,7 +266,7 @@ ${NAMADA_DIR}/target/release/namadac transfer \
   --token nam \
   --amount 1000 \
   --signing-keys relayer \
-  --ledger-address 127.0.0.1:26657
+  --node 127.0.0.1:26657
 ```
 
 After the sync, you can create the channel and start Hermes as we explain [above](#create-ibc-channel).
