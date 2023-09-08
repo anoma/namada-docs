@@ -22,3 +22,59 @@ TIMESTAMP=$(date +%s)
 NAMADA_LOG=info CMT_LOG_LEVEL=p2p:none,pex:error NAMADA_CMT_STDOUT=true namada node ledger run &> logs-${TIMESTAMP}.txt
 tail -f -n 20 logs-${TIMESTAMP}.txt ## (in another shell)
 ```
+
+### Create service file and run via systemd process
+After install namada and cometbft you can copy binary to /usr/local/bin/
+```bash copy
+cd $HOME && cp $HOME/cometbft/build/cometbft /usr/local/bin/cometbft && \
+cp "$HOME/namada/target/release/namada" /usr/local/bin/namada && \
+cp "$HOME/namada/target/release/namadac" /usr/local/bin/namadac && \
+cp "$HOME/namada/target/release/namadan" /usr/local/bin/namadan && \
+cp "$HOME/namada/target/release/namadaw" /usr/local/bin/namadaw && \
+cp "$HOME/namada/target/release/namadar" /usr/local/bin/namadar
+```
+Make service
+```bash copy
+sudo tee /etc/systemd/system/namadad.service > /dev/null <<EOF
+[Unit]
+Description=namada
+After=network-online.target
+[Service]
+User=$USER
+WorkingDirectory=$HOME/.local/share/namada
+Environment=TM_LOG_LEVEL=p2p:none,pex:error
+Environment=NAMADA_CMT_STDOUT=true
+ExecStart=/usr/local/bin/namada node ledger run 
+StandardOutput=syslog
+StandardError=syslog
+Restart=always
+RestartSec=10
+LimitNOFILE=65535
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+Enable service
+```bash copy
+sudo systemctl daemon-reload
+sudo systemctl enable namadad
+```
+Now you can manage the node through systemd commands
+Run node
+```bash copy
+sudo systemctl start namadad
+```
+Stop node
+```bash copy
+sudo systemctl stop namadad
+```
+Restart node
+```bash copy
+sudo systemctl restart namadad
+```
+Show node logs
+```bash copy
+sudo journalctl -u namadad -f -o cat
+```
+
+
