@@ -85,13 +85,14 @@ Notes:
 
 ## Incentive Description
 
-Incentive system provide a mechanism in which the old asset(input) is burned, the new asset(output) is minted with the same quantity and incentive asset(reward) is minted with the convert ratio meanwhile.
+Incentive system provide a mechanism in which the old asset (input) is burned, the new asset (output) is minted with the same quantity and incentive asset (reward) is minted with the convert ratio meanwhile.
 
 ### Incentive AllowedConversion Tree
 As described in Convert circuit, the `AllowedConversion Tree` is an independent merkle tree in the ledger and contains all the Incentive AllowedConversions.
 
 ### Incentive AllowedConversion Struct
-In general, there are three items in `Incentive AllowedConversion Struct`(but not mandatory？),i.e. input, output and reward. And each item has an asset type and a quantity(i64, for the convert ratio).
+In general, there are three items in `Incentive AllowedConversion Struct`(but not mandatory？¹),i.e. input, output and reward. And each item has an asset type and a quantity (i64, for the convert ratio).
+1. There should not be a question here, are they or aren't they mandatory?
 
 Note that the absolute value of input and output must be consistent in incentive system. The quantity of input is negative and the quantity of output is positive.
 

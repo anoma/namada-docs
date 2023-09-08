@@ -1,6 +1,7 @@
 ## Asset name schema
 
-MASP notes carry balances that are some positive integer amount of an
+An asset type is an abstract property added to a Sapling Note, in addition to the value. Notes only have one asset
+type and all transactions are balanced independently across all asset type. MASP notes carry balances that are some positive integer amount of an
 asset type. Per both the MASP specification and the implementation, the
 asset *identifier* is an 32-byte [Blake2s hash](https://www.blake2.net/) of an arbitrary asset
 *name* string, although the full 32-byte space is not used because the
@@ -58,3 +59,5 @@ asset name segments would be:
 - ID: an ID segment
 
 This could be serialized to, e.g., `addr123/addr456/tSPY/i12345`.
+
+Perhaps something about the asset generetor should be here (section 0.3 of file:///home/carlo/Downloads/multi-asset-shielded-pool-3.pdf )

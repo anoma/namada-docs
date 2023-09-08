@@ -2,7 +2,8 @@
 
 ## Introduction
 
-Ordinarily, a MASP transaction that does not shield or unshield assets must achieve a homomorphic net value balance of 0. Since every asset type has a pseudorandomly derived asset generator, it is not ordinarily feasible to achieve a net value balance of 0 for the transaction without each asset type independently having a net value balance of 0. Therefore, intentional burning and minting of assets typically requires a public "turnstile" where some collection of assets are unshielded, burned or minted in a public transaction, and then reshielded. Since this turnstile publicly reveals asset types and amounts, privacy is affected.
+Ordinarily, a MASP transaction that does not shield or unshield assets¹ must achieve a homomorphic net value balance of 0. Since every asset type has a pseudorandomly derived asset generator, it is not ordinarily feasible to achieve a net value balance of 0 for the transaction without each asset type independently having a net value balance of 0. Therefore, intentional burning and minting of assets typically requires a public "turnstile" where some collection of assets are unshielded, burned or minted in a public transaction, and then reshielded. Since this turnstile publicly reveals asset types and amounts, privacy is affected.
+1. What is the difference between not shielded and unshield assets?
 
 The goal is to design an extension to MASP that allows for burning and minting assets according to a predetermined, fixed, public ratio, but without explicitly publicly revealing asset types or amounts in individual transactions.
 
@@ -12,9 +13,12 @@ In the MASP, each Spend or Output circuit only verifies the integrity of spendin
 
 Instead of requiring the homomorphic sum of Spend and Output value commitments to sum to 0, burning and minting of assets can be enabled by allowing the homomorphic sum of Spend and Output value commitments to sum to either 0 or a multiple of an allowed conversion ratio. For example, if distinct assets A and B can be converted in a 1-1 ratio (meaning one unit of A can be burned to mint one unit of B) then the Spend and Output value commitments may sum to a nonzero value.
 
+Where does the allowed convert ratio comes from? How is it decided?
+
 ## Allowed conversions
 
 Let $A_1, A_2, \ldots, A_n$ be distinct asset types. An _allowed conversion_ is a list of tuples $\{(A_1, V_1), (A_2, V_2), \ldots (A_n, V_n)\}$ where $V_1, \ldots, V_n$ are signed 64-bit integers.
+What do Vs represent?
 
 The _asset generator_ of an allowed conversion is defined to be: $vb = [V_1] vb_1 + \ldots + [V_n] vb_n$ where $vb_i$ is the asset generator of asset $A_i$. 
 
@@ -34,6 +38,8 @@ $$(rt, cv^{mint})$$
 and private input:
 
 $$(path, pos, cm, v, rcv, vb)$$
+
+It be easier for the reader if these values contained in the public and private input where defined
 
 and the circuit checks:
 
@@ -56,7 +62,9 @@ Directionality of allowed conversions must be enforced as well. That is, $v$ mus
 
 ### Cycles 
 
-It is also critical not to allow cycles. For example, if $\{(A_1, -1), (A_2, 2)\}$ and $\{(A_1, 1), (A_2, -1)\}$ are allowed conversions, then an unlimited amount of $A_2$ may be minted from a nonzero amount of $A_1$. Since 
+It is also critical not to allow cycles. For example, if $\{(A_1, -1), (A_2, 2)\}$ and $\{(A_1, 1), (A_2, -1)\}$ are allowed conversions, then an unlimited amount of $A_2$ may be minted from a nonzero amount of $A_1$. Since
+
+Here the sentence was not finished
 
 ## Alternative approaches
 
