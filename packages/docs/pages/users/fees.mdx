@@ -1,6 +1,6 @@
 # Fees on Namada
 
-In order to settle the market for Namada blockspace demand, fees are coupled with transactions. In order for any namada transaction to be considered valid, the correct corresponding fee must be paid. The exact fee is set by governance, and included in the genesis file under `gas_cost`.
+In order to settle the market for Namada blockspace demand, fees are coupled with transactions. In order for any namada transaction to be considered valid, the correct corresponding fee must be paid. The exact fee is set by the user, and must be greater than or equal to the minimum `gas-price` set by governance, which is included in the genesis file under `gas_cost`.
 
 ## How fees are paid
 When explicitly stated, the gas fee is paid by the `--gas-payer` flag. If no `--gas-payer` flag is specified, the gas fee is paid by the first key in the `--signing-keys` flag.
@@ -35,13 +35,13 @@ For testnet purposes, we recommend [using the faucet](../networks/testnets/pow.m
 
 ## How fees are calculated
 The fee for a transaction is calculated by multiplying `gas-limit` by the gas price.
-Both the `--gas-limit` and the `--gas-price` can be specified by the user. If neither is specified, the default gas limit and minimum gas price is used. The default gas limit for the transfer tx type, for example, is 20000.
+Both the `--gas-limit` and the `--gas-price` can be specified by the user. If neither is specified, the default gas limit and minimum gas price is used. The default gas limit for any transaction is currently set to `20_000`.
 
 The minimum gas price is set in the genesis file under `gas_cost`.
 
 ## How to set the gas price and gas limit
 
-It is recommended to set the `gas-limit` based on the transaction being conducted. In order to estimate the `gas-limit` for a particular transaction, the `--dry-run` argument should be provided. This means that the transaction is simulated, but not yet sent to the ledger. 
+It is recommended to set the `gas-limit` based on the transaction being conducted. In order to estimate the `gas-limit` for a particular transaction, the `--dry-run-wrapper` argument should be provided. This means that the transaction is simulated, but not yet sent to the ledger. 
 
 For example, the following command will simulate a transfer transaction, and return the gas used:
 
@@ -53,7 +53,7 @@ namadac transfer \
   --amount 10 \
   --signing-keys keysha \
   --gas-payer keysha2 \
-  --dry-run
+  --dry-run-wrapper
 ```
 
 Which will ouptut something along the lines of 
