@@ -1,10 +1,11 @@
 # Fees on Namada
 
-In order to settle the market for Namada blockspace demand, fees are coupled with transactions. In order for any namada transaction to be considered valid, the correct corresponding fee must be paid. All fees are paid in the native token NAM. The exact fee is set by governance.
+In order to settle the market for Namada blockspace demand, fees are coupled with transactions. In order for any namada transaction to be considered valid, the correct corresponding fee must be paid. The exact fee is set by the user, and must be greater than or equal to the minimum `gas-price` set by governance, which is included in the genesis file under `gas_cost`.
 
 ## How fees are paid
+When explicitly stated, the gas fee is paid by the `--gas-payer` flag. If no `--gas-payer` flag is specified, the gas fee is paid by the first key in the `--signing-keys` flag.
 
-Fees on Namada are paid by the public key corresponding to first key that appears in the list of  `--signing-keys` of the transaction. This means that in the transaction 
+This means that in the transaction 
 ```shell copy
 namada client transfer \
   --source my-new-acc \
@@ -31,3 +32,62 @@ namada client transfer \
 (Assuming that `keysha2` exists and is in the wallet of the user)
 
 For testnet purposes, we recommend [using the faucet](../networks/testnets/pow.md) to source NAM for transaction fees.
+
+## How fees are calculated
+The fee for a transaction is calculated by multiplying `gas-limit` by the gas price.
+Both the `--gas-limit` and the `--gas-price` can be specified by the user. If neither is specified, the default gas limit and minimum gas price is used. The default gas limit for any transaction is currently set to `20_000`.
+
+The minimum gas price is set in the genesis file under `gas_cost`.
+
+## How to set the gas price and gas limit
+
+It is recommended to set the `gas-limit` based on the transaction being conducted. In order to estimate the `gas-limit` for a particular transaction, the `--dry-run-wrapper` argument should be provided. This means that the transaction is simulated, but not yet sent to the ledger. 
+
+For example, the following command will simulate a transfer transaction, and return the gas used:
+
+```shell copy
+namadac transfer \
+  --source my-new-acc \
+  --target validator-1 \
+  --token NAM \
+  --amount 10 \
+  --signing-keys keysha \
+  --gas-payer keysha2 \
+  --dry-run-wrapper
+```
+
+Which will ouptut something along the lines of 
+
+```md
+Dry-run result: Transaction is valid. Gas used: 1785;
+```
+This means that we could reasonably make this transfer transaction with a `gas-limit` of 2000.
+
+Hence, when making the transfer, we could specify the `gas-limit` as follows:
+
+```shell copy
+namadac transfer \
+  --source my-new-acc \
+  --target validator-1 \
+  --token NAM \
+  --amount 10 \
+  --signing-keys keysha \
+  --gas-payer keysha2 \
+  --gas-limit 2000
+```
+
+If for some reason, we wanted to pay a higher gas fee, we could also specify that as follows:
+
+```shell copy
+namadac transfer \
+  --source my-new-acc \
+  --target validator-1 \
+  --token NAM \
+  --amount 10 \
+  --signing-keys keysha \
+  --gas-payer keysha2 \
+  --gas-limit 2000 \
+  --gas-price 0.01
+```
+This will incentivise validators to prioritise this transaction above those with a lower gas price.
+
