@@ -6,6 +6,7 @@ This document describes using the inter-blockchain communication (IBC) protocol 
 
 <Callout type="warning">
 **Warning** This feature is currently in development. Expect the unexpected.
+As of `v0.22.0`, there are some known issues with using ARM devices with this relayer.
 </Callout>
 
 This document will cover three essential steps for using IBC with Namada:
@@ -117,7 +118,7 @@ We can download the latest binary release from our [releases page](https://githu
 
 E.g.
 ```bash copy
-export TAG="v1.6.0-namada-beta1"
+export TAG="v1.6.0-namada-beta2"
 export ARCH="x86_64-unknown-linux-gnu" # or "aarch64-apple-darwin"
 curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/download/${TAG}/hermes-${TAG}-${ARCH}.tar.gz
 tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
@@ -125,7 +126,7 @@ tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
 
 ##### From source
 ```bash copy
-export TAG="v1.6.0-namada-beta1"
+export TAG="1.6.0-namada"
 git clone git@github.com:heliaxdev/hermes.git
 git checkout $TAG
 cd hermes
