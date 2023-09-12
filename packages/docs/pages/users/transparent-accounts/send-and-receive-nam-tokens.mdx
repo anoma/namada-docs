@@ -15,7 +15,8 @@ Then, send a transaction to initialize your new established account and save its
 namada client init-account \
   --alias establishment \
   --public-keys keysha \
-  --source keysha
+  --source keysha \
+  --threshold 1
 ```
 
 Once this transaction has been applied, the client will automatically see the new address created by the transaction and add it to your wallet with the chosen alias `establishment`.
@@ -31,7 +32,8 @@ namada client transfer \
   --source establishment \
   --target validator-1 \
   --token NAM \
-  --amount 10
+  --amount 10 \
+  --signing-keys keysha
 ```
 
 This command will attempt to find and use the key of the source address to sign the transaction.
@@ -46,7 +48,7 @@ namada client balance --token NAM --owner my-new-acc
 
 <Callout type="info">
 For any client command that submits a transaction (`init-account`, `transfer`, `tx`, `update` and [PoS transactions](../../operators/validators/proof-of-stake.mdx)), 
-you can use the `--dry-run` flag to simulate the transaction being applied in the block and see what would be the result.
+you can use the `--dry-run-wrapper` flag to simulate the transaction being applied in the block and see what would be the result.
 </Callout>
 
 ### See every known addresses' balance
