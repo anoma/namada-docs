@@ -91,3 +91,40 @@ namadac transfer \
 ```
 This will incentivise validators to prioritise this transaction above those with a lower gas price.
 
+
+## Paying fees with tokens in the MASP
+
+It is also possible to pay for fees using the MASP. The purpose of this is to ensure that even though a user may not have NAM in their transparent balance, they can still make transparent transactions on chain. This is yet another incentive for users to keep the maximum amount of assets in the MASP.
+
+In order to pay for fees using the MASP, the user must specify the `--gas-spending-key` flag, and set it the alias of a spending key in your wallet. This will mean that the fees will be deducted from the shielded balance of the spending key, and unshielded to the transparent balance of the `--gas-payer` (or the address corresponding to the first key in the `--signing-keys`), before being paid for by the `--gas-payer`.
+
+For example, if the user has a spending key `spending-key-1` in their wallet, and they want to pay for the fees of a transaction using the MASP, they would run the following command:
+
+```shell copy 
+namadac transfer \
+  --source keysha \
+  --target address-b \
+  --token OSMO \
+  --amount 10 \
+  --gas-payer keysha \
+  --gas-spending-key spending-key-1
+```
+
+In this example, `keysha` may only have an OSMO balance in their transparent balance, but `spending-key-1` may have a positive NAM balance in their shielded balance. In this case, the NAM will be unshielded to the transparent balance of `keysha`, and then used to pay for the transaction fee.
+
+### Using a disposable gas payer
+
+It is also possible to use a disposable gas payer to pay for transaction fees. This is useful in cases where the user does not want to reveal the identity of the `--gas-payer`. In order to use a disposable gas payer, the user must include the `--disposable-gas-payer` flag, AND also must specify a `--gas-spending-key` . This will mean that the fees will be deducted from the shielded balance of the `--gas-spending-key`, and unshielded to the transparent balance of an ephemeral transparent address before being paid for by the ephemeral address.
+
+For example, if the user has a spending key `spending-key-1` in their wallet, and they want to pay for the fees of a transaction using a disposable address, they would run the following command:
+
+```shell copy
+namadac transfer \
+  --source keysha \
+  --target address-b \
+  --token OSMO \
+  --amount 10 \
+  --gas-spending-key spending-key-1 \
+  --disposable-gas-payer
+```
+
