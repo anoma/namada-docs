@@ -1,0 +1,15 @@
+# Background
+A shielded transaction is a transaction in which recipient, sender and transaction amount are hidden from any external
+observer. Sapling is a protocol that allows to two parties to execute a shielded transaction. It was developed by Electric
+Coin Company and it constitutes a cornerstone piece of Zcash.
+
+To achieve shielded transaction, sapling moves away from Bitcoin's UTXO model. It does so by introducing Notes, which carry value.
+A value *v* represented in a Note is spendable by who holds the *spending key*. In Sapling input and output of what would be
+a UTXO transaction are modified by containing commitments to notes, instead of addresses. From the *spending key* is possible
+to derive a *viewing key*, which allows third parties and token owners to view transactions. To guarantee that a commitment to
+a note have not been spent yet, when using a note as an input users have to publish a *nullifier*.
+The collection of all shielded transaction is sometimes referred as **Shielded pool**.
+
+Modern day block chain architectures allow for assets of different types to be exchanged. The Multi Asset Shielded Pool
+is a protocol that allows for assets different types to be exchanged in a shielded fashion within one blockchain platform. This
+is archived by introducing changes to the sapling protocol that allows to keep the asset type private.
