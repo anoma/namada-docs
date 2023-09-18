@@ -182,7 +182,7 @@ the fact that `value_balance_sapling` needs to be provided for
 each asset type.
 
 ### Transparent Input Format
-The input data structure decribes how much of each asset is
+The input data structure describes how much of each asset is
 being deducted from certain accounts. More precisely, it is as follows:
 ```
 struct TxIn {
@@ -201,7 +201,7 @@ struct TxIn {
 Note that the signature and public key are required to authenticate
 the deductions.
 ### Transparent Output Format
-The output data structure decribes how much is being added to
+The output data structure describes how much is being added to
 certain accounts. More precisely, it is as follows:
 ```
 struct TxOut {
@@ -260,12 +260,12 @@ Below, the conditions necessary to maintain consistency between the MASP validit
     * its asset type must be derived from the token address raw bytes and the current epoch once Borsh serialized from the type `(Address, Epoch)`:
       * the dependency on the address prevents replay attacks altering transfer asset types
       * the current epoch requirement prevents attackers from claiming extra rewards by forging the time when they began to receive rewards
-      * the derivation must be done as specified in `0.3 Derivation of Asset Generator from Asset Identifer`
+      * the derivation must be done as specified in `0.3 Derivation of Asset Generator from Asset Identifier`
 * If the source address is the MASP validity predicate, then:
   * no transparent inputs are permitted in the shielded transaction
   * the transparent transaction value pool's amount must equal the containing wrapper transaction's fee amount
   * the transparent transaction value pool's asset type must be derived from the containing wrapper transaction's fee token
-    * the derivation must be done as specified in `0.3 Derivation of Asset Generator from Asset Identifer`
+    * the derivation must be done as specified in `0.3 Derivation of Asset Generator from Asset Identifier`
 * If the source address is not the MASP validity predicate, then the transparent transaction value pool's amount must equal zero
 
 ## Remarks
@@ -300,7 +300,7 @@ The [Multi-Asset Shielded Pool Specification](https://github.com/anoma/masp/blob
   * The Sapling balance value is now defined as the net value of Spend and [Convert](#convert-descriptions) transfers minus Output transfers.
   * The Sapling balance value is no longer a scalar but a vector of pairs comprising values and asset types
   * Addition, subtraction, and equality checks of Sapling balance values is now done component-wise
-  * A Sapling balance value is defined to be non-negative iff each of its components is non-negative
+  * A Sapling balance value is defined to be non-negative if each of its components is non-negative
   * `ValueCommit` and the value base must be parameterized by asset type
   * Proofs must be updated to reflect the presence of multiple value bases
 * [4.19.1 Encryption (Sapling and Orchard)](https://zips.z.cash/protocol/protocol.pdf#saplingandorchardencrypt)
