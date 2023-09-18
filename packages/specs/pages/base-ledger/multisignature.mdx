@@ -47,7 +47,7 @@ A rust storage implementation is shown below:
 To verify the correctness of the signatures, the VP checks the following conditions:
 
 1. Enough **unique** signatures for the given threshold are provided
-2. Enough **valid** signatures for the given threshold are provided
+2. Enough **valid** signatures (out of these unique ones) for the given threshold are provided
 
 Say we have a threshold at 4 and we are provided with 15 signature. 10 of them are unique but not valid, 5 of them are valid but are not unique. Would the VP verify the correctness of the signature as valid?
 
