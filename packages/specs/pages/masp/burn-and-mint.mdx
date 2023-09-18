@@ -26,7 +26,7 @@ can be enabled by allowing the homomorphic sum of Spend and Output value commitm
 an allowed conversion ratio. For example, if distinct assets A and B can be converted in a 1-1 ratio (meaning one unit
 of A can be burned to mint one unit of B) then the Spend and Output value commitments may sum to a nonzero value.
 
-Where does the allowed convert ratio comes from? How is it decided?
+The set of incentivised assets is decided by governance. Once the set has been decided, the conversion table is programmatic. Each conversion ratio is amended at every epoch based on a PD-controller equation, depending on what assets need to be incentivised, based on their total presence in the shielded pool. 
 
 ## Allowed conversions
 
