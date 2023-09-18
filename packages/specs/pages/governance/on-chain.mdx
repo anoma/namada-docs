@@ -138,7 +138,7 @@ All the computation is done at the start of `grace_epoch` on data collected at t
 
 In parallel to tallying, the protocol manages the execution of accepted proposals and refunding in the `finalize_block` function. 
 If the proposals `grace_epoch` matches with the current epoch, AND the proposal had a positive outcome, the protocol refunds the locked funds from `GovernanceAddress` to the proposal author address (specified in the proposal `author` field).  
-Moreover, if the proposal had a positive outcome and had attached WASM code, the code is executed immidiately.
+Moreover, if the proposal had a positive outcome and had attached WASM code, the code is executed immediately.
 
 On the other hand, should the proposal be rejected (negative outcome), any locked funds is burnt (removed from total supply).
 
