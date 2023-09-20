@@ -308,9 +308,8 @@ This constraint is given by the following two:
 Cometbft provides a `BlockSize.MaxGas` parameter, and applies some optional
 validation in mempool if this parameter is initialized. It doesn't instead
 perform any check in consensus, leaving this task to the application itself (see
-[cometbft app spec](https://github.com/heliaxdev/cometbft/blob/78c705573710d5b41d0213080260f9eeb6b04ca7/spec/abci/apps.md#gas),
-[cometbft spec](https://github.com/heliaxdev/cometbft/blob/78c705573710d5b41d0213080260f9eeb6b04ca7/spec/core/data_structures.md#blockparams)
-and [this issue](https://github.com/cometbft/cometbft/issues/2310)).
+[cometbft app spec](https://github.com/informalsystems/cometbft/blob/main/spec/abci/abci%2B%2B_app_requirements.md#gas),
+[cometbft spec](https://github.com/informalsystems/cometbft/blob/main/spec/core/data_structures.md#blockparams).
 Therefore, instead of using the Cometbft provided param (and its mempool
 validation), Namada introduces a `MaxBlockGas` protocol parameter. This limit is
 checked during mempool and block validation, in `process_proposal`: if the block
