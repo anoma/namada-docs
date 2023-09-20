@@ -1,0 +1,31 @@
+# Proof of stake transactions
+
+The following details the execution of each transaction in the proof of stake system.
+
+## Bonding
+
+`namadac bond --source <source_address> --validator <validator_address> --amount <amount>`
+
+A validator can bond tokens to themselves, or a non-validator account can bond tokens to a validator. In the event of a validator self-bond, no argument is passed to the `--source`. Bonding is still permitted even if the `validator` is jailed.
+
+The bond transaction will only execute if:
+- the `amount` is greater than 0
+- the `source_address` is a non-validator account that exists on chain
+- the `validator_address` is a true validator account
+- the `source_address` has enough tokens to bond
+
+Bond execution:
+
+1. Increments the `source-validator` pair's bond at the pipeline epoch.
+2. Increments the `validator`'s `total_bonded` at the pipeline epoch.
+3. Increments the `validator`'s deltas and total deltas at the pipeline epoch.
+4. Updates the validator set at the pipeline epoch if the `validator` is not jailed.
+
+## Unbonding
+
+
+## Withdrawing
+
+
+## Redelegation
+

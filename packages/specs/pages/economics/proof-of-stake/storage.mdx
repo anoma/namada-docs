@@ -1,0 +1,85 @@
+# Proof of stake storage
+
+The following is a detailed description of important storage items in the proof of stake system. The structure of the storage is described along with how each is manipulated by various proof of stake transactions and the protocol itself.
+
+## Bonds
+Bonds are stored as an epoched map of bonded tokens, keyed by the delegator and validator pair:
+
+```delegator -> validator -> epoch -> amount```
+
+The `amount` is the total remaining tokens in the bond for a given starting `epoch`, which is the epoch in which the tokens started to contribute to the validator's voting power.
+
+Token amounts in the bonds are updated in place while bonding, unbonding, and redelegating. Bonding transactions increment the bonded amount according to the starting epoch. When unbonding and redelegating, the token amounts are decremented from the bonds in place, starting with the futuremost epoch that contains bonded tokens, then iterating backwards in time until the unbond/redelegation amount is fully accounted for.
+
+TO COMPLETE: describe precisely why the epochs of bonds are kept indefinitely in storage without trimming (bc of slashing but be more specific).
+
+## Unbonds
+Unbonds are stored as an epoched map of unbonded tokens, keyed by the delegator and validator pair:
+    
+```delegator -> validator -> start_epoch -> withdrawable_epoch -> amount```
+
+The `amount` is the total token amount that is unbonded from a bond that started contributing to voting power at `start_epoch` and that will be withdrawable at `withdrawable_epoch`.
+
+These unbonds are incremented during an unbond transaction, and their data is removed from storage upon a withdrawal transaction. Redelegation does not manipulate this unbond data.
+
+## Validator's Total Bonded
+A map of the total tokens bonded to a validator in a given epoch:
+
+```validator -> epoch -> amount```
+
+The `amount` is the total token amount bonded to the validator by all delegators, where `epoch` is the epoch in which the tokens began contributing to the voting power. Unlike the standard [bonds](#bonds) data, this total bonded data is not decremented during unbonding.
+
+TODO: provide some details on what this is used for.
+
+## Validator's Total Unbonded
+A map of the total tokens unbonded from a validator in a particular epoch:
+
+```validator -> unbond_epoch -> start_epoch -> amount```
+
+The `amount` is the total token amount unbonded from the validator corresponding, where the `unbond_epoch` is the epoch in which the tokens stopped contributing to the voting power. The `start_epoch` is the epoch in which the unbonded tokens originally started contributing to voting power when bonded.
+
+These unbonded amounts are only incremented during an unbond transaction.
+
+## Validator's Incoming Redelegations
+A destination validator's incoming redelegation:
+
+```dest_validator -> delegator -> redel_end_epoch```
+
+The `delegator` is the delegator address that has redelegated tokens to the `dest_validator`. The `redel_end_epoch` is the epoch in which the redelegated tokens start contributing the the `dest_validator`'s voting power.
+
+## Validator's Outgoing Redelegations
+Data describing a source validator's outgoing redelegated tokens:
+
+```src_validator -> dest_validator -> bond_start -> redel_start -> amount```
+
+This data contains the `dest_validator` to which the token `amount` that was previously bonded to the `src_validator` (previously active from epoch `bond_start`) was redelegated. The `redel_start` is the epoch in which the redelegation transaction is initiated (the tokens begin contributing to the `dest_validator`'s voting power at epoch `redel_start + pipeline_len`).
+
+## Validator's Total Redelegated Bonded
+The total token amount redelegated to a destination validator, summed and mapped according to the bond and redelegation epochs:
+
+```dest_validator -> redel_end_epoch -> src_validator -> bond_epoch -> amount```
+
+The `amount` is the total token amount that has been redelegated to the `dest_validator` from a given `src_validator`, where this `amount` originally started contributing to the `src_validator`'s voting power at `bond_epoch` and then started contributing to the `dest_validator`'s voting power at `redel_end_epoch`.
+
+## Validator's Total Redelegated Unbonded
+The total amount of redelegated tokens that have been unbonded from their destination validator, constrained by several different epochs:
+
+```dest_validator -> unbond_epoch -> redel_end_epoch -> src_validator -> bond_epoch -> amount```
+
+The epochs are:
+- `unbond_epoch`: when the token `amount` stops contributing to the `dest_validator`'s voting power
+- `redel_end_epoch`: when the token `amount` started contributing to the `dest_validator`'s voting power
+- `bond_epoch`: when the token `amount` started contributing to the `src_validator`'s voting power
+
+TODO: describe what this is needed for and what txs update it
+
+## Delegator's Redelegated Bonded
+The token amount redelegated by a delegator from a source validator to a destination validator, summed according to the epochs at which the tokens contributed to voting power:
+
+```delegator -> dest_validator -> redel_end_epoch -> src_validator -> bond_epoch -> amount```
+
+The `amount` is the total redelegated token amount that started contributing to the `dest_validator`'s voting power in `redel_end_epoch` and that originally started contributing to the `src_validator`'s voting power in `bond_epoch`.
+
+TODO: describe what this is needed for and what txs update it
+
+## Delegator's Redelegated Unbonded
