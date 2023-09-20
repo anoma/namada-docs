@@ -50,7 +50,7 @@ Once a proposal has been accepted by the protocol as valid, it will be added to 
 The VP must also check that voting adheres to the following constraints:
 
 - The voter is a delegator or a delegate (further constraints can be applied depending on the proposal type)
-- Given that non-validating accounts can vote, validators may only vote during the initial 2/3 of the whole proposal duration (`voting_end` - `voting_start`)
+- Given that non-validating accounts can vote, validators may only vote during the initial $\frac{2}{3}$ of the whole proposal duration (`voting_end` - `voting_start`)
 
 Once a proposal has been created, nobody can modify any of its fields.
 
@@ -97,7 +97,7 @@ where `ProposalVote` is an enum representing a `Yay` or `Nay` vote: the yay vari
 
 Storage writes for a vote transaction are described [here](./storage.md#votes).
 
-If non-validating accounts are allowed to vote, delegates will be able to vote only for 2/3 of the total voting period, while delegators can vote until the end of the voting period. 
+If non-validating accounts are allowed to vote, delegates will be able to vote only for $\frac{2}{3}$ of the total voting period, while delegators can vote until the end of the voting period. 
 If only validators are allowed to vote for the `ProposalType` in question, they are allowed to vote for the entire voting window.
 
 If a delegator votes differently to its delegate, the delegate's vote will be *overriden* 
@@ -114,9 +114,9 @@ There are two types of thresholds:
     - Fraction of total staked `NAM` that voted - This checks whether enough staked `NAM` voted for the proposal at all.
     - Fraction of votes in favor of the proposal - This checks whether enough votes (weighted by their staked `NAM`) voted in favor of the proposal, out of the staked `NAM` that did vote.
 
-E.g if the thresholds, respectively, are $\frac{1}{2}$ and $\frac{1}{3}, then at least 50% of the total staked `NAM` must have voted for the proposal AND out of this NAM, to be accepted.
+E.g if the thresholds, respectively, are $\frac{1}{2}$ and $\frac{1}{3}$, then at least 50% of the total staked `NAM` must have voted for the proposal AND out of this NAM, to be accepted.
 
-Tallying, is computed with the following rules:
+Tallying is computed with the following rules:
 
 <Steps>
 
