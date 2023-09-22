@@ -1,0 +1,142 @@
+# Shielded Transfer
+
+## Introduction and approach
+To integrate a sapling-like circuit (as MASP) into Namada we have to take the differences between the execution models
+between Namada and Zcash, for which sapling was originally specified.
+AS Zcash does not follow exactly a UTXO model, due to the presence of Notes in architecture. However, the spending of a
+note in Zcash is designed to minimize the distance between a pure UTXO model and a note-based architecture.
+Namada, on the other and, uses an account-state model for execution. The approach used is to embed a Zcash transaction (as
+specified within the zcash specification) in a Namada transfer object.
+
+## Transfer and Transaction
+Here we are going to describe how we embed transactions as described in zcash, into Namada-compatible transfer objects.
+
+### Transparent Input Format
+The input data structure describes how much of each asset is being deducted from certain accounts. More precisely, it is
+as follows:
+```
+struct TxIn {
+    // Source address
+    address: Address,
+    // Asset identifier for this input
+    token: AssetType,
+    // Asset value in the input
+    amount: u64,
+    // A signature over the hash of the transaction
+    sig: Signature,
+    // Used to verify the owner's signature
+    pk: PublicKey,
+}
+```
+Note that the signature and public key are required to authenticate the deductions.
+### Transparent Output Format
+The output data structure decribes how much is being added to certain accounts. More precisely, it is as follows:
+```
+struct TxOut {
+    // Destination address
+    address: Address,
+    // Asset identifier for this output
+    token: AssetType,
+    // Asset value in the output
+    amount: u64,
+}
+```
+Note that in contrast to Sapling's UTXO based approach, our transparent inputs/outputs are based on the account model used
+in the rest of Namada.
+
+### Note Format
+The note structure needs to encode an asset's type, its quantity and its owner. In our implementation has the following format:
+```
+struct Note {
+  // Diversifier for recipient address
+  d: jubjub::SubgroupPoint,
+  // Diversified public transmission key for recipient address
+  pk_d: jubjub::SubgroupPoint,
+  // Asset value in the note
+  value: u64,
+  // Pedersen commitment trapdoor
+  rseed: Rseed,
+  // Asset identifier for this note
+  asset_type: AssetType,
+  // Arbitrary data chosen by note sender
+  memo: [u8; 512],
+}
+```
+For cryptographic details and further information, see
+[Note Plaintexts and Memo Fields](https://zips.z.cash/protocol/protocol.pdf#noteptconcept).
+
+Diversifiers are selected by the client and used to diversify addresses and their associated keys. `v` and `t` identify
+the asset type and value. Asset identifiers are derived from asset names, which are arbitrary strings (in this case,
+token/other asset VP addresses). The derivation must deterministically result in an identifier which hashes to a valid
+curve point.
+
+### Transaction Format
+The transaction data structure comprises a list of transparent inputs and outputs as well as a list of shielded inputs
+and outputs. More precisely:
+```
+struct Transaction {
+    // Transaction version
+    version: u32,
+    // Transparent inputs
+    tx_in: Vec<TxIn>,
+    // Transparent outputs
+    tx_out: Vec<TxOut>,
+    // The net value of Sapling spends minus outputs
+    value_balance_sapling: Vec<(u64, AssetType)>,
+    // A sequence ofSpend descriptions
+    spends_sapling: Vec<SpendDescription>,
+    // A sequence ofOutput descriptions
+    outputs_sapling: Vec<OutputDescription>,
+    // A binding signature on the SIGHASH transaction hash,
+    binding_sig_sapling: [u8; 64],
+}
+```
+
+For the cryptographic constraints and further information, see
+[Transaction Encoding and Consensus](https://zips.z.cash/protocol/protocol.pdf#txnencoding).
+Note that this structure slightly deviates from Sapling due to the fact that `value_balance_sapling` needs to be provided
+for each asset type.
+
+### Shielded transfers
+
+Shielded transfers are implemented as an optional extension to transparent ledger transfers. The optional `shielded`
+field in combination with the `source` and `target` field determine whether the transfer is shielding, shielded, or
+unshielded. See the transfer format below:
+```
+/// A simple bilateral token transfer
+#[derive(..., BorshSerialize, BorshDeserialize, ...)]
+pub struct Transfer {
+    /// Source address will spend the tokens
+    pub source: Address,
+    /// Target address will receive the tokens
+    pub target: Address,
+    /// Token's address
+    pub token: Address,
+    /// The amount of tokens
+    pub amount: Amount,
+    /// The unused storage location at which to place TxId
+    pub key: Option<String>,
+    /// Shielded transaction part
+    pub shielded: Option<Transaction>,
+}
+```
+The conditions necessary for a valid shielded or unshielded transfer are outlined:
+* A shielded component equal to `None` indicates a transparent Namada transaction
+* Otherwise the shielded component must have the form `Some(x)` where `x` has the transaction encoding.
+* Hence for a shielded transaction to be valid:
+  * the `Transfer` must satisfy the usual conditions for Namada ledger transfers (i.e. sufficient funds, ...) as enforced by token and account validity predicates
+  * the `Transaction` must satisfy the conditions specified in the [Multi-Asset Shielded Pool Specification](https://github.com/anoma/masp/blob/main/docs/multi-asset-shielded-pool.pdf)
+  * the `Transaction` and `Transfer` together must additionally satisfy the below boundary conditions intended to ensure consistency between the MASP validity predicate ledger and Namada ledger
+* A key equal to `None` indicates an unpinned shielded transaction; one that can only be found by scanning and trial-decrypting the entire shielded pool
+* Otherwise the key must have the form `Some(x)` where `x` is a `String` such that there exists no prior accepted transaction with the same key
+
+## Remarks
+Below are miscellaneous remarks on the capabilities and limitations of the current MASP implementation:
+* The gas fees for shielded transactions are charged to the signer just like it is done for transparent transactions: as
+a consequence, an amount exceeding the gas fees must be available in a transparent account in order to execute an
+unshielding transaction - this prevents denial of service attacks
+* Using the MASP sentinel transaction key for transaction signing indicates that gas be drawn from the transaction's
+transparent value pool. In this case, the gas will be taken from the MASP transparent address if the shielded transaction is proven to be valid
+* With knowledge of its key, a pinned shielded transaction can be directly downloaded or proven non-existent without scanning the entire blockchain
+  * It is recommended that pinned transaction's key be derived from the hash of its payment address, something that both transaction parties would share
+  * This key must not be reused, this is in order to avoid revealing that multiple transactions are going to the same entity

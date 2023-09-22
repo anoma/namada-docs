@@ -1,7 +1,9 @@
 {
-  "ledger-integration": "Ledger integration",
+  "background": "Background",
+  "shielded-transfer": "Shielded Transfer",
+  "storage-interface": "Storage Interface",
+  "masp-vp": "MASP Validity Predicate",
   "asset-type": "Asset type",
-  "burn-and-mint": "Burn & mint",
-  "convert-circuit": "Convert circuit",
+  "masp-zcash-diff": "MASP Zcash Protocol Specification Differences",
   "trusted-setup": "Trusted setup"
 }
