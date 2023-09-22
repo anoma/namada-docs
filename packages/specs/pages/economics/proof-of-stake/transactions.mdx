@@ -10,7 +10,7 @@ A validator can bond tokens to themselves, or a non-validator account can bond t
 
 The bond transaction will only execute if:
 - the `amount` is greater than 0
-- the `source_address` is a non-validator account that exists on chain
+- the `source_address` is a non-validator account that exists on chain (if not a self-bond)
 - the `validator_address` is a true validator account
 - the `source_address` has enough tokens to bond
 
@@ -20,9 +20,33 @@ Bond execution:
 2. Increments the `validator`'s `total_bonded` at the pipeline epoch.
 3. Increments the `validator`'s deltas and total deltas at the pipeline epoch.
 4. Updates the validator set at the pipeline epoch if the `validator` is not jailed.
+5. Transfers tokens from the `source` account to the PoS account.
 
 ## Unbonding
 
+`namadac unbond --source <source_address> --validator <validator_address> --amount <amount>`
+
+An unbond transactions will only execute if:
+- the `amount` is greater than 0
+- the `source_address` is a non-validator account that exists on chain (if not a self-bond)
+- the `validator_address` is a true validator account
+- the `validator` is not *frozen* - it does not have any pending slashes yet to be processed
+- there are at least `amount` tokens remaining in the bond
+
+When unbonding tokens, the [bonds](../storage.md#bonds) and the [delegator's redelegated bonds](../storage.mdx#delegator-redelegated-bonds) are decremented in place, starting with the future-most epochs that have tokens. If there are both redelegated and non-redelegated tokens contributing to a bond, then the redelegated tokens are first unbonded before any non-redelegated tokens.
+
+The `unbond_tokens` underlying function that is called during unbonding is also called when redelegating tokens. However, some steps are only executed in the event that it is not a redelegation.
+
+Notes on execution:
+
+1. Find the bond epochs to remove and the bond epoch whose bond amount needs to be modified.
+2. Compute the modified redelegated bond if there are any redelegated tokens in the bond that must be modified.
+3. Compute new unbond amounts resulting from this unbond call.
+4. Update (remove and modify) the [bonds](../storage.md#bonds) in storage.
+5. **If not a redelegation**, update the [unbonds](../storage.md#unbonds) in storage by incrementing with the new unbonds from step 3.
+6. Compute new redelegated unbond amounts resulting from this unbond call.
+7. Update (remove and modify) the [redelegated bonds](../storage.md#delegator-redelegated-bonds) in storage.
+8. **If not a redelegation**, 
 
 ## Withdrawing
 
