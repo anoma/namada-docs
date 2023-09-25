@@ -4,10 +4,13 @@ import Expandable from '../../components/Expandable';
 
 The Namada software development kit (SDK) can be found in the `namada` repo under the path [`namada/shared`](https://github.com/anoma/namada/tree/main/shared). The SDK is written in Rust and can be used to interact with the Namada blockchain, by constructing transactions, signing them, and submitting them to the network.
 
+## Quick Start
+
+A good starting point to see the SDK in use is to check-out the [namada interface](https://github.com/anoma/namada-interface/tree/main/packages/shared/lib/src/sdk) repo. This repo contains a simple web application that uses the SDK to interact with the Namada blockchain. However, it is important to note the added complexity arising from the application integrating javascript using [wasm-bindgen](https://rustwasm.github.io/docs/wasm-bindgen/), which is not necesary.
+
 ## Installation
 
 The Namada SDK can be installed by creating a new Rust project and adding the following to the `Cargo.toml` file:
-
 
 
 <Expandable>
