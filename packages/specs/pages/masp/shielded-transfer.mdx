@@ -1,9 +1,7 @@
 # Shielded Transfer
 
 ## Introduction and approach
-To integrate a sapling-like circuit (as MASP) into Namada we have to take the differences between the execution models
-between Namada and Zcash, for which sapling was originally specified.
-AS Zcash does not follow exactly a UTXO model, due to the presence of Notes in architecture. However, the spending of a
+Namada's execution model differs from that of Zcash, and for this reason adjustments were made to accommodate.  However, the spending of a
 note in Zcash is designed to minimize the distance between a pure UTXO model and a note-based architecture.
 Namada, on the other and, uses an account-state model for execution. The approach used is to embed a Zcash transaction (as
 specified within the zcash specification) in a Namada transfer object.
