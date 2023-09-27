@@ -7,7 +7,7 @@ This can be a bit tricky, but the below boilerplate code should do the trick:
 use std::path::PathBuf;
 
 use namada::{
-    ledger::{
+    sdk::{
         args::{self, InputAmount},
         signing::{self, SigningTxData},
         tx::ProcessTxResponse,
@@ -19,7 +19,7 @@ use namada::{
         key::common::{self, SecretKey},
         masp::{TransferSource, TransferTarget},
         token::{self, DenominatedAmount, NATIVE_MAX_DECIMAL_PLACES},
-        transaction::GasLimit,
+        transaction::GasLimit, io::DefaultIo,
     },
 };
 
@@ -90,11 +90,11 @@ impl NamadaSdk {
         default_signer: Option<Address>,
         args: &args::Tx,
     ) -> SigningTxData {
-        signing::aux_signing_data(
+        signing::aux_signing_data::<_, _, DefaultIo>(
             &self.http_client,
             &mut self.wallet.wallet,
             args,
-            &owner,
+            owner,
             default_signer,
         )
         .await
@@ -106,7 +106,7 @@ impl NamadaSdk {
     }
 
     pub async fn process_tx(&mut self, tx: Tx, args: &args::Tx) -> ProcessTxResponse {
-        namada::ledger::tx::process_tx(&self.http_client, &mut self.wallet.wallet, args, tx)
+        namada::sdk::tx::process_tx::<_,_,DefaultIo>(&self.http_client, &mut self.wallet.wallet, args, tx)
             .await
             .unwrap()
     }
@@ -139,7 +139,7 @@ impl NamadaSdk {
         args: args::TxTransfer,
         fee_payer: common::PublicKey,
     ) -> Tx {
-        let (tx, _) = namada::ledger::tx::build_transfer(
+        let (tx, _) = namada::sdk::tx::build_transfer::<_,_,_,DefaultIo>(
             &self.http_client,
             &mut self.wallet.wallet,
             &mut self.shielded_ctx.shielded_context,
@@ -162,7 +162,7 @@ It is just important that the `SheldedContext` is imported somewhere, and we can
 ```rust
 use borsh::{BorshDeserialize, BorshSerialize};
 use masp_proofs::prover::LocalTxProver;
-use namada::ledger::masp::{ShieldedContext, ShieldedUtils};
+use namada::sdk::masp::{ShieldedContext, ShieldedUtils};
 
 #[derive(Default)]
 pub struct SdkShieldedCtx {
