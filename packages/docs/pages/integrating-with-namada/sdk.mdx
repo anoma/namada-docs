@@ -24,64 +24,67 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-trait = {version = "0.1.51"}
-tiny-bip39 = "0.8.2"
-borsh = "0.9.0"
-chrono = "0.4.22"
-getrandom = { version = "0.2.7", features = ["js"] }
-gloo-utils = { version = "0.1.5", features = ["serde"] }
+[package]
+name = "namada-sdk"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.6.20", features = ["tower-log"] }
+tokio = { version = "1.0", features = ["full"] }
+tower = { version = "0.4", features = [
+    "util",
+    "timeout",
+    "load-shed",
+    "limit",
+    "buffer",
+] }
+tower-http = { version = "0.4.4", features = [
+    "compression-full",
+    "limit",
+    "trace",
+    "cors",
+] }
+tower-layer = "0.3.2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+serde = { version = "1.0.138", features = ["derive"] }
+serde_json = "1.0"
+clap = { version = "4.4.2", features = ["derive", "env"] }
+lazy_static = "1.4.0"
+anyhow = "1.0.75"
+thiserror = "1.0.48"
+validator = { version = "0.16.0", features = ["derive"] }
+async-trait = "0.1.73"
+chrono = { version = "0.4.30", features = ["serde"] }
+rand = "0.8.5"
+rand_chacha = "0.3.1"
+dotenvy = "0.15.7"
+hex = "0.4.3"
+namada = { git = "https://github.com/anoma/namada", rev = "v0.23.0", default-features = false, features = ["abciplus", "namada-sdk", "async-send"] }
+borsh = "0.9.4"
+orion = "0.17.5"
+data-encoding = "2.4.0"
+reqwest = "0.11.20"
+zeroize = "1.6.0"
 masp_primitives = { git = "https://github.com/anoma/masp", rev = "50acc5028fbcd52a05970fe7991c7850ab04358e" }
 masp_proofs = { git = "https://github.com/anoma/masp", rev = "50acc5028fbcd52a05970fe7991c7850ab04358e", default-features = false, features = ["local-prover"] }
-namada = { git = "https://github.com/anoma/namada", rev="e31b7c2fd74ff32afc11380c9fedfb65fd58140b", default-features = false, features = ["abciplus", "namada-sdk"] }
-prost = "0.9.0"
-prost-types = "0.9.0"
-rand = "0.8.5"
-serde = "1.0.144"
-serde_json = "1.0"
-thiserror = "^1"
-wasm-bindgen = "0.2.86"
-wasm-bindgen-futures = "0.4.33"
-console_error_panic_hook = "0.1.6"
-zeroize = "1.6.0"
-tendermint-config = {git="https://github.com/heliaxdev/tendermint-rs.git", rev="02b256829e80f8cfecf3fa0d625c2a76c79cd043"}
-tendermint-rpc = {git="https://github.com/heliaxdev/tendermint-rs.git", rev="02b256829e80f8cfecf3fa0d625c2a76c79cd043", features = ["http-client"]}
-tokio = {version="1.32.0", default-features = false, features = ["macros", "rt-multi-thread"]}
-reqwest = { version="0.11.19", features = ["json"] }
-toml = "0.7.6"
-file-lock = "2.1.10"
-fs2 = "0.4.3"
-mktemp = "0.5.0"
-
-[dev-dependencies]
-wasm-bindgen-test = "0.3.13"
+axum-macros = "0.3.8"
 
 [patch.crates-io]
 borsh = {git = "https://github.com/heliaxdev/borsh-rs.git", rev = "cd5223e5103c4f139e0c54cf8259b7ec5ec4073a"}
-borsh-derive = {git = "https://github.com/heliaxdev/borsh-rs.git", rev = "cd5223e5103c4f139e0c54cf8259b7ec5ec4073a"}
-borsh-derive-internal = {git = "https://github.com/heliaxdev/borsh-rs.git", rev = "cd5223e5103c4f139e0c54cf8259b7ec5ec4073a"}
-borsh-schema-derive-internal = {git = "https://github.com/heliaxdev/borsh-rs.git", rev = "cd5223e5103c4f139e0c54cf8259b7ec5ec4073a"}
 
-# https://doc.rust-lang.org/cargo/reference/profiles.html
+[profile.ephemeral-build]
+inherits = "release"
+incremental = false
+lto = "thin"
+opt-level = 2
+codegen-units = 64
+strip = "symbols"
+debug = false
+
 [profile.release]
-lto = true
-opt-level = "s"
-
-[profile.dev]
-opt-level = "s"
-
-# wasm-pack sepcific configuration
-[package.metadata.wasm-pack.profile.release]
-# https://docs.rs/wasm-opt/latest/wasm_opt/
-wasm-opt = ['-O4']
-
-[package.metadata.wasm-pack.profile.dev]
-wasm-opt = false
-
-[package.metadata.wasm-pack.profile.dev.wasm-bindgen]
-omit-default-module-path = true
-
-[package.metadata.wasm-pack.profile.release.wasm-bindgen]
-omit-default-module-path = true
+incremental = false
 ```
 
 </Expandable>
