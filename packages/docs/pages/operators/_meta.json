@@ -2,6 +2,6 @@
     "ledger": "Running a full node",
     "validators": "Validators",
     "local-network": "Setting up a local network",
-    "ibc": "IBC on Namada",
+    "ibc": "IBC Relayers",
     "troubleshooting": "Troubleshooting"
 }

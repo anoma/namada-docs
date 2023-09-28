@@ -1,9 +1,9 @@
 import { Callout } from 'nextra-theme-docs'
 import Expandable from '../../components/Expandable'
 
-# Using IBC with Namada
+# Relaying on Namada
 
-This document describes using the inter-blockchain communication (IBC) protocol with Namada. This documentation covers being able to create connections through IBC as well as setting up local instances of Namada for testing purposes.
+This document describes how to operate a relayer for the Inter-Blockchain Communication (IBC) protocol with Namada. This documentation covers being able to create connections through IBC as well as setting up local instances of Namada for testing purposes.
 
 
 This document covers essential steps for using IBC with Namada:
@@ -12,11 +12,10 @@ This document covers essential steps for using IBC with Namada:
 2. [Install Hermes](#install-hermes)
 3. [Setting up the relayer](#setting-up-the-relayer)
 4. [Start the relayer](#start-the-relayer)
-5. [Transferring assets over IBC](#transferring-assets-over-ibc)
-6. [Set up local Namada instances](#set-up-local-namada-instances-using-the-hermes-script)
+5. [Set up local Namada instances](#set-up-local-namada-instances-using-the-hermes-script)
 
-The below is intended for those that wish to conduct IBC message transfers between two Namada chains. There is of course the capability to do this between any two IBC compatible chains (such as a Cosmos chain).
-In this case, it is necessary to have a node of both the destination and the source chain running in order to make any package transfers.
+The below is intended for those that wish to relay IBC message transfers between two Namada chains. There is of course the capability to do this between any two IBC compatible chains (such as a Cosmos chain).
+In this case, it is necessary to have a node running on both the destination and the source chain in order to make any package transfers.
 Below, we discuss first how to enable this connection between two pre-existing chains by Hermes, and second, setting up two Namada local instances or joining two pre-existing Namada instances for this purpose.
 
 
@@ -282,60 +281,8 @@ hermes --config $HERMES_CONFIG \
   --new-client-connection --yes
 ```
 
-## Transferring assets over IBC
-This will make transfers across chains by Namada CLI. This assumes that a channel has been created and Hermes is running with the proper config.
-
-In order to do this by Namada's `ibc-transfer` command, we will need to know the `base-dir` and `node` of each instance (and other transfer parameters).
-`base-dir` is the base directory of each node. If you have used the script, the directory is `${HERMES}/data/namada-*/.namada`.
-`node` is `rpc_addr` in the relevant Hermes' config file.
-You can run
-```shell
-grep "rpc_addr" ${HERMES_CONFIG}
-```
-to find the address.
-
-<Callout>
- **For the local node ONLY**
-
- To find your ledger address for Chain A, you can run the following command
- ```bash copy
- export BASE_DIR_A = "${HERMES}/data/namada-a/.namada"
- export LEDGER_ADDRESS_A = "$(grep "rpc_address" ${BASE_DIR_A}/${CHAIN_A_ID}/setup/validator-0/.namada/${CHAIN_A_ID}/config.toml)"
- ```
-</Callout>
-
-The channel ID for this chain will depend on the order in which one created the channel. Since we have only opened one channel, the `channel-id` is `channel-0`, but as more are created, these increase by index incremented by 1. Please refer to [here](#create-ibc-channel).
-
-Assuming that the open channel is `channel-0`, you can save it in an environment variable by running
-```bash copy
-export CHANNEL_ID = "channel-0"
-```
-
-The inter-blockchain transfers from Chain A can be achieved by
-```bash copy
-namadac --base-dir ${BASE_DIR_A}
-    ibc-transfer \
-        --amount ${AMOUNT} \
-        --source ${SOURCE_ALIAS} \
-        --receiver ${RECEIVER_RAW_ADDRESS} \
-        --token ${TOKEN_ALIAS} \
-        --channel-id ${CHANNEL_ID} \
-        --node ${LEDGER_ADDRESS_A}
-```
-Where the above variables in `${VARIABLE}` must be substituted with appropriate values. The raw address of the receiver can be found by `namadaw --base-dir ${BASE_DIR_B} address find --alias ${RECEIVER}`.
-
-E.g.
-```bash copy
-namadac --base-dir ${BASE_DIR_A}
-    ibc-transfer \
-    --amount 100 \
-    --source albert \
-    --receiver atest1d9khqw36g56nqwpkgezrvvejg3p5xv2z8y6nydehxprygvp5g4znj3phxfpyv3pcgcunws2x0wwa76 \
-    --token nam \
-    --channel-id channel-0 \
-    --node 127.0.0.1:27657
-```
-
+### Transferring assets over IBC
+It is now possible to [transfer assets between the two chains.](../users/ibc.mdx)
 
 ## Set up local Namada instances using the hermes script
 The script `setup-namada` will set up two instances with one validator node, copy necessary files for Hermes, and make an account for Hermes on each ledger. Also, it will make a Hermes' config file `config_for_namada.toml` in the `hermes` directory.
