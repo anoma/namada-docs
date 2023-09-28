@@ -5,5 +5,5 @@
   "fees": "Fees on Namada",
   "delegators": "Delegating stake on Namada",
   "governance": "Governance and Public Goods Funding",
-  "experimental": "Experimental features"
+  "ibc": "IBC transfers"
 }

@@ -6,18 +6,6 @@ After [joining the network as a full node](../../ledger/running-a-full-node.md),
 
 After this has been completed, you will need to increase your validator's `bonded-stake`, which can be done by self-bonding tokens sourced from the faucet.
 
-## Faucet
-
-In order to gain more NAM, the following command can be run: 
-```shell copy
-namadac transfer \
-    --token NAM \
-    --amount 1000 \
-    --source faucet \
-    --target $VALIDATOR_ALIAS \
-    --signing-keys $VALIDATOR_ALIAS
-```
-Note: A maximum amount of 1000 NAM can be sourced from the faucet per transaction, so to get more, run this multiple times.
 
 ## Bonding
 

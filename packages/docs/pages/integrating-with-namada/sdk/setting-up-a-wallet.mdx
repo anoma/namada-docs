@@ -29,7 +29,7 @@ impl SdkWallet {
         let mut wallet = Wallet::new(PathBuf::new(), store);
         let stored_keypair = StoredKeypair::Raw(sk.clone());
         let pk_hash = PublicKeyHash::from(&sk.to_public());
-        let alias = "my_faucet".to_string();
+        let alias = "alice".to_string();
         wallet.insert_keypair(alias, stored_keypair, pk_hash, true);
         wallet.add_address("nam", nam_address, true);
         Self { wallet }

@@ -2,25 +2,11 @@ import { Callout } from 'nextra-theme-docs'
 
 # The PoW Solution on Namada
 
-In order to combat the "costlessness of blockspace" problem with a testnet, and hence prevent DOS attacks as a result, when a Namada account does not have the required fees to pay for a transaction, the user must complete a Proof of Work challenge. The difficulty of this challenge is a parameter set by governance, and will dictate the (average) computational expenditure needed in order to complete the challenge.
+As of `v0.23.0`, the Namada faucet has been moved to be an API call to a server. In order to request tokens, a proof of work challenge must be completed, in order to prevent spamming of the faucet.
 
 <Callout type="warning">
-Note that this current fix will be not be included in Mainnet as it is circumstantial to testnet.
+Note that this is not included in Mainnet as it is circumstantial to testnet.
 </Callout>
 
-In order to avoid having to complete endless Proof of Work challenges, we recommend using the faucet to fund the implicit account as one of a user's first transactions:
+Since [fees are paid by implicit accounts](../../users/fees.mdx), it is recommended to source NAM to one of these accounts as the first step. Afterwards, using the `--gas-payer` flag, you can specify the address of the implicit account to pay for the transaction.
 
-```shell copy
-namada client transfer \
-  --source faucet \
-  --target keysha \
-  --token NAM \
-  --amount 1000 \
-  --signing-keys keysha
-```
-which will allow the key with alias `keysha` to sign future transactions and pay for any further fees.
-
-
-# The PoW Faucet
-
-The Faucet on Namada will always require users to complete a PoW challenge, regardless of the balance of the implicit account.
