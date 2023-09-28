@@ -6,5 +6,6 @@
   "joining-the-testnet": "Joining the latest Testnet",
   "post-genesis-validator": "Becoming a validator after genesis",
   "testnet-history": "History of Testnets",
-  "pow": "Using the testnet faucet"
+  "pow": "Using the testnet faucet",
+  "faq": "FAQ"
 }

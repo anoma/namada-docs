@@ -41,7 +41,7 @@ impl NamadaSdk {
     }
 
     pub fn get_secret_key(&mut self) -> SecretKey {
-        self.wallet.wallet.find_key("my_faucet", None).unwrap()
+        self.wallet.wallet.find_key("alice", None).unwrap()
     }
 
     pub fn get_address(&self, alias: String) -> Address {
