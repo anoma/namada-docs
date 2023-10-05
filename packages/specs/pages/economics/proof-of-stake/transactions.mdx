@@ -4,9 +4,11 @@ The following details the execution of each transaction in the proof of stake sy
 
 ## Bonding
 
+Client command:
+
 `namadac bond --source <source_address> --validator <validator_address> --amount <amount>`
 
-A validator can bond tokens to themselves, or a non-validator account can bond tokens to a validator. In the event of a validator self-bond, no argument is passed to the `--source`. Bonding is still permitted even if the `validator` is jailed.
+A validator can bond tokens to themselves (self-bond), or a non-validator account can bond tokens to a validator (delegation). In the event of a validator self-bond, no argument is passed to the `--source`. Bonding is still permitted even if the `validator` is jailed.
 
 The bond transaction will only execute if:
 - the `amount` is greater than 0
@@ -16,40 +18,82 @@ The bond transaction will only execute if:
 
 Bond execution:
 
-1. Increments the `source-validator` pair's bond at the pipeline epoch.
-2. Increments the `validator`'s `total_bonded` at the pipeline epoch.
+1. Increments the `source-validator` pair's `bond` at the pipeline epoch.
+2. Increments the `validator_total_bonded` at the pipeline epoch.
 3. Increments the `validator`'s deltas and total deltas at the pipeline epoch.
 4. Updates the validator set at the pipeline epoch if the `validator` is not jailed.
 5. Transfers tokens from the `source` account to the PoS account.
 
 ## Unbonding
 
+Client command:
+
 `namadac unbond --source <source_address> --validator <validator_address> --amount <amount>`
 
-An unbond transactions will only execute if:
+An unbond transaction will only execute if:
 - the `amount` is greater than 0
 - the `source_address` is a non-validator account that exists on chain (if not a self-bond)
 - the `validator_address` is a true validator account
 - the `validator` is not *frozen* - it does not have any pending slashes yet to be processed
 - there are at least `amount` tokens remaining in the bond
 
-When unbonding tokens, the [bonds](../storage.md#bonds) and the [delegator's redelegated bonds](../storage.mdx#delegator-redelegated-bonds) are decremented in place, starting with the future-most epochs that have tokens. If there are both redelegated and non-redelegated tokens contributing to a bond, then the redelegated tokens are first unbonded before any non-redelegated tokens.
+When unbonding tokens, the [bonds](../storage.md#bonds), [validator total bonded](../storage.md#validator-total-bonded) and the [delegator redelegated bonds](../storage.mdx#delegator-redelegated-bonds) are decremented in place, starting with the future-most epochs that have tokens. If there are both redelegated and non-redelegated tokens contributing to a bond, then the redelegated tokens are first unbonded before any non-redelegated tokens.
 
 The `unbond_tokens` underlying function that is called during unbonding is also called when redelegating tokens. However, some steps are only executed in the event that it is not a redelegation.
 
-Notes on execution:
+Flow of execution:
 
 1. Find the bond epochs to remove and the bond epoch whose bond amount needs to be modified.
 2. Compute the modified redelegated bond if there are any redelegated tokens in the bond that must be modified.
-3. Compute new unbond amounts resulting from this unbond call.
+3. Compute new unbond amounts resulting from this unbond call alone.
 4. Update (remove and modify) the [bonds](../storage.md#bonds) in storage.
 5. **If not a redelegation**, update the [unbonds](../storage.md#unbonds) in storage by incrementing with the new unbonds from step 3.
-6. Compute new redelegated unbond amounts resulting from this unbond call.
+6. Compute new redelegated unbond amounts resulting from this unbond call alone.
 7. Update (remove and modify) the [redelegated bonds](../storage.md#delegator-redelegated-bonds) in storage.
-8. **If not a redelegation**, 
+8. **If not a redelegation**, update the [redelegated unbonds](../storage.md#delegator-redelegated-unbonds) in storage by incrementing with the new redelegated unbonds from step 6.
+9. Update the [validator total bonded](../storage.md#validator-total-bonded) and [validator total unbonded](../storage.md#validator-total-unbonded) in storage using the new unbonds from step 3.
+10. Update the [validator total redelegated bonded](../storage.md#validator-total-redelegated-bonded) and [validator total redlegated unbonded](../storage.md#validator-total-redelegated-unbonded) in storage using the new redelegated unbonds from step 6.
+11. Compute the remaining amount in the unbond after applying slashes.
+12. **If the validator is not jailed**, update the validator sets.
+13. Decrement the `validator_deltas` and `total_deltas` with the slashed unbond amount.
 
 ## Withdrawing
+
+Client command:
+
+`namadac withdraw --source <source_address> --validator <validator_address> --amount <amount>`
+
+A withdraw transaction will only execute if:
+- an `unbond` exists in storage for the `source-validator` pair.
+
+When this transaction is executed, the tokens within all unbonds and redelegated unbonds that have `withdrawal_epoch` earlier than or equal to the `current_epoch` are withdrawn. Relevant slashes that were discovered after the `unbond` transaction are also applied when computing the correct amount to send the `source` of the withdrawal.
+
+Flow of execution:
+
+1. Find and collect all unbonds with `withdrawal_epoch <= current_epoch` and the corresponding redelegated unbonds, if they exist.
+2. Apply slashes to compute the total remaining amount of tokens to return to the `source` from all relevant unbonds.
+3. Transfer the final token amount from the `PoS` account to the `source` account.
 
 
 ## Redelegation
 
+Client command:
+
+`namadac redelegate --owner <delegator_address> --src_validator <src_validator_address> --dest_validator <dest_validator_address> --amount <amount>`
+
+A redelegation transaction will only execute if:
+- the `delegator_address` is a non-validator account that exists on chain
+- the `src_validator_address` and `dest_validator_address` are different validator accounts
+- there is not a *chained redelegation*: if the `src_validator_address` is holding any previously redelegated tokens, enough time must have passed such that these tokens cannot be slashed anymore
+
+When executing a redelegation, the protocol will first unbond the token `amount` from the `src_validator_address`, executing the steps described in the [unbonding](#unbonding) section, excluding those that only occur if a redelegation is not occurring. Afterward, the new bond is recorded by applying slashes to the unbonded amount, and other redelegation-related data is updated in storage.
+
+Flow of execution:
+
+1. Unbond the `amount` from the `src_validator_address` by executing the steps described in the [unbonding](#unbonding) section for a redelegation. This function call returns both a total slashed unbond amount and a map of these slashed unbond amounts keyed by the epochs at which they originally contributed to the `src_validator_address`.
+2. Increment the `delegator-dest_validator` redelegated bonds and the `dest_validator`'s `total_redelegated_bonded` using the slashed amounts map computed from the unbond call.
+3. Increment the `delegator-dest_validator` bond and the `dest_validator`'s `total_bonded` at the pipeline epoch using the total slashed amount from the unbond call.
+4. Update the `src_validator`'s `outgoing_redelegations`.
+5. Update the `dest_validator`'s `incoming_redelegations`.
+6. **If the `dest_validator` is not jailed**, update the validator sets.
+7. Increment the `dest_validator`'s deltas and the `total_deltas` with the total slashed amount.
