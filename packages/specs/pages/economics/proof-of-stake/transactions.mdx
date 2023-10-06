@@ -97,3 +97,58 @@ Flow of execution:
 5. Update the `dest_validator`'s `incoming_redelegations`.
 6. **If the `dest_validator` is not jailed**, update the validator sets.
 7. Increment the `dest_validator`'s deltas and the `total_deltas` with the total slashed amount.
+
+## Initialize validator
+
+Client command:
+
+`namadac init-validator`
+
+TODO: decide what exactly to say
+
+A transaction that can be submitted to instantiate a validator account post-genesis. A successful transaction will initialize the validator account with 0 staked tokens in the PoS system at the pipeline epoch.
+
+A validator initialization transaction will only execute if:
+- the provided `commission_rate` and `max_commission_rate_change` are valid
+- if provided, the `consensus_key` is an ed25519 key
+- if provided, the `eth_cold_key` and `eth_hot_key` are secp256k1 keys
+- the `consensus_key` is unique against all other validator `consensus_key`s_
+
+Flow of execution:
+
+1. Initialize the validator account storage with the validator VP, address, some keys with a specified multi-signature threshold.
+2. Initialize the validator's PoS data, which includes some more keys, the deltas, the commission rate, and the max commission change.
+3. Set the validator state as `BelowThreshold` since it starts with no staked tokens.
+
+## Unjail validator
+
+Client command:
+
+`namadac unjail-validator --validator <validator_address>`
+
+A transaction that can be submitted by a jailed validator to get itself reinstated into the validator set. A successful unjailing transaction will reinsert the validator back into the validator set at the pipeline epoch relative to the epoch of transaction submission.
+
+An unjail transaction will only execute if:
+- the validator is jailed for at every epoch from the current one through the pipeline epoch
+- the validator is not *frozen* - it does not have any pending slashes yet to be processed
+
+Flow of execution:
+
+1. Update the validator sets at the pipeline epoch according to the stake of the jailed validator at the pipeline epoch.
+
+## Change validator commission rate
+
+Client command:
+
+`namadac change-commission-rate --validator <validator_address> --commission-rate <new_rate>`
+
+A transaction that can be submitted by a validator to change its commission rate for the staking rewards of its delegators. A successful transaction will set the `new_rate` at the pipeline epoch.
+
+A commission rate change transaction will only execute if:
+- the `new_rate` is a value between 0 and 1
+- the `new_rate` is different from the current rate at the pipeline epoch
+- the absolute value difference between `new_rate` and the current rate at the epoch before the pipeline epoch is less than or equal to the validator's `max_commission_rate_change`
+
+Flow of execution:
+
+1. Set the `new_rate` to be the commission rate at the pipeline epoch.
