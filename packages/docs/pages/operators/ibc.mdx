@@ -138,7 +138,7 @@ tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
 ```bash copy
 export TAG="v1.6.0-namada-beta3"
 
-git clone git@github.com:heliaxdev/hermes.git
+git clone https://github.com/heliaxdev/hermes.git
 git checkout $TAG
 cd hermes
 cargo build --release --bin hermes
@@ -287,7 +287,7 @@ It is now possible to [transfer assets between the two chains.](../users/ibc.mdx
 ## Set up local Namada instances using the hermes script
 The script `setup-namada` will set up two instances with one validator node, copy necessary files for Hermes, and make an account for Hermes on each ledger. Also, it will make a Hermes' config file `config_for_namada.toml` in the `hermes` directory.
 ```bash copy
-git clone git@github.com:heliaxdev/hermes.git
+git clone https://github.com/heliaxdev/hermes.git
 git checkout $TAG # The branch is the same as our Hermes
 cd hermes
 ./scripts/setup-namada $NAMADA_DIR $CHAIN_ID_A $CHAIN_ID_B
