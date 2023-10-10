@@ -88,5 +88,5 @@ jobs:
       - name: Install tools
         run: |
           curl -k https://installer.heliax.click/${{ matrix.lychee_version }}! | bash
-      - name: Check broken links for {{ matrix.make.name }}
-        run: lychee packages/{{ matrix.make.path }}/pages/
+      - name: Check broken links for ${{ matrix.make.name }}
+        run: lychee packages/${{ matrix.make.path }}/pages/
