@@ -21,8 +21,8 @@ Below, we discuss first how to enable this connection between two pre-existing c
 
 ## Setup Hermes
 Hermes is an IBC relayer to relay IBC packets between chains (instances).
-We have our [fork of Hermes supporting Namada instances](https://github.com/heliaxdev/hermes/tree/1.6.0-namada).
-Before packet relay, we need the following steps to configure and start Hermes.
+Namada uses a [fork of Hermes supporting Namada instances](https://github.com/heliaxdev/hermes/tree/1.6.0-namada).
+Before packet relay, the user needs the following steps to configure and start Hermes.
 
 1. Make Hermes config file
 2. Create IBC client/connection/channel between instances
@@ -113,7 +113,7 @@ These are the pieces of this puzzle you want to keep your 👀 on:
 Hermes CLI has commands to create them. Before the creation, a node of each instance should be running at the specified rpc addresses. If you don't have nodes, please set up nodes manually or through our [scripts](#set-up-local-namada-instances-using-the-hermes-script).
 
 ### Export environment variables
-We will need to save certain environment variables. These are:
+The relaying user will need to save certain environment variables. These are:
 ```bash copy
 export CHAIN_A_ID="<replace-with-chain-a-id>"
 export CHAIN_B_ID="<replace-with-chain-b-id>"
@@ -183,7 +183,7 @@ cp $HOME/.local/share/namada/$CHAIN_A_ID/wallet.toml $HERMES/namada_wallet/$CHAI
 # Make sure this is done for both wallets on each chain!
 ```
 
-We are now ready to set up the client.
+It is now possible to set up the client.
 
 ### Create IBC channel
 The "create channel" command (below) creates not only the IBC channel but also the necessary IBC client connection.
@@ -269,7 +269,7 @@ hermes --config $HERMES_CONFIG start
 
 You can see more details of Hermes at [the official document](https://hermes.informal.systems/).
 
-After the sync, you can create the channel and start Hermes as we explain [above](#create-ibc-channel).
+After the sync, you can create the channel and start Hermes as explained [above](#create-ibc-channel).
 ```bash copy
 # create a channel
 hermes --config $HERMES_CONFIG \
@@ -293,7 +293,7 @@ cd hermes
 ./scripts/setup-namada $NAMADA_DIR $CHAIN_ID_A $CHAIN_ID_B
 ```
 
-In this case, we don't have to wait for sync. If the relayer account on each instance has enough balance, you can create a channel and start Hermes immediately as we explain [above](#create-ibc-channel). You find these chain IDs of the instances in the config file `config_for_namada.toml`. One can run `grep "id" ${HERMES_CONFIG}`.
+In this case, the user doesn't have to wait for sync. If the relayer account on each instance has enough balance, the user can create a channel and start Hermes immediately as explained [above](#create-ibc-channel). The user finds these chain IDs of the instances in the config file `config_for_namada.toml`. One can run `grep "id" ${HERMES_CONFIG}`.
 ```bash copy
 # create a channel
 hermes --config $HERMES_CONFIG \
