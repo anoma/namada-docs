@@ -131,7 +131,7 @@ E.g.
 export TAG="v1.6.0-namada-beta3"
 export ARCH="x86_64-unknown-linux-gnu" # or "aarch64-apple-darwin"
 curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/download/${TAG}/hermes-${TAG}-${ARCH}.tar.gz
-tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
+sudo tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
 ```
 
 ### From source
@@ -153,20 +153,19 @@ Check the binary:
 It is recommended to now add hermes to `$PATH` such that it is callable without any pre-fixes.
 For ubuntu users, this can be achieved by
 ```bash copy
-cp ./target/release/hermes /usr/local/bin/
+sudo cp ./target/release/hermes /usr/local/bin/
 ```
 </Callout>
 
 ## Setting up the relayer
 
-### Create the `namada_wallet` directory
+### Create the `namada_wallet` directory and chain directories to hold each relayer wallet.toml
 
 For the relayer to work, it needs to have a wallet directory to store the keys of the relayer. This can be done by running
 ```bash copy
 # in the Hermes folder
-mkdir namada_wallet
-mkdir $CHAIN_A_ID
-mkdir $CHAIN_B_ID
+mkdir -p ~/.hermes/namada_wallet/$CHAIN_A_ID
+mkdir -p ~/.hermes/namada_wallet/$CHAIN_B_ID
 ```
 
 ### Create the relayer account
