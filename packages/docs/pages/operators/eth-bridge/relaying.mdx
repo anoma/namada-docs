@@ -12,7 +12,7 @@ In order for any transactions to be relayed to the Ethereum smart contract, the 
 namadar validator-set relay --daemon --confirmations 1 --retry-sleep 0 --success-sleep 0 --safe-mode
 ```
 
-The `--safe-mode` flag is optional, but recommended. It will ensure that the relayer will not relay any transactions that are not signed by the validator set. This is a safety measure to ensure that no malicious transactions are relayed to the Ethereum smart contract.
+The `--safe-mode` flag is optional, but recommended. It will stop the relayer from being shut down by `^C` and will instead wait for the current batch of transactions to be relayed before shutting down.
 
 More optional flags are available, which can be found by running `namadar validator-set relay --help`. Notably, `--eth-gas`and `--eth-gas-price` will allow you to set the maximum gas-limit and gas-price, respectively, that the relayer will use when relaying transactions to the Ethereum smart contract.
 
