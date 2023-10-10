@@ -79,8 +79,8 @@ jobs:
         make:
           - name: docs
             path: docs
-          - name: specs
-            path: specs
+          # - name: specs
+          #   path: specs
 
     steps:
       - name: Checkout repo
