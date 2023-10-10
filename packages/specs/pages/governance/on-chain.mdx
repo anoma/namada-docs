@@ -10,13 +10,13 @@ This address also stores all previous proposals under its address space.
 
 Proposals are submitted through the client, and are verified by the `GovernanceAddress` before being added to the pending proposals list.
 
-The structure of proposals is outlined [here](./proposal.md).
+The structure of proposals is outlined [here](./proposal.mdx).
 
 
 The correct logic to handle these different types is hardcoded in protocol. 
 We'll also rely on type checking to strictly enforce the correctness of a proposal given its type. 
 These two approaches combined will prevent a user from deviating from the intended logic for a certain proposal type (e.g. providing a wasm code when it's not needed or allowing only validators to vote when also delegators should, etc...). 
-More details on the specific types supported can be found in the [relative](#supported-proposal-types) section of the [proposals page](./proposal.md).
+More details on the specific types supported can be found in the [relative](#supported-proposal-types) section of the [proposals page](./proposal.mdx).
 
 
 ### GovernanceAddress VP
@@ -28,7 +28,7 @@ A proposal must satisfy the following mandatory storage writes:
 
 - `counter` - The number of proposals submitted so far
 - `author` - The address of the author of the proposal
-- `type` - The [proposal type](./proposal.md#supported-proposal-types)
+- `type` - The [proposal type](./proposal.mdx#supported-proposal-types)
 - `funds` - The amount of funds locked for this proposal
 - `voting_start` - The epoch specifying when the voting period starts
 - `voting_end`- The epoch specifying when the voting period ends
@@ -95,7 +95,7 @@ struct OnChainVote {
 ```
 where `ProposalVote` is an enum representing a `Yay` or `Nay` vote: the yay variant also contains the specific memo (if any) required for that proposal.
 
-Storage writes for a vote transaction are described [here](./storage.md#votes).
+Storage writes for a vote transaction are described [here](./storage.mdx#votes).
 
 If non-validating accounts are allowed to vote, delegates will be able to vote only for $\frac{2}{3}$ of the total voting period, while delegators can vote until the end of the voting period. 
 If only validators are allowed to vote for the `ProposalType` in question, they are allowed to vote for the entire voting window.

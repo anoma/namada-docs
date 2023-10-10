@@ -15,7 +15,7 @@ Namada enacts a shielded pool incentive which pays users a variable rate for kee
 
 ### Implementation
 
-When users deposit assets into the shielded pool, the current epoch is appended to the asset type. Users can use these "epoched assets" as normal within the shielded pool. When epochs advance, users can use the [convert circuit](../masp/convert-circuit.md) to convert assets tagged with the old epoch to assets tagged with the new epoch, receiving shielded rewards in NAM proportional to the amount of the asset they had shielded, which automatically compound while the assets are shielded and the epochs progressing. When unshielding from the shielded pool, assets must be first converted to the current epoch (claiming any rewards), after which they can be converted back to the normal (un-epoched) unshielded asset denomination.
+When users deposit assets into the shielded pool, the current epoch is appended to the asset type. Users can use these "epoched assets" as normal within the shielded pool. When epochs advance, users can use the [convert circuit](../masp/convert-circuit.mdx) to convert assets tagged with the old epoch to assets tagged with the new epoch, receiving shielded rewards in NAM proportional to the amount of the asset they had shielded, which automatically compound while the assets are shielded and the epochs progressing. When unshielding from the shielded pool, assets must be first converted to the current epoch (claiming any rewards), after which they can be converted back to the normal (un-epoched) unshielded asset denomination.
 
 Namada allocates up to 10% per annum inflation of NAM to pay for shielded pool rewards.
 

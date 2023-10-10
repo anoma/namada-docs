@@ -17,7 +17,7 @@ Specifically, the validity predicate mainly consists of two parts.
 The first part is the state change check. It executes the corresponding IBC operation and gets the post-states of the IBC-related data. Then, it checks whether the actual states of IBC-related data by the transaction are equal to the result of the pseudo execution. The second part is the validation of the IBC-related data. It validates that the corresponding data conforms to the IBC protocol. The pseudo-execution and the validation functions are imported from `ibc-rs`.
 
 ## Fungible Token Transfer
-The transfer of fungible tokens over an IBC channel on separate chains is defined in [ICS20](https://github.com/cosmos/ibc/blob/master/spec/app/ics-020-fungible-token-transfer/README.md).
+The transfer of fungible tokens over an IBC channel on separate chains is defined in [ICS20](https://github.com/cosmos/ibc/blob/master/spec/app/ics-020-fungible-token-transfer/README.mdx).
 
 In Namada, the sending tokens is triggered by a transaction having [MsgTransfer](https://github.com/cosmos/ibc-rs/blob/014fec6958fedcfe9ed6ebfb2d0c28c2cb6487af/crates/ibc/src/applications/transfer/msgs/transfer.rs) as transaction data. A packet including [`PacketData`](https://github.com/cosmos/ibc-rs/blob/014fec6958fedcfe9ed6ebfb2d0c28c2cb6487af/crates/ibc/src/applications/transfer/packet.rs) for the transfer is made from the message in the transaction execution.
 
