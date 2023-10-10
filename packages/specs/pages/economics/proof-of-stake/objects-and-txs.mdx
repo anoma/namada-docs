@@ -57,7 +57,7 @@ A *candidate* validator that is not jailed (see [slashing](#slashing)) can be in
 
 From all the *candidate* validators, in each epoch the ones with the most voting power limited up to the `max_validator_slots` [parameter](#system-parameters) are selected for the `consensus` validator set. Whenever stake of a validator is changed, the validator sets must be updated at the appropriate offset matching the stake update.
 
-The limit on `min_validator_stake` [parameter](#system-parameters) is introduced, because the protocol needs to iterate through the validator sets in order to copy the last known state into a new epoch when epoch changes (to avoid offloading this cost to a transaction that is unlucky enough to be the first one to update the validator set(s) in some new epoch) and also to [distribute rewards](./reward-distribution.md) to `consensus` validators and to record unchanged validator products for validators `below_capacity`, who do not receive rewards in the current epoch.
+The limit on `min_validator_stake` [parameter](#system-parameters) is introduced, because the protocol needs to iterate through the validator sets in order to copy the last known state into a new epoch when epoch changes (to avoid offloading this cost to a transaction that is unlucky enough to be the first one to update the validator set(s) in some new epoch) and also to [distribute rewards](./reward-distribution.mdx) to `consensus` validators and to record unchanged validator products for validators `below_capacity`, who do not receive rewards in the current epoch.
 
 ### Delegator
 
@@ -113,7 +113,7 @@ Once an offense has been reported:
 2. Slashing
 
 - Individual: Once someone has reported an offense it is reviewed by validators and if confirmed the offender is slashed.
-- [cubic slashing](./cubic-slashing.md): escalated slashing
+- [cubic slashing](./cubic-slashing.mdx): escalated slashing
 
 Instead of absolute values, validators' total bonded token amounts and bonds' and unbonds' token amounts are stored as their deltas (i.e. the change of quantity from a previous epoch) to allow distinguishing changes for different epoch, which is essential for determining whether tokens should be slashed. Slashes for a fault that occurred in epoch `n` may only be applied before the beginning of epoch `n + unbonding_length`. For this reason, in epoch `m` we can sum all the deltas of total bonded token amounts and bonds and unbond with the same source and validator for epoch equal or less than `m - unbonding_length` into a single total bonded token amount, single bond and single unbond record. This is to keep the total number of total bonded token amounts for a unique validator and bonds and unbonds for a unique pair of source and validator bound to a maximum number (equal to `unbonding_length`).
 
@@ -134,7 +134,7 @@ This set is used to initialize the genesis state with epoched data active immedi
 The default values that are relative to epoch duration assume that an epoch last about 24 hours.
 
 - `max_validator_slots`: Maximum consensus validators, default `128`
-- `min_validator_stake`: Minimum stake of a validator that allows the validator to enter the `consensus` or `below_capacity` [sets](#validator-sets), in number of native tokens. Because the [inflation system](../inflation-system.md#proof-of-stake-rewards) targets a bonding ratio of 2/3, the minimum should be somewhere around `total_supply * 2/3 / max_validator_slots`, but it can and should be much lower to lower the entry cost, as long as it's enough to prevent validation account creation spam that could slow down PoS system update on epoch change
+- `min_validator_stake`: Minimum stake of a validator that allows the validator to enter the `consensus` or `below_capacity` [sets](#validator-sets), in number of native tokens. Because the [inflation system](../inflation-system.mdx#proof-of-stake-rewards) targets a bonding ratio of 2/3, the minimum should be somewhere around `total_supply * 2/3 / max_validator_slots`, but it can and should be much lower to lower the entry cost, as long as it's enough to prevent validation account creation spam that could slow down PoS system update on epoch change
 - `pipeline_len`: Pipeline length in number of epochs, default `2`, [see this link](https://github.com/cosmos/cosmos-sdk/blob/019444ae4328beaca32f2f8416ee5edbac2ef30b/docs/architecture/adr-039-epoched-staking.md#pipelining-the-epochs)
 - `unboding_len`: Unbonding duration in number of epochs, default `6`
 - `cubic_slash_window_width`: The number of epochs above and below the current one in which to collect misbehaviors for use in computing the cubic slash rate, default `1`.
@@ -267,7 +267,7 @@ When any validator's voting power changes, we attempt to perform the following u
       1. else if `power_after >= min_validator_stake`, insert the validator into `below_capacity` set with `voting_power = power_after`
       1. else, do nothing
 
-Additionally, for [rewards distribution](./reward-distribution.md):
+Additionally, for [rewards distribution](./reward-distribution.mdx):
 
 - When a validator moves from `below_threshold` set to either `below_capacity` or `consensus` set, the transaction must also fill in the validator's reward products from its last known value, if any, in all epochs starting from their `last_known_product_epoch` (exclusive) up to the `current_epoch + pipeline_len - 1` (inclusive) in order to make their look-up cost constant (assuming that validator's stake can only be increased at `pipeline_len` offset).
 - And on the opposite side, when a stake of a validator from `consensus` or `below_capacity` drops below `min_validator_stake`, we record their `last_known_product_epoch`, so that it can be used if and when the validator's stake goes above `min_validator_stake`.

@@ -353,7 +353,7 @@ Let `ZKSpend` be as defined in [4.1.13](https://zips.z.cash/protocol/protocol.pd
 A convert description comprises `(cv, rt, pi)` where
 * `cv: ValueCommit.Output` is value commitment to the value of the conversion note
 * `rt: B[Sapling Merkle]` is an anchor for the current conversion tree or an archived conversion tree
-* `pi: ZKConvert.Proof` is a zk-SNARK proof with primary input `(rt, cv)` for the Convert statement defined at [Burn and Mint conversion transactions in MASP](./burn-and-mint.md).
+* `pi: ZKConvert.Proof` is a zk-SNARK proof with primary input `(rt, cv)` for the Convert statement defined at [Burn and Mint conversion transactions in MASP](./burn-and-mint.mdx).
 #### Convert Description Encoding
 Let `pi_{ZKConvert}` be the zk-SNARK proof of the corresponding Convert statement. `pi_{ZKConvert}` is encoded in the `zkproof` field of the Convert description.
 

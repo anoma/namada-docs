@@ -19,12 +19,12 @@ We distinguish two kinds of keys:
 
 ### Shielding transfers
 
-To try out shielded transfers, you first need to be in possession of a
+To conduct a shielding transfer, the user must first be in possession of a
 transparent account with some token balance.
 
 #### Generate your Spending Key
 
-You can randomly generate a new Spending Key with:
+One can randomly generate a new spending key with:
 
 ```shell copy
 namadaw masp gen-key --alias <your-spending-key-alias>
@@ -37,7 +37,7 @@ the same alias.
 
 #### Create a new payment address
 
-To create a payment address from your Spending key, use:
+To create a payment address from one's spending key, one can run:
 
 ```shell copy
 namadaw masp gen-addr \
@@ -46,15 +46,15 @@ namadaw masp gen-addr \
 ```
 
 <Callout>
-This command will generate a different payment address each time you run it. 
-Payment addresses can be reused or discarded as you like, and any relationship 
-between addresses cannot be deciphered by any user without the spending key.
+This command will generate a different payment address each time the user runs the command. 
+Payment addresses can be reused or discarded as the user likes, and any relationship 
+between addresses cannot be deciphered by any other user without the spending key.
 </Callout>
 
 #### Send your shielding transfer
 
-Once you have a payment address, transfer a balance from your
-transparent account to your shielded account with something like:
+Once one has a payment address, one can transfer a balance from their
+transparent account to their shielded account with:
 
 ```shell copy
 namadac transfer \
@@ -64,9 +64,9 @@ namadac transfer \
     --amount <amount-to-shield>
 ```
 
-#### View your balance
+#### View one's balance
 
-Once this transfer has been broadcasted, validated, and executed on the blockchain, you can view your Spending Key's
+Once this transfer has been broadcasted, validated, and executed on the blockchain, one can view their spending key's
 balance:
 
 ```shell copy
@@ -75,7 +75,7 @@ namadac balance --owner <your-spending-key-alias>
 
 ### Shielded transfers
 
-Now that you have a shielded balance, it can be transferred to a
+Once the user has a shielded balance, it can be transferred to a
 another shielded address:
 
 ```shell copy
@@ -89,7 +89,7 @@ namadac transfer \
 
 ### Unshielding transfers
 
-You can also transfer back your balance to a transparent account:
+It is also possible to transfer the balance to a transparent account:
 
 ```shell copy
 namadac transfer \

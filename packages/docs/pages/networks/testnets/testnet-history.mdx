@@ -165,7 +165,7 @@ cd namada
 export NAMADA_TAG=v0.13.4
 make build-release
 ```
-3. Copy the new binaries to path. More in depth instructions can be found at [here](./environment-setup.md)
+3. Copy the new binaries to path. More in depth instructions can be found at [here](./environment-setup.mdx)
 4. Once this has been completed, **the node must tesync from genesis** (see below)
 
 **How to resync from genesis:**
@@ -178,7 +178,7 @@ mkdir backup-pregenesis && cp -r .namada/pre-genesis backup-pregenesis/
 rm -r .namada/public-testnet-3.0.81edd4d6eb6
 rm .namada/public-testnet-3.0.81edd4d6eb6.toml
 ```
-WARNING: Do not delete the entire `.namada` folder, as it contains your pre-genesis keys. If this is accidentally done, you will have to copy over the backup-pregenesis file. See [these instructions](../../validators/run-your-genesis-validator.md) for more details
+WARNING: Do not delete the entire `.namada` folder, as it contains your pre-genesis keys. If this is accidentally done, you will have to copy over the backup-pregenesis file. See [these instructions](../../validators/run-your-genesis-validator.mdx) for more details
 3. Rejoin the network
 ```bash copy
 export CHAIN_ID="public-testnet-3.0.81edd4d6eb6"
@@ -206,7 +206,7 @@ A patch was released [v0.13.3](https://github.com/anoma/namada/releases/tag/v0.1
 
 ***23/01/2023***
 
-A new testnet was released before the fortnightly testnet release schedule due to the below hardfork not working as intended. Follow the steps in [setting up a new testnet](./environment-setup.md)
+A new testnet was released before the fortnightly testnet release schedule due to the below hardfork not working as intended. Follow the steps in [setting up a new testnet](./environment-setup.mdx)
 
 ### Hardfork v0.13.1
 
