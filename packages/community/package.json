@@ -1,0 +1,22 @@
+{
+  "name": "namada-community",
+  "version": "0.0.1",
+  "description": "Namada Community Docs",
+  "license": "GPL-3.0",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build && next export",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^13.4.8",
+    "nextra": "latest",
+    "nextra-theme-docs": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.10",
+    "typescript": "^4.9.3"
+  }
+}
