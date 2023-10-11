@@ -4,7 +4,7 @@ export const PageHead = () => {
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta
         property="og:image"
-        content="https://specs.namada.net/opengraph.jpg"
+        content="https://community.namada.net/opengraph.png"
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@namada" />
