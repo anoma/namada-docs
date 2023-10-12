@@ -5,8 +5,8 @@ import { Callout } from 'nextra-theme-docs'
 A public goods steward can consist of an arbitrary number of people, and can be a single person. The only requirement is that the steward's multisignature account is elected by the community, through a governance proposal.
 
 For this reason, the first step to becoming a steward is to create a multisignature account. 
-This can be done using the commands found in the multisgnature documentation (coming soon). 
-{/* TODO: link to multisig docs  */}
+This can be done using the commands found in the [multisgnature documentation](../../transparent-accounts.mdx). 
+
 Once the multisig account is created, the steward can submit a governance proposal to elect the account as a steward.
 
 ## Governance proposal
@@ -73,3 +73,21 @@ where `<path/to/steward_proposal.json>` is the path to the `steward_proposal.jso
 Once the proposal is submitted, it will be voted on by the community (see [voting](./voting.mdx)). If the proposal passes, the account will become a steward. If the proposal fails, the account will not become a steward.
 
 Once a multisignature account becomes elected (which will happen at the end of the `grace_epoch`), it will be able to submit proposals to the public goods funding pool (see [submitting proposals](./proposing.mdx#proposing-funding)).
+
+## Losing stewardship
+
+There are 4 ways that a steward can lose their stewardship:
+
+1. Resign as a steward
+2. Have a significantly failed funding proposal ($/frac{2}{3}$ of the community votes, and out of these, $/frac{2}{3}$ vote against the proposal)
+3. Become voted out through a governance proposal
+4. They reach the end of their term
+
+Resigning as a steward can be done at any point. 
+Through the CLI it can be done with the command:
+
+```shell copy
+namadac resign-steward --steward my-steward-address
+```
+
+Read more about the other methods of losing stewardship in the [specs](https://specs.namada.net/economics/public-goods-funding/becoming-a-steward#losing-stewardship-status).
