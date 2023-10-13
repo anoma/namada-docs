@@ -17,6 +17,7 @@ Each proposal is stored in a sub-key under the internal proposal address. The st
 /$GovernanceAddress/proposal/$id/grace_epoch: Epoch
 /$GovernanceAddress/proposal/$id/proposal_code: Option<Vec<u8>>
 /$GovernanceAddress/proposal/$id/funds: u64
+/$GovernanceAddress/proposal/$id/result: ProposalResult
 /$GovernanceAddress/proposal/epoch/$id: u64
 ```
 
@@ -26,11 +27,13 @@ Each proposal is stored in a sub-key under the internal proposal address. The st
 An **epoch** is a range of blocks or time that is defined by the base ledger and made available to the PoS system. 
 This document assumes that epochs are identified by consecutive natural numbers. 
 All the data relevant to PoS are [associated with epochs](../economics/proof-of-stake/objects-and-txs.mdx#epoched-data).
+</Callout>
 
 `/$GovernanceAddress/proposal/$epoch/$id` is used for efficient iteration over proposals by epoch.
 
 `$epoch` refers to the same value as the one specified in the `grace_epoch` field.
-</Callout>
+
+`/$GovernanceAddress/proposal/$id/result` is used to store the result of the proposal after the tally has been performed: this allows the recover of a past result even after the validator set (and the corresponding voting powers) has changed.
 
 ## `GovernanceAddress`
 
