@@ -85,7 +85,7 @@ changed via governance. It should be high enough to cover necessary gas fees.
 
 ### Recovering from an update failure
 
-If vote extensions are not available, we cannot guarantee that a quorum of 
+If vote extensions are not available, Namada cannot guarantee that a quorum of 
 validator signatures can be gathered for the message that updates the 
 validator set before some epoch $E$ ends. Should this scenario take place,
 the Ethereum bridge will halt in the Namada to Ethereum direction, since
@@ -106,7 +106,7 @@ The Ethereum bridge relayer must submit proofs to the Ethereum
 bridge smart contracts before the conclusion of each Namada epoch, at
 which point proofs become invalid, due to:
 
-1. Validator set nonces incrementing (we use epoch values for this purpose).
+1. Validator set nonces incrementing (Namada uses epoch values for this purpose).
 2. Validator sets themselves changing.
 
 The default set of binaries of the Namada chain provide:

@@ -1,10 +1,9 @@
 # Ethereum Events Attestation
 
-We want to store events from the smart contracts of our bridge onto
-Namada. We will include events that have been voted by at least one
+Namada stores events from the smart contracts of its bridge. Namada includes events that have been voted by at least one
 validator, but will not act on them until they have been `seen` by a
 weighted average of more than $\frac{2}{3}$ of the voting power
-available across all epochs of the tally. Generically, we consider some
+available across all epochs of the tally. Generically, Namada considers some
 tally $t$ `seen` if it satisfies the following inequality:
 
 $$\sum_{E \in \xi} (\frac{\sigma(E)}{\sum_{E' \in \xi} \sigma(E')} \cdot F_E) >
@@ -27,15 +26,15 @@ before being included in vote extensions or stored on chain.
 
 ``` rust
 pub enum EthereumEvent {
-    // we will have different variants here corresponding to different types
-    // of raw events we receive from Ethereum
+    // Namada has different variants corresponding to different types
+    // of raw events Namada receives from Ethereum
     TransfersToNamada(Vec<TransferToNamada>)
     // ...
 }
 ```
 
 Validators may never vote more than once on a given event. To ensure
-that this invariant is held, we keep track of who voted on some event
+that this invariant is held, Namada keep track of who voted on some event
 and events are timed out if they are not `seen` within the span of
 `unbonding_length` epochs, which corresponds to the period of time
 necessary for bonded tokens to be returned to an address (check the
@@ -68,7 +67,7 @@ eventually become `seen`.
 ## Vote extension protocol transactions
 
 A batch of Ethereum events $E$ newly confirmed at some block height $H$
-is included by some validator $v$ in a protocol transaction we dub the
+is included by some validator $v$ in a protocol transaction Namada dubs the
 *Ethereum events vote extension*. The vote extension is signed by the
 protocol key of $v$, uniquely identifying $v$'s vote on some Ethereum
 event $e \in E$ at $H$.
@@ -96,7 +95,7 @@ even evicted from the mempool altogether, if it is never proposed.
 
 ## Storage
 
-To make including new events easy, we take the approach of always
+To make including new events easy, Namada takes the approach of always
 overwriting the state with the new state rather than applying state
 diffs. The storage keys involved are:
 
@@ -196,7 +195,7 @@ These checks are to prevent censorship of events from validators by the
 block proposer. If ABCI++ is not enabled, unfortunately these checks
 cannot be made.
 
-In `FinalizeBlock`, we derive a second transaction (the "state update"
+In `FinalizeBlock`, Namada derives a second transaction (the "state update"
 transaction) from the vote aggregation that:
 
 -   Calculates the required changes to `/eth_msgs` storage and applies
