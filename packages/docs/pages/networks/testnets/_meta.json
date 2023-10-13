@@ -7,5 +7,6 @@
   "post-genesis-validator": "Becoming a validator after genesis",
   "testnet-history": "History of testnets",
   "pow": "Using the testnet faucet",
-  "faq": "FAQ"
+  "faq": "FAQ",
+  "campfire": "Campfire Testnet"
 }
