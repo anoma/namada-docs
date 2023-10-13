@@ -35,7 +35,7 @@ is described in this section.
 
 A pool of transfers from Namada to Ethereum will be kept by Namada. Every
 transaction to Ethereum that Namada validators approve will be added to this
-pool. We call this the _Bridge Pool_.
+pool. Namada calls this the _Bridge Pool_.
 
 The Bridge Pool should be thought of as a sort of mempool. When users who
 wish to move assets to Ethereum submit their transactions, they will pay some
@@ -144,7 +144,7 @@ now, is the minimum duration in blocks of an epoch. Transactions that time out
 should revert the state changes in Namada, including refunding the paid fees
 and escrowed assets.
 
-Timeouts only happen after we process transfer to Ethereum events to guarantee
+Timeouts only happen after Namada processes transfer to Ethereum events in order to guarantee
 the consistency of the shared state between Namada and Ethereum. Nonces from
 `TransferToEthereum` events will place a total order on these transfers and
 any future relay attempts. The obvious downside of this approach is that
