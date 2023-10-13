@@ -17,6 +17,7 @@ env:
 jobs:
   docker:
     runs-on: ${{ matrix.os }}
+    needs: [checks]
     strategy:
       fail-fast: false
       matrix:
@@ -67,3 +68,25 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             "TARGET=${{ matrix.make.path }}"
+
+  checks:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04]
+        lychee_version: [lycheeverse/lychee@v0.13.0]
+        make:
+          - name: docs
+            path: docs
+          # - name: specs
+          #   path: specs
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install tools
+        run: |
+          curl -k https://installer.heliax.click/${{ matrix.lychee_version }}! | bash
+      - name: Check broken links for ${{ matrix.make.name }}
+        run: lychee --offline packages/${{ matrix.make.path }}/pages/

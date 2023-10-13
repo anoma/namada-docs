@@ -1,0 +1,60 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Send and Receive NAM tokens
+
+In Namada, tokens are implemented as accounts with the [Token Validity Predicate](https://github.com/anoma/namada/blob/9b67281e359ebff5467cad57c866fbcf91eb80c8/shared/src/ledger/native_vp/multitoken.rs#L30).
+The validity predicate (VP) checks, in particular, that the total supply (of the token) is preserved in any transaction that uses this token. Your wallet will be pre-loaded with some token addresses that are initialized in the genesis block.
+
+### Initialize an established account
+
+If you already have a key in your wallet, you can skip this step. Otherwise, [generate a new keypair](../transparent-accounts.mdx#generate-a-keypair) now.
+
+Then, send a transaction to initialize your new established account and save its address with the alias `establishment`. The `keysha` public key will be written into the account's storage for authorizing future transactions. We also sign this transaction with `keysha`.
+
+```shell copy
+namada client init-account \
+  --alias establishment \
+  --public-keys keysha \
+  --signing-keys keysha \
+  --threshold 1
+```
+
+Once this transaction has been applied, the client will automatically see the new address created by the transaction and add it to your wallet with the chosen alias `establishment`.
+
+This command uses the prebuilt [User Validity Predicate](https://github.com/anoma/namada/blob/main/wasm/wasm_source/src/vp_user.rs).
+
+### Send a Payment
+
+To submit a regular token transfer from your account to the `validator-1` address:
+
+```shell copy
+namada client transfer \
+  --source establishment \
+  --target validator-1 \
+  --token NAM \
+  --amount 10 \
+  --signing-keys keysha
+```
+
+This command will attempt to find and use the key of the source address to sign the transaction.
+
+### See your balance
+
+To query token balances for a specific token and/or owner:
+
+```shell copy
+namada client balance --token NAM --owner my-new-acc
+```
+
+<Callout type="info">
+For any client command that submits a transaction (`init-account`, `transfer`, `tx`, `update` and [PoS transactions](../../operators/validators/proof-of-stake.mdx)), 
+you can use the `--dry-run-wrapper` flag to simulate the transaction being applied in the block and see what would be the result.
+</Callout>
+
+### See every known addresses' balance
+
+You can see the token's addresses known by the client when you query all tokens balances:
+
+```shell copy
+namada client balance
+```

@@ -1,0 +1,179 @@
+import { Callout } from 'nextra-theme-docs'
+
+# On-chain proposals
+
+## Types of proposals
+
+All the different types of proposals are listed in [the specs](https://specs.namada.net/governance/proposal). Different proposals will have different permissions, data structures, as well as voting requirements.
+
+## Create a proposal
+
+Assuming you have an account with at least 500 NAM token (in this example we are going to use `my-new-acc`), lets get the corresponding address
+
+```shell copy
+namada wallet address find --alias `my-new-acc`
+```
+
+Now, we need to create a json file `proposal.json` holding the content of our proposal. Copy the below text into a json file.
+
+```json
+{
+	"proposal": {
+		"content": {
+			"title": "One Small Step for Namada, One Giant Leap for Memekind",
+			"authors": "bengt@heliax.dev",
+			"discussions-to": "forum.namada.net/t/namada-proposal/1",
+			"created": "2069-04-20T00:04:44Z",
+			"license": "MIT",
+			"abstract": "We present a proposal that will send our community to the moon. This proposal outlines all training necessary to accomplish this goal. All memers are welcome to join.",
+			"motivation": "When you think about it, the moon isn't actually that far away.The moon is only 384,400 km. We have not yet brought Namada to the moon, so it is only natural to use 101 as the prime number for our modular arithmetic operations. 384,400 (mod 101) = 95. 95 km is a distance that can be easily covered by a single person in a single day. Namada was produced by more than 100 people. So 95/100 = 0, rounded to the nearest integer. This means that Namada can reach the moon in no time.",
+			"details": "Bringing Namada to the moon in no time is easily achievable. We just need to pass this governance proposal and set the plan in action",
+			"requires": ""
+		},
+		"author": "atest1v4ehgw36g9zyydzpgycy23phxuunxdesgc6nydfsxge5x3zzgscny32pxccn2wfjg5urx3fhzxhmch",
+		"voting_start_epoch": 21,
+		"voting_end_epoch": 24,
+		"grace_epoch": 27,
+		"type": {
+			"Default": null
+		}
+	}
+}
+```
+
+In the content field, most of the fields are self-explanatory. The `requires` field references a proposal id that must be passed before this proposal can be executed. The `created` field must be in the format `YYYY-MM-DDTHH:MM:SSZ`.
+
+You should change the value of:
+
+- `Author` field with the address of `my-new-acc`;
+- `voting_start_epoch` with a future epoch (must be a multiple of 3) for which you want the voting to begin;
+- `voting_end_epoch` with an epoch greater than `voting_start_epoch`, a multiple of 3, and by which no further votes will be accepted;
+- `grace_epoch` with an epoch greater than `voting_end_epoch` + 6, in which the proposal, if passed, will come into effect.
+
+The `data` field and its structure is dependant on the type of proposal being submitted. Below we outline the structure of the "data" field for each type of proposal. The one given in the example above is for a `Default Proposal`.
+
+### Default Proposal 
+
+```json
+"data" : "<path/to/wasm.wasm>"
+```
+
+<Callout type="info">
+The data field for default proposals is optional. This is in line with the nature of default proposals. 
+If the proposals have code attached to them in order to change governance parameters, then this code 
+will be represented as a wasm file and the path to this file will be given in the data field.
+</Callout>
+
+### ETH Bridge Proposal
+
+```json
+"data" : "<hex-encoded-bytes-of-what-will-be-signed-by-validators>"
+```
+
+<Callout type="warning">
+**Note**:
+The encoding will be submitted as a string
+</Callout>
+
+### Steward Proposal
+
+```json
+"data" : [
+        {
+            "action" : "add",
+            "address" : "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+        }
+    ]     
+```
+
+<Callout>
+The data field for steward proposals is a **list** of actions to be taken. 
+The actions can be either `add` or `remove` and the address is the address of 
+the steward to be added or removed. In this way you can add or remove multiple 
+stewards in a single proposal.
+</Callout>
+
+### PGF Proposal
+    
+```json
+"data" :
+        {
+            "continuous" : [
+                {
+                    "target": {
+                        "amount": 420,
+                        "address": "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+                    },
+                    "action" : "add",
+                },
+            ],
+            "retro" : [
+                {
+                    "target": {
+                        "amount": 1337,
+                        "address": "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+                    }
+                }
+            ]
+        },  
+```
+
+<Callout>
+The data field for PGF proposals contains both continuous and retroactive PGF funding actions. 
+Within each action, the user can include multiple payments in the form of a vector. 
+Within each payment, the target field contains the address of the recipient as well 
+as the amount of NAM that they will receive. For continuous PGF funding, the amount 
+specified will be sent at the end of each epoch. There is also the option to remove a 
+recipient from the continuous PGF funding, by specifying an already existing continuous 
+funding payment, and then also including the "remove" action. For retroactive PGF funding, 
+the amount specified will be sent immediately.
+</Callout>
+
+## Submitting the proposal
+As soon as your `proposal.json` file is ready, you can submit the proposal with (make sure to be in the same directory as the `proposal.json` file):
+
+```shell copy
+namada client init-proposal --data-path proposal.json 
+```
+
+The transaction should have been accepted. You can query all the proposals with:
+
+```shell copy
+namada client query-proposal
+```
+
+or a single proposal with
+
+```shell copy
+namada client query-proposal --proposal-id 0
+```
+
+where `0` is the proposal id.
+
+## Vote on a proposal
+
+Only delegators and delegates can vote on proposals. Assuming you fall into one of these categories, you can send a vote with the following command:
+
+```shell copy
+namada client vote-proposal \
+    --proposal-id 0 \
+    --vote yay \
+    --signing-keys <your-alias>
+```
+
+where `--vote` can be either `yay` or `nay`.
+
+## Check the result
+
+As soon as the ledger reaches the epoch defined in the json as `voting_end_epoch`, no more votes will be accepted.
+The code defined in `proposal_code` json field will be executed at the beginning of `grace_epoch` epoch. You can use the following commands to check the status of a proposal:
+
+```shell copy
+namada client query-proposal --proposal-id 0
+```
+
+or to just check the result:
+
+```shell copy
+namada client query-proposal-result --proposal-id 0
+```

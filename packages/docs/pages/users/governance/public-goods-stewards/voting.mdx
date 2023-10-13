@@ -1,0 +1,27 @@
+# Voting for stewards and PGF proposals
+
+## Voting for stewards
+
+Any user is allowed (and encouraged) to vote for potential PGF stewards. Once the steward has submitted their proposal to the ledger, the community can vote on it. The voting process is the same as for any other proposal, but the proposal type is `StewardProposal`.
+
+The CLI command for voting for a steward is:
+
+```shell copy
+namada client vote-proposal \
+    --proposal-id <proposal-id-of-steward-proposal> \
+    --vote yay \
+    --signing-keys <your-alias>
+```
+
+In order to vote against the proposal, replace `yay` with `nay`.
+
+## Voting for PGF proposals
+
+Similarly, the command for voting for PGF proposals is:
+
+```shell copy
+namada client vote-proposal \
+    --proposal-id <proposal-id-of-steward-proposal> \
+    --vote yay \
+    --signing-keys <your-alias>
+```

@@ -15,6 +15,9 @@ const config: DocsThemeConfig = {
       canonical: "https://docs.namada.net",
     };
   },
+  sidebar: {
+    defaultMenuCollapseLevel: 1,
+  },
   head: <PageHead />,
   logo: <Logo />,
   project: {
@@ -28,6 +31,10 @@ const config: DocsThemeConfig = {
   footer: {
     text: "Namada",
   },
+  navigation: {
+    prev: true,
+    next: true
+  }
 };
 
 export default config;

@@ -10,13 +10,13 @@ This address also stores all previous proposals under its address space.
 
 Proposals are submitted through the client, and are verified by the `GovernanceAddress` before being added to the pending proposals list.
 
-The structure of proposals is outlined [here](./proposal.md).
+The structure of proposals is outlined [here](./proposal.mdx).
 
 
 The correct logic to handle these different types is hardcoded in protocol. 
 We'll also rely on type checking to strictly enforce the correctness of a proposal given its type. 
 These two approaches combined will prevent a user from deviating from the intended logic for a certain proposal type (e.g. providing a wasm code when it's not needed or allowing only validators to vote when also delegators should, etc...). 
-More details on the specific types supported can be found in the [relative](#supported-proposal-types) section of the [proposals page](./proposal.md).
+More details on the specific types supported can be found in the [relative](#supported-proposal-types) section of the [proposals page](./proposal.mdx).
 
 
 ### GovernanceAddress VP
@@ -28,7 +28,7 @@ A proposal must satisfy the following mandatory storage writes:
 
 - `counter` - The number of proposals submitted so far
 - `author` - The address of the author of the proposal
-- `type` - The [proposal type](./proposal.md#supported-proposal-types)
+- `type` - The [proposal type](./proposal.mdx#supported-proposal-types)
 - `funds` - The amount of funds locked for this proposal
 - `voting_start` - The epoch specifying when the voting period starts
 - `voting_end`- The epoch specifying when the voting period ends
@@ -50,7 +50,7 @@ Once a proposal has been accepted by the protocol as valid, it will be added to 
 The VP must also check that voting adheres to the following constraints:
 
 - The voter is a delegator or a delegate (further constraints can be applied depending on the proposal type)
-- Given that non-validating accounts can vote, validators may only vote during the initial 2/3 of the whole proposal duration (`voting_end` - `voting_start`)
+- Given that non-validating accounts can vote, validators may only vote during the initial $\frac{2}{3}$ of the whole proposal duration (`voting_end` - `voting_start`)
 
 Once a proposal has been created, nobody can modify any of its fields.
 
@@ -95,9 +95,9 @@ struct OnChainVote {
 ```
 where `ProposalVote` is an enum representing a `Yay` or `Nay` vote: the yay variant also contains the specific memo (if any) required for that proposal.
 
-Storage writes for a vote transaction are described [here](./storage.md#votes).
+Storage writes for a vote transaction are described [here](./storage.mdx#votes).
 
-If non-validating accounts are allowed to vote, delegates will be able to vote only for 2/3 of the total voting period, while delegators can vote until the end of the voting period. 
+If non-validating accounts are allowed to vote, delegates will be able to vote only for $\frac{2}{3}$ of the total voting period, while delegators can vote until the end of the voting period. 
 If only validators are allowed to vote for the `ProposalType` in question, they are allowed to vote for the entire voting window.
 
 If a delegator votes differently to its delegate, the delegate's vote will be *overriden* 
@@ -114,9 +114,9 @@ There are two types of thresholds:
     - Fraction of total staked `NAM` that voted - This checks whether enough staked `NAM` voted for the proposal at all.
     - Fraction of votes in favor of the proposal - This checks whether enough votes (weighted by their staked `NAM`) voted in favor of the proposal, out of the staked `NAM` that did vote.
 
-E.g if the thresholds, respectively, are $\frac{1}{2}$ and $\frac{1}{3}, then at least 50% of the total staked `NAM` must have voted for the proposal AND out of this NAM, to be accepted.
+E.g if the thresholds, respectively, are $\frac{1}{2}$ and $\frac{1}{3}$, then at least 50% of the total staked `NAM` must have voted for the proposal AND out of this NAM, to be accepted.
 
-Tallying, is computed with the following rules:
+Tallying is computed with the following rules:
 
 <Steps>
 
@@ -138,7 +138,7 @@ All the computation is done at the start of `grace_epoch` on data collected at t
 
 In parallel to tallying, the protocol manages the execution of accepted proposals and refunding in the `finalize_block` function. 
 If the proposals `grace_epoch` matches with the current epoch, AND the proposal had a positive outcome, the protocol refunds the locked funds from `GovernanceAddress` to the proposal author address (specified in the proposal `author` field).  
-Moreover, if the proposal had a positive outcome and had attached WASM code, the code is executed immidiately.
+Moreover, if the proposal had a positive outcome and had attached WASM code, the code is executed immediately.
 
 On the other hand, should the proposal be rejected (negative outcome), any locked funds is burnt (removed from total supply).
 

@@ -2,7 +2,7 @@
 
 Namada uses the automatically-compounding variant of the [F1 fee distribution](https://drops.dagstuhl.de/opus/volltexte/2020/11974/pdf/OASIcs-Tokenomics-2019-10.pdf).
 
-Rewards are given to validators for proposing blocks, for voting on finalizing blocks, and for being in the [consensus validator set](objects-and-txs.md#validator-sets). The funds for these rewards come from **minting** (creating new tokens). The amount that is minted depends on how many staking tokens are locked (staked) and some maximum annual inflation rate. The rewards mechanism is implemented as a [PD controller](../inflation-system.md#detailed-inflation-calculation-model) that dynamically adjusts the inflation rate to achieve a target staked token ratio. When the total fraction of tokens staked is very low, the return rate per validator needs to increase, but as the total fraction of stake rises, validators will receive fewer rewards. Once the desired staking fraction is achieved, the amount minted will just be the desired annual inflation.
+Rewards are given to validators for proposing blocks, for voting on finalizing blocks, and for being in the [consensus validator set](objects-and-txs.mdx#validator-sets). The funds for these rewards come from **minting** (creating new tokens). The amount that is minted depends on how many staking tokens are locked (staked) and some maximum annual inflation rate. The rewards mechanism is implemented as a [PD controller](../inflation-system.mdx#detailed-inflation-calculation-model) that dynamically adjusts the inflation rate to achieve a target staked token ratio. When the total fraction of tokens staked is very low, the return rate per validator needs to increase, but as the total fraction of stake rises, validators will receive fewer rewards. Once the desired staking fraction is achieved, the amount minted will just be the desired annual inflation.
 
 Each delegation to a validator is initiated at an agreed-upon commission rate charged by the validator. Validators pay out rewards to delegators based on this mutually-determined commission rate. The minted rewards are auto-bonded and only transferred when the funds are unbonded. Once the protocol determines the total amount of tokens to mint at the end of the epoch, the minted tokens are effectively divided among the relevant validators and delegators according to their proportional stake. In practice, the reward products, which are the fractional increases in staked tokens claimed, are stored for the validators and delegators, and the reward tokens are only transferred to the validator’s or delegator’s account upon withdrawal. This is described in the following sections. The general system is similar to what Cosmos does.
 
@@ -17,7 +17,7 @@ Consider a system with
   - bonding is processed after the pipeline length
   - unbonding is processed after the pipeline + unbonding length
   - rewards are paid out at the end of each epoch, i.e., in each epoch $e$, a reward $R_{e,i}$ is paid out to validator $V_i$
-  - slashing is applied as described in [slashing](cubic-slashing.md).
+  - slashing is applied as described in [slashing](cubic-slashing.mdx).
 
 We wish to approximate as exactly as possible the following ideal delegator reward distribution system:
 
@@ -148,7 +148,7 @@ in order to calculate the new rewards given out to the delegator during withdraw
 
 The commission rate $c_V(e)$ is the same for all delegations to a validator $V$ in a given epoch $e$, including for self-bonds. The validator can change the commission rate at any point, subject to a maximum rate of change per epoch, which is a constant specified when the validator is created and immutable once validator creation has been accepted.
 
-While rewards are given out at the end of every epoch, voting power is only updated after the pipeline offset. According to the [proof-of-stake system](objects-and-txs.md#epoched-data),  at the current epoch `e`, the validator sets can only be updated for epoch `e + pipeline_offset`, and it should remain unchanged from epoch `e` to `e + pipeline_offset - 1`. Updating voting power in the current epoch would violate this rule.
+While rewards are given out at the end of every epoch, voting power is only updated after the pipeline offset. According to the [proof-of-stake system](objects-and-txs.mdx#epoched-data),  at the current epoch `e`, the validator sets can only be updated for epoch `e + pipeline_offset`, and it should remain unchanged from epoch `e` to `e + pipeline_offset - 1`. Updating voting power in the current epoch would violate this rule.
 
 
 ## Distribution of block rewards to validators

@@ -1,0 +1,22 @@
+# Validators on Namada
+
+Namada is a proof-of-stake blockchain, which means that the validators are the ones who are responsible for both voting on state-transitions and proposing new blocks.
+
+### What is a genesis validator? How does it differ from a post-genesis Validator?
+
+A (pre-)genesis validator is a validator who is proposed to be a validator in the genesis block of the blockchain. If the genesis file is accepted by the network, then the (pre-)genesis validators are able to conduct validating activities on the blockchain, with the stake specified in the genesis file. These validators are setup with the correct consensus keys, which must match those specified in the genesis file.
+
+A post-genesis validator, on the other hand, is a validating account which was created sometime after the genesis block. These accounts are initiated by the `init-validator` command.
+
+### How do I become a validator?
+
+#### Pre-requisites
+Validators require stake in the form of NAM in order to participate in the consensus process. The amount of stake required is specified in the genesis file. In order to become a validator, you must have at least the minimum amount of stake required.
+
+In addition, the validator node must meet the [minimum hardware requirements](./validators/hardware.mdx).
+
+#### Steps
+
+See these steps for [setting up a genesis validator](./validators/genesis-validator-setup.mdx).
+
+See these steps for [setting up a post-genesis validator](./validators/post-genesis-validator-setup.mdx).

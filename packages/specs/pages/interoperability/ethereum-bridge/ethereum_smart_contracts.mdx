@@ -128,6 +128,7 @@ contracts should generally accept:
   voting powers).
 - Signatures over the message by validators from the consensus validator set.
 
+
 Given this data, anyone should be able to make the relevant Ethereum smart
 contract method call, if they are willing to pay the Ethereum gas. A call is
 then authorized to happen if:
@@ -170,6 +171,13 @@ contract will contain the hash of the next validator set hash.
 - A relayer submits a validator set update for epoch `11` to _Governance_, using
   a quorum of signatures from the Namada chain.
 - The _Governance_ and _Bridge_ contracts now know the hashes of the validator
-  sets for epochs `10` and `11`, and will accept messages signed by epoch `10`.
-  It will no longer accept messages signed by the validator set for epoch `9`.
-- Namada progresses to epoch `11`, and the flow repeats.
+  sets for epochs `10` and `11`, and will accept messages signed by either of
+  them. It will no longer accept messages signed by the validator set for epoch
+  `9`.
+- Namada progresses to epoch `11`, and the flow repeats
+
+NB: the flow for when the bridge has just launched is similar, except the
+contracts know the details of only one epoch's validator set - the launch
+epoch's. E.g. if the bridge launches at epoch `10`, then initially the contracts
+know the hash only for epoch `10` and not epochs `10` and `11`, until the first
+validator set update has been submitted

@@ -1,0 +1,27 @@
+# Namada Ethereum Bridge 
+
+The ethereum bridge on Namada is a trustless (in the sense that the only trust assumptions are that validators on Namada are collectively honest) bridge between Namada and Ethereum.
+
+The bridge is a combination of smart contracts on Ethereum as well as ledger protocol code that enables its functionality. The bridge is designed to be generic, and can be used to bridge any chain that has a BFT consensus mechanism.
+
+
+## Design
+
+The full design specs can be found [here](https://specs.namada.net/interoperability/ethereum-bridge).
+
+A short outline of the design is outlined below.
+
+## The ethereum side
+
+Value transferred to the Namada is escrowed in a vault abstraction, which
+enables other contracts to be upgraded without moving value around. When ERC20
+tokens are transferred back to Ethereum, value is released from escrow into the
+destination accounts.
+
+## The Namada side
+
+When a transfer is initiated from Ethereum to Namada, the transfer is validated by the validators. Once this validation is complete, the transferred funds are minted on the Namada side and sent to the destination account. When tokens are sent back to Ethereum, they are burnt on the Namada end.
+
+This documentation is intended for relayers and validators on Namada and is structured as follows:
+
+- [Relaying transactions](./eth-bridge/relaying.mdx)

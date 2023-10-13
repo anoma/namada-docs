@@ -1,0 +1,48 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Relaying Ethereum Transactions
+
+Relayer commands are found in the `namadar` binary, which at the moment can only be installed from source.
+
+## Relaying validator set updates
+
+In order for any transactions to be relayed to the Ethereum smart contract, the validator sets need to be up to date on the Ethereum side. This is updated by a relayer which can be set up in the following manner:
+
+```bash copy
+namadar validator-set relay --daemon --confirmations 1 --retry-sleep 0 --success-sleep 0 --safe-mode
+```
+
+The `--safe-mode` flag is optional, but recommended. It will stop the relayer from being shut down by `^C` and will instead wait for the current batch of transactions to be relayed before shutting down.
+
+More optional flags are available, which can be found by running `namadar validator-set relay --help`. Notably, `--eth-gas`and `--eth-gas-price` will allow you to set the maximum gas-limit and gas-price, respectively, that the relayer will use when relaying transactions to the Ethereum smart contract.
+
+## Relaying transactions
+
+Transactions are relayed in batches. The relayer will wait until it has a batch of transactions to relay before sending them to the Ethereum smart contract. This is done to reduce the number of transactions that need to be sent to the Ethereum smart contract, and thus reduce the gas costs.
+
+The relayer can get a "recommended-batch" of signed transactions to relay by running:
+
+```bash
+namadar ethereum-bridge-pool recommend-batch
+```
+
+If this is favourable for the relayer, it can construct the proof and relay it to the Ethereum smart contract by running:
+
+```bash
+namadar ethereum-bridge-pool relay-proof --hash-list $HASH_LIST
+```
+
+<Callout type="info">
+As this involves an Ethereum transaction, the `--eth-gas` and `--eth-gas-price` flags are also available here.
+</Callout>
+
+Alternatively, the relayer can run the command:
+
+```bash
+namadar ethereum-bridge-pool construct-proof --hash-list $HASH_LIST
+```
+
+To only construct the proof without relaying it. The proof could then be relayed manually by the relayer.
+
+
+

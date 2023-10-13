@@ -23,6 +23,9 @@ const config: DocsThemeConfig = {
   chat: {
     link: "https://discord.gg/namada",
   },
+  sidebar: {
+    defaultMenuCollapseLevel: 1,
+  },
   docsRepositoryBase:
     "https://github.com/anoma/namada-docs/blob/master/packages/specs",
   footer: {

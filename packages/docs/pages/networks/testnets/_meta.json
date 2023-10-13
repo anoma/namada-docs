@@ -1,0 +1,11 @@
+{
+  "environment-setup": "Environment setup",
+  "migrating-testnets": "Migrating testnets",
+  "pre-genesis": "Pre-genesis validator setup",
+  "genesis-validator-apply": "Applying as a genesis validator",
+  "joining-the-testnet": "Joining the latest Testnet",
+  "post-genesis-validator": "Becoming a validator after genesis",
+  "testnet-history": "History of testnets",
+  "pow": "Using the testnet faucet",
+  "faq": "FAQ"
+}

@@ -2,13 +2,16 @@
   "license": "GPL-3.0",
   "workspaces": [
     "packages/docs",
-    "packages/specs"
+    "packages/specs",
+    "packages/community"
   ],
   "scripts": {
     "dev:docs": "npm run dev --workspace=packages/docs",
     "dev:specs": "npm run dev --workspace=packages/specs",
+    "dev:community": "npm run dev --workspace=packages/community",
     "build:docs": "npm run build --workspace=packages/docs",
     "build:specs": "npm run build --workspace=packages/specs",
+    "build:community": "npm run build --workspace=packages/community",
     "build": "npm run build --workspaces"
   },
   "dependencies": {

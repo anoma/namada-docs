@@ -1,0 +1,71 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Proposing funding
+
+## Formatting the `proposal.json`
+
+Below is an example of a `PGFProposal` that a steward could submit. Note that only stewards will be able to submit these proposals.
+```json
+{
+    "proposal" :{
+        "content": {
+            "title": "Stewie for Steward 2024",
+            "authors": "stewie@heliax.dev",
+            "discussions-to": "forum.namada.net/t/stewies-manifesto/1",
+            "created": "2024-01-01T00:00:01Z",
+            "license": "MIT",
+            "abstract": "Stewie is running for steward, with a focus on technical research. The technical research I will be focused on will definitely not be for weapons of mass destruction. There is some possibility however that I may be focusing somewhat on open source software for weapons of mass destruction.",
+            "motivation": "Nobody knows technical research better than me. Trust me. I know it. I have the best technical research. I will be the best steward. Last night, Namada called me and said, Stewie, thank you. I will make public goods funding great again",
+            "details": "As a genius baby, I possess an unmatched level of intelligence and a visionary mindset. I will utilize these qualities to solve the most complex problems, and direct public goods funding towards weapons of mass destruction ... i mean open source software for weapons of mass destruction",
+        },
+        "author": "stewie",
+        "voting_start_epoch": 3,
+        "voting_end_epoch": 6,
+        "grace_epoch": 12,
+    },
+    "data" :
+        {
+            "continuous" : [
+                {
+                    "target": {
+                        "amount": 420,
+                        "address": "<address-of-recipient>"
+                    }
+                    "action" : "add",
+                },
+            ],
+            "retro" : [
+                {
+                    "target": {
+                        "amount": 1337,
+                        "address": "<address-of-recipient>"
+                    }
+                }
+            ]
+        },  
+}
+```
+where `<address-of-recipient>` should be changed to the address of the recipient of the funds.
+
+Save this file as `PGF_proposal.json` to some memorable path on your machine.
+
+## Submitting the proposal
+
+In order to submit the proposal, the steward can use the following command:
+
+```shell copy
+namada client init-proposal \
+    --pgf-proposal \
+    --data-path PGF_proposal.json
+```
+
+The proposal will then be given a `proposal-id` which can be used to query the proposal.
+
+## Querying the proposal
+
+The command for querying the proposal is as follows:
+
+```shell copy
+namada client query-proposal \
+    --proposal-id <the-proposal-id>
+```

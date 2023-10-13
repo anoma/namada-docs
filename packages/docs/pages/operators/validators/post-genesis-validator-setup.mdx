@@ -1,0 +1,56 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Generating a validator account
+
+```bash copy
+namada wallet address gen --alias aliace
+```
+
+Now choose a name for your validator:
+
+```bash copy
+export VALIDATOR_ALIAS="<your-validator-name>"
+```
+
+A validator account requires additional keys compared to a user account, so start by initialising a validator account:
+
+```bash copy
+namada client init-validator \
+  --alias $VALIDATOR_ALIAS \
+  --account-keys aliace \
+  --signing-keys aliace \
+  --commission-rate <enter-your-commission-rate> \
+  --max-commission-rate-change <enter-decimal-rate>
+```
+
+When initialising a validator account, it is also mandatory to specify both the `commission-rate` charged by the validator for delegation rewards (in decimal format) as well as the `maximum-commission-rate-change` per epoch in the `commission-rate`. Both are expressed as a decimal between 0 and 1. The standard for mainnet will be set by social consensus, but for testnets, the standard has been `0.01` and `0.05`, respectively. 
+
+This command will generate the keys required for running a validator:
+
+- Consensus key, which is used in [signing blocks in CometBFT](https://docs.cometbft.com/v0.37/core/validators#validator-keys).
+- Validator account key for signing transactions on the validator account, such as token self-bonding, unbonding and withdrawal, validator keys, validity predicate, state and metadata updates.
+
+Then, it submits a transaction to the ledger that generates the new validator account with established address, which can be used to receive new delegations.
+
+The keys and the alias of the address will be saved in your wallet. 
+
+<Callout type="warning" emoji="🛎️">
+**IMPORTANT**
+
+Our local ledger node will also be setup to run this validator, you just have to shut it down with e.g. `Ctrl + C`, then start it again with the same command as before.
+</Callout>
+
+```shell copy
+namadan ledger run
+```
+
+The ledger will then use the validator consensus key to sign blocks, should your validator account acquire enough voting power to be included in the active validator set. The size of the active validator set is limited to `128` (the limit is set by the PoS `max_validator_slots` parameter).
+
+Note that the balance of NAM tokens that is in your validator account does not count towards your validator's stake and voting power:
+
+```shell copy
+namada client balance --owner my-validator --token NAM
+```
+
+That is, the balance of your account's address is a regular liquid balance that you can transfer using your validator account key, depending on the rules of the validator account's validity predicate. The default validity predicate allows you to transfer it with a signed transaction and/or stake it in the PoS system. Therefore, in order to increase the voting power of your validator, you need to accrue [some stake](./staking.mdx).
+

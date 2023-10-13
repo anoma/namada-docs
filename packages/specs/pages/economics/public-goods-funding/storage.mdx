@@ -22,11 +22,14 @@ The VP must also check that any `StewardFundingProposal` spending is only done b
 ### Storage keys
 
 Each recipient will be listed under this storage space (for cPGF)
-- `/PGFAddress/cPGF_recipients/Address = Amount`
+- `/PGFAddress/cPGF_recipients/address = Amount`
 - `/PGFAddress/active_stewards/address = Address`
+{/* TODO: Make this accurate */}
+- `/GovernanceParams/StewardTerm = Epoch`
 
 ### Struct
 
+The below is a rust implementation of the Steward structure.
 ```rust
 struct Stewards {
     addresses: Vec<Address>,

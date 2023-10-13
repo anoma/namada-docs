@@ -48,5 +48,5 @@ The signature is produced over the hash of the concatenation of: `proposalHash`,
 
 ## Tallying votes offline
 
-Offline votes are tallied under the same mechanism as [on chain vote tallying](./on-chain.md#tally), but instead of reading the data from storage it will require a list of serialized json votes.
+Offline votes are tallied under the same mechanism as [on chain vote tallying](./on-chain.mdx#tally), but instead of reading the data from storage it will require a list of serialized json votes.
 The voting power for each delegate/delegator is calculated based on their respective bonded-stake from the latest block in that epoch (in principle it could be any block in the epoch, since voting-power does not change within an epoch).

@@ -1,0 +1,22 @@
+## Hardware Wallet
+
+Namada's web wallet extension is compatible with the [Ledger](https://www.ledger.com/) hardware. This guide will walk you through the process of setting up your Ledger device to work with Namada.
+
+### Prerequisites
+A ledger device with the latest firmware installed. You can find instructions on how to update your firmware [here](https://support.ledger.com/hc/en-us/articles/360002731113-Update-device-firmware).
+
+Install the javascript npm package [here](https://www.npmjs.com/package/@zondax/ledger-namada).
+
+In order to use the ledger with the web wallet, you will need to install the [Namada Web Wallet](./web-wallet.mdx#install).
+
+### Connecting your Ledger
+1. Open the Namada web extension.
+2. Under settings, click on the `Connect Ledger` button.
+3. Set an alias for the account that ledger will control the keys for.
+4. You can choose to connect to the ledger via `USB` (recommended) or `HID` (Human Interface Devices). 
+5. The ledger will ask you to confirm the connection. Confirm this connection on your ledger device. 
+6. Once completed, the extension will show the address of the account that the ledger is controlling the keys for.
+7. You can now close the information window and use the ledger to sign transactions.
+
+### Sending transactions with the ledger
+See the [web wallet](./web-wallet.mdx#sending-transactions) guide for instructions on how to send transactions with the web wallet.

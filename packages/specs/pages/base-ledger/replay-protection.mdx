@@ -25,7 +25,7 @@ prevent the execution of already processed transactions.
 
 ## Context
 
-This section illustrates the pre-existing context in the replay protection mechanims is implemented.
+This section illustrates the pre-existing context in the replay protection mechanism is implemented.
 
 ### Encryption-Authentication
 
@@ -67,7 +67,7 @@ pub struct Tx {
 ```
 
 The wrapper transaction is composed of some metadata, an optional unshielding tx
-for fee payment (see [fee specs](../economics/fee-system.md)), the encrypted
+for fee payment (see [fee specs](../economics/fee-system.mdx)), the encrypted
 inner transaction itself and the hash of the concatenation of these values. {/* TODO: Ensure that the hash of concatentation statement is as accurate as possible. It could be values, it could be the object (which consists of keys + values)*/}
 The inner `Tx` transaction carries the Wasm code to be executed and the associated data.
 
@@ -100,7 +100,7 @@ the execution steps:
 
 The transaction data is effectively prevented from being tampered with by the signature checks, since any such tampering would cause the checks to fail and the transaction to be rejected.
 For a more in-depth view, please refer to the
-[Namada execution spec](./execution.md).
+[Namada execution spec](./execution.mdx).
 
 ### CometBFT replay protection
 
@@ -123,7 +123,7 @@ semantics of the state transition. This inner transaction must be protected from
 `WrapperTx` is the only type of transaction currently accepted by the ledger. It must be protected from replay attacks; otherwise, a malicious user could replay the transaction as is. Even if the inner transaction implemented replay protection or was not accepted for any reason, the signer of the wrapper would still incur gas and fees, resulting in economic damage.
 
 To prevent the replay of both these transactions, reliance is placed on a set of digests from already processed transactions that are kept in storage. These digests are computed on the **unsigned** transactions, to support replay
-protection even for [multisigned](multisignature.md) transactions. In this case, using hashes from the signed transactions would result in a different hash for a different set of signatures on the same transaction, allowing for a replay. To achieve this, the `WrapperTx` hash field contins the hash of the unsigned inner transaction, instead of the signed one. This change does not impact the overall safety of Namada, as the wrapper is still signed over all its bytes, including the inner signature. The modification also allows for early replay attack checks in the mempool and during wrapper block-inclusion.
+protection even for [multisigned](multisignature.mdx) transactions. In this case, using hashes from the signed transactions would result in a different hash for a different set of signatures on the same transaction, allowing for a replay. To achieve this, the `WrapperTx` hash field contains the hash of the unsigned inner transaction, instead of the signed one. This change does not impact the overall safety of Namada, as the wrapper is still signed over all its bytes, including the inner signature. The modification also allows for early replay attack checks in the mempool and during wrapper block-inclusion.
 
 In addition, a subspace in storage is required, headed by a `ReplayProtection` internal address:
 ``` bash
@@ -138,7 +138,7 @@ The hashes are positioned at the end of the path to enable rapid storage lookups
 The consistency of the storage subspace is critically important for the correct functioning of the replay protection mechanism. To safeguard it, a validity predicate will verify that no changes to this subspace are applied by any wasm transaction, as these changes should only originate from the protocol.
 
 In both `mempool_validation` and `process_proposal` a check is performed
-(in conjuction with other checks, as described in the [relative section](#wrapper-checks)) on the digests against the storage to ensure that neither of the transactions has already been executed. If this condition is not met, the `WrapperTx` is not included in the mempool or block, respectively. In `process_proposal` a
+(in conjunction with other checks, as described in the [relative section](#wrapper-checks)) on the digests against the storage to ensure that neither of the transactions has already been executed. If this condition is not met, the `WrapperTx` is not included in the mempool or block, respectively. In `process_proposal` a
 temporary cache is used to prevent the replay of a transaction in the same block. If both
 checks pass, the transaction is included in the block. The hashes are
 committed to storage in `finalize_block` and the transaction is executed.
@@ -178,7 +178,7 @@ the attack explained in this section is performed:
 
 #### Governance proposals
 
-Governance [proposals](../base-ledger/governance.md) may carry some wasm code to
+Governance [proposals](../base-ledger/governance.mdx) may carry some wasm code to
 be executed in case the proposal passed. This code is embedded into a
 `DecryptedTx` directly by the validators at block processing time and is not
 inserted into the block itself.
@@ -264,7 +264,7 @@ In mempool_validation, several checks are performed on the wrapper transaction t
 - Unshielding transaction (if present) releases the minimum required tokens for fee payment
 - Successful execution of the unshielding transaction (if present)
 
-More details about gas, fees, and the unshielding transaction can be found in the [fee specs](../economics/fee-system.md).
+More details about gas, fees, and the unshielding transaction can be found in the [fee specs](../economics/fee-system.mdx).
 
 These checks can all be conducted before executing the transactions themselves. If any of these checks fail, the transaction is considered invalid, and the appropriate action is taken:
 

@@ -1,0 +1,58 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Transferring assets over IBC
+
+It is possible to make ibc transfers using the Namada cli with the command `namadac ibc-transfer`. The assumed pre-requisites are that a channel has been created and Hermes is running with the proper config on two nodes.
+
+In order to conduct an IBC transfer using Namada's `ibc-transfer` command, we will need to know the `base-dir` and `node` of each instance (and other transfer parameters).
+`base-dir` is the base directory of each node, see [base-dir](../operators/ledger/base-directory.mdx) for more information.
+`node` is the `rpc_addr` of the relayer.
+You can run
+```shell
+grep "rpc_addr" ${HERMES_CONFIG}
+```
+to find the address.
+
+<Callout>
+ **For the local node ONLY**
+
+ To find your ledger address for Chain A, you can run the following command
+ ```bash copy
+ export BASE_DIR_A = "${HERMES}/data/namada-a/.namada"
+ export LEDGER_ADDRESS_A = "$(grep "rpc_address" ${BASE_DIR_A}/${CHAIN_A_ID}/setup/validator-0/.namada/${CHAIN_A_ID}/config.toml)"
+ ```
+</Callout>
+
+The channel ID for this chain will depend on the order in which one created the channel. Since we have only opened one channel, the `channel-id` is `channel-0`, but as more are created, these increase by index incremented by 1. The channel-id should be communicated by the relayer.
+
+Assuming that the open channel is `channel-0`, you can save it in an environment variable by running
+```bash copy
+export CHANNEL_ID = "channel-0"
+```
+
+The inter-blockchain transfers from Chain A can be achieved by
+```bash copy
+namadac --base-dir ${BASE_DIR_A}
+    ibc-transfer \
+        --amount ${AMOUNT} \
+        --source ${SOURCE_ALIAS} \
+        --receiver ${RECEIVER_RAW_ADDRESS} \
+        --token ${TOKEN_ALIAS} \
+        --channel-id ${CHANNEL_ID} \
+        --node ${LEDGER_ADDRESS_A}
+```
+Where the above variables in `${VARIABLE}` must be substituted with appropriate values. The raw address of the receiver can be found by `namadaw --base-dir ${BASE_DIR_B} address find --alias ${RECEIVER}`.
+
+E.g.
+```bash copy
+namadac --base-dir ${BASE_DIR_A}
+    ibc-transfer \
+    --amount 100 \
+    --source albert \
+    --receiver atest1d9khqw36g56nqwpkgezrvvejg3p5xv2z8y6nydehxprygvp5g4znj3phxfpyv3pcgcunws2x0wwa76 \
+    --token nam \
+    --channel-id channel-0 \
+    --node 127.0.0.1:27657
+```
+
+Once the transaction has been submitted, a relayer will need to relay the packet to the other chain. This is done automatically by the relayer running Hermes. If the packet is never succsesfully relayed, the funds are returned to the sender after a timeout. See more infomation in the [specs](https://specs.namada.net/interoperability/ibc).
