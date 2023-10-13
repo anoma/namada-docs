@@ -56,3 +56,17 @@ namadac --base-dir ${BASE_DIR_A}
 ```
 
 Once the transaction has been submitted, a relayer will need to relay the packet to the other chain. This is done automatically by the relayer running Hermes. If the packet is never succsesfully relayed, the funds are returned to the sender after a timeout. See more infomation in the [specs](https://specs.namada.net/interoperability/ibc).
+
+## Transferring assets back from Cosmos-SDK based chains
+
+When a transfer has been made to a Cosmos-SDK based chain, the ibc transfer is conducted as above. However, when transferring back from the cosmos-based chain, clearly the `namadac ibc-transfer` command will not work. Instead, you want to use [`gaiad`](https://github.com/cosmos/gaia).
+
+```bash
+gaiad tx ibc-transfer transfer transfer ${CHANNEL_ID} ${RECEIVER_RAW_ADDRESS} ${AMOUNT}${IBC_TOKEN_ADDRESS} --from ${COSMOS_ALIAS} --node ${COSMOS_RPC_ENDPOINT} --fees 5000uatom
+```
+
+for example:
+
+```bash copy
+gaiad tx ibc-transfer transfer transfer channel-0 atest1d9khqw368qcyx3jxxu6njs2yxs6y2sjyxdzy2d338pp5yd35g9zrv334gceng3z9gvmryv2pfdddt4 10ibc/281545A262215A2D7041CE1B518DD4754EC7097A1C937BE9D9AB6F1F11B452DD --from my-cosmos-address --node https://rpc.sentry-01.theta-testnet.polypore.xyz:443 --fees 5000uatom
+```
