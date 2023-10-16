@@ -23,12 +23,15 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         make:
-          - name: Build Specs docs image
+          - name: Build Specs image
             image: specs
             path: specs
-          - name: Build Docs docs image
+          - name: Build Docs image
             image: docs
             path: docs
+          - name: Build Docs image
+            image: community
+            path: community
 
     steps:
       - name: Checkout repo
@@ -81,6 +84,8 @@ jobs:
             path: docs
           # - name: specs
           #   path: specs
+          - name: community
+            path: community
 
     steps:
       - name: Checkout repo
