@@ -134,6 +134,15 @@ curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/downloa
 tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
 ```
 
+<Callout type="info">
+For some systems, `/usr/local/bin` is a protected directory. In this case, you may need to run the above command with `sudo`.
+I.e 
+```bash copy
+sudo tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
+```
+This is also true for the command `cp ./target/release/hermes /usr/local/bin/` below (see the comment).
+</Callout>
+
 ### From source
 ```bash copy
 export TAG="v1.6.0-namada-beta3"
@@ -146,7 +155,7 @@ export HERMES=$(pwd) # if needed
 ```
 Check the binary:
 ```bash copy
-./target/release/hermes --version
+./target/release/hermes --version #or sudo cp ./target/release/hermes /usr/local/bin/
 ```
 
 <Callout type="info">
@@ -159,14 +168,14 @@ cp ./target/release/hermes /usr/local/bin/
 
 ## Setting up the relayer
 
-### Create the `namada_wallet` directory
+### Create the `namada_wallet` directory and chain directories to hold each relayer wallet.toml
 
 For the relayer to work, it needs to have a wallet directory to store the keys of the relayer. This can be done by running
 ```bash copy
 # in the Hermes folder
 mkdir namada_wallet
-mkdir $CHAIN_A_ID
-mkdir $CHAIN_B_ID
+mkdir -p ~/.hermes/namada_wallet/$CHAIN_A_ID
+mkdir -p ~/.hermes/namada_wallet/$CHAIN_B_ID
 ```
 
 <Callout type="info">
@@ -186,7 +195,7 @@ This will generate a key for the relayer account. The key will be stored in the 
 
 It is now important to copy this wallet file into the `namada_wallet` directory that was created above, for each chain. Continuing this example, the first wallet can be copied by running:
 ```bash copy
-cp $HOME/.local/share/namada/$CHAIN_A_ID/wallet.toml $HERMES/namada_wallet/$CHAIN_A_ID/wallet.toml
+cp $HOME/.local/share/namada/$CHAIN_A_ID/wallet.toml ~/.hermes/namada_wallet/$CHAIN_A_ID/wallet.toml
 # Make sure this is done for both wallets on each chain!
 ```
 
