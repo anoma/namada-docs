@@ -16,7 +16,7 @@ The upgrade is a soft upgrade, meaning that there is no consensus breaking chang
 Then, simply stop the current ledger and restart it with the new binaries. This can be done by running the following commands:
 
 ```bash copy
-OPERATING_SYSTEM="Linux"
+OS="Linux"
 wget https://github.com/anoma/namada/releases/download/v0.23.1/namada-v0.23.1-${OS}-x86_64.tar.gz
 tar -xvf namada-v0.23.1-${OS}-x86_64.tar.gz -C /usr/local/bin/ #sudo may be required
 killall namadan
