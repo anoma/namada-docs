@@ -20,8 +20,9 @@ Then, simply stop the current ledger and restart it with the new binaries. This 
 ```bash copy
 OS="Linux" # Or OS="Darwin" for Mac
 wget https://github.com/anoma/namada/releases/download/v0.23.1/namada-v0.23.1-${OS}-x86_64.tar.gz
-tar -xvf namada-v0.23.1-${OS}-x86_64.tar.gz -C /usr/local/bin/ #sudo may be required
 killall namadan
+tar -xvf namada-v0.23.1-${OS}-x86_64.tar.gz
+cp namada-v0.23.1-${OS}-x86_64/* /usr/local/bin/ #sudo may be required
 namada --version #should output v0.23.1
 NAMADA_CMT_STDOUT=true namada node ledger run
 ```
