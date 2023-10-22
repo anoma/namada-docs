@@ -45,7 +45,7 @@ After=network-online.target
 [Service]
 User=$USER
 WorkingDirectory=$HOME/.local/share/namada
-Environment=TM_LOG_LEVEL=p2p:none,pex:error
+Environment=CMT_LOG_LEVEL=p2p:none,pex:error
 Environment=NAMADA_CMT_STDOUT=true
 ExecStart=/usr/local/bin/namada node ledger run 
 StandardOutput=syslog
