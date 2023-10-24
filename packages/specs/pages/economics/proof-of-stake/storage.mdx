@@ -7,61 +7,82 @@ Bonds are stored as an epoched map of bonded tokens, keyed by the delegator and 
 
 ```delegator -> validator -> epoch -> amount```
 
-The `amount` is the total remaining tokens in the bond for a given starting `epoch`, which is the epoch in which the tokens started to contribute to the validator's voting power.
+The `amount` is the total remaining tokens in the bond for a given starting `epoch`, which is the epoch in which the tokens started to contribute to the `validator`'s voting power.
 
-Token amounts in the bonds are updated in place while bonding, unbonding, and redelegating. Bonding transactions increment the bonded amount according to the starting epoch. When unbonding and redelegating, the token amounts are decremented from the bonds in place, starting with the futuremost epoch that contains bonded tokens, then iterating backwards in time until the unbond/redelegation amount is fully accounted for.
+Token amounts in the bonds are updated in place by transaction execution. Transactions that manipulate the `bonds`:
+- [Bond tx](transactions.md#bonding): increments the bond amount according to the `epoch`.
+- [Unbond tx](transactions.md#unbonding): decrements the bond amount, starting with the futuremost `epoch` that contains bonded tokens, then iterating backwards in time until the unbond amount is fully accounted for.
+- [Redelegation tx](transactions.md#redelegation): decrements the amount bonded to the `src_validator` and increments the amount bonded to the `dest_validator`.
 
-TO COMPLETE: describe precisely why the epochs of bonds are kept indefinitely in storage without trimming (bc of slashing but be more specific).
+Bonds are always kept in storage for all epochs that continue to have bonded tokens, as this is required for slashing computations. TODO: need to elaborate more?  
 
 ## Unbonds
 Unbonds are stored as an epoched map of unbonded tokens, keyed by the delegator and validator pair:
     
 ```delegator -> validator -> start_epoch -> withdrawable_epoch -> amount```
 
-The `amount` is the total token amount that is unbonded from a bond that started contributing to voting power at `start_epoch` and that will be withdrawable at `withdrawable_epoch`.
+The `amount` is the total token amount that has been unbonded from a bond that started contributing to voting power at `start_epoch` and that will be withdrawable at `withdrawable_epoch`.
 
-These unbonds are incremented during an unbond transaction, and their data is removed from storage upon a withdrawal transaction. Redelegation does not manipulate this unbond data.
+Transactions that manipulate the `unbonds`:
+- [Unbond tx](transactions.md#unbonding): increments the unbond amount according to the `start_epoch` and `withdrawable_epoch`.
+- [Withdraw tx](transactions.md#withdrawing): removes the unbond data according to the `withdrawable_epoch` after using it to determine the token amount to transfer to the bond holder.
 
-## Validator's Total Bonded
-A map of the total tokens bonded to a validator in a given epoch:
+Redelegation does not manipulate this unbond data, as it is primarily used to determine how many tokens are to be transferred during a withdrawal, and redelegated tokens are not withdrawable by virtue of the redelegation transaction.
+
+## Validator Total Bonded
+A map of the total remaining tokens bonded to a validator in a given epoch:
 
 ```validator -> epoch -> amount```
 
-The `amount` is the total token amount bonded to the validator by all delegators, where `epoch` is the epoch in which the tokens began contributing to the voting power. Unlike the standard [bonds](#bonds) data, this total bonded data is not decremented during unbonding.
+The `amount` is the total token amount bonded to the `validator` by all delegators, where `epoch` is the epoch in which the tokens began contributing to the voting power. This data is the sum of [bonds](#bonds) over all delegators to a particular `validator` (including itself).
 
-TODO: provide some details on what this is used for.
+Transactions that manipulate the `validator_total_bonded`:
+- [Bond tx](transactions.md#bonding): increments the bond amount according to the `epoch`.
+- [Unbond tx](transactions.md#unbonding): decrements the bond amount, starting with the futuremost `epoch` that contains bonded tokens, then iterating backwards in time until the unbond amount is fully accounted for.
+- [Redelegation tx](transactions.md#redelegation): decrements the `src_validator_total_bonded` and increments the `dest_validator_total_bonded`.
 
-## Validator's Total Unbonded
+TODO: provide some more details on what this is used for?
+
+## Validator Total Unbonded
 A map of the total tokens unbonded from a validator in a particular epoch:
 
 ```validator -> unbond_epoch -> start_epoch -> amount```
 
-The `amount` is the total token amount unbonded from the validator corresponding, where the `unbond_epoch` is the epoch in which the tokens stopped contributing to the voting power. The `start_epoch` is the epoch in which the unbonded tokens originally started contributing to voting power when bonded.
+The `amount` is the total token amount unbonded from the `validator`, where the `unbond_epoch` is the epoch in which the tokens stopped contributing to the `validator`'s voting power. The `start_epoch` is the epoch in which the unbonded tokens originally started contributing to the `validator`'s voting power when bonded. This data is the sum of [unbonds](#unbonds) over all delegators to a particular `validator` (including itself), but this data is not removed when the unbonded tokens are withdrawn.
 
-These unbonded amounts are only incremented during an unbond transaction.
+Transactions that manipulate the `validator_total_unbonded`:
+- [Unbond tx](transactions.md#unbond): increments the total unbonded amount according to the `start_epoch` and `unbond_epoch`, which is the pipeline epoch.
+- [Redelegation tx](transactions.md#redelegation): increments the `src_validator_total_unbonded`
 
-## Validator's Incoming Redelegations
-A destination validator's incoming redelegation:
+TODO: provide some more details on what this is used for?
+
+## Validator Incoming Redelegations
+A destination validator's latest incoming redelegation from a particular delegator:
 
 ```dest_validator -> delegator -> redel_end_epoch```
 
-The `delegator` is the delegator address that has redelegated tokens to the `dest_validator`. The `redel_end_epoch` is the epoch in which the redelegated tokens start contributing the the `dest_validator`'s voting power.
+The `delegator` is the delegator address that has redelegated tokens to the `dest_validator`. The `redel_end_epoch` is the most recent epoch in which redelegated tokens start contributing the the `dest_validator`'s voting power.
 
-## Validator's Outgoing Redelegations
+Transactions that manipulate the `validator_incoming_redelegations`:
+- [Redelegation tx](transactions.md#redelegation): updates the `dest_validator`'s incoming redelegation with the epoch when the redelegated tokens will start contributing to its voting power.
+
+When a redelegation transaction is initiated, the `validator_incoming_redelegations` for the pair of the `src_validator` and `delegator` are checked to determine if the redelegation is *chained*. If the `delegator` has redelegated tokens to the `src_validator` recently enough, then a further redelegation away from the `src_validator` will not be allowed.
+
+## Validator Outgoing Redelegations
 Data describing a source validator's outgoing redelegated tokens:
 
 ```src_validator -> dest_validator -> bond_start -> redel_start -> amount```
 
 This data contains the `dest_validator` to which the token `amount` that was previously bonded to the `src_validator` (previously active from epoch `bond_start`) was redelegated. The `redel_start` is the epoch in which the redelegation transaction is initiated (the tokens begin contributing to the `dest_validator`'s voting power at epoch `redel_start + pipeline_len`).
 
-## Validator's Total Redelegated Bonded
+## Validator Total Redelegated Bonded
 The total token amount redelegated to a destination validator, summed and mapped according to the bond and redelegation epochs:
 
 ```dest_validator -> redel_end_epoch -> src_validator -> bond_epoch -> amount```
 
 The `amount` is the total token amount that has been redelegated to the `dest_validator` from a given `src_validator`, where this `amount` originally started contributing to the `src_validator`'s voting power at `bond_epoch` and then started contributing to the `dest_validator`'s voting power at `redel_end_epoch`.
 
-## Validator's Total Redelegated Unbonded
+## Validator Total Redelegated Unbonded
 The total amount of redelegated tokens that have been unbonded from their destination validator, constrained by several different epochs:
 
 ```dest_validator -> unbond_epoch -> redel_end_epoch -> src_validator -> bond_epoch -> amount```
@@ -73,13 +94,28 @@ The epochs are:
 
 TODO: describe what this is needed for and what txs update it
 
-## Delegator's Redelegated Bonded
+## Delegator Redelegated Bonded
 The token amount redelegated by a delegator from a source validator to a destination validator, summed according to the epochs at which the tokens contributed to voting power:
 
 ```delegator -> dest_validator -> redel_end_epoch -> src_validator -> bond_epoch -> amount```
 
 The `amount` is the total redelegated token amount that started contributing to the `dest_validator`'s voting power in `redel_end_epoch` and that originally started contributing to the `src_validator`'s voting power in `bond_epoch`.
 
-TODO: describe what this is needed for and what txs update it
+This data is similar to [bonds](bonds) but exclusive to redelegated tokens.
 
-## Delegator's Redelegated Unbonded
+Transactions that manipulate the `delegator_redelegated_bonded`:
+- [Unbonding tx](transactions.md#unbond): decrements the redelegated bonded amount if previously redelegated tokens are unbonded.
+- [Redelegation tx](transactions.md#redelegation): decrements a `src_validator`'s redelegated bonded amount if previously redelegated tokens are once again being redelegated, and increases a `dest_validator`'s redelegated bonded amount according to the current redelegation.
+
+## Delegator Redelegated Unbonded
+The amount of previously redelegated tokens that have been unbonded from the destination validator of said redelegation, summed according to the epochs at which the tokens contributed to voting power:
+
+```delegator -> dest_validator -> redel_end_epoch -> withdraw_epoch -> src_validator -> bond_epoch -> amount```
+
+The `amount` is the total unbonded redelegated token amount that started contributing to the `dest_validator`'s voting power in `redel_end_epoch` and that originally started contributing to the `src_validator`'s voting power in `bond_epoch`. The `withdraw_epoch` is the epoch in which the unbonded tokens are withdrawable.
+
+This data is similar to [unbonds](unbonds) but exclusive to redelegated tokens.
+
+Transactions that manipulate the `delegator_redelegated_unbonded`:
+- [Unbonding tx](transactions.md#unbond): increments the redelegated unbonded amount if previously redelegated tokens are unbonded.
+- [Withdraw tx](transactions.md#withdraw): removes data for those redelegated unbonded tokens whose `withdraw_epoch` is at or before the epoch of the transaction.
