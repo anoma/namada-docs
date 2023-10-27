@@ -1,24 +1,24 @@
 import { Callout } from 'nextra-theme-docs'
 
-# The Campfire Testnet
+# The Namada Campfire Testnet ⛺🔥
 
 <Callout type="info">
-The campfire testnet is a testnet that is run in parallel to the "validator" testnet. This is a community run testnet, currently being maintained and orchestrated by [Knowable](https://knowable.vc/) and the Luminara community. The version may differ from the validator testnet, and is currently running on version `v0.23.1`.
+The Namada Campfire ⛺🔥 testnet is run in parallel to the "validator" testnet. This is a community-run testnet, currently being maintained and orchestrated by the [Luminara collective](https://luminara.icu), a small group of Namada supporters. Campfire usually runs the latest release (or pre-release), which may differ from the validator testnet. You can see the version and more at https://testnet.luminara.icu
 </Callout>
 
 ## Joining 
 
 <Callout type="info" emoji="🏕️">
-The most up to date docs on joining the campfire testnet can be found [here](https://knowabl.notion.site/Campfire-testnet-5e4c1df53ab64b818a55bfcf36ccc550).
+The most up-to-date docs on joining Campfire ⛺🔥 can be found [here](https://knowabl.notion.site/Campfire-testnet-5e4c1df53ab64b818a55bfcf36ccc550).
 </Callout>
 
 ### Pre-requisites
 
 <Callout type="warning" emoji="❗">
-Currently, campfire only supports Ubuntu machines in its current setup. 
+Currently, Campfire ⛺🔥 docs only detail support for Ubuntu machines. 
 </Callout>
 
-The user will need to have installed the [Stack-Orchestrator](https://github.com/vknowable/stack-orchestrator), which is a general tool for quickly launching and managing a stack of Tendermint based blockchains. The docs are found in the [README](https://github.com/vknowable/stack-orchestrator/README.md) of the repo, and the tool can be installed by running the following command:
+The user will need to have installed the [Stack-Orchestrator](https://github.com/vknowable/stack-orchestrator), which is a general tool for quickly and flexibly launching and managing a software stack in a containerized environment. The docs are found in the [README](https://github.com/vknowable/stack-orchestrator/README.md) of the repo, and the tool can be installed by running the following command:
 
 ```bash copy
 git clone https://github.com/vknowable/stack-orchestrator.git
@@ -27,7 +27,7 @@ scripts/namada-quick-install.sh
 exit
 ```
 
-Once this is completed, it is recommended to install Namada through the following Docker image:
+Once this is completed, it is recommended to install Namada through the following Docker image (and the version in this command may need to be [updated accordingly](https://testnet.luminara.icu):
 
 ```bash copy
 export NAMADA_TAG=v0.23.1
@@ -51,4 +51,4 @@ The relevant and more detailed docs are found [here](https://knowabl.notion.site
 
 ## Interacting with the testnet
 
-The Luminara community has also composed a [Namada CLI cheat sheet](https://www.notion.so/Namada-CLI-cheat-sheet-b54b220610bd4e7e91548e32d7ac3c8a) that is available and useful for any Namada user.
+The [Luminara collective](https://luminara.icu) has also composed a [Namada CLI cheat sheet](https://www.notion.so/Namada-CLI-cheat-sheet-b54b220610bd4e7e91548e32d7ac3c8a) that is available and useful for any Namada user.
