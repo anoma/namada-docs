@@ -17,74 +17,38 @@ The Namada SDK can be installed by creating a new Rust project and adding the fo
 
 ```toml
 [package]
-name = "sdk"
+name = "namada-sdk-starter"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-[package]
-name = "namada-sdk"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-axum = { version = "0.6.20", features = ["tower-log"] }
-tokio = { version = "1.0", features = ["full"] }
-tower = { version = "0.4", features = [
-    "util",
-    "timeout",
-    "load-shed",
-    "limit",
-    "buffer",
-] }
-tower-http = { version = "0.4.4", features = [
-    "compression-full",
-    "limit",
-    "trace",
-    "cors",
-] }
-tower-layer = "0.3.2"
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-serde = { version = "1.0.138", features = ["derive"] }
-serde_json = "1.0"
-clap = { version = "4.4.2", features = ["derive", "env"] }
-lazy_static = "1.4.0"
-anyhow = "1.0.75"
-thiserror = "1.0.48"
-validator = { version = "0.16.0", features = ["derive"] }
-async-trait = "0.1.73"
-chrono = { version = "0.4.30", features = ["serde"] }
-rand = "0.8.5"
-rand_chacha = "0.3.1"
-dotenvy = "0.15.7"
-hex = "0.4.3"
-namada = { git = "https://github.com/anoma/namada", rev = "v0.23.0", default-features = false, features = ["abciplus", "namada-sdk", "async-send"] }
-borsh = "0.9.4"
-orion = "0.17.5"
-data-encoding = "2.4.0"
-reqwest = "0.11.20"
-zeroize = "1.6.0"
-masp_primitives = { git = "https://github.com/anoma/masp", rev = "50acc5028fbcd52a05970fe7991c7850ab04358e" }
-masp_proofs = { git = "https://github.com/anoma/masp", rev = "50acc5028fbcd52a05970fe7991c7850ab04358e", default-features = false, features = ["local-prover"] }
-axum-macros = "0.3.8"
+async-std = "1.11.0"
+async-trait = "0.1.51"
+borsh = "0.9.0"
+file-lock = "2.0.2"
+futures = "0.3.28"
+getrandom = { version = "0.2" }
+masp_primitives = { git = "https://github.com/anoma/masp.git", rev = "50acc5028fbcd52a05970fe7991c7850ab04358e" }
+masp_proofs = { git = "https://github.com/anoma/masp.git", rev = "50acc5028fbcd52a05970fe7991c7850ab04358e", features = ["download-params"]}
+# Make sure the rev is to the latest version of namada in the below repo
+namada_sdk = { git = "https://github.com/anoma/namada.git", rev = "v0.24.0", default-features = false, features = ["abciplus", "namada-sdk", "std"] }
+rand = {version = "0.8", default-features = false}
+rand_core = {version = "0.6", default-features = false}
+tendermint-config = {git="https://github.com/heliaxdev/tendermint-rs.git", rev="b7d1e5afc6f2ccb3fd1545c2174bab1cc48d7fa7"}
+tendermint-rpc = {git="https://github.com/heliaxdev/tendermint-rs.git", rev="b7d1e5afc6f2ccb3fd1545c2174bab1cc48d7fa7", features = ["http-client"]}
+thiserror = "1.0.38"
+tokio = {version = "1.8.2", default-features = false}
+toml = "0.5.8"
+zeroize = "1.5.5"
 
 [patch.crates-io]
 borsh = {git = "https://github.com/heliaxdev/borsh-rs.git", rev = "cd5223e5103c4f139e0c54cf8259b7ec5ec4073a"}
+borsh-derive = {git = "https://github.com/heliaxdev/borsh-rs.git", rev = "cd5223e5103c4f139e0c54cf8259b7ec5ec4073a"}
+borsh-derive-internal = {git = "https://github.com/heliaxdev/borsh-rs.git", rev = "cd5223e5103c4f139e0c54cf8259b7ec5ec4073a"}
+borsh-schema-derive-internal = {git = "https://github.com/heliaxdev/borsh-rs.git", rev = "cd5223e5103c4f139e0c54cf8259b7ec5ec4073a"}
 
-[profile.ephemeral-build]
-inherits = "release"
-incremental = false
-lto = "thin"
-opt-level = 2
-codegen-units = 64
-strip = "symbols"
-debug = false
-
-[profile.release]
-incremental = false
 ```
 
 </Expandable>

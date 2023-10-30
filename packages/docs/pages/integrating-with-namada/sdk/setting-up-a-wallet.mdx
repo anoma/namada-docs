@@ -1,8 +1,59 @@
 # Setting up an SDK wallet
 
-In order to use the sdk in order to eventually construct transfers, we need to also import the Namada `Wallet` module.
+## Relevant imports
 
-Below is a basic setup that implements the required trait `WalletUtils` for a struct we call `SdkWallet`.
+### General imports
+```rust
+// namada_sdk::Namada is a high level interface in order to interact with the Namada SDK
+use namada_sdk::Namada;
+// The NamadaImpl provides convenient implementations to frequently used Namada SDK interactons
+use namada_sdk::NamadaImpl;
+```
+
+### Wallet specific imports
+
+```rust
+// SecretKey, common and SchemeType give access to Namada cryptographic keys and their relevant implementations. Namada supports ED25519 and SECP256K1 keys.
+use namada_sdk::core::types::key::common::SecretKey;
+use namada_sdk::core::types::key::{common, SchemeType};
+// Filesystem wallet utilities (stores the path of the wallet on the filesystem)
+use namada_sdk::wallet::fs::FsWalletUtils;
+```
+
+## Creating a wallet from a mnemonic
+
+The SDK can create a wallet from a mnemonic phrase. The mnemonic phrase is a 24 word phrase that can be used to restore a wallet. 
+
+```rust
+let mnemonic = Mnemonic::from_phrase(MNEMONIC_CODE, namada_sdk::bip39::Language::English)
+```
+
+```rust
+// Assuming a cometbft node is running on localhost:26657
+let http_client = HttpClient::new("http://localhost:26657").unwrap();
+// Assuming wallet.toml exists in the current directory
+let mut wallet = FsWalletUtils::new(PathBuf::from("wallet.toml"));
+// The key can be generated from the wallet by passing in the mnemonic phrase
+let (_key_alias, sk) = NamadaImpl::new(&http_client, &mut wallet, &mut shielded_ctx, &NullIo)
+            .wallet_mut()
+            .await
+            .derive_key_from_user_mnemonic_code(
+                SchemeType::Ed25519,
+                Some(alias),
+                false,
+                Some(derivation_path),
+                Some((mnemonic.clone(), Zeroizing::new("".to_owned()))),
+                None,
+            )
+            .expect("unable to derive key from mnemonic code")
+            .unwrap();
+```
+
+In the second part of the above function, the key is derived from the mnemonic phrase. The `alias` is the name of the key that will be stored in the wallet. The `derivation_path` is the path to the key in the HD wallet. The `mnemonic` is the mnemonic phrase that was generated earlier. The `shielded_ctx` is the context for the shielded transactions. The `NullIo` is the IO context for the wallet.
+
+## Generating a new wallet and saving it to the filesystem
+
+It is also possible to create the sdk wallet from scratch. This is more involved because it requires generating a new store for the wallet to exist in.
 
 ```rust
 use std::path::PathBuf;
