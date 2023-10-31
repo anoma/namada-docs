@@ -1,6 +1,7 @@
 {
     "setting-up-a-client" : "Setting up a client",
     "setting-up-a-wallet" : "Setting up a wallet",
+    "generating-accounts": "Generating accounts",
     "constructing-transfers" : "Constructing transfers",
     "interface-integration" : "Integrating with the interface"
 }
