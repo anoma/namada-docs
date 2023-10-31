@@ -49,11 +49,24 @@ Other transactions can be constructed in a similar fashion.
 
 In order to make the transfer shielded, we need to the only difference is to use shielded addresses and keys instead of transparent ones.
 
-It is important to use the shielded `SpendingKey` as the source.
+It is important to use the shielded extended `SpendingKey` as the source.
 
 ```rust
-Account{
-    public_key: sk.to_public(),
-    private_key: sk,
-    revealed: false,
-}
+
+use namada::types::masp::{ExtendedSpendingKey, PaymentAddress, TransferSource, TransferTarget};
+
+// Make sure to replace 'secret-ex' with an actual Namada extended spending key
+let source = ExtendedSpendingKey::from_str("secret-ex").unwrap();
+// Make sure to replace "payment-addr-ex" with an actual Namada payment address
+let destination = PaymentAddress::from_str("payment-addr-ex").unwrap();
+let fee_payer = 
+let mut transfer_tx_builder = namada
+        .new_transfer(
+            TransferSource::ExtendedSpendingKey(source),
+            TransferTarget::Address(Address::from(&destination.public_key)),
+            namada.native_token(),
+            amount,
+        )
+        // Make sure to replace "transparent-address-ex" with an actual Namada transparent address
+        .signing_keys(vec![Address::from_str("transparent-address-ex").ok()]);
+```
