@@ -93,7 +93,7 @@ struct OnChainVote {
     yay: ProposalVote,
 }
 ```
-where `ProposalVote` is an enum representing a `Yay` or `Nay` vote: the yay variant also contains the specific memo (if any) required for that proposal.
+where `ProposalVote` is an enum representing a `Yay`, `Nay`, or `Abstain` vote: the yay variant also contains the specific memo (if any) required for that proposal.
 
 Storage writes for a vote transaction are described [here](./storage.mdx#votes).
 
@@ -122,12 +122,16 @@ Tallying is computed with the following rules:
 
 1. Sum all the voting power of delegates that voted `Yay`, call this sum `SumYay`
 2. Sum all the voting power of delegates that voted `Nay`, call this sum `SumNay`
-3. Check if the sum `SumYay` + `SumNay` meets the first threshold, if not, the proposal outcome is negative
-3. For any delegate that voted `Yay`, subtract the voting power of any delegator that voted `Nay` from `SumYay`
-4. For any delegate that voted `Nay`, subtract the voting power of any delegator that voted `Yay` from `SumNay`
-5. Add voting power for any delegation that voted `Yay` (whose corresponding delegate didn't vote `Yay`) to `SumYay`
-6. Add voting power for any delegation that voted `Nay` (whose corresponding delegate didn't vote `Nay`) to `SumNay`
-7. If the sum `SumYay` is greater than or equal to the sum `SumNay`, **AND** `SumYay` divided by the total `bonded-stake` is greater or equal to the threshold set by `ProposalType`, the proposal outcome is positive, otherwise negative
+3. Sum all the voting power of delegates that voted `Abstain`, call this sum `SumAbstain`
+4. Check if the sum `SumYay` + `SumNay` + `SumAbstain` meets the first threshold, if not, the proposal outcome is negative
+5. For any delegate that voted `Yay`, subtract the voting power of any delegator that voted other than `Yay` from `SumYay`
+6. For any delegate that voted `Nay`, subtract the voting power of any delegator that voted other than `Nay` from `SumNay`
+7. For any delegate that voted `Abstain`, subtract the voting power of any delegator that voted other than `Abstain` from `SumAbstain`
+8. Add voting power for any delegation that voted `Yay` (whose corresponding delegate didn't vote `Yay`) to `SumYay`
+9. Add voting power for any delegation that voted `Nay` (whose corresponding delegate didn't vote `Nay`) to `SumNay`
+9. Add voting power for any delegation that voted `Abstain` (whose corresponding delegate didn't vote `Abstain`) to `SumAbstain`
+10. Set `SumYeaOrNay` to `SumYay` + `SumNay`
+11. Decide whether or not the proposal succeeds based on the proposal-type-specific tally instructions (see [Proposal](./proposal.md))
 
 </Steps>
 

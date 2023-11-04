@@ -59,26 +59,25 @@ pub enum ProposalType {
 - Doesn't carry any WASM code
 - Allows both validators and delegators to vote
 - Requires $\frac{1}{3}$ of the total voting power to vote
-- Requires $\frac{1}{2}$ of the total votes to be `Yay`
+- Requires $\frac{1}{2}$ of the non-abstain (either yea or nay) votes to be `Yay`
 
 `StewardFundingProposal` is a proposal to *conduct* _Public Goods Funding_ **by a steward**:
 - Can only be submitted by PGF stewards
 - Allows both validators and delegators to vote
-- Passes by default **UNLESS** $\frac{1}{3}$ of the total voting power votes on the proposal, **AND** out of the votes, at least $\frac{1}{2}$ are `Nay`
-- Causes the steward to lose steward status if $\frac{2}{3}$ of the total voting power votes on the proposal **AND** out of the votes, at least $\frac{2}{3}$ are `Nay`
+- Passes by default **UNLESS** $\frac{1}{3}$ of the total voting power votes on the proposal, **AND** out of the votes, at least $\frac{1}{2}$ of the non-abstain votes are `Nay`
+- Causes the steward to lose steward status if $\frac{2}{3}$ of the total voting power votes on the proposal **AND** out of the votes, at least $\frac{2}{3}$ of the non-abstain votes are `Nay`
 
 `FundingProposal` is a proposal to *conduct* _Public Goods Funding_ **by anyone**:
 - Allows both validators and delegators to vote
 - Requires $\frac{1}{3}$ of the total voting power to vote
-- Requires $\frac{1}{2}$ of the total votes to be `Yay`
+- Requires $\frac{1}{2}$ of the non-abstain votes to be `Yay`
 
 `PGFProposal` is a specific proposal to propose transfers for _Public Goods Funding_:
 - Doesn't carry any WASM code
 - Allows both validators and delegators to vote
 If the proposer is not a steward:
 - Requires $\frac{1}{3}$ of the total voting power to vote
-- Requires $\frac{1}{2}$ of the total votes to be `Yay`
+- Requires $\frac{1}{2}$ of the non-abstain votes to be `Yay`
 If the proposer is a steward, passes unless:
-- $\frac{1}{3}$ of the total voting power votes on the proposal, **AND** out of the votes, at least $\frac{1}{2}$ are `Nay`
-- Causes the steward to lose steward status if $\frac{2}{3}$ of the total voting power votes on the proposal **AND** out of the votes, at least $\frac{2}{3}$ are `Nay`
-
+- $\frac{1}{3}$ of the total voting power votes on the proposal, **AND** out of the votes, at least $\frac{1}{2}$ of the non-abstain votes are `Nay`
+- Causes the steward to lose steward status if $\frac{2}{3}$ of the total voting power votes on the proposal **AND** out of the votes, at least $\frac{2}{3}$ of the non-abstain votes are `Nay`
