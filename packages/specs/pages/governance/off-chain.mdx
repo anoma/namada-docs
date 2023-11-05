@@ -39,7 +39,7 @@ Offline votes are represented as JSON objects with the following structure:
   proposalHash: Base64<Vec<u8>>,
   voter: Address,
   signature: Base64<Self.proposalHash>,
-  vote: Enum(yay|nay)
+  vote: Enum(yay|nay|abstain)
 }
 ```
 
