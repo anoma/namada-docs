@@ -16,6 +16,9 @@ The below code will download all the binaries for the latest release for all sup
 OPERATING_SYSTEM="Linux" # or "Darwin" for MacOS
 latest_release_url=$(curl -s "https://api.github.com/repos/anoma/namada/releases/latest" | grep "browser_download_url" | cut -d '"' -f 4 | grep "$OPERATING_SYSTEM")
 wget "$latest_release_url"
+
+# Unzip the downloaded file, The file name may vary depending on the version you've downloaded.
+tar -xzvf namada-v0.25.0-Linux-x86_64.tar.gz
 ```
 
 ## Placing the binaries onto `$PATH`
