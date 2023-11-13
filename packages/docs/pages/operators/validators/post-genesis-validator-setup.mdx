@@ -3,7 +3,7 @@ import { Callout } from 'nextra-theme-docs'
 # Generating a validator account
 
 ```bash copy
-namada wallet address gen --alias aliace
+namada wallet address gen --alias name_of_your_wallet
 ```
 
 Now choose a name for your validator:
@@ -17,8 +17,8 @@ A validator account requires additional keys compared to a user account, so star
 ```bash copy
 namada client init-validator \
   --alias $VALIDATOR_ALIAS \
-  --account-keys aliace \
-  --signing-keys aliace \
+  --account-keys name_of_your_wallet \
+  --signing-keys name_of_your_wallet \
   --commission-rate <enter-your-commission-rate> \
   --max-commission-rate-change <enter-decimal-rate>
 ```
