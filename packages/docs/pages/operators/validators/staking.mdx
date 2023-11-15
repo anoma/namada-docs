@@ -1,3 +1,5 @@
+import { Callout } from "nextra-theme-docs";
+
 # Bonding (Staking)
 
 We discuss two types of bonding: 
@@ -7,7 +9,7 @@ We discuss two types of bonding:
 ## Non-self bonding (delegating)
 
 <Callout type="info" emoji="🤡">
-Note that the use of the placeholder `aliace` for the alias parameter. This is a completely configurable parameter, and should just refer to the alias of the key/address used to bond.
+Note the use  of the placeholder `aliace` for the alias parameter. This is a completely configurable parameter, and should just refer to the alias of the key/address used to bond.
 </Callout>
 
 Users can bond to any number of validators at any time. When a user bond tokens, the bonds won't count towards the validator's stake (which in turn determines its voting power) until the beginning of epoch `n + 2` in the current epoch `n` (the literal `2` is set by PoS parameter `pipeline_len`). The bonded tokens will be deducted from the bonder's account immediately, and will be credited to the PoS system's account.
