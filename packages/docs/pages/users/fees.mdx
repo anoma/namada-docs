@@ -5,6 +5,10 @@ In order to settle the market for Namada blockspace demand, fees are coupled wit
 ## How fees are paid
 When explicitly stated, the gas fee is paid by the `--gas-payer` flag. If no `--gas-payer` flag is specified, the gas fee is paid by the first key in the `--signing-keys` flag.
 
+<Callout type="info" emoji="🤡">
+Note that the use of the placeholder `keysha` for the key parameter. This is a completely configurable parameter, and should just refer to the alias of the key signing the transaction (that has a positive nam balance).
+</Callout>
+
 This means that in the transaction 
 ```shell copy
 namada client transfer \
@@ -26,7 +30,7 @@ namada client transfer \
   --token NAM \
   --amount 10 \
   --signing-keys keysha \
-  --gas-payer keysha2
+  --gas-payer accountant
   ```
 
 (Assuming that `keysha2` exists and is in the wallet of the user)
@@ -52,7 +56,7 @@ namadac transfer \
   --token NAM \
   --amount 10 \
   --signing-keys keysha \
-  --gas-payer keysha2 \
+  --gas-payer accountant \
   --dry-run-wrapper
 ```
 
@@ -72,7 +76,7 @@ namadac transfer \
   --token NAM \
   --amount 10 \
   --signing-keys keysha \
-  --gas-payer keysha2 \
+  --gas-payer accountant \
   --gas-limit 2000
 ```
 
@@ -85,7 +89,7 @@ namadac transfer \
   --token NAM \
   --amount 10 \
   --signing-keys keysha \
-  --gas-payer keysha2 \
+  --gas-payer accountant \
   --gas-limit 2000 \
   --gas-price 0.01
 ```
