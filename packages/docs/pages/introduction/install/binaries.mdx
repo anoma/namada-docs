@@ -18,6 +18,12 @@ latest_release_url=$(curl -s "https://api.github.com/repos/anoma/namada/releases
 wget "$latest_release_url"
 ```
 
+Unzip the `tar` using the following command:
+```shell copy
+#Assuming the user only has one namada tar file in the current directory
+tar -xzvf namada*.tar.gz
+```
+
 ## Placing the binaries onto `$PATH`
 For ubuntu and mac machines, the following command should work for placing namada into path.
 
