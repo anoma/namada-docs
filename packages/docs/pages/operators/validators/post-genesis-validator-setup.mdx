@@ -2,8 +2,12 @@ import { Callout } from 'nextra-theme-docs'
 
 # Generating a validator account
 
+<Callout type="info" emoji="🤡">
+Note that the use of the placeholder `aliace` for the alias parameter. This is a completely configurable parameter, and should just refer to the alias of the key/address generated.
+</Callout>
 ```bash copy
-namada wallet address gen --alias aliace
+KEY_ALIAS="aliace"
+namada wallet address gen --alias $KEY_ALIAS
 ```
 
 Now choose a name for your validator:
@@ -17,8 +21,8 @@ A validator account requires additional keys compared to a user account, so star
 ```bash copy
 namada client init-validator \
   --alias $VALIDATOR_ALIAS \
-  --account-keys aliace \
-  --signing-keys aliace \
+  --account-keys $KEY_ALIAS \
+  --signing-keys $KEY_ALIAS \
   --commission-rate <enter-your-commission-rate> \
   --max-commission-rate-change <enter-decimal-rate>
 ```

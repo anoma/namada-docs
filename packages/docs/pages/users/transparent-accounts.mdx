@@ -23,8 +23,13 @@ namada wallet key
 
 It is possible to generate keys using the CLI. By doing so, an implicit account address is also derived in the process and added to storage.
 
+<Callout type="info" emoji="🤡">
+Note that the use of the placeholder `keysha` for the key parameter. This is a completely configurable parameter, and should just refer to the alias of the key signing the transaction (that has a positive nam balance).
+</Callout>
+
 ```shell copy
-namada wallet key gen --alias keysha
+KEY_ALIAS="keysha"
+namada wallet key gen --alias $KEY_ALIAS
 ```
 
 <Callout type="info">
@@ -37,7 +42,8 @@ The encryption password is _not_ a part of key generation randomness.
 Namada wallet supports keypair generation using a [mnemonic code](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) and [HD derivation path](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 To generate a keypair for a default path use
 ```shell copy
-namada wallet key gen --alias keysha --hd-path default
+KEY_ALIAS="keysha"
+namada wallet key gen --alias $KEY_ALIAS --hd-path default
 ```
 
 <Callout type="info">
