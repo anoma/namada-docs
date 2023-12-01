@@ -1,0 +1,90 @@
+# Setting up a decentarlised Namada network
+
+Setting up a decentralised Namada network requires coordination between two distinct parties:
+
+1. [The network coordinator](#the-network-coordinator)
+2. [The pre-genesis network participants](#pre-genesis-network-participants)
+
+This process is also called the **genesis ceremony**.
+
+## The network coordinator
+
+The network coordinator is responsible for:
+0. Setup
+1. Collecting pre-genesis public keys
+2. Allocating pre-genesis NAM balances
+3. Collecting pre-genesis transactions
+4. Generating the genesis block
+
+### Setup
+
+The genesis ceremony preperation includes creating a coordinated location for the pre-genesis network participants to submit their public keys. The network coordinator is responsible for setting up this location. Conventionally, the network coordinator will host a github repository that allows the pre-genesis network participants to submit their public keys. The network coordinator must ensure that the github repository is publicly accessible and that the pre-genesis network participants are able to submit their public keys in a secure manner.
+
+Further, the network coordinator is responsible for making clear timelines for the various steps in the genesis ceremony. The network coordinator must ensure that the pre-genesis network participants are aware of the timelines and that they are able to submit their public keys, transactions, and be online in due time.
+
+### Collecting pre-genesis public keys
+
+The ceremony begins by the network coordinator collecting the public keys of the pre-genesis network participants. The network coordinator must ensure that the total number of pre-genesis public keys collected is equal to the total number of pre-genesis network participants.
+
+Conventionally, the network coordinator hosts a github repository that allows the pre-genesis network participants to submit their public keys. The network coordinator must ensure that the github repository is publicly accessible and that the pre-genesis network participants are able to submit their public keys in a secure manner.
+
+### Allocating pre-genesis NAM balances
+
+Once the participants have [submitted their keys and addresses](#submitting-keys-and-addresses) the network coordinator must allocate balances to these addresses/public keys. The coordinaotor must also ensure that the total pre-genesis NAM balances allocated to the pre-genesis network participants is equal to the total NAM supply.
+
+After this is completed, the network coordinator will publish the `balances.toml` file that contains the pre-genesis NAM balances allocated to the pre-genesis network participants. The `balances.toml` file should be published in the same location as the pre-genesis public keys were submitted.
+
+## Pre-genesis network participants
+
+
+### Generating keys
+
+Before the genesis ceremony begins, the pre-genesis network participants must generate their public and private keys. The pre-genesis network participants must ensure that their private keys are kept secret and that their public keys are submitted to the network coordinator in due time.
+
+This can be done through the namada cli:
+
+```bash
+ALIAS="<your-key-alias>"
+namadac gen key --alias $ALIAS --pre-genesis
+```
+
+After the user has entered their passwords and written down their mnemonic phrase, the namada cli will save the keys to the `pre-genesis` folder inside the [base directory](../ledger/base-directory.mdx).
+
+In order to print the keys, the user can run the following command:
+
+```bash
+# Not recommended in production since it will print the private key to the terminal (which can be recovered)
+cat $BASE_DIR/pre-genesis/wallet.toml
+```
+
+It is the public keys that the pre-genesis network participants must submit to the network coordinator.
+
+```toml
+# Example wallet.toml
+[public_keys]
+bengt = "ED25519_PK_PREFIXtpknam1qq2vscpcvhdwht9tldj9ntxnknandhnerhzd6d42xqzukw2kpcfpudh3dl2"
+
+...
+
+[addresses]
+bengt = "tnam1qq97eqvv4lam8ds00j9em2s2f0r8e7r60qw9fdfq"
+```
+
+It is then the right hand side of each of these fields that is submitted to the network coordinator, i.e `ED25519_PK_PREFIXtpknam1qq2vscpcvhdwht9tldj9ntxnknandhnerhzd6d42xqzukw2kpcfpudh3dl2` and `tnam1qq97eqvv4lam8ds00j9em2s2f0r8e7r60qw9fdfq` in the example above.
+
+The network coordinator should specify the schema in which the pre-genesis network participants should submit their public keys and addresses. A toml file with the following schema is recommended:
+
+```toml
+[<pre-genesis-participant-alias>]
+"public-key" = "ED25519_PK_PREFIXtpknam1qpjs6jrjuu5cj508ys7ezee4r40v8as6vz4j3ddc9qm68nfhf5n7clp4xse"
+"address" = "tnam1qq5skuga54tfs7422hzz8sqvk3s6lhe2dg32jjhd"
+```
+
+### Submitting keys and addresses
+
+After the network coordinator has published the location (conventionally a github repository) for the pre-genesis network participants to submit their public keys, the participants are expected to submit their generated public keys (and their corresponding addresses) to the network coordinator in due time. The deadline will be set by the network coordinator.
+
+### Generating transactions
+
+This can only occur AFTER the network coordinator has published the `balances.toml` that allocates pre-genesis NAM balances to the pre-genesis network participants.
+

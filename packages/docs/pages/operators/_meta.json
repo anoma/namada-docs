@@ -2,7 +2,7 @@
     "hardware": "Hardware requirements",
     "ledger": "Running a full node",
     "validators": "Validators",
-    "local-network": "Setting up a local network",
+    "networks": "Starting a network",
     "ibc": "IBC Relayers",
     "troubleshooting": "Troubleshooting"
 }
