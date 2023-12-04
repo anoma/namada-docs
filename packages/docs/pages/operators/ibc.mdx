@@ -3,30 +3,25 @@ import Expandable from '../../components/Expandable'
 
 # Relaying on Namada
 
-This document describes how to operate a relayer for the Inter-Blockchain Communication (IBC) protocol with Namada. This documentation covers being able to create connections through IBC as well as setting up local instances of Namada for testing purposes.
+This document describes how to operate a relayer for the Inter-Blockchain Communication (IBC) protocol with Namada. This documentation covers being able to create connections through IBC as well as setting up local chains of Namada for testing purposes.
 
 
 This document covers essential steps for using IBC with Namada:
 
-1. [Setup Hermes](#setup-hermes)
+1. [Configure Hermes](#configure-hermes)
 2. [Install Hermes](#install-hermes)
 3. [Setting up the relayer](#setting-up-the-relayer)
 4. [Start the relayer](#start-the-relayer)
-5. [Set up local Namada instances](#set-up-local-namada-instances-using-the-hermes-script)
+5. [Set up local Namada chains](#set-up-local-namada-chains-using-the-hermes-script)
 
 The below is intended for those that wish to relay IBC message transfers between two Namada chains. There is of course the capability to do this between any two IBC compatible chains (such as a Cosmos chain).
 In this case, it is necessary to have a node running on both the destination and the source chain in order to make any package transfers.
-Below, we discuss first how to enable this connection between two pre-existing chains by Hermes, and second, setting up two Namada local instances or joining two pre-existing Namada instances for this purpose.
+Below, we discuss first how to enable this connection between two pre-existing chains by Hermes, and second, setting up two Namada local chains for this purpose.
 
 
-## Setup Hermes
-Hermes is an IBC relayer to relay IBC packets between chains (instances).
-Namada uses a [fork of Hermes supporting Namada instances](https://github.com/heliaxdev/hermes/tree/1.6.0-namada).
-Before packet relay, the user needs the following steps to configure and start Hermes.
-
-1. Make Hermes config file
-2. Create IBC client/connection/channel between instances
-3. Run Hermes
+## Configure Hermes
+Hermes is an IBC relayer to relay IBC packets between chains.
+Namada uses a [fork of Hermes supporting Namada chains](https://github.com/heliaxdev/hermes/tree/v1.7.1-namada-beta4).
 
 ### Make Hermes config file
 One essential piece of the puzzle is to create a `config.toml` file that describes what connections will be set up that the relayer will be responsible for.
@@ -38,7 +33,7 @@ touch $HERMES_CONFIG
 
 If you don't specify the file path, `~/.hermes/config.toml` is read as default.
 
-You can find an example of the config file below. Essentially, you change only the chain IDs, the RPC addresses, and the key names in the config file for Namada. If you don't have nodes, please set up nodes manually or through our [scripts](#set-up-local-namada-instances-using-the-hermes-script).
+You can find an example of the config file below. Essentially, you change only the chain IDs, the RPC addresses, and the key names in the config file for Namada. If you don't have nodes, please set up nodes manually or through our [scripts](#set-up-local-namada-chains-using-the-hermes-script).
 
 <details>
 <summary>Example: config.toml</summary>
@@ -72,25 +67,25 @@ port = 3001
 
 [[chains]]
 id = 'namada-test.0a4c6786dbda39f786'  # set your chain ID
-type = 'namada'
+type = 'Namada'
 rpc_addr = 'http://127.0.0.1:27657'  # set the IP and the port of the chain
 grpc_addr = 'http://127.0.0.1:9090'  # not used for now
 event_source = { mode = 'push', url = 'ws://127.0.0.1:27657/websocket', batch_delay = '500ms' }  # set the IP and the port of the chain
 account_prefix = ''  # not used
 key_name = 'relayer'  # The key is an account name you made
 store_prefix = 'ibc'
-gas_price = { price = 0.001, denom = 'nam' }  # not used for now
+gas_price = { price = 0.001, denom = 'atest1v4ehgw36x9ry2dphx5mrvdjxgez5gdengeq5gs2pg3znx32yg9p5yv2zg3pnjvf4g9q5x329epndn0' }  # the price isn't used for now, the denom should be a raw token address
 
 [[chains]]
 id = 'namada-test.647287156defa8728c'
-type = 'namada'
+type = 'Namada'
 rpc_addr = 'http://127.0.0.1:28657'
 grpc_addr = 'http://127.0.0.1:9090'
 event_source = { mode = 'push', url = 'ws://127.0.0.1:28657/websocket', batch_delay = '500ms' }
 account_prefix = ''
 key_name = 'relayer'
 store_prefix = 'ibc'
-gas_price = { price = 0.001, denom = 'nam' }
+gas_price = { price = 0.001, denom = 'atest1v4ehgw36xazry3pn89q5xv3ngyungs3hxc65vwp3xez5zdp3xppy2v6yxc65zsfegyc5yd2ptuf9d8' }
 ```
 </details>
 
@@ -106,11 +101,11 @@ These are the pieces of this puzzle you want to keep your 👀 on:
  - `chains.rpc_address` specifies the port that the channel is communicating through, and will be the argument for the `ledger_address` of Namada when interacting with the ledger (will become clearer later)
      - Make sure to change the IP address to the IP address of your local machine that is running this node!
  - `chains.key_name` specifies the key of the signer who signs a transaction from the relayer. The key should be generated before starting the relayer.
- - `event_source` specifies the URL of the chain's websocket. This must be the same as the `rpc_address` for Hermes to work properly.
-</Callout>
+ - `chains.event_source` specifies the URL of the chain's websocket. This must be the same as the `rpc_address` for Hermes to work properly.
+ - `chains.gas_price.denom` specifies the token that the relayer pays for IBC transactions. `chains.gas_price.price` isn't used for now.
 
-### Create IBC client/connection/channel between instances
-Hermes CLI has commands to create them. Before the creation, a node of each instance should be running at the specified rpc addresses. If you don't have nodes, please set up nodes manually or through our [scripts](#set-up-local-namada-instances-using-the-hermes-script).
+You can see more details of configuration in [the official document](https://hermes.informal.systems/documentation/configuration).
+</Callout>
 
 ### Export environment variables
 The relaying user will need to save certain environment variables. These are:
@@ -128,7 +123,7 @@ One can download the latest binary release from our [releases page](https://gith
 
 E.g.
 ```bash copy
-export TAG="v1.6.0-namada-beta3"
+export TAG="v1.7.1-namada-beta4"
 export ARCH="x86_64-unknown-linux-gnu" # or "aarch64-apple-darwin"
 curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/download/${TAG}/hermes-${TAG}-${ARCH}.tar.gz
 tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
@@ -145,7 +140,7 @@ This is also true for the command `cp ./target/release/hermes /usr/local/bin/` b
 
 ### From source
 ```bash copy
-export TAG="v1.6.0-namada-beta3"
+export TAG="v1.7.1-namada-beta4"
 
 git clone https://github.com/heliaxdev/hermes.git
 git checkout $TAG
@@ -168,36 +163,27 @@ cp ./target/release/hermes /usr/local/bin/
 
 ## Setting up the relayer
 
-### Create the `namada_wallet` directory and chain directories to hold each relayer wallet.toml
-
-For the relayer to work, it needs to have a wallet directory to store the keys of the relayer. This can be done by running
-```bash copy
-# in the Hermes folder
-mkdir namada_wallet
-mkdir -p ~/.hermes/namada_wallet/$CHAIN_A_ID
-mkdir -p ~/.hermes/namada_wallet/$CHAIN_B_ID
-```
-
-<Callout type="info">
-This step is only needed for namada chains. For cosmos based chains, it is advised to add the key directly to hermes.
-```bash copy
-./hermes --config $HERMES_CONFIG keys add --chain "<name-of-chain>" --key-file "<path-to-key>" --overwrite
-```
-</Callout>
-
 ### Create the relayer account
-On each chain, there must be a `relayer` account. On a namada chain, this can be done by running
+On each chain, there must be a `relayer` account. The alias should be the same as `chains.key_name` in the config. On a namada chain, this can be done by running
 ```bash copy
 namadaw key gen --alias relayer
 ```
 
 This will generate a key for the relayer account. The key will be stored in the `wallet.toml` that is found in the [base directory](./ledger/base-directory.mdx) of the node, inside the `chain-id` folder. For example, if the `chain-id` is `namada-test.0a4c6786dbda39f786`, the `wallet.toml` will be found in `$HOME/.local/share/namada/namada-test.0a4c6786dbda39f786/wallet.toml` (on a ubuntu machine where `base-dir` has not been set up properly).
 
-It is now important to copy this wallet file into the `namada_wallet` directory that was created above, for each chain. Continuing this example, the first wallet can be copied by running:
+The relayer account should have some balance to pay the fee of transactions. Before creating an IBC channel or relaying an IBC packet, you need to transfer the fee token to the relayer account.
+
+### Add the relayer key to Hermes
+To sign each transaction, the relayer's key should be added to Hermes with `keys add` command in advance. It requires the `wallet.toml` which should have the key of `chains.key_name`. Once the key has been added, Hermes doesn't need the wallet anymore.
 ```bash copy
-cp $HOME/.local/share/namada/$CHAIN_A_ID/wallet.toml ~/.hermes/namada_wallet/$CHAIN_A_ID/wallet.toml
-# Make sure this is done for both wallets on each chain!
+hermes --config $HERMES_CONFIG keys add --chain $CHAIN_ID --key-file $WALLET_PATH
 ```
+
+Hermes will store the key in `~/.hermes/keys/${CHAIN_ID}` as default. You can specify the directory by setting `chains.key_store_folder` in the config file.
+
+<Callout type="info">
+If you want to use an encrypted key with a password, you have to set an environment variable `NAMADA_WALLET_PASSWORD_FILE` for the password file or `NAMADA_WALLET_PASSWORD` to avoid entering the password for each transaction submission.
+</Callout>
 
 It is now possible to set up the client.
 
@@ -278,7 +264,7 @@ SUCCESS Channel {
 </Expandable>
 
 ## Start the relayer
-Once you run Hermes, it monitors instances via the nodes and relays packets according to monitored events.
+Once you run Hermes, it monitors chains via the nodes and relays packets according to monitored events.
 ```bash copy
 hermes --config $HERMES_CONFIG start
 ```
@@ -300,24 +286,24 @@ hermes --config $HERMES_CONFIG \
 ### Transferring assets over IBC
 It is now possible to [transfer assets between the two chains.](../users/ibc.mdx)
 
-## Set up local Namada instances using the hermes script
-The script `setup-namada` will set up two instances with one validator node, copy necessary files for Hermes, and make an account for Hermes on each ledger. Also, it will make a Hermes' config file `config_for_namada.toml` in the `hermes` directory.
+## Set up local Namada chains using the Hermes script
+The script `setup-namada` will set up two chains with one validator node, copy necessary files for Hermes, and make an account for Hermes on each ledger. Also, it will make a Hermes' config file `config_for_namada.toml` in the `hermes` directory.
 
 First, you will need to export some environment variables:
 
 ```bash copy
 export NAMADA_DIR="<path-to-namada-source-directory>"
-export TAG="v1.6.0-namada-beta3"
+export TAG="v1.7.1-namada-beta4"
 ```
 
 ```bash copy
 git clone https://github.com/heliaxdev/hermes.git
 git checkout $TAG # The branch is the same as our Hermes
 cd hermes
-./scripts/setup-namada $NAMADA_DIR $CHAIN_ID_A $CHAIN_ID_B
+./scripts/setup-namada $NAMADA_DIR
 ```
 
-In this case, the user doesn't have to wait for sync. If the relayer account on each instance has enough balance, the user can create a channel and start Hermes immediately as explained [above](#create-ibc-channel). The user finds these chain IDs of the instances in the config file `config_for_namada.toml`. One can run `grep "id" ${HERMES_CONFIG}`.
+In this case, the user doesn't have to wait for sync. If the relayer account on each instance has enough balance, the user can create a channel and start Hermes immediately as explained [above](#create-ibc-channel). The user finds these chain IDs of the chains in the config file `config_for_namada.toml`. One can run `grep "id" ${HERMES_CONFIG}`.
 ```bash copy
 # create a channel
 hermes --config $HERMES_CONFIG \
