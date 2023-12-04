@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Setting up a decentarlised Namada network
 
 Setting up a decentralised Namada network requires coordination between two distinct parties:
@@ -87,4 +89,110 @@ After the network coordinator has published the location (conventionally a githu
 ### Generating transactions
 
 This can only occur AFTER the network coordinator has published the `balances.toml` that allocates pre-genesis NAM balances to the pre-genesis network participants.
+
+#### Generate an established account
+
+In order to generate a pre-genesis validator account, the pre-genesis network participants must first generate an established account. This can be done through the namada cli:
+
+<Callout>
+The `$ALIAS` variable is the alias of the pre-genesis keys that were generated in the [Generating keys](#generating-keys) step.
+</Callout>
+
+```bash
+#Ensure $BASE_DIR is set to the base directory
+TX_FILE_PATH="$BASE_DIR/pre-genesis/transactions.toml"
+namadac utils init-genesis-established-account --path $TX_FILE_PATH --alias $ALIAS
+
+# You can change the `--path` argument to any file path, but the recommended is `$BASE_DIR/pre-genesis/transactions.toml`
+```
+
+The command will ouptut the generated address of the established account.
+
+```text
+Derived established account address: tnam1q8lsztqqhpjxdwzw88mqqc2mun7dvpxvas3v2dxk
+```
+
+It is useful to save this address for later use.
+
+```bash
+ESTABLISHED_ACCOUNT_ADDRESS=tnam1q8lsztqqhpjxdwzw88mqqc2mun7dvpx
+```
+
+This will generate a `transactions.toml` file that contains the pre-genesis transaction that will establish the account. The `transactions.toml` file should look something like this:
+
+```toml
+[[established_account]]
+vp = "vp_user"
+threshold = 1
+public_keys = ["tpknam1qr872zwdvw4u4nkpl0ykmvhyvxw7j0u6g7ymz03d7he0jr3szkuwczddjp2"]
+```
+
+#### Generate a pre-genesis multisignature account
+
+In order to generate a pre-genesis multisignature account, simply add multiple `--alias` flags to the command:
+
+```bash
+# Ensure $BASE_DIR is set to the base directory
+# Assuming that the values of $ALIAS1, $ALIAS2, and $ALIAS3 are the aliases of the pre-genesis keys that were generated in the [Generating keys](#generating-keys) step.
+TX_FILE_PATH="$BASE_DIR/pre-genesis/transactions.toml"
+namadac utils init-genesis-established-account --path $TX_FILE_PATH --alias $ALIAS1 --alias $ALIAS2 --alias $ALIAS3
+```
+
+The command will ouptut the generated address of the multisignature account.
+
+
+```text
+Derived established account address: tnam1q8qvns6ndpff03wmszkhgepk2r8f9ws68ugktfml
+```
+
+The corresponding `transactions.toml` file should look something like this:
+
+```toml
+[[established_account]]
+vp = "vp_user"
+threshold = 1
+public_keys = ["tpknam1qr872zwdvw4u4nkpl0ykmvhyvxw7j0u6g7ymz03d7he0jr3szkuwczddjp2", "tpknam1qpz5n0u49s6s5jx4nyycyw0w288yfq96p3lvwxkedxyw77y0vd53sqmryce"]
+```
+
+#### Generate a pre-genesis validator account
+
+Once the pre-genesis network participants have generated respective pre-genesis established accounts, they can generate their pre-genesis validator accounts. This can be done through the namada cli:
+
+```bash
+# Ensure $BASE_DIR is set to the base directory
+# Ensure $ESTABLISHED_ACCOUNT_ADDRESS is set
+# Ensure $TX_FILE_PATH is set
+
+EMAIL="<your-email>"
+SELF_BOND_AMOUNT=1000000 # Set this to the amount of NAM you want to self-bond
+namadac utils init-genesis-validator \
+  --address $ESTABLISHED_ACCOUNT_ADDRESS \
+  --alias "my-validator" \
+  --net-address "127.0.0.1:26656" \
+  --commission-rate 0.05 \
+  --max-commission-rate-change 0.01 \
+  --self-bond-amount $SELF_BOND_AMOUNT \
+  --email $EMAIL \
+  --path $TX_FILE_PATH
+```
+
+<Callout>
+The SELF_BOND_AMOUNT must be less than or equal to the amount of NAM allocated to the pre-genesis keys in the `balances.toml` that was published by the network coordinator.
+</Callout>
+
+The above command will append the necessary transactions to the `transactions.toml` file. The `transactions.toml` file should look something like this:
+
+Successful execution will output the new validator address:
+
+```text
+Validator account address: tnam1q8lsztqqhpjxdwzw88mqqc2mun7dvpxvas3v2dxk
+```
+
+### Submitting transactions
+
+Once all pre-genesis transactions have been generated, the pre-genesis network participants must submit their transactions to the network coordinator in due time. The deadline will be set by the network coordinator. This will involve simply submitting the `transactions.toml` file to the network coordinator at the agreed upon location.
+
+By convention, a directory for each pre-genesis network participant is created in the github repository. The `transactions.toml` file is then submitted to the respective directory.
+
+
 
