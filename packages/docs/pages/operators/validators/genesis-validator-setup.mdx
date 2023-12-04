@@ -35,7 +35,7 @@ namada client utils init-genesis-validator \
 
 ``` bash
 export KEY_ALIAS="CHOOSE_A_NAME_FOR_YOUR_VALIDATOR-KEY"
-namadaw key gen --pre-genesis --alias $ALIAS
+namadaw key gen --pre-genesis --alias $KEY_ALIAS
 ```
 ##### 1.2 Generate your validator
 
@@ -48,7 +48,7 @@ export VALIDATOR_ALIAS="CHOOSE_A_NAME_FOR_YOUR_VALIDATOR"
 export PUBLIC_IP="LAPTOP_OR_SERVER_IP/DNS"
 export BALANCE_ON_KEY="The amount of tokens allocated at genesis to the key" # For testnets, usually 1000000000
 export EMAIL="The email address for validator communications" # Required field, but can be a dummy email (although not recommended)
-namada client utils init-genesis-validator \       
+namada client utils init-genesis-validator \
     --source $KEY_ALIAS \
     --alias $VALIDATOR_ALIAS \
     --net-address "${PUBLIC_IP}:26656" \
