@@ -1,19 +1,43 @@
 import { Callout } from 'nextra-theme-docs'
 
-# Generating a validator account
+# Setting up a validator account
+
+## Genesis validators
+
+A genesis validator is one which is a validator right from the first block of the chain, i.e., at genesis. The details of genesis validators are hardcoded into the genesis file that is distributed to all users who want to interact with a chain.
+
+### Prerequisites
+
+- a machine that meets the [requirements](../hardware.mdx) for running a validator node
+- an associated public IPv4 address with ports 26656 reachable from anywhere for P2P connections
+
+### Method
+
+The method for setting up a genesis validator is described under the [pre-genesis participants](../networks/genesis-flow/participants.mdx#generate-a-pre-genesis-validator-account) section.
+
+
+## Post-genesis validators
+
+Post-genesis validators are validators that become initialised after the genesis block. This is the most common way of becoming a validator, and is the method described in this section.
 
 <Callout type="info" emoji="🤡">
 Note the use  of the placeholder `aliace` for the alias parameter. This is a completely configurable parameter, and should just refer to the alias of the key/address generated.
 </Callout>
+
+### Initialising a new validator account
+
+The user must first generate a key pair for their validator account.
+
 ```bash copy
 KEY_ALIAS="aliace"
-namada wallet address gen --alias $KEY_ALIAS
+namada wallet key gen --alias $KEY_ALIAS
 ```
 
 Now choose a name for your validator:
 
 ```bash copy
 export VALIDATOR_ALIAS="<your-validator-name>"
+export EMAIL="<your-validator-email-for-communication>"
 ```
 
 A validator account requires additional keys compared to a user account, so start by initialising a validator account:
@@ -24,8 +48,22 @@ namada client init-validator \
   --account-keys $KEY_ALIAS \
   --signing-keys $KEY_ALIAS \
   --commission-rate <enter-your-commission-rate> \
-  --max-commission-rate-change <enter-decimal-rate>
+  --max-commission-rate-change <enter-decimal-rate> \
+  --email $EMAIL
 ```
+
+It is also possible to convert an established account to a validator account:
+
+```bash copy
+namada client become-validator \
+  --address $ESTABLISHED_ACCOUNT_ADDRESS \
+  --signing-keys $KEY_ALIAS \
+  --commission-rate <enter-your-commission-rate> \
+  --max-commission-rate-change <enter-decimal-rate> \
+  --email $EMAIL
+```
+
+The validator account will now have the same alias as the established account.
 
 When initialising a validator account, it is also mandatory to specify both the `commission-rate` charged by the validator for delegation rewards (in decimal format) as well as the `maximum-commission-rate-change` per epoch in the `commission-rate`. Both are expressed as a decimal between 0 and 1. The standard for mainnet will be set by social consensus, but for testnets, the standard has been `0.01` and `0.05`, respectively. 
 
@@ -38,10 +76,12 @@ Then, it submits a transaction to the ledger that generates the new validator ac
 
 The keys and the alias of the address will be saved in your wallet. 
 
+### Start validating
+
 <Callout type="warning" emoji="🛎️">
 **IMPORTANT**
 
-Our local ledger node will also be setup to run this validator, you just have to shut it down with e.g. `Ctrl + C`, then start it again with the same command as before.
+The local ledger node will also be setup to run this validator, you just have to shut it down with e.g. `Ctrl + C`, then start it again with the same command as before.
 </Callout>
 
 ```shell copy
