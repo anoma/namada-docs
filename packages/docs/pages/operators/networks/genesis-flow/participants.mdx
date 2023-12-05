@@ -58,11 +58,11 @@ The network coordinator should specify the schema in which the pre-genesis netwo
 
 ### Submitting keys and addresses
 
-After the network coordinator has published the location (conventionally a github repository) for the pre-genesis network participants to submit their public keys, the participants are expected to submit their generated public keys (and their corresponding addresses) to the network coordinator in due time. The deadline will be set by the network coordinator.
+After the network coordinator has published the location (conventionally a git repository) for the pre-genesis network participants to submit their public keys, the participants are expected to submit their generated public keys (and their corresponding addresses) to the network coordinator in due time. The deadline will be set by the network coordinator.
 
 ### Generating transactions
 
-This can only occur AFTER the network coordinator has published the `balances.toml` that allocates pre-genesis NAM balances to the pre-genesis network participants.
+Participants are also responsible for generating the genesis-block transactions that set the initial state of the blockchain, including initialising genesis validator accounts and bonding to them. However, it is only possible to make transactions that require value once the balances of the keys become agreed upon (once the `balances.toml` file has been published).
 
 #### Generate an established account
 
@@ -130,6 +130,10 @@ public_keys = ["tpknam1qr872zwdvw4u4nkpl0ykmvhyvxw7j0u6g7ymz03d7he0jr3szkuwczddj
 
 #### Generate a pre-genesis validator account
 
+<Callout type='info'>
+This step will require the `balances.toml` file to have been published by the network coordinator.
+</Callout>
+
 Once the pre-genesis network participants have generated respective pre-genesis established accounts, they can generate their pre-genesis validator accounts. This can be done through the namada cli:
 
 ```bash
@@ -151,8 +155,22 @@ namadac utils init-genesis-validator \
   --path $TX_FILE_PATH
 ```
 
-<Callout>
-The SELF_BOND_AMOUNT must be less than or equal to the amount of NAM allocated to the pre-genesis keys in the `balances.toml` that was published by the network coordinator.
+<Callout type="info">
+
+The `SELF_BOND_AMOUNT` must be less than or equal to the amount of NAM allocated to the pre-genesis keys in the `balances.toml` that was published by the network coordinator. It will correspond to the self-bonded stake of the validator account at genesis.
+
+The `--net-address` specifies the network address of the validator node given by "IP:PORT". It is also possible to use DNS names instead of IP:PORT addresses.
+
+The `--alias` flag is the moniker name of the validator account.
+
+The `--commission-rate` and `--max-commision-rate` flags are the commission rate and the maximum permitted commission rate change of the validator account per epoch. See the validator docsfor more info.
+
+The `--email` flag is the email address of the validator account. This is used for the validator account to receive notifications from the network coordinator and other participants.
+
+The `--address` flag is the Namada address of the account.
+
+The `--path` flag is the path to the `transactions.toml` file that will be appended to, and requires the established account to already be initialised under.
+
 </Callout>
 
 The above command will append the necessary transactions to the `transactions.toml` file. The `transactions.toml` file should look something like this:
@@ -181,6 +199,6 @@ The above command will output a `signed-transactions.toml` file that contains th
 
 Once all pre-genesis transactions have been generated and signed, the pre-genesis network participants must submit their transactions to the network coordinator in due time. The deadline will be set by the network coordinator. This will involve simply submitting the `signed-transactions.toml` file to the network coordinator at the agreed upon location.
 
-By convention, a directory for each pre-genesis network participant is created in the github repository. The `signed-transactions.toml` file is then submitted to the respective directory.
+By convention, a directory for each pre-genesis network participant is created in the git repository. The `signed-transactions.toml` file is then submitted to the respective directory.
 
 </Steps>
