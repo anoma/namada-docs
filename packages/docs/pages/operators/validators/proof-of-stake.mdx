@@ -25,3 +25,21 @@ In order to query the current epoch, the following command can be run:
 ```shell copy
 namada client epoch
 ```
+
+## Slashing
+
+Validators on Namada are slashed for misbehavior. Automatic slashing conditions are defined by the CometBFT, but validators can also report misbehavior by other validators. If a validator is deemed to have misbehaved, they are slashed by a certain amount of their stake. The amount of stake slashed, as well as the time required for the slash to take effect (pipeline) is defined by protocol parameters.
+
+## Jailing
+
+Validators on Namada are jailed for either misbehaviour or for being offline for too long. If a number of blocks pass (also defined in the protocol parameters under `liveness_window_check`) in which none have been signed by the validator in question, the validator is jailed.
+
+When a validator is jailed, they are unable to participate in the consensus protocol. A validator is jailed for at least the pipeline amount of epochs, but must be unjailed manually by the validator. This is done by submitting an `unjail-validator` command.
+
+```bash
+VALIDATOR_ALIAS="<your-validator-alias>"
+SIGNING_KEYS="<your-signing-key(s)>"
+namada client unjail-validator --validator $VALIDATOR_ALIAS --signing-keys $SIGNING_KEYS
+```
+
+If successful, the validator will be unjailed after the pipeline amount of epochs, and is able to participate in the consensus protocol again.
