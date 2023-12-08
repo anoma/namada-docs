@@ -21,7 +21,7 @@ This can be done through the namada cli:
 
 ```bash
 ALIAS="<your-key-alias>"
-namadaw gen key --alias $ALIAS --pre-genesis
+namadaw --pre-genesis key gen --alias $ALIAS
 ```
 
 After the user has entered their passwords and written down their mnemonic phrase, the namada cli will save the keys to the `pre-genesis` folder inside the [base directory](../../ledger/base-directory.mdx).
