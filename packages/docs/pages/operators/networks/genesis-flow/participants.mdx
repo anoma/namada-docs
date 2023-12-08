@@ -21,7 +21,7 @@ This can be done through the namada cli:
 
 ```bash
 ALIAS="<your-key-alias>"
-namadac gen key --alias $ALIAS --pre-genesis
+namadaw --pre-genesis key gen --alias $ALIAS
 ```
 
 After the user has entered their passwords and written down their mnemonic phrase, the namada cli will save the keys to the `pre-genesis` folder inside the [base directory](../../ledger/base-directory.mdx).
@@ -89,7 +89,7 @@ Derived established account address: tnam1q8lsztqqhpjxdwzw88mqqc2mun7dvpxvas3v2d
 It is useful to save this address for later use.
 
 ```bash
-ESTABLISHED_ACCOUNT_ADDRESS=tnam1q8lsztqqhpjxdwzw88mqqc2mun7dvpx
+ESTABLISHED_ACCOUNT_ADDRESS=tnam1q8lsztqqhpjxdwzw88mqqc2mun7dvpxvas3v2dxk
 ```
 
 This will generate a `transactions.toml` file that contains the pre-genesis transaction that will establish the account. The `transactions.toml` file should look something like this:
