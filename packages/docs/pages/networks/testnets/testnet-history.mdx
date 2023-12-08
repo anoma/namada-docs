@@ -6,40 +6,24 @@ This page covers all installation steps required by various upgrades to testnets
 
 ## Latest Upgrade
 
-- Namada public testnet 14 (soft-upgrade hot-fix):
-  - From date: 19th of October 2023 9:00 UTC
-  - Namada protocol version: `v0.23.1`
-  - Cometbft version: `0.37.2`
-  - CHAIN_ID: `public-testnet-14.5d79b6958580`
-
-How to upgrade to the latest testnet:
-The upgrade is a soft upgrade, meaning that there is no consensus breaking change to the new binaries, and they are backwards compatible. Validators are encouraged to upgrade to the latest version of the binaries, which can be found [here](https://github.com/anoma/namada/releases/tag/v0.23.1)
-
-Then, simply stop the current ledger and restart it with the new binaries. This can be done by running the following commands:
-
-```bash copy
-OS="Linux" # Or OS="Darwin" for Mac
-wget https://github.com/anoma/namada/releases/download/v0.23.1/namada-v0.23.1-${OS}-x86_64.tar.gz
-tar -xvf namada-v0.23.1-${OS}-x86_64.tar.gz --strip-components 1 -C /usr/local/bin/ #sudo may be required
-killall namadan
-namada --version #should output v0.23.1
-NAMADA_CMT_STDOUT=true namada node ledger run
-```
-
-<Callout type="info">
-Note that the `v0.23.1` Linux binaries require Ubuntu LTS, which means that some older versions of Ubuntu will not be compatible (only Ubuntu `22.04` or later). In this case, it is recommended to build from source in order to upgrade.
-</Callout>
+No upgrades are currently scheduled.
 
 ## Latest Testnet
 
-- Namada public testnet 14:
+- Namada public testnet 15:
+  - From date: 14th of December 2023 17:00 UTC
+  - Namada protocol version: `v0.28.0`
+  - Cometbft version: `0.37.2`
+  - CHAIN_ID: `tbd`
+
+
+## Testnet History Timeline
+
+- Namada public testnet 14 (offline):
   - From date: 5th of October 2023 17:00 UTC
   - Namada protocol version: `v0.23.0`
   - Cometbft version: `0.37.2`
   - CHAIN_ID: `public-testnet-14.5d79b6958580`
-
-
-## Testnet History Timeline
 
 - Namada public testnet 13 (offline):
   - From date: 12th of September 2023 17:00 UTC
