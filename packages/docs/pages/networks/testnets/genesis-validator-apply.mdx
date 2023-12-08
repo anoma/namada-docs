@@ -8,31 +8,66 @@ Before a testnet launches, you can apply to be a genesis validator.
 
 Follow [this guide](../../operators/validators/validator-setup.mdx#pre-genesis) on how to generate your "pre-genesis" validator files.
 
-After this, you'll have a `validator.toml` file, the contents of which will look something like the following:
+<Callout>
+All pre-genesis validators are expected to bond `1000000` NAM tokens. At least that many tokens will be allocated to the pre-genesis validator key
+</Callout>
+
+After this, you'll have a signed `transactions.toml` file, the contents of which will look something like the following:
 
 ```toml
-[validator.1337-validator]
-consensus_public_key = "00056fff5232da385d88428ca2bb2012a4d83cdf5c697864dde34b393333a72268"
-eth_cold_key = "0103d985a8345ef505cf139c3dfbd5f5a1da73d2864c62ce9d0a98da73898a59f6f9"
-eth_hot_key = "010241bb691e44dd3c4263522474e45751e97307e92326250f96c1bcd0a06880875d"
-account_public_key = "00f1bd321be2e23b9503653dd50fcd5177ca43a0ade6da60108eaecde0d68abdc8"
-protocol_public_key = "0054c213d2f8fe2dd3fc5a41a52fd2839cb49643d960d7f75e993202692c5d8783"
-dkg_public_key = "6000000054eafa7320ddebf00c9487e5f7ea5107a8444f042b74caf9ed5679163f854577bf4d0992a8fd301ec4f3438c9934c617a2c71649178e536f7e2a8cdc1f8331139b7fd9b4d36861f0a9915d83f61d7f969219f0eba95bb6fa45595425923d4c0e"
+[[established_account]]
+vp = "vp_user"
+threshold = 1
+public_keys = ["tpknam1qrf7k5r2kvuppxnp0ruapkkd5szmyxzjxg7t64salgz5wrf6d327wmdh8xj"]
+
+[[validator_account]]
+address = "tnam1q9yprrkkhy0kfngwg59rxx9q2f8kj5ufhctn4n6u"
+vp = "vp_user"
 commission_rate = "0.01"
-max_commission_rate_change = "0.05"
-net_address = "1.2.3.4:26656"
-tendermint_node_key = "00e1a8fe1abceb700063ab4558baec680b64247e2fd9891962af552b9e49318d8d"
+max_commission_rate_change = "0.01"
+net_address = "1.2.3.4:1000"
+
+[validator_account.consensus_key]
+pk = "tpknam1qz2t8q4xt0vtm4x8kclr4lxhp0sea3956jzltdc2kqx4428a3queja2jx7p"
+authorization = "signam1qp2a25j2x2u5ggawvd6fa4z8h7m0tw3ndtulzfwzxtfe6487arazthq2s28v5lmekn6dlp9qukehxwvanzyhfcgqpu7y6cut5l928qsxr3pp7k"
+
+[validator_account.protocol_key]
+pk = "tpknam1qzwl3qsqtthmdwa2xn8pgymlsl3r8mdx53qgpm7xwwxgmn4hg0hjccnd27q"
+authorization = "signam1qzp03svcajhr7f68ayy3kq8xq4l78j7qdnxfc2v0g3s0qt69gkxhm0kx866hg77wty9hj004jfn94pavkmfqxqhyypjs0padv99vrjsqeqgg9q"
+
+[validator_account.tendermint_node_key]
+pk = "tpknam1qqwxpdvqyqlke25cfg46knx3slmzl84ap6v3kunu5r4efu3va3n7zf7nduz"
+authorization = "signam1qpwzap7pczw3dlxjjxauhls9rya4fpxu4mmtrplkx9yfur5t3cf4wmwkvexnd4jyaeme3l9tfuxt7aapzzmjjsejsz8zz5upccykafgyu3dzqm"
+
+[validator_account.eth_hot_key]
+pk = "tpknam1qypdeegcgv32w6ynrqsaml546rn9jr8ua9pv54t0dpdyuf2069eyflghxz99u"
+authorization = "signam1qx5ve2mcu2s8pajr4w6tat9z3v3p4g75zy9vug0w7epwdzapg7k8u3jxrsg5kax4xk7p3maxv49va98hsz6ntdfs2fx3whk70raepyg3qyn0nufq"
+
+[validator_account.eth_cold_key]
+pk = "tpknam1qyp0659xh8e8la0gx39f40epmamgug5l2ddgpplfe2zgpm8xlk7yzhcpnfx2e"
+authorization = "signam1q806c02930rdnac5jtxtnmdr6jwhfwteu4eqchu0xe5jgaqsv0znztam6u3tyatme6fh72les7d502wpajqa0v8l5kc8cpef4nv8py5lqyv80ct3"
+
+[validator_account.metadata]
+email = "test@test.com"
+
+[validator_account.signatures]
+tpknam1qrf7k5r2kvuppxnp0ruapkkd5szmyxzjxg7t64salgz5wrf6d327wmdh8xj = "signam1qptu8kxn9apr7e7h438d60gsaqyupvgcur9rcxva4ft3vzh67y4qv2v2rm7ugg469kpe6qx7cr206n8tk0daqw9h03k72m6ffqwf56swvg0cjs"
+
+[[bond]]
+source = "tnam1q9yprrkkhy0kfngwg59rxx9q2f8kj5ufhctn4n6u"
+validator = "tnam1q9yprrkkhy0kfngwg59rxx9q2f8kj5ufhctn4n6u"
+amount = "100"
+
+[bond.signatures]
+tpknam1qrf7k5r2kvuppxnp0ruapkkd5szmyxzjxg7t64salgz5wrf6d327wmdh8xj = "signam1qqgn525t548eg7nrwhrlke0n6r8d3zqw79tdkeyva79r6snc26ew6fq2fkvunljw7l6hq5ed6e8dqyaq9afexwd88gnprlusjds77qgq57ej0a"
 ```
 
 This file contains only public information and is safe to share publicly.
 
-<Callout>
-The field `tendermint_node_key` is named this for legacy reasons. It is actually the CometBFT consensus public key.
-</Callout>
 
 ### Submitting the config
-If you want to be a genesis validator for the testnet, please make a pull request to https://github.com/anoma/namada-testnets adding your validator.toml file to the relevant directory (e.g. `namada-public-testnet-2` for the second public testnet), renaming it to `$alias.toml`. 
-E.g. if you chose your alias to be "bertha", submit the file with the name `bertha.toml`. You can see what an example PR looks like [here](https://github.com/anoma/namada-testnets/pull/29).
+If you want to be a genesis validator for the testnet, please make a pull request to https://github.com/anoma/namada-testnets adding your signed `transactions.toml` file to the relevant directory (e.g. `namada-public-testnet-2` for the second public testnet), renaming it to `$alias.toml`. 
+E.g. if you chose your alias to be "bertha", submit the file with the name `bertha.toml`. You can see what an example PR looks like [here](https://github.com/anoma/namada-testnets/pull/2616).
 
 ### Wait for the `CHAIN_ID`
 Wait until the corresponding `CHAIN_ID` has been distributed.
