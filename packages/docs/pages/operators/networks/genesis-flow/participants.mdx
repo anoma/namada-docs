@@ -144,10 +144,11 @@ Once the pre-genesis network participants have generated respective pre-genesis 
 EMAIL="<your-email>"
 SELF_BOND_AMOUNT=1000000 # Set this to the amount of NAM you want to self-bond
 VALIDATOR_ALIAS="<your-validator-alias>"
+IP_ADDRESS="<your-public-IP-address>"
 namadac utils init-genesis-validator \
   --address $ESTABLISHED_ACCOUNT_ADDRESS \
   --alias $VALIDATOR_ALIAS \
-  --net-address "127.0.0.1:26656" \
+  --net-address "$IP_ADDRESS:26656" \
   --commission-rate 0.05 \
   --max-commission-rate-change 0.01 \
   --self-bond-amount $SELF_BOND_AMOUNT \
