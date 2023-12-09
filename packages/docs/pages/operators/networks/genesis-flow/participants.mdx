@@ -75,7 +75,7 @@ The `$ALIAS` variable is the alias of the pre-genesis keys that were generated i
 ```bash
 #Ensure $BASE_DIR is set to the base directory
 TX_FILE_PATH="$BASE_DIR/pre-genesis/transactions.toml"
-namadac utils init-genesis-established-account --path $TX_FILE_PATH --alias $ALIAS
+namadac utils init-genesis-established-account --path $TX_FILE_PATH --aliases $ALIAS
 
 # You can change the `--path` argument to any file path, but the recommended is `$BASE_DIR/pre-genesis/transactions.toml`
 ```
@@ -109,7 +109,7 @@ In order to generate a pre-genesis multisignature account, simply add multiple `
 # Ensure $BASE_DIR is set to the base directory
 # Assuming that the values of $ALIAS1, $ALIAS2, and $ALIAS3 are the aliases of the pre-genesis keys that were generated in the [Generating keys](#generating-keys) step.
 TX_FILE_PATH="$BASE_DIR/pre-genesis/transactions.toml"
-namadac utils init-genesis-established-account --path $TX_FILE_PATH --alias $ALIAS1 --alias $ALIAS2 --alias $ALIAS3
+namadac utils init-genesis-established-account --path $TX_FILE_PATH --aliases $ALIAS1 --aliases $ALIAS2 --aliases $ALIAS3
 ```
 
 The command will ouptut the generated address of the multisignature account.
