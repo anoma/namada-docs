@@ -142,6 +142,7 @@ Once the pre-genesis network participants have generated respective pre-genesis 
 # Ensure $TX_FILE_PATH is set
 
 EMAIL="<your-email>"
+DISCORD_HANDLE="<your-discord-handle>" # This is optional
 SELF_BOND_AMOUNT=1000000 # Set this to the amount of NAM you want to self-bond
 VALIDATOR_ALIAS="<your-validator-alias>"
 namadac utils init-genesis-validator \
@@ -152,6 +153,7 @@ namadac utils init-genesis-validator \
   --max-commission-rate-change 0.01 \
   --self-bond-amount $SELF_BOND_AMOUNT \
   --email $EMAIL \
+  --discord-handle $DISCORD_HANDLE \
   --path $TX_FILE_PATH
 ```
 
@@ -166,6 +168,8 @@ The `--alias` flag is the moniker name of the validator account.
 The `--commission-rate` and `--max-commision-rate` flags are the commission rate and the maximum permitted commission rate change of the validator account per epoch. See the validator docsfor more info.
 
 The `--email` flag is the email address of the validator account. This is used for the validator account to receive notifications from the network coordinator and other participants.
+
+The optional `--discord-handle` flag is the discord handle of the validator account. This is used for the validator account to receive notifications from the network coordinator and other participants.
 
 The `--address` flag is the Namada address of the account.
 
