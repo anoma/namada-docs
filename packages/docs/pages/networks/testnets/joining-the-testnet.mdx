@@ -1,11 +1,36 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Joining the latest testnet
 
 Depending on whether you are a genesis validator, you can join the latest testnet either as a genesis validator or as a full node.
 
 ## Joining as a genesis validator
-Joining the testnet validator is identical to that of a mainnet validator.
 
-For this reason, please refer to [these docs](../../operators/validators/validator-setup.mdx#start-validating).
+In order to join the network as a genesis validator, you will need to have been selected in the genesis ceremony. If you have not been selected, you can still join as a full node.
+If you have been selected. You must run the following command:
+
+```bash
+CHAIN_ID="<chain-id>"
+VALIDATOR_ALIAS="<your-validator-alias>"
+namadac utils join-network --chain-id $CHAIN_ID --genesis-validator $VALIDATOR_ALIAS
+```
+
+<Callout>
+Note that if you use the above command, your pre-genesis wallet must be in the default base directory (`$BASE_DIR`). If the wallet is not in the default base directory, you must use the flag `--pre-genesis-path` instead. The value for this will be `$BASE_DIR/pre-genesis/$VALIDATOR_ALIAS`.
+
+E.g if your base directory is `.namada` and your validator alias is `my-validator`, then run the command 
+
+```bash
+CHAIN_ID="<chain-id>"
+VALIDATOR_ALIAS="my-validator"
+BASE_DIR=".namada"
+namadac utils join-network --chain-id $CHAIN_ID --pre-genesis-path $BASE_DIR/pre-genesis/$VALIDATOR_ALIAS
+```
+</Callout>
+
+Running the node of a pre-genesis validator is identical to that of a mainnet validator.
+
+For this reason, please refer to [these docs](../../operators/validators/validator-setup.mdx#start-validating) for running the node.
 
 ## Joining as a full node
 If you are not a genesis validator, please follow the steps for [joining as a full node](../../operators/ledger/running-a-full-node.mdx). 

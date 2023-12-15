@@ -86,6 +86,8 @@ The local ledger node will also be setup to run this validator, you just have to
 
 ```shell copy
 namadan ledger run
+# or for more verbose output:
+# NAMADA_LOG=info CMT_LOG_LEVEL=p2p:none,pex:error NAMADA_CMT_STDOUT=true namadan ledger run
 ```
 
 The ledger will then use the validator consensus key to sign blocks, should your validator account acquire enough voting power to be included in the active validator set. The size of the active validator set is limited to `128` (the limit is set by the PoS `max_validator_slots` parameter).
