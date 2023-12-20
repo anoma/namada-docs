@@ -1,38 +1,46 @@
 import { Callout } from 'nextra-theme-docs'
 
+<Callout type="info" emoji="🫶">
+These docs were kindly created by community member [CryptoSJ](https://github.com/msobh13) and have been edited for readability purposes. If you have any suggestions, please open an [issue](https://github.com/anoma/namada-docs/issues) or a [pull request](https://github.com/anoma/namada-docs/pulls) at the github repository.
+</Callout>
+
 
 # Horcrux with Namada Blockchain for High Availability and Security
 
-This guide is intended for operators of Namada Validators.
-This guide uses Horcrux as its remote signing cluster with 3 Namada nodes to provide high availability
-and security. It does this by eliminating the single point of failure and to remove the validator signing key from the node for more security.
+This guide is intended for Namada Validator operators. It outlines the use of Horcrux as a remote signing cluster with three Namada nodes to enhance high availability and security. This approach eliminates single points of failure and enhances validator signing key security.
 
-### Design:
-  3 horcrux servers as remote Signers cluster 
-  3 Namada Nodes.
+## Design:
 
-### Software Requirements:
-  OS  : Ubuntu 22.04.3 
-  App : horcrux v3.2.3 
+- Three Horcrux servers serve as the remote signers cluster.
+- Three Namada Nodes are used as validators.
 
-### Hardware Requirements for Signers:
-  3x VPS w/ 2 CPU, 2 GB RAM, 20 GB SSD 
+## Software Requirements:
 
-### FW open ports :
-  19901 for Nodes and 2222 for Signers - you can chose any port you want 
+- Operating System: Ubuntu 22.04.3
+- Application: Horcrux v3.2.3
 
-### DNS records : 
-  3 cname ( node1 , node2,node3 ) for nodes 
-  3 cname ( signer1,signer2,signer3 ) for signers
+## Hardware Requirements for Signers:
 
-## Run These steps on your all signers servers:
+- Three Virtual Private Servers (VPS) with 2 CPUs, 2 GB RAM, and 20 GB SSD each.
 
-1. Create the directory to organize your horcrux files
+## Firewall Open Ports:
+
+- Ports 19901 for Nodes and 2222 for Signers (You can choose different ports if desired).
+
+## DNS Records:
+
+- Create three CNAME records for nodes: node1, node2, and node3.
+- Create three CNAME records for signers: signer1, signer2, and signer3.
+
+## Run These Steps on All Signer Servers:
+
+1. Create a directory to organize your Horcrux files:
 
 ```shell copy
 mkdir HorcruxNamada
 HORCRUX_PATH=$(pwd)/HorcruxNamada
 ```
+
 ```shell copy
 cd HorcruxNamada
 ```
@@ -43,7 +51,7 @@ cd HorcruxNamada
 wget https://github.com/strangelove-ventures/horcrux/releases/download/v3.2.3/horcrux_linux-amd64
 ```
 
-3. Rename horcrux_linux-amd64 to horcrux and copy it to /usr/bin/ and /usr/local/sbin/:
+3. Rename horcrux_linux-amd64 to "horcrux" and copy it to /usr/bin/ and /usr/local/sbin/:
 
 ```shell copy
 mv horcrux_linux-amd64 horcrux
@@ -63,7 +71,7 @@ sudo cp horcrux /usr/local/sbin/horcrux
 sudo nano /etc/systemd/system/hornamada.service
 ```
 
-5. Paste below content inside:
+5. Paste the following content:
 
 ```shell
 [Unit]
@@ -90,11 +98,11 @@ sudo systemctl enable hornamada.service
 ```
 
 
-### The below steps are only for your first signer ( Signer 1 ):
+### Activating the first signer ( Signer 1 ):
 
 1. Copy your Namada `priv_validator_key.json` from the `cometbft/config` directory (located in `$BASE_DIR`) to the newly created `HorcruxNamada` folder.
 
-(Optional) Use FQDN instead of IP, port 19901 for Nodes and port 2222 for signers
+(Optional) This guide will be using FQDN instead of IP, port 19901 for Nodes and port 2222 for signers. Feel free to adjust based on your preferences.
 
 2. Run the following commands to initialize the horcrux cluster:
 
@@ -102,10 +110,11 @@ sudo systemctl enable hornamada.service
 YOURDOMAIN="<YOUR_DOMAIN>"
 horcrux config init --node "tcp://node1.$YOURDOMAIN:19901" --node "tcp://node2.$YOURDOMAIN:19901" --node "tcp://node3.$YOURDOMAIN:19901" --cosigner "tcp://signer1.$YOURDOMAIN.net:2222" --cosigner "tcp://signer2.$YOURDOMAIN:2222" --cosigner "tcp://signer3.$YOURDOMAIN:2222" --threshold 2 --grpc-timeout 1500ms --raft-timeout 1500ms --home $HORCRUX_PATH
 ```
-```shell copy
 
+```shell copy
 horcrux create-ecies-shards --shards 3 --home $HORCRUX_PATH
 ```
+
 ```shell copy
 NAMADA_CHAIN_ID="<NAMADA_CHAIN_ID>"
 horcrux create-ed25519-shards --chain-id $NAMADA_CHAIN_ID --key-file $HORCRUX_PATH/priv_validator_key.json --threshold 2 --shards 3 --home $HORCRUX_PATH
@@ -123,13 +132,13 @@ Expect to find new files and new folders inside `HorcruxNamada`:
   state
 ```
 
-3. Move your `priv_validator_key.json` to a secure location as we don’t need it anymore.
+3. Move your `priv_validator_key.json` to a secure location, as it will not be needed any more.
 
-4. Create a new file inside state folder named `${NAMADA_CHAIN_ID}_priv_validator_state.json`  
+4. Create a new file inside the state folder named `${NAMADA_CHAIN_ID}_priv_validator_state.json`  
 
 This file will hold the signing state for the cluster.
 
-5. Paste the belew content to it:
+5. Paste the belew content into it:
 
 ```json
 {
@@ -141,13 +150,9 @@ This file will hold the signing state for the cluster.
 
 5. Copy the `HorcruxNamada` directory to the other signers using `scp`.
 
-After copying your HorcruxNamada folder to the second signer you will need to delete both folders named ( cosigner_1 , cosigner_3 ) and their content from HorcruxNamada folder  inside  ( signer 2 ) .
+After copying your `HorcruxNamada` folder to the second signer, you will need to delete both folders named cosigner_1 and cosigner_3, along with their content from the HorcruxNamada folder inside signer 2. This will leave only two folders: `cosigner_2` and `state`.
 
-This will lead to having Only two Folders  cosigner_2  folder and a state folder.
-
-6. Copy cosigner_2 content ( ecies_keys.json ) to the `HorcruxNamada` Folder  
-
-So in the end in ( singer 2 ) ,  `HorcruxNamada` folder content should be: 
+6. Copy `cosigner_2` content ( `ecies_keys.json` ) to the `HorcruxNamada` Folder:
 
 ```shell
 config.yaml
@@ -156,7 +161,7 @@ cosigner_2
 state\NAMADA-CHAIN-ID_priv_validator_state.json
 state
 ```
-7. Repeat same steps with signer 3 . `HorcruxNamada` folder content in signer 3 server should be: 
+7. Repeat same steps for signer 3. Thus, the `HorcruxNamada` folder content in the third server should be: 
 
 ```shell
 config.yaml
@@ -166,7 +171,7 @@ state\NAMADA-CHAIN-ID_priv_validator_state.json
 state
 ```
 
-### These steps will be applied to the first Namada node 
+### Apply these steps to the first Namada node 
 
 1. Configure Namada to start using the Horcrux cluster for signing blocks by editing the `config.toml` located in Namada config folder.
 
@@ -182,13 +187,13 @@ Replace it with
 priv_validator_laddr = "0.0.0.0:19901"
 ```
 
-2.  remove the priv_validator_key.json from the node and store it in secure location as we don’t need it anymore 
+2. Remove the priv_validator_key.json from the node and store it in secure location as we don’t need it anymore 
 
-3.  stop NAMADA node and ONLY after it stopped open the file priv_validator_state.json inside the cometbft/data and check the “height” number 
+3. Stop the Namada node. ONLY after it stopped, open the file `priv_validator_state.json` inside the `cometbft/data` directory and check the “height” number.
 
-4. go to each signer and edit the NAMADA-CHAIN-ID_priv_validator_state.json inside the horcruxNamada/state with the “height” number you just got 
+4. Go to each signer and edit the `NAMADA-CHAIN-ID_priv_validator_state.json` file inside the `HorcruxNamada/state` directory with the “height” number from step 3. 
 
-from your Namada Validator state should be like this 
+It should now look like this:
 
 ```json
 {
@@ -198,23 +203,23 @@ from your Namada Validator state should be like this
 }
 ```
 
-5. Start your first horcrux signer process inside signer one and check the logs 
+5. Start your first `horcrux` signer process inside `Signer_One` and check the logs:
 
 ```shell copy
 sudo systemctl restart hornamada.service && sudo journalctl -u hornamada.service -f --output cat
 ```
 
 
-6.  start signer 2 and signer 3 horcrux signer process and watch the logs 
+6. Start the signer 2 and signer 3 `horcrux signer` processes and watch the logs 
 
-7.  start your Namada process on your First Node and check the logs 
+7. Start your Namada process on your first node and check the logs.
 
-If everything is working your node should start signing blocks 
+If everything is working fine, your node should start signing blocks.
 
 8. Install 2 Namada Nodes in different servers and edit their config file as we did with node 1 
 
 ###  WARNING :
-FOR ALL RUNNING NODES IN THE CLUSTER  BE SURE YOU ARE USING priv_validator_laddr = "0.0.0.0:19901" AND REMOVE THE ORIGNAL priv_validator_key.json FROM ALL NODES
+FOR ALL RUNNING NODES IN THE CLUSTER  BE SURE YOU ARE USING `priv_validator_laddr = "0.0.0.0:19901"` AND REMOVE THE ORIGNAL `priv_validator_key.json` FROM ALL NODES
 PLEASE NOTE THAT USING REMOTE SIGNING COULD LEAD TO DOUBLE SIGNING AND SLASHING IF YOUR NODE SIGNED SAME BLOCK TWICE,
 SO BE SURE THAT NEVER USE LOCAL AND REMOTE SIGNING SAME TIME .
 
