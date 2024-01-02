@@ -1,14 +1,14 @@
 # Web Wallet
 
 ## Install
-When Namada is in `mainnet`, the web wallet will be available in most browser extension web stores. For now, you can install it from source by following the instructions below.
+When Namada is in [`mainnet`](../../networks/mainnets.mdx), the web wallet will be available in most browser extension web stores. For now, the user can install it from source by following the instructions below.
 
 ### Installing from source (for development and experiment purposes)
 
 #### Connect to a testnet or run a local node
-1. Follow the instructions for the [testnets](../../networks/testnets.mdx) to connect to a testnet or set up a local node using [docker](../../introduction/install/docker.mdx).
+1. Follow the instructions for the [testnets](../../networks/testnets.mdx) to connect to a testnet or [set up a local node](../../operators/networks/local-network.mdx).
 2. Figure out where the base directory is stored and save its location as a variable such as `export BASE_DIR=<path/to/base/dir>`.
-   You can follow [these docs](../../networks/testnets/migrating-testnets.mdx#after-v0153) to save this variable. Go ahead and save the chain id as a variable as well. You can find the chain id by running `cat $BASE_DIR/global-config.toml`. Save this chain-id to the variable `export CHAIN_ID=<CHAIN_ID>`.
+   You can follow [these docs](../../networks/testnets/migrating-testnets.mdx) to save this variable. Go ahead and save the chain id as a variable as well. You can find the chain id by running `cat $BASE_DIR/global-config.toml`. Save this chain-id to the variable `export CHAIN_ID=<CHAIN_ID>`.
 3. You will need to edit the CometBFT config in order to allow the web wallet to connect to your node.
    The CometBFT config will be located in `$BASE_DIR/$CHAIN_ID/cometbft/config/config.toml`. You will need to change the `cors_allowed_origins` field to `["*"]`. You can do this by running
    ```shell copy
