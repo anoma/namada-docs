@@ -297,7 +297,7 @@ type Unbonds = HashMap<BondId, Epoched<Unbond>>;
 
 struct BondId {
   validator: Address,
-  /// The delegator adddress for delegations, or the same as the `validator`
+  /// The delegator address for delegations, or the same as the `validator`
   /// address for self-bonds.
   source: Address,
 }
@@ -310,7 +310,7 @@ struct Bond {
 
 struct Unbond {
   /// A key is a pair of the epoch of the bond from which a unbond was created
-  /// the epoch of unboding. This is needed for slash epoch range check.
+  /// the epoch of unbonding. This is needed for slash epoch range check.
   deltas: HashMap<(Epoch, Epoch), token::Amount>
 }
 ```

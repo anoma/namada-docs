@@ -1,6 +1,6 @@
 import { Callout } from 'nextra-theme-docs'
 
-{/* TODO: Maket this section more clear. At the moment I'm not sure what optmisation is what in the "possible optimisations" */}
+{/* TODO: Maket this section more clear. At the moment I'm not sure what optimisation is what in the "possible optimisations" */}
 # Possible optimizations
 
 In this section we describe two alternative solutions that come with some optimizations.
@@ -387,7 +387,7 @@ the following:
 
 ```rust
 pub struct WrapperTx {
-  /// The fee to be payed for including the tx
+  /// The fee to be paid for including the tx
   pub fee: Fee,
   /// Used to determine an implicit account of the fee payer
   pub pk: common::PublicKey,
@@ -495,7 +495,7 @@ validate it. These will involve:
 
 These checks can all be done before executing the transactions themselves. If
 any of these fails, the transaction should be considered invalid and the action
-to take will be one of the followings:
+to take will be one of the following:
 
 1. If the checks fail on the signature, chainId, expiration or transaction
    counter, then this transaction will be forever invalid, regardless of the

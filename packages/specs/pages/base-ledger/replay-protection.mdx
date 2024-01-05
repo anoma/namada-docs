@@ -41,7 +41,7 @@ transaction is composed of two parts: a `WrapperTx` and an inner `Tx`
 {/* TODO: Check that this is up to date. I believe it is not */}
 ```rust
 pub struct WrapperTx {
-  /// The fee to be payed for including the tx
+  /// The fee to be paid for including the tx
   pub fee: Fee,
   /// Used to determine an implicit account of the fee payer
   pub pk: common::PublicKey,
@@ -68,7 +68,7 @@ pub struct Tx {
 
 The wrapper transaction is composed of some metadata, an optional unshielding tx
 for fee payment (see [fee specs](../economics/fee-system.mdx)), the encrypted
-inner transaction itself and the hash of the concatenation of these values. {/* TODO: Ensure that the hash of concatentation statement is as accurate as possible. It could be values, it could be the object (which consists of keys + values)*/}
+inner transaction itself and the hash of the concatenation of these values. {/* TODO: Ensure that the hash of concatenation statement is as accurate as possible. It could be values, it could be the object (which consists of keys + values)*/}
 The inner `Tx` transaction carries the Wasm code to be executed and the associated data.
 
 A transaction is constructed as follows:
@@ -153,7 +153,7 @@ has an internal replay protection mechanism.
 
 Still, since this field represents a valid, `Transaction`, there is a possible
 attack that can be run by leveraging this field: a malicious user could extract
-this data before it makes it to a block, embedd it into a valid, masp signed
+this data before it makes it to a block, embed it into a valid, masp signed
 `Tx` and apply it in advance.
 
 This attack is performed before the original tx is placed in a block and,
