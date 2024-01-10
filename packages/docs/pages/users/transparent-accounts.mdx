@@ -29,11 +29,11 @@ Note the use  of the placeholder `keysha` for the key parameter. This is a compl
 
 ```shell copy
 KEY_ALIAS="keysha"
-namada wallet key gen --alias $KEY_ALIAS
+namada wallet gen --alias $KEY_ALIAS
 ```
 
 <Callout type="info">
-The derived implicit address shares the same `keysha` alias. The previous command has the same effect as `namada wallet address gen --alias keysha`.
+The derived implicit address shares the same `keysha` alias. The previous command has the same effect as `namada wallet gen --alias keysha`.
 </Callout>
 
 By default, the keys are stored encrypted.
@@ -43,7 +43,7 @@ Namada wallet supports keypair generation using a [mnemonic code](https://github
 To generate a keypair for a default path use
 ```shell copy
 KEY_ALIAS="keysha"
-namada wallet key gen --alias $KEY_ALIAS --hd-path default
+namada wallet gen --alias $KEY_ALIAS --hd-path default
 ```
 
 <Callout type="info">
@@ -67,7 +67,7 @@ namada wallet key restore --alias keysha --hd-path default
 ### List all known keys
 
 ```shell copy
-namada wallet key list
+namada wallet list --keys
 ```
 
 ## Manage addresses
@@ -76,32 +76,28 @@ namada wallet key list
 To manage addresses, similar to keys, various sub-commands are available:
 
 ```shell copy
-namada wallet address
+namada wallet --help
 ```
 
 ### Generate an implicit address
 
 Let's call the implicit address `accountant`:
 ```shell copy
-namada wallet address gen --alias accountant
+namada wallet gen --alias accountant
 ```
 
-<Callout type="info">
-Note that this will also generate and save a key from which the address was derived and save it under the same `accountant` alias. Thus, this command has the same effect as `namada wallet key gen --alias accountant`.
-</Callout>
-
 ```shell copy
-namada wallet address gen --alias keysha --hd-path default
+namada wallet gen --alias keysha --hd-path default
 ```
 generates an address using a [mnemonic code](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) and [HD derivation path](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 
 ### Restore the address
 
 ```shell copy
-namada wallet address restore --alias keysha --hd-path default
+namada wallet derive --alias keysha --hd-path default
 ```
 ### List all known addresses
 
 ```shell copy
-namada wallet address list
+namada wallet list --addr
 ```
