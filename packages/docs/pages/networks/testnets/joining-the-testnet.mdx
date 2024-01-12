@@ -7,6 +7,11 @@ Depending on whether you are a genesis validator, you can join the latest testne
 ## Joining as a genesis validator
 
 In order to join the network as a genesis validator, you will need to have been selected in the genesis ceremony. If you have not been selected, you can still join as a full node.
+
+<Callout>
+For the shielded expedition, only the top 114 pilots have been selected as genesis validators. If you were not selected, you can still bond to one of the genesis validators or become a post-genesis validator.
+</Callout>
+
 If you have been selected. You must run the following command:
 
 ```bash
@@ -31,6 +36,12 @@ namadac utils join-network --chain-id $CHAIN_ID --pre-genesis-path $BASE_DIR/pre
 Running the node of a pre-genesis validator is identical to that of a mainnet validator.
 
 For this reason, please refer to [these docs](../../operators/validators/validator-setup.mdx#start-validating) for running the node.
+
+## Submitting bonding transactions as a non-genesis validator
+If your public key has been allocated `NAM` (`NAAN` for the shielded expedition), you can bond to a genesis validator as a pre-genesis transaction.
+Please follw the steps [here](../../operators/networks/genesis-flow/participants.mdx#bond-to-a-pre-genesis-validator-account) in order to submit these transactions.
+
+Remember to sign these transactions as well. 
 
 ## Joining as a full node
 If you are not a genesis validator, please follow the steps for [joining as a full node](../../operators/ledger/running-a-full-node.mdx). 

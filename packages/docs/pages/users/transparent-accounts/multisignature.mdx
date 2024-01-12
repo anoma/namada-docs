@@ -16,19 +16,13 @@ Before creating an account, a user must generate at least one cryptographic `key
 
 The following method will generate such a key:
 ```shell
-namadaw key gen \
+namadaw gen \
 --alias my-key1
 ```
 A second key can be generated as well (which will be useful for multisigs):
 ```shell
-namadaw key gen \
+namadaw gen \
 --alias my-key2
-```
-
-An implicit address can also be generated:
-```shell
-namadaw address gen \
---alias my-address
 ```
 
 Accounts on Namada are initialised through the following method:

@@ -47,7 +47,7 @@ This should sync your node to the ledger and will take a while (depending on you
 First you will need an implicit account in order to receive tokens. You can generate one with:
 
 ```shell copy
-namadaw address gen --alias <your-go-to-alias>
+namadaw gen --alias <your-go-to-alias>
 ```
 
 For the remainder of this introduction, let's assume your go-to alias is `stanley`.
@@ -55,7 +55,7 @@ For the remainder of this introduction, let's assume your go-to alias is `stanle
 This will generate a new account and store it in the default keychain. You can see the account with:
 
 ```shell copy
-namadaw address list
+namadaw list --addr
 ```
 
 {/* #TODO: ADD some output */}
