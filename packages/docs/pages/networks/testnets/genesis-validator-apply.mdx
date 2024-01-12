@@ -9,10 +9,12 @@ Before a testnet launches, you can apply to be a genesis validator.
 Follow [this guide](../../operators/validators/validator-setup.mdx#pre-genesis) on how to generate your "pre-genesis" validator files.
 
 <Callout>
-All pre-genesis validators are expected to bond `1000000` NAM tokens. At least that many tokens will be allocated to the pre-genesis validator key
+For the shielded expedition, the `balances.toml` file has been published at the [namada-shieled-expedition repository](https://github.com/anoma/namada-shielded-expedition).
+Amounts bonded in the bonding transactions must be less than or equal to the amounts specified in the `balances.toml` file.
+It is recommended to leave at least 1000 `NAAN` unbonded for transaction fees.
 </Callout>
 
-After this, you'll have a signed `transactions.toml` file, the contents of which will look something like the following:
+After this, you will have a signed `transactions.toml` file, the contents of which will look something like the following:
 
 ```toml
 [[established_account]]

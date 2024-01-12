@@ -145,7 +145,7 @@ Once the pre-genesis network participants have generated respective pre-genesis 
 
 EMAIL="<your-email>"
 DISCORD_HANDLE="<your-discord-handle>" # This is optional
-SELF_BOND_AMOUNT=1000000 # Set this to the amount of NAM you want to self-bond
+SELF_BOND_AMOUNT=1000000 # Set this to the amount of NAM you want to self-bond. This must be less than or equal to the amount of NAM allocated to the pre-genesis keys in the `balances.toml` that was published by the network coordinator.
 VALIDATOR_ALIAS="<your-validator-alias>"
 IP_ADDRESS="<your-public-IP-address>"
 namadac utils init-genesis-validator \
@@ -187,6 +187,21 @@ Successful execution will output the new validator address:
 ```text
 Validator account address: tnam1q8lsztqqhpjxdwzw88mqqc2mun7dvpxvas3v2dxk
 ```
+
+#### Bond to a pre-genesis validator account
+If your public key has been allocated `NAM` (`NAAN` for the shielded expedition), you can bond to a genesis validator as a pre-genesis transaction.
+Please follow the below steps:
+
+```bash copy
+namadac utils genesis-bond \
+    --validator "<your-validator-alias>" \  # Validator address.
+    --amount "<amount>" \  # Amount of tokens to stake in a bond.
+    --source "<your-tpknam-in-balances.toml>" \  # Source address for delegations. For self-bonds, the validator is also the source.
+    --path "<filename-for-your-tx.toml>"  \  # Output toml file to write transactions to.
+```
+
+After this step is completed, sign the transaction 
+
 
 ### Signing transactions
 
