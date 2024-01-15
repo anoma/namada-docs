@@ -194,10 +194,10 @@ Please follow the below steps:
 
 ```bash copy
 namadac utils genesis-bond \
-    --validator "<your-validator-alias>" \  # Validator address.
-    --amount "<amount>" \  # Amount of tokens to stake in a bond.
-    --source "<your-tpknam-in-balances.toml>" \  # Source address for delegations. For self-bonds, the validator is also the source.
-    --path "<filename-for-your-tx.toml>"  \  # Output toml file to write transactions to.
+    --validator "<your-validator-address>" \
+    --amount "<amount-to-stake-in-bond>" \
+    --source "<your-tpknam-in-balances.toml>" \
+    --path "<filename-for-your-tx.toml>"
 ```
 
 After this step is completed, sign the transaction 
