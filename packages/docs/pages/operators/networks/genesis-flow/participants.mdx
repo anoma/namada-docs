@@ -145,6 +145,9 @@ Once the pre-genesis network participants have generated respective pre-genesis 
 
 EMAIL="<your-email>"
 DISCORD_HANDLE="<your-discord-handle>" # This is optional
+AVATAR_URL="<your-avatar-url>" # This is optional, and expects a URL to an image the size of 128x128 pixels
+WEBSITE="<your-website>" # This is optional
+DESCRIPTION="<your-description>" # This is optional
 SELF_BOND_AMOUNT=1000000 # Set this to the amount of NAM you want to self-bond. This must be less than or equal to the amount of NAM allocated to the pre-genesis keys in the `balances.toml` that was published by the network coordinator.
 VALIDATOR_ALIAS="<your-validator-alias>"
 IP_ADDRESS="<your-public-IP-address>"
@@ -157,6 +160,9 @@ namadac utils init-genesis-validator \
   --self-bond-amount $SELF_BOND_AMOUNT \
   --email $EMAIL \
   --discord-handle $DISCORD_HANDLE \
+  --avatar $AVATAR_URL \
+  --website $WEBSITE \
+  --description $DESCRIPTION \
   --path $TX_FILE_PATH
 ```
 
