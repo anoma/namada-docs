@@ -70,7 +70,7 @@ Let's go through each subcomponents and describe them.
 
 ### Description
 
-The CL handles the operation steps of the ceremony: adding a new contributor to the queue, authentificating a contributor, sending and receiving challenge files, removing inactive contributors, reattributing challenge file to a new contributor after a contributor dropped, verifying contributions, creating new files...
+The CL handles the operation steps of the ceremony: adding a new contributor to the queue, authenticating a contributor, sending and receiving challenge files, removing inactive contributors, reattributing challenge file to a new contributor after a contributor dropped, verifying contributions, creating new files...
 
 ### "Historical" context
 
@@ -79,7 +79,7 @@ The CL was originally implemented for the Powers of Tau (phase 1 of the MPC). In
 ### CL in the Namada context
 
 Splitting the parameters into multiple chunks is useful, if it takes hours to contribute. In our case, the contribution time is about some seconds and in the worst case about some minutes. So, we don't need to split the parameters into chunks. Though, since we forked from the Aleo Trusted Setup, we still have some references to "chunked" things like folder, variable or function names. In our implementation, this means that we have one contributor and one chunk per round. For example, the contribution file of a round `i` from a participant will always be located at `transcript/round_{i}/chunk_0/contribution_1.unverified`.
-To be able to re-use the CL without heavy refactoring, we decided to keep most of the Aleo code as it is and only change the parts that needed to be changed, more precisely the crypto functions (`initialize`, `contribute` and `verify`) and the coordinator config `environment.rs`.
+To be able to reuse the CL without heavy refactoring, we decided to keep most of the Aleo code as it is and only change the parts that needed to be changed, more precisely the crypto functions (`initialize`, `contribute` and `verify`) and the coordinator config `environment.rs`.
 
 ## 2. HTTP REST API
 
@@ -103,7 +103,7 @@ The [HTTP REST API](https://github.com/anoma/namada-trusted-setup/blob/9c3e6c63c
 - `/contribution_info` Retrieve the contributions' info. This endpoint is accessible by anyone and does not require a signed request.
 - `/healthcheck` Retrieve healthcheck info. This endpoint is accessible by anyone and does not require a signed request.
 
-![](/images/trusted-setup-assets/namda-ts-swimlane.png)
+![](/images/trusted-setup-assets/namada-ts-swimlane.png)
 
 ### Saved files
 
