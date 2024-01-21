@@ -138,13 +138,13 @@ Expect to find new files and new folders inside `HorcruxNamada`:
 
 This file will hold the signing state for the cluster.
 
-5. Paste the belew content into it:
+5. Paste the below content into it:
 
 ```json
 {
   "height": "0",
   "round": "0",
-  " step": 3
+  "step": 3
 }
 ```
 
@@ -199,7 +199,7 @@ It should now look like this:
 {
   "height": "<YOUR_NAMADA_HEIGHT>",
   "round": "0",
-  " step": 3
+  "step": 3
 }
 ```
 
@@ -221,10 +221,10 @@ If everything is working fine, your node should start signing blocks.
 ###  WARNING :
 FOR ALL RUNNING NODES IN THE CLUSTER  BE SURE YOU ARE USING `priv_validator_laddr = "0.0.0.0:19901"` AND REMOVE THE ORIGINAL `priv_validator_key.json` FROM ALL NODES
 PLEASE NOTE THAT USING REMOTE SIGNING COULD LEAD TO DOUBLE SIGNING AND SLASHING IF YOUR NODE SIGNED SAME BLOCK TWICE,
-SO BE SURE THAT NEVER USE LOCAL AND REMOTE SIGNING SAME TIME .
+SO BE SURE THAT NEVER USE LOCAL AND REMOTE SIGNING SAME TIME.
 
 
-### TROUBLESHOUTING :
+### TROUBLESHOOTING :
   * check FW ports 
   * check dns for signers and node cnames 
   * check files and folder paths for horcrux 
