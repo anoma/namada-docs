@@ -196,7 +196,11 @@ Validator account address: tnam1q8lsztqqhpjxdwzw88mqqc2mun7dvpxvas3v2dxk
 
 #### Bond to a pre-genesis validator account
 If your public key has been allocated `NAM` (`NAAN` for the shielded expedition), you can bond to a genesis validator as a pre-genesis transaction.
-Please follow the below steps:
+<Callout type="info">
+This step is intended for pre-genesis participants who have been allocated `NAM` (`NAAN` for the shielded expedition) and want to bond to a genesis validator that is not their own. If you want to bond to your own genesis validator, please follow the steps in [Generate a pre-genesis validator account](#generate-a-pre-genesis-validator-account) and use the `--self-bond` arguments.
+</Callout>
+
+The bond can be achieved by running:
 
 ```bash copy
 namadac utils genesis-bond \
@@ -206,7 +210,7 @@ namadac utils genesis-bond \
     --path "<filename-for-your-tx.toml>"
 ```
 
-After this step is completed, sign the transaction 
+After this step is completed, it is required to sign the transaction.
 
 
 ### Signing transactions
