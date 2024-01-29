@@ -19,6 +19,7 @@ Now, we need to create a json file `proposal.json` holding the content of our pr
 ```json
 {
 	"proposal": {
+        "id": 1,
 		"content": {
 			"title": "One Small Step for Namada, One Giant Leap for Memekind",
 			"authors": "bengt@heliax.dev",
@@ -34,9 +35,9 @@ Now, we need to create a json file `proposal.json` holding the content of our pr
 		"voting_start_epoch": 21,
 		"voting_end_epoch": 24,
 		"grace_epoch": 27,
-		"type": {
-			"Default": null
-		}
+        "data": {
+            // Depends on proposal type
+        }
 	}
 }
 ```
