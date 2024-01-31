@@ -16,7 +16,7 @@ Namada uses [ed25519](https://en.wikipedia.org/wiki/EdDSA#Ed25519) keypairs for 
 To manage your keys, various sub-commands are available under:
 
 ```shell copy
-namada wallet key
+namada wallet --help
 ```
 
 ### Generate a keypair
@@ -61,8 +61,11 @@ Loss of any of them would inevitably lead to impossible account recovery.
 
 To recover the keypair from your mnemonic code and passphrase use
 ```shell copy
-namada wallet key restore --alias keysha --hd-path default
+namada wallet key derive --alias keysha --hd-path default
 ```
+
+This will ask you to then enter a passphrase (unless you add the `--unsafe-dont-encrypt` flag),
+and then will ask you to enter your mnemonic code.
 
 ### List all known keys
 
