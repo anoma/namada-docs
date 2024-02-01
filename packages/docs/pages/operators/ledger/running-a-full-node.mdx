@@ -7,7 +7,7 @@ Before starting a full node, the unique identifier of the `chain-id` will be nee
 Once the `chain-id` has been distributed, it is possible to join the network with the `CHAIN_ID`:
 ```bash copy
   export CHAIN_ID="namada-mainnet" ## (replace with the actual chain-id)
-  namada client utils join-network --chain-id $CHAIN_ID
+  NAMADA_NETWORK_CONFIGS_SERVER="https://github.com/anoma/namada-shielded-expedition/releases/download/shielded-expedition.b40d8e9055" namada client utils join-network --chain-id $CHAIN_ID
   ```
 
 ### Start your node and sync

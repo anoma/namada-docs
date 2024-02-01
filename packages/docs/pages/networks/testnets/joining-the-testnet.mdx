@@ -17,7 +17,7 @@ If you have been selected. You must run the following command:
 ```bash
 CHAIN_ID="<chain-id>"
 VALIDATOR_ALIAS="<your-validator-alias>"
-namadac utils join-network --chain-id $CHAIN_ID --genesis-validator $VALIDATOR_ALIAS
+NAMADA_NETWORK_CONFIGS_SERVER="https://github.com/anoma/namada-shielded-expedition/releases/download/shielded-expedition.b40d8e9055" namadac utils join-network --chain-id $CHAIN_ID --genesis-validator $VALIDATOR_ALIAS
 ```
 
 <Callout>
@@ -29,7 +29,7 @@ E.g if your base directory is `.namada` and your validator alias is `my-validato
 CHAIN_ID="<chain-id>"
 VALIDATOR_ALIAS="my-validator"
 BASE_DIR=".namada"
-namadac utils join-network --chain-id $CHAIN_ID --pre-genesis-path $BASE_DIR/pre-genesis/$VALIDATOR_ALIAS
+NAMADA_NETWORK_CONFIGS_SERVER="https://github.com/anoma/namada-shielded-expedition/releases/download/shielded-expedition.b40d8e9055" namadac utils join-network --chain-id $CHAIN_ID --pre-genesis-path $BASE_DIR/pre-genesis/$VALIDATOR_ALIAS
 ```
 </Callout>
 

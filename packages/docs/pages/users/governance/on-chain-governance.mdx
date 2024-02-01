@@ -47,9 +47,9 @@ In the content field, most of the fields are self-explanatory. The `requires` fi
 You should change the value of:
 
 - `Author` field with the address of `my-new-acc`;
-- `voting_start_epoch` with a future epoch (must be a multiple of 3) for which you want the voting to begin;
-- `voting_end_epoch` with an epoch greater than `voting_start_epoch`, a multiple of 3, and by which no further votes will be accepted;
-- `grace_epoch` with an epoch greater than `voting_end_epoch` + 6, in which the proposal, if passed, will come into effect.
+- `voting_start_epoch` with a future epoch (must be a multiple of the `min-voting-period` found in the `parameters.toml`) for which you want the voting to begin;
+- `voting_end_epoch` with an epoch greater than `voting_start_epoch`, a multiple of `min-voting-period`, and by which no further votes will be accepted;
+- `grace_epoch` with an epoch greater than `voting_end_epoch` + `, in which the proposal, if passed, will come into effect.
 
 The `data` field and its structure is dependent on the type of proposal being submitted. Below we outline the structure of the "data" field for each type of proposal. The one given in the example above is for a `Default Proposal`.
 
