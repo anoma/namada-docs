@@ -31,14 +31,16 @@ Now, we need to create a json file `proposal.json` holding the content of our pr
 			"details": "Bringing Namada to the moon in no time is easily achievable. We just need to pass this governance proposal and set the plan in action",
 			"requires": ""
 		},
-		"author": "atest1v4ehgw36g9zyydzpgycy23phxuunxdesgc6nydfsxge5x3zzgscny32pxccn2wfjg5urx3fhzxhmch",
+		"author": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q",
 		"voting_start_epoch": 21,
 		"voting_end_epoch": 24,
 		"grace_epoch": 27,
-        "data": {
-            // Depends on proposal type
+	},
+    "data":
+        {
+            "add": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q",
+            "remove": ["tnam1q9jpj9u5p6ugjylarkwmj9tsxr0pjlgpn5wa8ff0"]
         }
-	}
 }
 ```
 
@@ -82,7 +84,7 @@ The encoding will be submitted as a string
 "data" : [
         {
             "action" : "add",
-            "address" : "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+            "address" : "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q"
         }
     ]     
 ```
@@ -103,7 +105,7 @@ stewards in a single proposal.
                 {
                     "target": {
                         "amount": 420,
-                        "address": "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+                        "address": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q"
                     },
                     "action" : "add",
                 },
@@ -112,7 +114,7 @@ stewards in a single proposal.
                 {
                     "target": {
                         "amount": 1337,
-                        "address": "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn"
+                        "address": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q"
                     }
                 }
             ]
@@ -133,11 +135,22 @@ the amount specified will be sent immediately.
 ## Submitting the proposal
 As soon as your `proposal.json` file is ready, you can submit the proposal with (make sure to be in the same directory as the `proposal.json` file):
 
+**For a default proposal:**
+
 ```shell copy
 namada client init-proposal --data-path proposal.json 
 ```
 
-The transaction should have been accepted. You can query all the proposals with:
+**For non-default proposals:**
+
+One of the flags `--pgf-stewards`, `--pgf-funding`, `--eth` must be specified. For example, for a PGF steward proposal:
+
+```shell copy
+namada client init-proposal --pgf-stewards --data-path proposal.json
+```
+
+## Query the proposal
+If the submitted transaction was accepted, the user can query all the proposals with:
 
 ```shell copy
 namada client query-proposal
