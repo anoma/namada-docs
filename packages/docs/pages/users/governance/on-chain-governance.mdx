@@ -11,7 +11,7 @@ All the different types of proposals are listed in [the specs](https://specs.nam
 Assuming you have an account with at least 500 NAM token (in this example we are going to use `my-new-acc`), lets get the corresponding address
 
 ```shell copy
-namada wallet address find --alias `my-new-acc`
+namada wallet find --alias `my-new-acc`
 ```
 
 Now, we need to create a json file `proposal.json` holding the content of our proposal. Copy the below text into a json file.
@@ -83,8 +83,7 @@ The encoding will be submitted as a string
 ```json
 "data" : [
         {
-            "action" : "add",
-            "address" : "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q"
+            "add": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q"
         }
     ]     
 ```
@@ -100,25 +99,29 @@ stewards in a single proposal.
     
 ```json
 "data" :
-        {
-            "continuous" : [
-                {
-                    "target": {
-                        "amount": 420,
-                        "address": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q"
-                    },
-                    "action" : "add",
-                },
-            ],
-            "retro" : [
-                {
-                    "target": {
-                        "amount": 1337,
-                        "address": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q"
+    {
+        "continuous" : [
+            {
+                "Internal": 
+                    {
+                        
+                        "amount": "1337",
+                        "target": "tnam1q9rxk49a7y6fp8h5qwz47d6jhml0km2w2y7emqyz"
+                        
                     }
-                }
-            ]
-        },  
+        }
+        ],
+        "retro" : [
+            {
+                "Internal": 
+                    {
+                        
+                        "amount": "1337",
+                        "target": "tnam1q9rxk49a7y6fp8h5qwz47d6jhml0km2w2y7emqyz"
+                    }
+            }
+        ]
+    },  
 ```
 
 <Callout>
@@ -128,9 +131,25 @@ Within each payment, the target field contains the address of the recipient as w
 as the amount of NAM that they will receive. For continuous PGF funding, the amount 
 specified will be sent at the end of each epoch. There is also the option to remove a 
 recipient from the continuous PGF funding, by specifying an already existing continuous 
-funding payment, and then also including the "remove" action. For retroactive PGF funding, 
+funding payment, and then setting the amount to "0". For retroactive PGF funding, 
 the amount specified will be sent immediately.
 </Callout>
+
+#### IBC PGF proposals
+
+For a pgf proposal that is to be executed on an IBC chain, the "Internal" data structure will be substituted with "IBC":
+
+```json
+"IBC": 
+    {
+        
+        "amount": "1337",
+        "target": "tnam1q9rxk49a7y6fp8h5qwz47d6jhml0km2w2y7emqyz",
+        "port_id": "<port-id>",
+        "channel_id": "<channel-id>"
+    }
+```
+
 
 ## Submitting the proposal
 As soon as your `proposal.json` file is ready, you can submit the proposal with (make sure to be in the same directory as the `proposal.json` file):
