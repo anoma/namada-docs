@@ -166,7 +166,7 @@ cp ./target/release/hermes /usr/local/bin/
 ### Create the relayer account
 On each chain, there must be a `relayer` account. The alias should be the same as `chains.key_name` in the config. On a namada chain, this can be done by running
 ```bash copy
-namadaw gen key --alias relayer
+namadaw gen --alias relayer
 ```
 
 This will generate a key for the relayer account. The key will be stored in the `wallet.toml` that is found in the [base directory](./ledger/base-directory.mdx) of the node, inside the `chain-id` folder. For example, if the `chain-id` is `namada-test.0a4c6786dbda39f786`, the `wallet.toml` will be found in `$HOME/.local/share/namada/namada-test.0a4c6786dbda39f786/wallet.toml` (on a ubuntu machine where `base-dir` has not been set up properly).
