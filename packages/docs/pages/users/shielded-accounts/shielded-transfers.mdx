@@ -27,7 +27,7 @@ transparent account with some token balance.
 One can randomly generate a new spending key with:
 
 ```shell copy
-namadaw masp gen-key --alias <your-spending-key-alias>
+namadaw gen --shielded --alias <your-spending-key-alias>
 ```
 
 <Callout>
@@ -40,7 +40,7 @@ the same alias.
 To create a payment address from one's spending key, one can run:
 
 ```shell copy
-namadaw masp gen-addr \
+namadaw gen-payment-addr \
     --key <your-spending-key-alias> \
     --alias <your-payment-address-alias>
 ```
