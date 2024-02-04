@@ -18,6 +18,31 @@ Now, we need to create a json file `proposal.json` holding the content of our pr
 
 ```json
 {
+    "proposal": {
+    "id": "Arbitrary",
+    "content": {
+        "title": "Text",
+        "authors": "Text",
+        "discussions-to": "URL",
+        "created": "YYYY--DDTHH:MM:SSZ",
+        "license": "<insert-license>",
+        "abstract": "Text",
+        "motivation": "Text",
+        "details": "Text",
+        "requires": "Number"
+    },
+    "author": "author-address",
+    "voting_start_epoch": 420,
+    "voting_end_epoch": 426,
+    "grace_epoch": 432,
+    },
+    "data": "TODO-ADD-DATA-IF-NEEDED"
+}
+```
+
+A correct Steward proposal example is shown below:
+```json
+{
 	"proposal": {
         "id": 1,
 		"content": {
@@ -58,24 +83,22 @@ The `data` field and its structure is dependent on the type of proposal being su
 ### Default Proposal 
 
 ```json
-"data" : "<path/to/wasm.wasm>"
+"data" : [1,2,3,4,5,6,7,8,9,10] # This is a u8 vector
 ```
 
 <Callout type="info">
 The data field for default proposals is optional. This is in line with the nature of default proposals. 
 If the proposals have code attached to them in order to change governance parameters, then this code 
-will be represented as a wasm file and the path to this file will be given in the data field.
+will be represented as a wasm file and byte encoded vector will be tehe value of the data field.
 </Callout>
 
-### ETH Bridge Proposal
-
-```json
-"data" : "<hex-encoded-bytes-of-what-will-be-signed-by-validators>"
+<Callout type="info" emoji="">
+In order to read the path to bytes, one can use a simple python script.
+```python
+with open(file_path, "rb") as f:
+    byte_vec = f.read()
+print(byte_vec)
 ```
-
-<Callout type="warning">
-**Note**:
-The encoding will be submitted as a string
 </Callout>
 
 ### Steward Proposal
@@ -149,6 +172,17 @@ For a pgf proposal that is to be executed on an IBC chain, the "Internal" data s
         "channel_id": "<channel-id>"
     }
 ```
+
+### ETH Bridge Proposal
+
+```json
+"data" : "<hex-encoded-bytes-of-what-will-be-signed-by-validators>"
+```
+
+<Callout type="warning">
+**Note**:
+The encoding will be submitted as a string
+</Callout>
 
 
 ## Submitting the proposal
