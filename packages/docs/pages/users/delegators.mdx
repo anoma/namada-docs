@@ -33,5 +33,11 @@ If you have the alias saved in your wallet, you can also pass `<validator-alias>
 ## Redelegating
 Redelegating is the process of changing the delegate you have bonded to. This process takes 4 epochs, after which your NAM will be redelegated.
 
+To redelegate, you can use the following command:
+
+```bash copy
+namadac redelegate --source-validator "<source-validator>" --destination-validator "<destination-validator>" --owner "<owner>" --amount "<delegator-address>"
+```
+
 ## Unbonding
 Unbonding is the process of removing your bonded NAM from a delegate. This process is identical to [unbonding tokens from a validator](../operators/validators/staking.mdx#unbonding).
