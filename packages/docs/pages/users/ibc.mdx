@@ -16,18 +16,18 @@ to find the address.
 <Callout>
  **For the local node ONLY**
 
- To find your ledger address for Chain A, you can run the following command
- ```bash copy
- export BASE_DIR_A = "${HERMES}/data/namada-a/.namada"
- export LEDGER_ADDRESS_A = "$(grep "rpc_address" ${BASE_DIR_A}/${CHAIN_A_ID}/setup/validator-0/.namada/${CHAIN_A_ID}/config.toml)"
- ```
+To find your ledger address for Chain A, you can run the following command
+```bash copy
+export BASE_DIR_A="${HERMES}/data/namada-a/.namada"
+export LEDGER_ADDRESS_A="$(grep "rpc_address" ${BASE_DIR_A}/${CHAIN_A_ID}/setup/validator-0/.namada/${CHAIN_A_ID}/config.toml)"
+```
 </Callout>
 
-The channel ID for this chain will depend on the order in which one created the channel. Since we have only opened one channel, the `channel-id` is `channel-0`, but as more are created, these increase by index incremented by 1. The channel-id should be communicated by the relayer.
+The [channel ID](../operators/ibc.mdx) for this chain will depend on the order in which one created the channel. Since we have only opened one channel, the `channel-id` is `channel-0`, but as more are created, these increase by index incremented by 1. The channel-id should be communicated by the relayer.
 
 Assuming that the open channel is `channel-0`, you can save it in an environment variable by running
 ```bash copy
-export CHANNEL_ID = "channel-0"
+export CHANNEL_ID="channel-0"
 ```
 
 The inter-blockchain transfers from Chain A can be achieved by
