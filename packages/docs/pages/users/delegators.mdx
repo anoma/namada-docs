@@ -1,22 +1,18 @@
-# Delegators
+# Bonding and proof-of-stake
 
-## Delegators vs Delegates
-All accounts on Namada with any amount of *bonded* NAM, is by definition, either a delegator or a delegate. 
+## Bonded tokens
+Any account on Namada can *bond* or *stake* NAM tokens to any validator in the proof-of-stake system. When NAM tokens are bonded to a validator, that validator, if it is a member of the consensus set, may use those tokens as voting power to vote or sign newly proposed blocks.
 
-#### What is a delegator?
-> A delegator is an account that has bonded NAM to a delegate. 
+These validators earn some block rewards for doing so, and the original stakers of those tokens earn a proportional share of the validators' block rewards.
 
-#### What is a delegate?
-> A delegate is an account that has been bonded to by a delegator.
+The non-validator accounts that bond NAM to a validator are known as *delegators*. Validators may also bond NAM tokens to themselves.
 
 ## Becoming a delegator
 In order to become a delegator, you must first have an account with positive NAM balance. If you do not have an account, you can follow the instructions [here](./transparent-accounts.mdx) to create one.
 
-Once you have an account, you can bond your NAM to a delegate. At the time of writing, the only possible delegates are validators. In future Namada versions, there will be the option to delegate to other, non-validating accounts as well.
+Once you have an account, you can bond your NAM to a validator. Bonding (or delegating) to a validator is the same as [staking with a validator](../operators/validators/staking.mdx).
 
-Delegating to a validator is the same as [staking with a validator](../operators/validators/staking.mdx).
-
-First, you may want to list the available validators you can stake to:
+First, you may want to list some available validators you can stake to:
 
 ```bash copy
 namadac bonded-stake
@@ -25,19 +21,75 @@ namadac bonded-stake
 Once you've found the address of your favourite validator, you can bond to them with the following command:
 
 ```bash copy
-namadac bond --validator <validator-address> --amount <amount> --signing-keys <account-alias>
+namadac bond --source <delegator-address> --validator <validator-address> --amount <amount>
 ```
 
-If you have the alias saved in your wallet, you can also pass `<validator-alias>` instead of `<validator-address>`.
+The `<delegator-address>` is your account address from which you would like to stake NAM tokens. Validators who would like to self-bond do not need to provide the `--source` argument.
 
-## Redelegating
-Redelegating is the process of changing the delegate you have bonded to. This process takes 4 epochs, after which your NAM will be redelegated.
+If you have the alias for an address saved in your wallet, you can also pass it as an argument.
 
-To redelegate, you can use the following command:
+Once the transaction is submitted, the bond will become active at the *pipeline length* relative to the current epoch, which is some number of epochs in the future relative to the current one. Currently, this value is 2 epochs.
+
+The pipeline length of the chain and other important proof-of-stake parameters can be queried from the chain with the following command:
 
 ```bash copy
-namadac redelegate --source-validator "<source-validator>" --destination-validator "<destination-validator>" --owner "<owner>" --amount "<delegator-address>"
+namadac query-protocol-parameters
 ```
 
 ## Unbonding
-Unbonding is the process of removing your bonded NAM from a delegate. This process is identical to [unbonding tokens from a validator](../operators/validators/staking.mdx#unbonding).
+Unbonding is the process of removing your bonded NAM from a validator, and this must be done before attempting to withdraw your previously bonded tokens.
+
+This process is identical to [unbonding tokens from a validator](../operators/validators/staking.mdx#unbonding).
+
+The command to unbond is similar to the bonding command:
+
+```bash copy
+namadac unbond --source <delegator-address> --validator <validator-address> --amount <amount>
+```
+
+After a successful unbond transaction, the unbonded NAM tokens will be available for withdrawal after `pipeline_length + unbonding_length + cubic_slashing_window_length` epochs. Once again, the values of these three parameters can be queried from the chain.
+
+## Withdrawing
+When the full unbonding period has passed, you can withdraw the unbonded NAM using the following command:
+
+```bash copy
+namadac withdraw --source <delegator-address> --validator <validator-address>
+```
+
+This transaction will immediately transfer all fully unbonded NAM tokens back to the `delegator-address` account, increasing your transferable balance.
+
+You may also query some information regarding how many NAM tokens are available for withdrawal with the following command:
+
+```bash copy
+namadac bonds --owner <delegator-address>
+```
+
+## Redelegating
+In certain circumstances, you may want to switch the validator that holds your bonded tokens. This could be because your original validator has dropped out of the consensus set or has been deactivated or jailed and slashed for misbehaving.
+
+You can accomplish this with a redelegating the bonded tokens rather than unbonding, withdrawing, and then bonding again. Use the following command:
+
+```bash copy
+namadac redelegate --owner <delegator-address> --source-validator <source-validator> --destination-validator <destination-validator> --amount <amount>
+```
+
+The `delegator-address` is your address, the `source-validator` is the validator that currently holds your bond, and the `destination-validator` is your desired new validator to hold your bond.
+
+Your new bond will be active and begin contributing to the `destination-validator`'s voting power after the pipeline length has passed. It will no longer be held by the `source-validator` at this epoch as well.
+
+## Claiming rewards
+Inflationary rewards for proof-of-stake are computed and minted once per epoch, at the very beginning of a new epoch.
+
+In order to claim rewards that are owed to you for bonded NAM tokens, run the following command:
+
+```bash copy
+namadac claim-rewards --source <delegator-address> --validator <validator-address>
+```
+
+Successful execution of this transaction will immediately transfer the the reward tokens you are owed to your `delegator-address`, incrementing your transparent balance.
+
+Additionally, you can query the pending reward tokens without claiming by running:
+
+```bash copy
+namadac rewards --source <delegator-address> --validator <validator-address>
+```
