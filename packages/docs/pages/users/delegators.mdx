@@ -93,3 +93,11 @@ Additionally, you can query the pending reward tokens without claiming by runnin
 ```bash copy
 namadac rewards --source <delegator-address> --validator <validator-address>
 ```
+
+## Interacting with jailed validators
+
+When the validator that holds a bond is jailed, there are restrictions on what can be done with the bond.
+
+Bonding tokens is always permitted to any validator, even if it is jailed.
+
+Unbonding and redelegating from a jailed validator is not permitted if that validator is enqueued to be slashed (it is *frozen*), as described in [this section on jailing validators for protocol misbehaviors](../operators/validators/jailing.mdx#jailing-for-protocol-misbehavior). Otherwise, unbonding and redelegating is permitted.
