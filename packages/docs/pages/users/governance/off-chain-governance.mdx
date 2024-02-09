@@ -26,17 +26,23 @@ For offline proposals, the structure of the `proposal.json` file is as follows:
 "tally_epoch": 1337,
 ```
 
-<Callout>
+<Callout type="info">
 The `tally_epoch` is the block height at which the tally was computed. This is any integer before the current epoch. Since the tallying should occur before it is submitted.
 </Callout>
 
 ```shell copy
 namada client init-proposal \
     --data-path proposal.json \
+    --signing-keys your-signing-keys-for-author \
     --offline
 ```
 
 This command will create a `proposal` file same directory where the command was launched.
+
+<Callout type="info">
+If you would like the proposal to be created in a different directory, you can use the `--output-folder-path` flag to specify the directory. The directory must already exist, however.
+It is also essential that you provide the `--signing-keys` argument to sign the proposal. As of `v0.31.2`, the `--signing-keys` is optional but it is not possible to sign the proposal after it has been created.
+</Callout>
 
 ## Vote on proposal
 
