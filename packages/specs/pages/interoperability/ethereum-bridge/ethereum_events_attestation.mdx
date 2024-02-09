@@ -6,8 +6,7 @@ weighted average of more than $\frac{2}{3}$ of the voting power
 available across all epochs of the tally. Generically, Namada considers some
 tally $t$ `seen` if it satisfies the following inequality:
 
-$$\sum_{E \in \xi} (\frac{\sigma(E)}{\sum_{E' \in \xi} \sigma(E')} \cdot F_E) >
-\frac{2}{3}$$
+$$\sum_{E \in \xi} (\frac{\sigma(E)}{\sum_{E' \in \xi} \sigma(E')} \cdot F_E) > \frac{2}{3}$$
 
 Where $\xi$ is the set of epochs when $t$ took place, $\sigma$ is a
 function mapping an epoch to its total voting power and $F_E$ is the
