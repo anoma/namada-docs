@@ -6,7 +6,29 @@ If for any reason issuing an on-chain proposal is not adequate to your needs, yo
 
 ## Create proposal
 
-Create the same json file as in the on-chain proposal and use the following command:
+### The proposal file
+
+For offline proposals, the structure of the `proposal.json` file is as follows:
+
+```json
+"content": {
+                "title": "<Title>",
+                "authors": "<email>",
+                "discussions-to": "<forum-link>",
+                "created": "<Timestamp in format YYYY-MM-DDTHH:MM:SSZ>",
+                "license": "<Licences>",
+                "abstract": "<Abstract>",
+                "motivation": "<Motivation>",
+                "details": "<Details>",
+                "requires": "<preceding-proposal-id-that-must-pass>",
+            },
+"author": "<author-address>",
+"tally_epoch": 1337,
+```
+
+<Callout>
+The `tally_epoch` is the block height at which the tally will be computed. This is any integer after the current epoch.
+</Callout>
 
 ```shell copy
 namada client init-proposal \
