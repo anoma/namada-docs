@@ -21,7 +21,7 @@ Below, we discuss first how to enable this connection between two pre-existing c
 
 ## Configure Hermes
 Hermes is an IBC relayer to relay IBC packets between chains.
-Namada uses a [fork of Hermes supporting Namada chains](https://github.com/heliaxdev/hermes/tree/v1.7.1-namada-beta4).
+Namada uses a [fork of Hermes supporting Namada chains](https://github.com/heliaxdev/hermes/tree/v1.7.4-namada-beta7).
 
 ### Make Hermes config file
 One essential piece of the puzzle is to create a `config.toml` file that describes what connections will be set up that the relayer will be responsible for.
@@ -123,7 +123,7 @@ One can download the latest binary release from our [releases page](https://gith
 
 E.g.
 ```bash copy
-export TAG="v1.7.1-namada-beta4"
+export TAG="v1.7.4-namada-beta7"
 export ARCH="x86_64-unknown-linux-gnu" # or "aarch64-apple-darwin"
 curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/download/${TAG}/hermes-${TAG}-${ARCH}.tar.gz
 tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
@@ -140,7 +140,7 @@ This is also true for the command `cp ./target/release/hermes /usr/local/bin/` b
 
 ### From source
 ```bash copy
-export TAG="v1.7.1-namada-beta4"
+export TAG="v1.7.4-namada-beta7"
 
 git clone https://github.com/heliaxdev/hermes.git
 git checkout $TAG
@@ -293,7 +293,7 @@ First, you will need to export some environment variables:
 
 ```bash copy
 export NAMADA_DIR="<path-to-namada-source-directory>"
-export TAG="v1.7.1-namada-beta4"
+export TAG="v1.7.4-namada-beta7"
 ```
 
 ```bash copy
