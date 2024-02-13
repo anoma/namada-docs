@@ -5,13 +5,13 @@ Namada uses [CometBFT](https://github.com/cometbft/cometbft/) (nee Tendermint Go
 {/* Maybe we want to leave out the below section. I just felt we should give a brief summary of CometBFT */}
 ## The benefits of using CometBFT
 
-Using the CometBFT consensus algorithm comes with a number of benefits including but not limited to:
+Using the CometBFT consensus algorithm comes with a number of benefits including:
 
 - Fast finality 
-    - CometBFT achieves fast and deterministic finality, meaning that once a block is committed to the blockchain, it is irreversible. This is crucial for applications rely on settled transactions that cannot be rolled back.
+    - CometBFT achieves fast and deterministic finality, meaning that once a block is committed to the blockchain, it is irreversible. This is crucial for applications which rely on settled transactions that cannot be rolled back, and enables efficient, low-latency interoperability.
 - Inter-blockchain communication system (IBC)
-    - Composability with all other CometBFT-based blockchains, such as Cosmos-ecosystem blockchains
+    - Interoperability with all other IBC-supporting chains, such as [Osmosis](https://osmosis.zone), the [Cosmos Hub](https://cosmos.network), and [Noble](https://nobleassets.xyz/).
 - Battle tested
-    - The entire Cosmos ecosystem has been using CometBFT (nee Tendermint) for years
+    - The entire Cosmos ecosystem has been using CometBFT (nee Tendermint) for years.
 - Customisable
-    - Allows the setting of various parameters, including the ability to implement a custom proof of stake algorithm
+    - Allows the configuration of various parameters, including the ability to implement a custom proof of stake algorithm (as Namada does).
