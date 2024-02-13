@@ -3,7 +3,21 @@ import { Callout } from 'nextra-theme-docs'
 # Namada Proposals
 
 ## Proposal JSON
-Field semantics are as follows:
+For online proposals, the fields of the proposal JSON are as follows:
+
+```json
+{
+    "proposal": {
+        "id": 1, // The proposal id
+        "content": content, // (see below),
+        "author": "author", // The author's address
+        "voting_start_epoch": 420, // The epoch at which voting starts
+        "voting_end_epoch": 426, // The epoch at which voting ends
+        "grace_epoch": 432, // The epoch at which the proposal will be executed (if it passes)
+    },
+    "data": data // The optional proposal data, depends on the type of proposal
+}
+```
 
 - The `content` value should follow a standard format. 
 We leverage a similar format to what is described in the [BIP2](https://github.com/bitcoin/bips/blob/master/bip-0002.mediawiki#bip-format-and-structure) document:
