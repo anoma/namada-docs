@@ -70,3 +70,51 @@ for example:
 ```bash copy
 gaiad tx ibc-transfer transfer transfer channel-0 atest1d9khqw368qcyx3jxxu6njs2yxs6y2sjyxdzy2d338pp5yd35g9zrv334gceng3z9gvmryv2pfdddt4 10ibc/281545A262215A2D7041CE1B518DD4754EC7097A1C937BE9D9AB6F1F11B452DD --from my-cosmos-address --node https://rpc.sentry-01.theta-testnet.polypore.xyz:443 --fees 5000uatom
 ```
+
+## Shielding transfer
+Before `namadac ibc-transfer`, you need to generate a proof of the following IBC transfer for the shielding transfer to the destination Namada. The command `namadac ibc-gen-shielded` generates the proof and outputs a file including required data. In this case, Chain B is the destination chain.
+```bash copy
+namadac --base-dir ${BASE_DIR_B} ibc-gen-shielded \
+  --output-folder-path ${OUTPUT_PATH} \
+  --target ${payment_addr_b} \
+  --token apfel \
+  --amount 100 \
+  --port-id transfer \
+  --channel-id channel-0 \
+  --node ${LEDGER_ADDRESS_B}
+```
+Then, you can send the token from the source chain by setting the proof in the ICS-20 packet's memo field. The following example is to send tokens from the source Namada (Chain A). The `${memo_path}` should be the file path created by `namadac ibc-gen-shielded` on the destination chain.
+```bash copy
+namadac --base-dir ${BASE_DIR_A} ibc-transfer \
+  --source ${spending_key_a} \
+  --receiver ${payment_addr_b} \
+  --token apfel \
+  --amount 100 \
+  --channel-id channel-0 \
+  --memo-path ${memo_path} \
+  --node ${LEDGER_ADDRESS_A}
+```
+
+When the source chain is a Cosmos-SDK based chain, the memo should be set as string with `--memo` option.
+```bash copy
+memo=$(cat ${memo_path})
+gaiad tx ibc-transfer transfer \
+  ${CHANNEL_ID} \
+  ${RECEIVER_PAYMENT_ADDRESS} \
+  ${AMOUNT}${IBC_TOKEN_ADDRESS} \
+  --from ${COSMOS_ALIAS} \
+  --memo ${memo} \
+  --node ${COSMOS_RPC_ENDPOINT} \
+  --fees 5000uatom
+```
+
+You can do unshielding transfers over IBC without generating a proof.
+```bash copy
+namadac --base-dir ${BASE_DIR_A} ibc-transfer \
+  --source ${spending_key_a} \
+  --receiver ${RECEIVER_RAW_ADDRESS} \
+  --token nam \
+  --amount 100 \
+  --channel-id channel-0 \
+  --node ${LEDGER_ADDRESS_A}
+```
