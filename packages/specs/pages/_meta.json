@@ -1,9 +1,6 @@
 {
   "index": "Introduction",
   "base-ledger": "Base ledger",
-  "governance": "Governance",
-  "masp": "Multi-asset shielded pool",
-  "interoperability": "Interoperability",
-  "economics": "Economics",
+  "modules": "Modules",
   "further-reading": "Further reading"
 }

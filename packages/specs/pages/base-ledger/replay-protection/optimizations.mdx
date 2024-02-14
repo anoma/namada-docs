@@ -69,7 +69,7 @@ these conditions doesn't hold the VP will discard the transactions and prevent
 the changes from being applied to the storage.
 
 In the specific case of a shielded transfer, since MASP already comes with
-replay protection as part of the Zcash design (see the [MASP specs](../masp.mdx)
+replay protection as part of the Zcash design (see the [MASP specs](../../modules/masp.mdx)
 and [Zcash protocol specs](https://zips.z.cash/protocol/protocol.pdf)), the
 counter in `SignedTxData` is not required and therefore should be optional.
 
@@ -486,9 +486,9 @@ validate it. These will involve:
 
 - Valid signature
 - `GasLimit` is below the block gas limit (see the
-  [fee specs](../economics/fee-system.mdx) for more details)
+  [fee specs](../fee-system.mdx) for more details)
 - `Fees` are paid with an accepted token and match the minimum amount required
-  (see the [fee specs](../economics/fee-system.mdx) for more details)
+  (see the [fee specs](../fee-system.mdx) for more details)
 - Valid chainId
 - Valid transaction counter
 - Valid expiration

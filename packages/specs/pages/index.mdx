@@ -9,9 +9,9 @@ import { SpecsAscii } from '../components/SpecsAscii'
 
 Namada is a sovereign proof-of-stake layer-one blockchain, using the [CometBFT](https://cometbft.com/) (nee Tendermint) BFT consensus algorithm. Namada enables multi-asset private transfers for any native or non-native asset using a [multi-asset shielded pool](https://research.metastate.dev/multi-asset_shielded_pool/) derived from the [Sapling circuit](https://z.cash/upgrade/sapling/).
 
-Namada features full IBC protocol support, a natively integrated [Ethereum bridge](./interoperability.mdx), a modern [proof-of-stake system](./economics/proof-of-stake.mdx) with cubic slashing, a [stake-weighted governance signalling mechanism](./governance.mdx), and a dual continuous/retroactive [public goods funding system](./economics/public-goods-funding.mdx).
+Namada features full IBC protocol support, a natively integrated [Ethereum bridge](./modules/ethereum-bridge.mdx), a modern [proof-of-stake system](./modules/proof-of-stake.mdx) with cubic slashing, a [stake-weighted governance signalling mechanism](./modules/governance.mdx), and a dual continuous/retroactive [public goods funding system](./modules/governance/public-goods-funding.mdx).
 
-Users of the MASP are [rewarded](./economics/shielded-pool-incentives.mdx) for their contributions to the privacy set in the form of native protocol tokens (NAM). 
+Users of the MASP are [rewarded](./modules/masp/shielded-pool-incentives.mdx) for their contributions to the privacy set in the form of native protocol tokens (NAM). 
 
 Namada also supports shielded actions, which allow users to hold their assets privately on Namada most of the time while occasionally unshielding specific assets in order to interact with existing applications on transparent chains.
 
@@ -40,11 +40,8 @@ Users of Namada earn rewards, retain privacy of assets, and contribute to shared
 
 These documents describe the behavior of the Namada protocol. This description is organized into five sub-sections:
 
-- [Base ledger](./base-ledger.mdx)
-- [Governance](./governance.mdx)
-- [Multi-asset shielded pool](./masp.mdx)
-- [Interoperability](./interoperability.mdx)
-- [Economics](./economics.mdx)
+1. [Base Ledger](./base-ledger.mdx): This section describes the core ledger functionality of the Namada protocol. This includes the basic data structures and state transitions that make up the Namada blockchain.
+2. [Modules](./modules.mdx): This section describes the modules that make up the Namada protocol. Each module is a distinct part of the protocol that can be understood in isolation.
 
 This book is written using [NextraJS](https://nextra.site/). The source can be found in the [Namada Docs repository](https://github.com/anoma/namada-docs/tree/master/packages/specs).
 

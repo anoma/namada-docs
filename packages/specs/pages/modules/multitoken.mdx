@@ -6,7 +6,7 @@ The fungible token validity predicate authorises token balance changes on the ba
 
 A token balance is stored with a storage key. The token balance key should be `#Multitoken/{token_addr}/balance/{owner_addr}`. These keys can be made with [token functions](https://github.com/anoma/namada/blob/5da82f093f10c0381865accba99f60c557360c51/core/src/types/token.rs).
 
-We can have multitoken balances for the same owner by `{token_addr}`, e.g. a token received over IBC is managed in `#Multitoken/{ibc_token}/balance/{receiver_addr}`. It is distinguished from the receiver's original balance in `#Multitoken/{token_addr}/balance/{receiver_addr}` to know which chain the token was transferred from. The `{ibc_token}` is explained in [IBC](../interoperability/ibc.mdx).
+We can have multitoken balances for the same owner by `{token_addr}`, e.g. a token received over IBC is managed in `#Multitoken/{ibc_token}/balance/{receiver_addr}`. It is distinguished from the receiver's original balance in `#Multitoken/{token_addr}/balance/{receiver_addr}` to know which chain the token was transferred from. The `{ibc_token}` is explained in [IBC](../modules/ibc.mdx).
 
 Transfers between the balances with the same `{token_addr}` are allowed. Specifically, we can transfer a token from `#Multitoken/{token_addr}/balance/{sender_addr}` to `#Multitoken/{token_addr}/balance/{receiver_addr}`.
 
