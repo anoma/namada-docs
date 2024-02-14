@@ -38,7 +38,7 @@ and events are timed out if they are not `seen` within the span of
 `unbonding_length` epochs, which corresponds to the period of time
 necessary for bonded tokens to be returned to an address (check the
 [relevant proof-of-stake
-section](../../economics/proof-of-stake/reward-distribution.md) for more
+section](../proof-of-stake/reward-distribution.mdx) for more
 details). Timing out an event consists of removing all its associated
 state from storage. Therefore, this mechanism serves another purpose:
 purging forged events from storage, voted on by Byzantine validators.
@@ -80,7 +80,7 @@ Namada validators perform votes on other kinds of data, namely:
     contracts of the bridge.
 2)  Bridge pool root vote extensions. These vote extensions are used to
     reach a quorum decision on the most recent root and nonce of the
-    [Ethereum bridge pool](./transfers_to_ethereum.md).
+    [Ethereum bridge pool](./transfers_to_ethereum.mdx).
 
 These protocol transactions are only ever included on-chain if the
 Tendermint version that is being used to run the ledger does not include

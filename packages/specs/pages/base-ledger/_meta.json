@@ -1,8 +1,6 @@
 {
   "consensus": "Consensus",
-  "execution": "Execution",
-  "multisignature": "Multisignature",
-  "fungible-token": "Fungible token",
+  "execution": "Execution model",
   "replay-protection": "Replay protection",
   "block-space-allocator": "Block space allocator"
 }
