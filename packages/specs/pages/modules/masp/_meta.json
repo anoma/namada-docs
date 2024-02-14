@@ -3,5 +3,6 @@
   "asset-type": "Asset type",
   "burn-and-mint": "Burn & mint",
   "convert-circuit": "Convert circuit",
-  "trusted-setup": "Trusted setup"
+  "trusted-setup": "Trusted setup",
+  "shielded-pool-incentives": "Shielded pool rewards"
 }

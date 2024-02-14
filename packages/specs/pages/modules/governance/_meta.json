@@ -2,5 +2,6 @@
     "on-chain" : "On chain governance",
     "off-chain" : "Off chain governance",
     "proposal" : "Proposals",
-    "storage" : "Storage"
+    "storage" : "Storage",
+    "public-goods-funding" : "Public goods funding"
 }
