@@ -1,11 +1,17 @@
 # Modules
 
-The validity predicates define the modules of Namada. These modules are:
+Namada's features are grouped into _modules_. Each module defines:
+- a validity predicate, which controls a storage sub-space in the ledger state;
+- a set of data structures and a storage layout, which are used in this storage sub-space;
+- a set of transactions, which allow users to take actions that change state in this storage sub-space; and, optionally
+- handlers to be run on various block lifecycle events (e.g. during ABCI's `FinalizeBlock` or at the end of each epoch), which can be used to implement periodic, automated state changes (e.g. minting new tokens at the end of an epoch and distributing them to delegators)
 
-- Multitoken
-- Multisignature
-- Proof-of-stake
-- Multi-asset-shielded-pool (MASP)
-- Governance
-- IBC
-- Ethereum bridge
+Namada includes the following modules:
+
+- [Multitoken](./modules/multitoken.mdx)
+- [Multisignature](./modules/multisignature.mdx)
+- [Proof-of-stake](./modules/proof-of-stake.mdx)
+- [Multi-asset-shielded-pool (MASP)](./modules/masp.mdx)
+- [Governance](./modules/governance.mdx)
+- [IBC](./modules/ibc.mdx)
+- [Ethereum bridge](./modules/ethereum-bridge.mdx)
