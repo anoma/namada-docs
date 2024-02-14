@@ -21,7 +21,7 @@ struct MultisigAccount {
 }
 ```
 
-Multisignature accounts, because they are initialised by an on-chain transaction, will always have their public key revealed to the ledger. However, when keypairs are generated in an offline fashion, the user must submit a transaction in order to reveal their public key. Because of this, it is helpful to add the field `revealed` to the account struct.
+Multisignature accounts, because they are initialized by an on-chain transaction, will always have their public key revealed to the ledger. However, when keypairs are generated in an offline fashion, the user must submit a transaction in order to reveal their public key. Because of this, it is helpful to add the field `revealed` to the account struct.
 
 ```rust
 use namada_sdk::core::types::key::common::{PublicKey, SecretKey};

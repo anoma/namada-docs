@@ -32,7 +32,7 @@ Validators on Namada are slashed for misbehavior. Automatic slashing conditions 
 
 ## Jailing
 
-Validators on Namada are jailed for either misbehaviour or for being offline for too long. If a number of blocks pass (also defined in the protocol parameters under `liveness_window_check`) in which none have been signed by the validator in question, the validator is jailed.
+Validators on Namada are jailed for either misbehavior or for being offline for too long. If a number of blocks pass (also defined in the protocol parameters under `liveness_window_check`) in which none have been signed by the validator in question, the validator is jailed.
 
 When a validator is jailed, they are unable to participate in the consensus protocol. A validator is jailed for at least the pipeline amount of epochs, but must be unjailed manually by the validator. This is done by submitting an `unjail-validator` command.
 

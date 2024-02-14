@@ -6,7 +6,7 @@ All accounts in Namada have a unique address, exactly one Validity Predicate and
 
 There are currently 3 types of account addresses:
 - **Implicit:** An implicit account is derived from your keypair and can be used to authorize certain transactions from the account. Implicit accounts have no code attached to them, and can only have one key controlling it. This differs it from established accounts, which can support multiple keys.
-- **Established:** An established account is a associated with one or more cryptographic keys. Each account has the `vp_user` predicate which validate any associated transaction. The main purpose of this code is to ensure that the multisignature threshold is correctly met and stores the keys that verify transactions. All established accounts will be inititalised through on-chain transactions, unlike implicit accounts, which exist as soon as the keypair is generated.
+- **Established:** An established account is a associated with one or more cryptographic keys. Each account has the `vp_user` predicate which validate any associated transaction. The main purpose of this code is to ensure that the multisignature threshold is correctly met and stores the keys that verify transactions. All established accounts will be initialized through on-chain transactions, unlike implicit accounts, which exist as soon as the keypair is generated.
 - **Internal:** Special internal accounts, such as protocol parameters account, PoS and IBC.
 
 ## Manage keypairs
