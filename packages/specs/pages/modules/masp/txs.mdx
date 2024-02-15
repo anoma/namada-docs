@@ -2,4 +2,117 @@ import { Callout } from 'nextra-theme-docs'
 
 ## Transactions
 
-Placeholder
+### Transaction Format
+The transaction data structure comprises a list of transparent inputs
+and outputs as well as a list of shielded inputs and outputs. More
+precisely:
+```
+struct Transaction {
+    // Transaction version
+    version: u32,
+    // Transparent inputs
+    tx_in: Vec<TxIn>,
+    // Transparent outputs
+    tx_out: Vec<TxOut>,
+    // The net value of Sapling spends minus outputs
+    value_balance_sapling: Vec<(u64, AssetType)>,
+    // A sequence ofSpend descriptions
+    spends_sapling: Vec<SpendDescription>,
+    // A sequence ofOutput descriptions
+    outputs_sapling: Vec<OutputDescription>,
+    // A binding signature on the SIGHASH transaction hash,
+    binding_sig_sapling: [u8; 64],
+}
+```
+For the cryptographic constraints and further information, see
+[Transaction Encoding and Consensus](https://zips.z.cash/protocol/protocol.pdf#txnencoding).
+Note that this structure slightly deviates from Sapling due to
+the fact that `value_balance_sapling` needs to be provided for
+each asset type.
+
+### Transparent Input Format
+The input data structure describes how much of each asset is
+being deducted from certain accounts. More precisely, it is as follows:
+```
+struct TxIn {
+    // Source address
+    address: Address,
+    // Asset identifier for this input
+    token: AssetType,
+    // Asset value in the input
+    amount: u64,
+    // A signature over the hash of the transaction
+    sig: Signature,
+    // Used to verify the owner's signature
+    pk: PublicKey,
+}
+```
+Note that the signature and public key are required to authenticate
+the deductions.
+### Transparent Output Format
+The output data structure describes how much is being added to
+certain accounts. More precisely, it is as follows:
+```
+struct TxOut {
+    // Destination address
+    address: Address,
+    // Asset identifier for this output
+    token: AssetType,
+    // Asset value in the output
+    amount: u64,
+}
+```
+Note that in contrast to Sapling's UTXO based approach, our
+transparent inputs/outputs are based on the account model used
+in the rest of Namada.
+
+# Shielded Transfer Specification
+## Transfer Format
+Shielded transactions are implemented as an optional extension to transparent ledger transfers. The optional `shielded` field in combination with the `source` and `target` field determine whether the transfer is shielding, shielded, or unshielded. See the transfer format below:
+```
+/// A simple bilateral token transfer
+#[derive(..., BorshSerialize, BorshDeserialize, ...)]
+pub struct Transfer {
+    /// Source address will spend the tokens
+    pub source: Address,
+    /// Target address will receive the tokens
+    pub target: Address,
+    /// Token's address
+    pub token: Address,
+    /// The amount of tokens
+    pub amount: Amount,
+    /// The unused storage location at which to place TxId
+    pub key: Option<String>,
+    /// Shielded transaction part
+    pub shielded: Option<Transaction>,
+}
+```
+## Conditions
+Below, the conditions necessary for a valid shielded or unshielded transfer are outlined:
+* A shielded component equal to `None` indicates a transparent Namada transaction
+* Otherwise the shielded component must have the form `Some(x)` where `x` has the transaction encoding specified in the [Multi-Asset Shielded Pool Specs]()
+* Hence for a shielded transaction to be valid:
+  * the `Transfer` must satisfy the usual conditions for Namada ledger transfers (i.e. sufficient funds, ...) as enforced by token and account validity predicates
+  * the `Transaction` must satisfy the conditions specified in the [Multi-Asset Shielded Pool Specification](https://github.com/anoma/masp/blob/main/docs/multi-asset-shielded-pool.pdf)
+  * the `Transaction` and `Transfer` together must additionally satisfy the below boundary conditions intended to ensure consistency between the MASP validity predicate ledger and Namada ledger
+* A key equal to `None` indicates an unpinned shielded transaction; one that can only be found by scanning and trial-decrypting the entire shielded pool
+* Otherwise the key must have the form `Some(x)` where `x` is a `String` such that there exists no prior accepted transaction with the same key
+
+### Boundary Conditions
+Below, the conditions necessary to maintain consistency between the MASP validity predicate ledger and Namada ledger are outlined:
+* If the target address is the MASP validity predicate, then no transparent outputs are permitted in the shielded transaction
+* If the target address is not the MASP validity predicate, then:
+  * there must be exactly one transparent output in the shielded transaction and:
+    * its public key must be the hash of the target address bytes - this prevents replay attacks altering transfer destinations
+      * the hash is specifically a RIPEMD-160 of a SHA-256 of the input bytes
+    * its value must equal that of the containing transfer - this prevents replay attacks altering transfer amounts
+    * its asset type must be derived from the token address raw bytes and the current epoch once Borsh serialized from the type `(Address, Epoch)`:
+      * the dependency on the address prevents replay attacks altering transfer asset types
+      * the current epoch requirement prevents attackers from claiming extra rewards by forging the time when they began to receive rewards
+      * the derivation must be done as specified in `0.3 Derivation of Asset Generator from Asset Identifier`
+* If the source address is the MASP validity predicate, then:
+  * no transparent inputs are permitted in the shielded transaction
+  * the transparent transaction value pool's amount must equal the containing wrapper transaction's fee amount
+  * the transparent transaction value pool's asset type must be derived from the containing wrapper transaction's fee token
+    * the derivation must be done as specified in `0.3 Derivation of Asset Generator from Asset Identifier`
+* If the source address is not the MASP validity predicate, then the transparent transaction value pool's amount must equal zero

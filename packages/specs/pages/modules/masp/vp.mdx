@@ -2,4 +2,116 @@ import { Callout } from 'nextra-theme-docs'
 
 ## VP logic
 
-Placeholder
+## Shielded pool validity predicate (VP) 
+
+The shielded value pool can be an Namada established account with a
+validity predicate which handles the verification of shielded
+transactions. Similarly to zcash, the asset balance of the shielded pool
+itself is transparent - that is, from the transparent perspective, the
+MASP is just an account holding assets. The shielded pool VP has the
+following functions:
+
+- Accepts only valid transactions involving assets moving in or out of
+  the pool.
+- Accepts valid shielded-to-shielded transactions, which don't move
+  assets from the perspective of transparent Namada.
+- Publishes the note commitment and nullifier reveal Merkle trees.
+
+To make this possible, the host environment needs to provide
+verification primitives to VPs. One possibility is to provide a single
+high-level operation to verify transaction output descriptions and proofs, but another is to provide cryptographic functions in the host
+environment and implement the verifier as part of the VP.
+
+In future, the shielded pool will be able to update the commitment and
+nullifier Merkle trees as it receives transactions. This could likely be
+achieved via the temporary storage mechanism added for IBC, with the
+trees finalized with each block.
+
+The input to the VP is the following set of state changes:
+
+- updates to the shielded pool's asset balances
+- new encrypted notes
+- updated note and nullifier tree states (partial, because we only have
+  the last block's anchor)
+
+and the following data which is ancillary from the ledger's perspective:
+
+- spend descriptions, which destroy old notes:
+```
+struct SpendDescription {
+  // Value commitment to amount of the asset in the note being spent
+  cv: jubjub::ExtendedPoint,
+  // Last block's commitment tree root
+  anchor: bls12_381::Scalar,
+  // Nullifier for the note being nullified
+  nullifier: [u8; 32],
+  // Re-randomized version of the spend authorization key
+  rk: PublicKey,
+  // Spend authorization signature
+  spend_auth_sig: Signature,
+  // Zero-knowledge proof of the note and proof-authorizing key
+  zkproof: Proof<Bls12>,
+}
+```
+- output descriptions, which create new notes:
+```
+struct OutputDescription {
+  // Value commitment to amount of the asset in the note being created
+  cv: jubjub::ExtendedPoint,
+  // Derived commitment tree location for the output note
+  cmu: bls12_381::Scalar,
+  // Note encryption public key
+  epk: jubjub::ExtendedPoint,
+  // Encrypted note ciphertext
+  c_enc: [u8; ENC_CIPHERTEXT_SIZE],
+  // Encrypted note key recovery ciphertext
+  c_out: [u8; OUT_CIPHERTEXT_SIZE],
+  // Zero-knowledge proof of the new encrypted note's location
+  zkproof: Proof<Bls12>,
+}
+```
+
+Given these inputs:
+
+The VP must verify the proofs for all spend and output descriptions
+([`bellman::groth16`](https://docs.rs/bellman/latest/bellman/groth16/index.html)), as well as the signature for spend notes.
+
+Encrypted notes from output descriptions must be published in the
+storage so that holders of the viewing key can view them; however, the
+VP does not concern itself with plaintext notes.
+
+Nullifiers and commitments must be appended to their respective Merkle
+trees in the VP's storage as well, which is a transaction-level rather
+than a block-level state update.
+
+In addition to the individual spend and output description
+verifications, the final transparent asset value change described in the
+transaction must equal the pool asset value change. As an additional
+sanity check, the pool's balance of any asset may not end up negative. 
+
+NB: Shielded-to-shielded transactions in an asset do not, from the
+ledger's perspective, transact in that asset; therefore, the asset's own
+VP cannot run as described above because the shielded
+pool is asset-hiding.
+
+## Client capabilities
+The client should be able to:
+* Make transactions with a shielded sender and/or receiver
+* Scan the blockchain to determine shielded assets in one's possession
+* Generate payment addresses from viewing keys from spending keys
+
+To make shielded transactions, the client has to be capable of creating
+and spending notes, and generating proofs which the pool VP verifies.
+
+Unlike the VP, which must have the ability to do complex verifications,
+the transaction code for shielded transactions can be comparatively
+simple: it delivers the transparent value changes in or out of the pool,
+if any, and proof data computed offline by the client.
+
+The client and wallet must be extended to support the shielded pool and
+the cryptographic operations needed to interact with it. From the
+perspective of the transparent Namada protocol, a shielded transaction is
+just a data write to the MASP storage, unless it moves value in or out
+of the pool. The client needs the capability to create notes,
+transactions, and proofs of transactions, but it has the advantage of
+simply being able to link against the MASP crates, unlike the VP.
