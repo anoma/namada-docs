@@ -250,5 +250,5 @@ namada client query-proposal-result --proposal-id 0
 <Callout type="info">
 It is important to note that the proposal will only be executed at the end of the `grace_epoch` epoch if it has passed. If it has not passed, the proposal will be rejected and the code will not be executed.
 
-Another important note is that the voting period differs between `delegates` and `delegators`. The `delegates` have a shorter voting period than the `delegators`. This is to ensure that the `delegates` have enough time to vote on the proposals. See the specs for more information.
+Another important note is that the voting period differs between `delegates` and `delegators`. The `delegates` have a shorter voting period than the `delegators`. This is defined in the `parameters.toml`. This is to ensure that the `delegates` have enough time to vote on the proposals. See the specs for more information.
 </Callout>
