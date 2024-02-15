@@ -1,13 +1,6 @@
 # Fungible token
 
-{/* TODO: Unfamiliar with this VP, should be looked at */}
-
 The fungible token validity predicate authorises token balance changes on the basis of conservation-of-supply and approval-by-sender. Namada implements a "multitoken" validity predicate, in that all tokens have the same logic and can share one VP (with appropriate storage distinctions).
 
-A token balance is stored with a storage key. The token balance key should be `#Multitoken/{token_addr}/balance/{owner_addr}`. These keys can be made with [token functions](https://github.com/anoma/namada/blob/5da82f093f10c0381865accba99f60c557360c51/core/src/types/token.rs).
+{/* TODO: This is the same as design rationale atm, needs changing */}
 
-We can have multitoken balances for the same owner by `{token_addr}`, e.g. a token received over IBC is managed in `#Multitoken/{ibc_token}/balance/{receiver_addr}`. It is distinguished from the receiver's original balance in `#Multitoken/{token_addr}/balance/{receiver_addr}` to know which chain the token was transferred from. The `{ibc_token}` is explained in [IBC](../modules/ibc.mdx).
-
-Transfers between the balances with the same `{token_addr}` are allowed. Specifically, we can transfer a token from `#Multitoken/{token_addr}/balance/{sender_addr}` to `#Multitoken/{token_addr}/balance/{receiver_addr}`.
-
-These balance changes are validated by the multitoken validity predicate. It also checks the minted or burned token. If a token is minted or burned, i.e. when `#Multitoken/{token_addr}/balance/minted` is updated in the transaction, not only the total minted balance is checked but also calling the minter's validity predicate is checked. The minter should be set in a transaction minting the token. For example, when a token is received over IBC, the received token will be minted for the receiver's balance `#Multitoken/{ibc_token}/balance/{receiver_addr}`. The minted balance `#Multitoken/{ibc_token}/balance/minted` is also increased by the amount of the received token. The minted amount should be checked by the multitoken validity predicate. And, the multitoken validity predicate checks if the minter's validity predicate, the IBC validity predicate in this case, will be called (IBC validity predicate checks the minted amount is correct for the corresponding IBC operation).

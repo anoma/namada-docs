@@ -1,0 +1,27 @@
+import { Callout } from 'nextra-theme-docs'
+
+## Transactions
+
+A rust implementation of a `SignedTxData` struct is described below:
+
+```rust
+pub struct SignedTxData {
+    /// The original tx data bytes, if any
+    pub data: Option<Vec<u8>>,
+    /// The signature is produced on the tx data concatenated with the tx code
+    /// and the timestamp.
+    pub sig: Vec<(u8, common::Signature)>,
+}
+```
+
+The `sig` field holds a vector of tuples where the first element is an 8-bit integer and the second one is a signature. The integer serves as an index to match a specific signature to one of the public keys in the list of accepted ones for efficiency purposes.
+
+In order to craft a multisignature transaction, the involved parties must coordinate. More precisely, the transaction itself is constructed by one entity which will distribute the constructed transaction to the other signers and collect their signatures. 
+
+<Callout type="info">
+Note that the constructing party doesn't necessarily need to be one of the signers. 
+</Callout>
+
+Finally, these signatures are inserted in the `SignedTxData` struct to be encrypted, wrapped and submitted to the network.
+
+Namada does not provide a layer to support this process, so the involved parties will need to rely on an external communication mechanism.

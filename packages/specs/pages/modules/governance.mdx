@@ -2,6 +2,21 @@ import { Callout } from 'nextra-theme-docs'
 
 # Governance
 
+Namada introduces a governance mechanism to propose and apply protocol changes without the need for a hard fork, and to signal stakeholder approval for potential hard forks. 
+Any user able to deposit the correct amount of `NAM` is able to propose some changes in a proposal for which delegators and validators cast their `yay` or `nay` votes. 
+It is also possible to attach some payloads to proposals, in specific cases, to embed additional information. 
+
+Governance on Namada supports both `signaling` and `voting` mechanisms. 
+The signaling mechanism is used for changes which require a hard fork, while the voting mechanism is used for changes which merely alter state. 
+In cases where the chain is not able to produce blocks anymore, Namada relies on [off-chain signaling](#off-chain-protocol) to agree on a common move.
+
+Further information about delegators, validators, and NAM can be found in the [proof-of-stake section](./proof-of-stake.mdx).
+
+Namada supports both on chain and on chain governance.
+The on-chain governance process exists to assist in reaching social consensus in a structured, well-defined way. 
+Social consensus may also be reached off-chain through any community-selected mechanism.
+It is expected that the community will use the offline proposal mechanism primarily for when the chain is halted.
+
 ## Definitions
 
 Before describing Namada governance, it is useful to define the concepts of NAM, validators, delegators, and delegates.
@@ -36,28 +51,3 @@ The respective validator of that address becomes the default *delegate* (explain
 Similarly, a delegate's `voting-power` (now in terms of voting on governance proposals, not blocks) is proportional to the sum of its self-bonded tokens and all the bonded tokens from other addresses to their own address.
 
 > **Note**: Initially, Namada only supports validators as delegates. In the future, the ability for separate delegates may be added.
-
-## Motivation
-
-Namada introduces a governance mechanism to propose and apply protocol changes without the need for a hard fork, and to signal stakeholder approval for potential hard forks. 
-Any user able to deposit the correct amount of `NAM` is able to propose some changes in a proposal for which delegators and validators cast their `yay` or `nay` votes. 
-It is also possible to attach some payloads to proposals, in specific cases, to embed additional information. 
-
-Governance on Namada supports both `signaling` and `voting` mechanisms. 
-The signaling mechanism is used for changes which require a hard fork, while the voting mechanism is used for changes which merely alter state. In cases where the chain is not able to produce blocks anymore, Namada relies on [off-chain signaling](#off-chain-protocol) to agree on a common move.
-
-Further information about delegators, validators, and NAM can be found in the [proof-of-stake section](./proof-of-stake.mdx).
-
-## Outline
-
-There are two ways to propose a change to the Namada protocol:
-
-1. [**On-chain**](#on-chain-governance) - A proposal is submitted to the Namada blockchain, and the Namada blockchain handles the voting process.
-2. [**Off-chain**](#off-chain-governance) - A proposal is submitted to a focal point outside of the Namada blockchain, and the voting process occurs off-chain.
-
-## Spam resistance
-
-Namada governance implements a spam resistance mechanism to prevent the network from being spammed with proposals.
-This mechanism is based on the fact that a proposal must be submitted with a deposit of `NAM` tokens.
-This deposit is returned to the proposer if the proposal is accepted, and burned otherwise.
-This is only possible if the proposal is submitted on-chain, as off-chain proposals are not able to submit a deposit.

@@ -1,0 +1,40 @@
+import { Callout } from 'nextra-theme-docs'
+
+## VP logic
+
+### Slashing
+
+An important part of the security model of Namada is based on making attacking the system very expensive. To this end, the validator who has bonded stake will eventually be slashed once an offense has been detected.
+
+These are the types of offenses:
+
+- Equivocation in consensus
+  - voting: a validator has submitted two votes that are conflicting
+  - block production: a block producer has created two different blocks for the same height
+- Invalidity:
+  - voting: validators have voted on invalid block
+  - block production: a block producer has produced invalid block (when supported by Comet)
+
+Unavailability is not considered an offense, but a validator who hasn't voted will not receive rewards.
+
+Once an offense has been reported:
+
+1. Kicking out
+2. Slashing
+
+- Individual: Once someone has reported an offense it is reviewed by validators and if confirmed the offender is slashed.
+- [cubic slashing](./cubic-slashing.mdx): escalated slashing
+
+Instead of absolute values, validators' total bonded token amounts and bonds' and unbonds' token amounts are stored as their deltas (i.e. the change of quantity from a previous epoch) to allow distinguishing changes for different epoch, which is essential for determining whether tokens should be slashed. Slashes for a fault that occurred in epoch `n` may only be applied before the beginning of epoch `n + unbonding_length`. For this reason, in epoch `m` we can sum all the deltas of total bonded token amounts and bonds and unbond with the same source and validator for epoch equal or less than `m - unbonding_length` into a single total bonded token amount, single bond and single unbond record. This is to keep the total number of total bonded token amounts for a unique validator and bonds and unbonds for a unique pair of source and validator bound to a maximum number (equal to `unbonding_length`).
+
+To disincentivize validators misbehavior in the PoS system a validator may be slashed for any fault that it has done. An evidence of misbehavior may be submitted by any account for a fault that occurred in epoch `n` anytime before the beginning of epoch `n + unbonding_length`.
+
+A valid evidence reduces the validator's total bonded token amount by the slash rate in and before the epoch in which the fault occurred. The validator's voting power must also be adjusted to the slashed total bonded token amount. Additionally, a slash is stored with the misbehaving validator's address and the relevant epoch in which the fault occurred. When an unbond is being withdrawn, we first look-up if any slash occurred within the range of epochs in which these were active and if so, reduce its token amount by the slash rate. Note that bonds and unbonds amounts are not slashed until their tokens are withdrawn.
+
+The invariant is that the sum of amounts that may be withdrawn from a misbehaving validator must always add up to the total bonded token amount.
+
+## Initialization
+
+An initial validator set with self-bonded token amounts must be given on system initialization.
+
+This set is used to initialize the genesis state with epoched data active immediately (from the first epoch).

@@ -1,6 +1,8 @@
 {
-  "objects-and-txs": "Objects and Txs",
-  "cubic-slashing": "Cubic slashing",
-  "reward-distribution": "Reward distribution",
-  "inflation-system": "Inflation system"
+    "design": "Design",
+    "data-types": "Data types",
+    "storage": "Storage",
+    "vp": "Validity Predicate logic",
+    "txs": "Transactions",
+    "handlers": "Handlers"
 }
