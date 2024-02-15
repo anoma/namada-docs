@@ -1,8 +1,8 @@
 {
-    "design": "Design",
+    "design": "Design rationale",
     "data-types": "Data types",
-    "storage": "Storage",
-    "vp": "Validity Predicate logic",
+    "storage": "Storage layout",
+    "vp": "Validity predicate logic",
     "txs": "Transactions",
     "handlers": "Handlers"
 }

@@ -4,3 +4,9 @@ import { Callout } from 'nextra-theme-docs'
 
 The "user" validity predicate is the default validity predicate for all user-owned accounts. It is a multisignature validity predicate that requires at least `k` out of `n` valid signatures to be present in the signed transaction data for every transaction originating from the user. By default, both `k` and `n` are set to 1, meaning that the user can sign transactions on their own. This is the default validity predicate for all user-owned accounts.
 
+- [Design rationale](./multisignature/design.mdx)
+- [Data types](./multisignature/data-types.mdx)
+- [Storage layout](./multisignature/storage.mdx)
+- [Validity predicate logic](./multisignature/vp.mdx)
+- [Transactions](./multisignature/txs.mdx)
+- [Handlers](./multisignature/handlers.mdx)

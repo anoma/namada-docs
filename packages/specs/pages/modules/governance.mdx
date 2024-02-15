@@ -6,6 +6,13 @@ Namada introduces a governance mechanism to propose and apply protocol changes w
 Any user able to deposit the correct amount of `NAM` is able to propose some changes in a proposal for which delegators and validators cast their `yay` or `nay` votes. 
 It is also possible to attach some payloads to proposals, in specific cases, to embed additional information. 
 
+- [Design rationale](./governance/design.mdx)
+- [Data types](./governance/data-types.mdx)
+- [Storage layout](./governance/storage.mdx)
+- [Validity predicate logic](./governance/vp.mdx)
+- [Transactions](./governance/txs.mdx)
+- [Handlers](./governance/handlers.mdx)
+
 Governance on Namada supports both `signaling` and `voting` mechanisms. 
 The signaling mechanism is used for changes which require a hard fork, while the voting mechanism is used for changes which merely alter state. 
 In cases where the chain is not able to produce blocks anymore, Namada relies on [off-chain signaling](#off-chain-protocol) to agree on a common move.
