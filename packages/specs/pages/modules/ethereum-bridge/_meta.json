@@ -1,9 +1,8 @@
 {
-  "security": "Security",
-  "bootstrapping": "Bootstrapping",
-  "ethereum_events_attestation": "Ethereum events attestation",
-  "transfers_to_namada": "Transfers to Namada",
-  "transfers_to_ethereum": "Transfers to Ethereum",
-  "proofs": "Proofs",
-  "ethereum_smart_contracts": "Ethereum Smart Contracts"
+    "design": "Design",
+    "data-types": "Data types",
+    "storage": "Storage",
+    "vp": "Validity Predicate logic",
+    "txs": "Transactions",
+    "handlers": "Handlers"
 }

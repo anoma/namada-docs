@@ -1,80 +1,30 @@
 import { Callout } from 'nextra-theme-docs'
 
+## Storage keys
 
-# Governance storage
+### On-chain `Proposals`
 
-Just like PoS, governance also has its own storage space.
 
-## Proposals
-Each proposal is stored in a sub-key under the internal proposal address. The storage keys involved are:
 
-```
-/$GovernanceAddress/proposal/$id/content: Vec<u8>
-/$GovernanceAddress/proposal/$id/author: Address
-/$GovernanceAddress/proposal/$id/type: ProposalType
-/$GovernanceAddress/proposal/$id/start_epoch: Epoch
-/$GovernanceAddress/proposal/$id/end_epoch: Epoch
-/$GovernanceAddress/proposal/$id/grace_epoch: Epoch
-/$GovernanceAddress/proposal/$id/proposal_code: Option<Vec<u8>>
-/$GovernanceAddress/proposal/$id/funds: u64
-/$GovernanceAddress/proposal/$id/result: ProposalResult
-/$GovernanceAddress/proposal/epoch/$id: u64
-```
+### Offline proposals
 
-<Callout type="info" emoji="⏱️">
-**Definition of "Epoch":**
-
-An **epoch** is a range of blocks or time that is defined by the base ledger and made available to the PoS system. 
-This document assumes that epochs are identified by consecutive natural numbers. 
-All the data relevant to PoS are [associated with epochs](../proof-of-stake/objects-and-txs.mdx#epoched-data).
-</Callout>
-
-`/$GovernanceAddress/proposal/$epoch/$id` is used for efficient iteration over proposals by epoch.
-
-`$epoch` refers to the same value as the one specified in the `grace_epoch` field.
-
-`/$GovernanceAddress/proposal/$id/result` is used to store the result of the proposal after the tally has been performed: this allows the recover of a past result even after the validator set (and the corresponding voting powers) has changed.
-
-## `GovernanceAddress`
-
-`GovernanceAddress` parameters and global storage keys are:
+Offline proposals are represented as JSON objects with the following structure:
 
 ```
-/$GovernanceAddress/counter: u64
-/$GovernanceAddress/min_proposal_fund: u64
-/$GovernanceAddress/max_proposal_code_size: u64
-/$GovernanceAddress/min_proposal_period: u64
-/$GovernanceAddress/max_proposal_content_size: u64
-/$GovernanceAddress/min_proposal_grace_epochs: u64
-/$GovernanceAddress/pending/$proposal_id: u64
+{
+  content: Base64<Vec<u8>>,
+  author: Address,
+  tallyEpoch: Epoch,
+  signature: Base64<Vec<u8>>
+}
 ```
 
-- `counter` is used to assign a unique, incremental ID to each proposal.
-- `min_proposal_fund` represents the minimum amount of locked tokens to submit a proposal.
-- `max_proposal_code_size` is the maximum allowed size (in bytes) of the proposal WASM code.
-- `min_proposal_period` sets the minimum voting time window (in `Epoch`).
-- `max_proposal_content_size` tells the maximum number of characters allowed in the proposal content.
-- `min_proposal_grace_epochs` is the minimum required time window (in `Epoch`) between `end_epoch` and the epoch in which the proposal has to be executed.
-- `/$GovernanceAddress/pending/$proposal_id` - this storage key is written only before the execution of the code defined in `/$GovernanceAddress/proposal/$id/proposal_code` and deleted afterwards. Since this storage key can be written only by the protocol itself (and by no other means), VPs can check for the presence of this storage key to be sure that a proposal_code has been executed by the protocol and not by a transaction.
+The signature is produced over the hash of the concatenation of: `content`, `author`, and `tallyEpoch`. 
+Proposal types are not supported off-chain.
 
-## Votes
+#### Proposal fields
 
-Vote transaction creates or modifies the following storage key:
-
-```
-/$GovernanceAddress/proposal/$id/vote/$delegation_address/$voter_address: ProposalVote
-```
-
-The storage key will only be created if the transaction is signed either by a validator or a delegator. 
-In case a vote misses a required memo or carries a memo with an invalid format, the vote will be discarded at validation time (by the VP) and it won't be written to storage.
-
-
-## External storage
-The governance machinery also relies on a subkey stored under the `NAM` token address:
-
-```
-/$NAMAddress/balance/$GovernanceAddress: u64
-```
-
-This is to leverage the `NAM` VP to check that the funds were correctly locked. 
-The governance subkey, `/$GovernanceAddress/proposal/$id/funds` will be used after the tally step to know the exact amount of tokens to refund or move to Treasury.
+- `content`: The proposal content (encoded). This is the actual proposal that will be voted on.
+- `author`: The address of the proposal author.
+- `tallyEpoch`: The epoch in which the proposal will be tallied. This epoch must already exist when tallying occurs. If the chain is halted, this means choosing an epoch in the past (e.g. the most recent epoch).
+- `signature`: The signature of the proposal author over the hash of the concatenation of: `content`, `author`, and `tallyEpoch`
