@@ -1,5 +1,8 @@
 import { info } from 'console'
+import { SocketAddress } from 'net'
+import { addHookAliases } from 'next/dist/server/require-hook'
 import { Callout } from 'nextra-theme-docs'
+import { f, t } from 'nextra/dist/types-fa5ec8b0'
 
 # On-chain proposals
 
@@ -226,9 +229,12 @@ Only delegators and delegates can vote on proposals. Assuming you fall into one 
 namada client vote-proposal \
     --proposal-id 0 \
     --vote yay \
-    --address <your-address> \
-    --signing-keys <your-alias>
+    --address <your-address>
 ```
+
+<Callout type="info">
+The `--address` flag needs to be the address of the delegator or delegate that is voting. For validators, it is better to use the raw address rather than the alias. The `--signing-keys` can be the alias, however it is recommended to leave out the `--signing-keys` flag and let the client figure out the signing keys. If the key does not have a balance, use the `--gas-payer` flag to specify the address of the account that will pay for the gas.
+</Callout>
 
 where `--vote` can be either `yay`, `nay` or `abstain`.
 
