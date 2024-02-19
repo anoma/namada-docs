@@ -1,5 +1,8 @@
 import { info } from 'console'
+import { SocketAddress } from 'net'
+import { addHookAliases } from 'next/dist/server/require-hook'
 import { Callout } from 'nextra-theme-docs'
+import { f, t } from 'nextra/dist/types-fa5ec8b0'
 
 # On-chain proposals
 
@@ -226,9 +229,12 @@ Only delegators and delegates can vote on proposals. Assuming you fall into one 
 namada client vote-proposal \
     --proposal-id 0 \
     --vote yay \
-    --address <your-address> \
-    --signing-keys <your-alias>
+    --address <your-address>
 ```
+
+<Callout type="info">
+The `--address` flag needs to be the address of the delegator or delegate that is voting. For validators, it is better to use the raw address rather than the alias. The `--signing-keys` can be the alias, however it is recommended to leave out the `--signing-keys` flag and let the client figure out the signing keys. If the key does not have a balance, use the `--gas-payer` flag to specify the address of the account that will pay for the gas.
+</Callout>
 
 where `--vote` can be either `yay`, `nay` or `abstain`.
 
@@ -251,4 +257,26 @@ namada client query-proposal-result --proposal-id 0
 It is important to note that the proposal will only be executed at the start of the `grace_epoch` epoch if it has passed. If it has not passed, the proposal will be rejected and the code will not be executed.
 
 Another important note is that the voting period differs between validators and non-validators. The validators have a shorter voting period than the delegators. This is defined in the `parameters.toml`. This is to ensure that the non-validators have enough time to vote on the proposals (so that the validators cannot vote in the last block against the non-validators preference). See the specs for more information.
+</Callout>
+
+## Submit a governance proposal with wasm code attached (advanced)
+
+First you will need a valid `.wasm` file. You then need to read this file into a vector of bytes. This can be done with the following python script:
+
+```python
+with open(wasm_file_path, "rb") as f:
+    byte_vec = list(f.read())
+print(str(byte_vec))
+```
+
+This needs to go into the `data` field of the proposal json. E.g `"data": [1,2,3,4,5,6,7,8,9,10]`
+
+When submitting this proposal, it is likely that the gas requirement will be large. Therefore, it is recommended to supply both the `--gas-limit` and `--gas-price` flags.
+
+```shell copy
+namadac init-proposal --data-path proposal.json --gas-limit 500000 --gas-price 0.01
+```
+
+<Callout type="info">
+Hint: use the `--dry-run` feature to figure out how much gas will be needed and use `namadac query-protocol-paramters` to see the current minimum gas price.
 </Callout>
