@@ -1,8 +1,4 @@
-import { info } from 'console'
-import { SocketAddress } from 'net'
-import { addHookAliases } from 'next/dist/server/require-hook'
 import { Callout } from 'nextra-theme-docs'
-import { f, t } from 'nextra/dist/types-fa5ec8b0'
 
 # On-chain proposals
 
@@ -280,3 +276,8 @@ namadac init-proposal --data-path proposal.json --gas-limit 500000 --gas-price 0
 <Callout type="info">
 Hint: use the `--dry-run` feature to figure out how much gas will be needed and use `namadac query-protocol-paramters` to see the current minimum gas price.
 </Callout>
+
+## A video tutorial
+Skip all the boring text and watch a video tutorial on how to submit a proposal:
+
+<iframe src="https://player.vimeo.com/video/914426953?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="640" height="416" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen></iframe>

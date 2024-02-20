@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Jailed validators
 
 Validators can be *jailed* for several reasons, such as double signing a block, signing an invalid block, or excessive downtime. Each of these reasons will have different ramifications for the validator.
@@ -19,6 +21,15 @@ Once jailed, validators remain jailed indefinitely. They can only be unjailed by
 ```bash copy
 namadac unjail-validator --validator <validator_address>
 ```
+
+<Callout type="info">
+Because the validator alias sometimes clashes with the alias for the implicit account and or established account in the wallet, it is recommended to use the validator address instead of the alias.
+In order to find the validator address, you can use the following command:
+```bash copy
+namadaw list --addr | grep <validator-alias>
+```
+then make sure it is the corresponding `tnam` address.
+</Callout>
 
 If the transaction is successful, then the validator will be reinstated into one of the validator sets at the pipeline length relative to the current epoch (typically 2 epochs in the future).
 

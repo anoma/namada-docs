@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Bonding and proof-of-stake
 
 ## Bonded tokens
@@ -23,6 +25,15 @@ Once you've found the address of your favourite validator, you can bond to them 
 ```bash copy
 namadac bond --source <delegator-address> --validator <validator-address> --amount <amount>
 ```
+
+<Callout type="info">
+Because the validator alias sometimes clashes with the alias for the implicit account and or established account in the wallet, it is recommended to use the validator address instead of the alias.
+In order to find the validator address, you can use the following command:
+```bash copy
+namadaw list --addr | grep <validator-alias>
+```
+then make sure it is the corresponding `tnam` address.
+</Callout>
 
 The `<delegator-address>` is your account address from which you would like to stake NAM tokens. Validators who would like to self-bond do not need to provide the `--source` argument.
 
