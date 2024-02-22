@@ -14,8 +14,8 @@ use namada_sdk::NamadaImpl;
 
 ```rust
 // SecretKey, common and SchemeType give access to Namada cryptographic keys and their relevant implementations. Namada supports ED25519 and SECP256K1 keys.
-use namada_sdk::core::types::key::common::SecretKey;
-use namada_sdk::core::types::key::{common, SchemeType};
+use namada_sdk::types::key::common::SecretKey;
+use namada_sdk::types::key::{common, SchemeType};
 // Filesystem wallet utilities (stores the path of the wallet on the filesystem)
 use namada_sdk::wallet::fs::FsWalletUtils;
 ```
@@ -37,16 +37,19 @@ let mut wallet = FsWalletUtils::new(PathBuf::from("wallet.toml"));
 let (_key_alias, sk) = NamadaImpl::new(&http_client, &mut wallet, &mut shielded_ctx, &NullIo)
             .wallet_mut()
             .await
-            .derive_key_from_user_mnemonic_code(
-                SchemeType::Ed25519,
-                Some(alias),
-                false,
-                Some(derivation_path),
-                Some((mnemonic.clone(), Zeroizing::new("".to_owned()))),
-                None,
+            let (_key_alias, sk) = namada
+            .wallet_mut()
+            .await
+            .derive_store_key_from_mnemonic_code(
+                scheme: SchemeType::Ed25519,
+                alias: Some(alias),
+                alias_force: false,
+                derivation_path: derivation_path,
+                mnemonic_passphrase: Some((mnemonic.clone(), Zeroizing::new("".to_owned()))),
+                prompt_bip39_passphrase: false,
+                password: None,
             )
-            .expect("unable to derive key from mnemonic code")
-            .unwrap();
+            .expect("unable to derive key from mnemonic code");
 ```
 
 In the second part of the above function, the key is derived from the mnemonic phrase. The `alias` is the name of the key that will be stored in the wallet. The `derivation_path` is the path to the key in the HD wallet. The `mnemonic` is the mnemonic phrase that was generated earlier. The `shielded_ctx` is the context for the shielded transactions. The `NullIo` is the IO context for the wallet.
