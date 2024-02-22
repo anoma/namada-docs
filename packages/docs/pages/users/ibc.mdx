@@ -52,7 +52,7 @@ namadac --base-dir ${BASE_DIR_A}
     --receiver atest1d9khqw36g56nqwpkgezrvvejg3p5xv2z8y6nydehxprygvp5g4znj3phxfpyv3pcgcunws2x0wwa76 \
     --token nam \
     --channel-id channel-0 \
-    --node 127.0.0.1:27657
+    --node http://127.0.0.1:27657
 ```
 
 Once the transaction has been submitted, a relayer will need to relay the packet to the other chain. This is done automatically by the relayer running Hermes. If the packet is never successfully relayed, the funds are returned to the sender after a timeout. See more information in the [specs](https://specs.namada.net/modules/ibc).
