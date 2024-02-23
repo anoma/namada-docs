@@ -3,5 +3,7 @@
     "setting-up-a-wallet" : "Setting up a wallet",
     "generating-accounts": "Generating accounts",
     "constructing-transfers" : "Constructing transfers",
+    "proof-of-stake" : "Proof of stake transactions",
+    "governance" : "Governance",
     "interface-integration" : "Integrating with the interface"
 }
