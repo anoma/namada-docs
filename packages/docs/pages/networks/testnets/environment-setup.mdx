@@ -1,22 +1,22 @@
-import {Steps} from 'nextra-theme-docs'
+import { Steps } from 'nextra-theme-docs'
 import { Callout } from 'nextra-theme-docs'
 
 # Environment setup
 
-<Callout type="info">
+< Callout type = "info" >
 If you don't want to build Namada from source you can [install Namada from binaries](../../introduction/install/binaries.mdx).
 Note that building from source can be a difficult process and is not recommended for beginners.
-</Callout>
+< /Callout>
 
 Export the following variables:
 
 ```bash copy
-export NAMADA_TAG=v0.31.5
+export NAMADA_TAG=v0.31.6
 ```
 
 
 ## Installing Namada
-<Steps>
+< Steps >
 ### Install all pre-requisites
     - [Rust](https://www.rust-lang.org/tools/install)
     - [CometBFT](../../introduction/installing-cometbft.mdx)
@@ -37,17 +37,17 @@ sudo apt-get update -y
 sudo apt-get install build-essential make pkg-config libssl-dev libclang-dev -y
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-</Steps>
+< /Steps>
 ## Installing CometBFT
-<Steps>
+< Steps >
 ### See the installing CometBFT section [here](../../introduction/installing-cometbft.mdx) for instructions on how to install CometBFT.
 ### Copy both the namada and CometBFT binaries to somewhere on $PATH (or use the relative paths). This step may or may not be necessary.
     
 - namada binaries can be found in `/target/release`
 - CometBFT is likely in `$HOME/Downloads/cometbft`
-</Steps>
+< /Steps>
 ## Check ports
-<Steps>
+< Steps >
 ### Open ports on your machine:
     - 26656
     - 26657
@@ -66,6 +66,6 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 - Make sure you are using the correct CometBFT version
     - `cometbft version` should output `0.37.2`
 - Make sure you are using the correct Namada version
-    - `namada --version` should output `Namada v0.31.5`
+    - `namada --version` should output `Namada v0.31.6`
 
-</Steps>
+< /Steps>
