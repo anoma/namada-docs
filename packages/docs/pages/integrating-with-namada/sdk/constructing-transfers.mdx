@@ -17,8 +17,8 @@ let mut namada = NamadaImpl::new(&http_client, &mut wallet, &mut shielded_ctx, &
         .chain_id(ChainId::from_str("public-testnet-14.5d79b6958580").unwrap());
 // Transfer the given amount of native tokens from the source account to the
 // destination account.
-async fn gen_transfer<'a>(
-    namada: &impl Namada<'a>,
+async fn gen_transfer(
+    namada: &impl Namada,
     source: &Account,
     destination: &Account,
     amount: InputAmount,
@@ -30,13 +30,13 @@ async fn gen_transfer<'a>(
             namada.native_token(),
             amount,
         )
-        .signing_keys(vec![source.private_key.clone()]);
+        .signing_keys(vec![source.public_key.clone()]);
     let (mut transfer_tx, signing_data, _epoch) = transfer_tx_builder
         .build(namada)
         .await
         .expect("unable to build transfer");
     namada
-        .sign(&mut transfer_tx, &transfer_tx_builder.tx, signing_data)
+        .sign(&mut transfer_tx, args: &transfer_tx_builder.tx, signing_data, with: default_sign, user_data: ())
         .await
         .expect("unable to sign reveal pk tx");
     namada.submit(transfer_tx, &transfer_tx_builder.tx).await

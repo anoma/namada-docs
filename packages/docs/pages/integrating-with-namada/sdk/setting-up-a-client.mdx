@@ -50,13 +50,13 @@ impl ClientTrait for SdkClient {
         height: Option<BlockHeight>,
         prove: bool,
     ) -> Result<EncodedResponseQuery, Self::Error> {
-        let data = data.unwrap_or_default();
-        let height = height
+        let data = data.unwrap_or_default(); // default to empty vec
+        let height = heigh
             .map(|height| {
                 tendermint::block::Height::try_from(height.0)
                     .map_err(|_err| Error::InvalidHeight(height))
             })
-            .transpose()?;
+            .transpose()?; // convert to tendermint::block::Height
         let response = self
             .abci_query(
                 Some(std::str::FromStr::from_str(&path).unwrap()),

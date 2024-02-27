@@ -1,0 +1,47 @@
+import { Callout } from 'nextra-theme-docs'
+
+## Proof of stake using the SDK
+
+All proof of stake functionality will be find within the `namada_sdk::proof_of_stake` module.
+
+```rust 
+use namada_sdk::NamadaImpl; // This module allows us to access the NamadaImpl struct, which is needed for most transactions
+
+let http_client = reqwest::Client::new();
+let wallet = Wallet::from_mnemonic("your mnemonic here").unwrap();
+let wallet: namada_sdk::wallet::Wallet<FsWalletUtils> = FsWalletUtils::new(PathBuf::from("wallet.toml"));
+let shielded_ctx = FsShieldedUtils::new(Path::new("masp/").to_path_buf());
+let namada_impl = NamadaImpl::new(http_client, wallet, shielded_ctx, NullIo)
+        .await
+        .expect("unable to construct Namada object")
+        .chain_id(ChainId::from_str(CHAIN_ID).unwrap());
+
+let bond_tx_builder = namada_iml
+            
+            .new_bond(validator_address.clone(), amount)
+            .source(source_address.clone())
+            .signing_keys(vec![source_public_key]);
+
+let (mut bond_tx, signing_data) = bond_tx_builder
+            .build(&namada_iml)
+            .await
+            .expect("unable to build bond");
+
+namada_iml
+    .sign(
+        &mut bond_tx,
+        &bond_tx_builder.tx,
+        signing_data,
+        default_sign,
+        (),
+    )
+    .await
+    .expect("unable to sign reveal bond");
+
+let tx = namada_iml.submit(bond_tx, &bond_tx_builder.tx).await;
+```
+
+That will submit the bond transaction to the network.
+
+Similar proof of stake transactions such as `new_unbond`, `new_redelegation`, `new_claim_rewards` and `new_withdraw` are also available in the SDK.
+
