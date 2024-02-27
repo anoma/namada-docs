@@ -7,7 +7,7 @@ import { Callout } from 'nextra-theme-docs'
 Below is an example of a `PGFProposal` that a governance participant could submit.
 ```json
 {
-    "proposal" :{
+    "proposal": {
         "id": 1,
         "content": {
             "title": "Stewie for Steward 2024",
@@ -17,33 +17,32 @@ Below is an example of a `PGFProposal` that a governance participant could submi
             "license": "MIT",
             "abstract": "Stewie is running for steward, with a focus on technical research. The technical research I will be focused on will definitely not be for weapons of mass destruction. There is some possibility however that I may be focusing somewhat on open source software for weapons of mass destruction.",
             "motivation": "Nobody knows technical research better than me. Trust me. I know it. I have the best technical research. I will be the best steward. Last night, Namada called me and said, Stewie, thank you. I will make public goods funding great again",
-            "details": "As a genius baby, I possess an unmatched level of intelligence and a visionary mindset. I will utilize these qualities to solve the most complex problems, and direct public goods funding towards weapons of mass destruction ... i mean open source software for weapons of mass destruction",
+            "details": "As a genius baby, I possess an unmatched level of intelligence and a visionary mindset. I will utilize these qualities to solve the most complex problems, and direct public goods funding towards weapons of mass destruction ... i mean open source software for weapons of mass destruction"
         },
         "author": "stewie",
         "voting_start_epoch": 3,
         "voting_end_epoch": 6,
-        "grace_epoch": 12,
+        "grace_epoch": 12
     },
-    "data" :
-        {
-            "continuous" : [
-                {
-                    "target": {
-                        "amount": 420,
-                        "address": "<address-of-recipient>"
-                    }
-                    "action" : "add",
+    "data": {
+        "continuous": [
+            {
+                "target": {
+                    "amount": 420,
+                    "address": "<address-of-recipient>"
                 },
-            ],
-            "retro" : [
-                {
-                    "target": {
-                        "amount": 1337,
-                        "address": "<address-of-recipient>"
-                    }
+                "action": "add"
+            }
+        ],
+        "retro": [
+            {
+                "target": {
+                    "amount": 1337,
+                    "address": "<address-of-recipient>"
                 }
-            ]
-        },  
+            }
+        ]
+    }
 }
 ```
 where `<address-of-recipient>` should be changed to the address of the recipient of the funds.
