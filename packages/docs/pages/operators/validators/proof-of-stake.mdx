@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Cubic Proof-of-Stake system
 
 The Namada Proof of Stake (PoS) system uses the NAM token as the staking token. It features delegation to any number of validators and customizable validator validity predicates.
@@ -43,3 +45,41 @@ namada client unjail-validator --validator $VALIDATOR_ALIAS --signing-keys $SIGN
 ```
 
 If successful, the validator will be unjailed after the pipeline amount of epochs, and is able to participate in the consensus protocol again.
+
+## Consensus Key Management
+
+The consensus key is crucial for validators as it is used to sign blocks and participate in the CometBFT consensus protocol. This key ensures that only authorized validators can propose and vote on blocks, contributing to the network's overall security.
+
+### Changing the Consensus Key
+Validators are able to change their consensus key, allowing for enhanced security and key rotation practices. This process is essential for maintaining the security of the validator's operations and protecting against potential compromise.
+
+To change the consensus key, validators can use the following command:
+
+```bash
+VALIDATOR_ADDRESS="<your-validator-address>"
+SIGNING_KEYS="<your-signing-key>"
+namada client change-consensus-key --validator $VALIDATOR_ADDRESS --signing-keys $SIGNING_KEYS
+```
+
+<Callout type="info" emoji="🔑">
+The new consensus key will be recorded in the `wallet.toml` file and is scheduled to become active 2 blocks before the pipeline offset from the epoch at the moment of activation. This timing ensures a smooth transition. It is essential for validators to plan the key rotation accordingly to ensure continuous participation in block validation without interruption.
+</Callout>
+
+### Generating a New Consensus Key
+After the transition period, validators must replace the current `priv_validator_key.json` with the newly generated key. This step is crucial for activating the new consensus key for block signing.
+
+To generate a new consensus key, use the following command:
+
+```bash
+namadaw convert --alias <new-consensus-key>
+```
+
+This command will create a new consensus key, which validators should securely store and use to replace the existing `priv_validator_key.json` file. It is critical for validators to perform this step correctly.
+
+After updating the consensus key, validators can find out their new validator address with the following command:
+
+```bash
+namadaw find --alias <new-consensus-key>
+```
+
+
