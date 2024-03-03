@@ -51,7 +51,7 @@ impl ClientTrait for SdkClient {
         prove: bool,
     ) -> Result<EncodedResponseQuery, Self::Error> {
         let data = data.unwrap_or_default(); // default to empty vec
-        let height = heigh
+        let height = height
             .map(|height| {
                 tendermint::block::Height::try_from(height.0)
                     .map_err(|_err| Error::InvalidHeight(height))
@@ -97,4 +97,24 @@ impl ClientTrait for SdkClient {
 }
 ```
 
-Now, we are ready to use this client to send transactions.
+This client will allow us to make asynchronous calls to the network and handle the responses.
+
+## Instantiating a Namada Implementation object
+
+When constructing transactions using the sdk, we almost alwasy need a `namada_impl` object. 
+
+```rust
+use namada_sdk::NamadaImpl; // This module allows us to access the NamadaImpl struct, which is needed for most transactions
+
+let source_address = Address::from_str("tnam1v4ehgw36xq6ngs3ng5crvdpngg6yvsecx4znjdfegyurgwzzx4pyywfexuuyys69gc6rzdfnryrntx").unwrap();
+let http_client = reqwest::Client::new();
+let wallet = Wallet::from_mnemonic("your mnemonic here").unwrap();
+let wallet: namada_sdk::wallet::Wallet<FsWalletUtils> = FsWalletUtils::new(PathBuf::from("wallet.toml"));
+let shielded_ctx = FsShieldedUtils::new(Path::new("masp/").to_path_buf());
+let namada_impl = NamadaImpl::new(http_client, wallet, shielded_ctx, NullIo)
+        .await
+        .expect("unable to construct Namada object")
+        .chain_id(ChainId::from_str(CHAIN_ID).unwrap());
+```
+
+This object will be referenced throughout the documentation as `namada_impl`.
