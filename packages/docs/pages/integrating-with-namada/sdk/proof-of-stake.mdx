@@ -4,30 +4,25 @@ import { Callout } from 'nextra-theme-docs'
 
 All proof of stake functionality will be find within the `namada_sdk::proof_of_stake` module.
 
+<Callout type="info">
+The `namada_impl` object is assumed to have been constructed as described in the [setting up a client](./setting-up-a-client.mdx#instantiating-a-namada-implementation-object) section.
+</Callout>
+
 ```rust 
-use namada_sdk::NamadaImpl; // This module allows us to access the NamadaImpl struct, which is needed for most transactions
+// We assume we have a namada_impl object that is already initialized
 
-let http_client = reqwest::Client::new();
-let wallet = Wallet::from_mnemonic("your mnemonic here").unwrap();
-let wallet: namada_sdk::wallet::Wallet<FsWalletUtils> = FsWalletUtils::new(PathBuf::from("wallet.toml"));
-let shielded_ctx = FsShieldedUtils::new(Path::new("masp/").to_path_buf());
-let namada_impl = NamadaImpl::new(http_client, wallet, shielded_ctx, NullIo)
-        .await
-        .expect("unable to construct Namada object")
-        .chain_id(ChainId::from_str(CHAIN_ID).unwrap());
-
-let bond_tx_builder = namada_iml
+let bond_tx_builder = namada_impl
             
             .new_bond(validator_address.clone(), amount)
             .source(source_address.clone())
             .signing_keys(vec![source_public_key]);
 
 let (mut bond_tx, signing_data) = bond_tx_builder
-            .build(&namada_iml)
-            .await
-            .expect("unable to build bond");
+    .build(&namada_iml)
+    .await
+    .expect("unable to build bond");
 
-namada_iml
+namada_impl
     .sign(
         &mut bond_tx,
         &bond_tx_builder.tx,
