@@ -1,0 +1,8 @@
+## Writing
+
+The writing module exposes the broadcast function to send transactions to a Namada node.
+
+```rust
+pub fn broadcast_tx(tendermint_addr: &str, tx: Tx) -> Result<Response, Error> {...}
+```
+The Tx object can be retrieved from the transaction module by calling the `::payload()` method on the transaction object. See [transaction](./transactions.mdx) for more details.
