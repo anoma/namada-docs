@@ -1,0 +1,55 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Using the Light SDK
+
+The light sdk exposes the following modules:
+
+```rust 
+pub mod reading; // exposes queries to retrieve data from a Namada node
+pub mod transaction; // contains functions to construct all the transactions currently supported by the protocol
+pub mod writing; // exposes functions to send data to a Namada node
+pub use namada_sdk; // exposes the namada_sdk module for low level interactions with the Namada node
+```
+
+## Reading
+
+The reading module exposes the following functions:
+
+```rust
+pub fn query_native_token(tendermint_addr: &str) -> Result<Address, Error>{...}
+/// Query the last committed block, if any.
+pub fn query_block(tendermint_addr: &str) -> Result<Option<LastBlock>, Error>{...}
+/// Query the results of the last committed block
+pub fn query_results(tendermint_addr: &str) -> Result<Vec<BlockResults>, Error> {...}
+/// Get a properly denominated amount of a token
+pub fn denominate_amount(tendermint_addr: &str, amount: u64, token: &str) -> Result<DenominatedAmount, Error> {...}
+```
+Each of these functions returns a Result type, which can be used to handle errors.
+The `tendermint_addr` parameter is the address of the Namada node to query. For local nodes, this is usually `http://localhost:26657`.
+
+## Transaction
+The transaction module exposes various modules (objects) to construct transactions. Each object implements the `::new()` method to create a new instance of the object.
+
+```rust
+pub mod account; // contains functions to create transactions for account module
+pub mod bridge; // contains functions to create transactions for bridge module
+pub mod governance; // contains functions to create transactions for governance module
+pub mod ibc; // contains functions to create transactions for ibc module
+pub mod pgf; // contains functions to create transactions for pgf module
+pub mod pos; // contains functions to create transactions for pos module
+pub mod transfer; // contains functions to create transactions for transfer module
+```
+
+Using these modules is given in more detail under the [examples section](./examples.mdx).
+
+## Writing
+
+The writing module exposes the broadcast function to send transactions to a Namada node.
+
+```rust
+pub fn broadcast_tx(tendermint_addr: &str, tx: Tx) -> Result<Response, Error> {...}
+```
+The Tx object can be retrieved from the transaction module by calling the `::payload()` method on the transaction object.
+
+
+
