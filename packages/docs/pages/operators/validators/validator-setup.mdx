@@ -63,6 +63,10 @@ namada client become-validator \
   --email $EMAIL
 ```
 
+<Callout type="info">
+The commission rate is a parameter that determines the percentage of the rewards that the validator will take from the delegators. The `max-commission-rate-change` is the maximum change in the commission rate that can occur in one epoch.
+</Callout>
+
 The validator account will now have the same alias as the established account.
 
 When initialising a validator account, it is also mandatory to specify both the `commission-rate` charged by the validator for delegation rewards (in decimal format) as well as the `maximum-commission-rate-change` per epoch in the `commission-rate`. Both are expressed as a decimal between 0 and 1. The standard for mainnet will be set by social consensus, but for testnets, the standard has been `0.01` and `0.05`, respectively. 
@@ -100,3 +104,14 @@ namada client balance --owner my-validator --token NAM
 
 That is, the balance of your account's address is a regular liquid balance that you can transfer using your validator account key, depending on the rules of the validator account's validity predicate. The default validity predicate allows you to transfer it with a signed transaction and/or stake it in the PoS system. Therefore, in order to increase the voting power of your validator, you need to accrue [some stake](./staking.mdx).
 
+## Querying a validator's tendermint address
+
+If the validator account has been set up correctly and has bonded stake, it will be possible to query it using the `find-validator` command:
+
+```shell copy
+namada client find-validator --validator <validator-address>
+```
+
+<Callout type="info">
+It is important to note that the validator **address** is required, not the alias. The address can be found using the wallet command `namadaw list --addr | grep "your-validator-alias".`
+</Callout>
