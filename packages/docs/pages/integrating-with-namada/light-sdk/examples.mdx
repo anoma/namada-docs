@@ -28,23 +28,27 @@ let transfer = Transfer::new(
     );
 // In order to broadcast the transaction, it must be signed. This is difficult at the moment and more docs will be provided soon.
 // For now, the below code can be replicated.
-let targets = vec![transfer.payload().raw_header_hash()];
+let targets = vec![transfer.clone().payload().raw_header_hash()];
 let mut secret_keys = BTreeMap::new();
-secret_keys.insert(0, secret_key);
+secret_keys.insert(0, secret_key.clone());
 
-let signer_pub_key = secret_key.to_public();
-let signer_address = namada_light_sdk::namada_sdk::address::Address::from(signer_pub_key);
+let signer_pub_key = secret_key.clone().to_public();
 
-let signature = namada_light_sdk::namada_sdk::tx::Signature::new(targets, secret_keys, Some(signer_address));
+let signature_tx = namada_light_sdk::namada_sdk::tx::Signature::new(targets, secret_keys.clone(), None);
+let signature = signature_tx.signatures.get(&0u8).unwrap().to_owned();
 
-transfer = transfer.attach_signatures(signer_pub_key, signature);
+transfer = transfer.attach_signatures(signer_pub_key.clone(), signature.clone());
 let fee = namada_light_sdk::namada_sdk::token::DenominatedAmount::from_str("10").unwrap();
 let gas_limit = namada_light_sdk::namada_sdk::tx::data::GasLimit::from_str("20000").unwrap();
 
-transfer = transfer.attach_fee(fee, amount, signer_pub_key, epoch, gas_limit);
-let fee_targets = vec![transfer.payload().sechashes()];
-let fee_signature = namada_light_sdk::namada_sdk::tx::Signature::new(targets, secret_keys, Some(signer_address));
-transfer = transfer.attach_fee_signature(signer, signature);
+let epoch = namada_light_sdk::namada_sdk::proof_of_stake::Epoch::from_str("0").unwrap();
+
+transfer = transfer.attach_fee(fee, token_address.clone(), signer_pub_key.clone(), epoch, gas_limit);
+let fee_targets = vec![transfer.clone().payload().sechashes()];
+let fee_signature_tx = namada_light_sdk::namada_sdk::tx::Signature::new(targets, secret_keys.clone(), None);
+let fee_signature = fee_signature_tx.signatures.get(&0u8).unwrap().to_owned();
+
+transfer = transfer.attach_fee_signature(signer_pub_key.clone(), signature.clone());
 
 // Once signed and the fee_payer and signature is added, the payload can be retrieved and broadcasted
 let transfer_tx = transfer.payload()
