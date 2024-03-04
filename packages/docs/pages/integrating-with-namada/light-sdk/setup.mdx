@@ -1,0 +1,44 @@
+# Importing the Light SDK
+
+The Light SDK can be imported into your project using the following line in your `cargo.toml` file.
+
+```toml
+[package]
+name = "namada-light-sdk-starter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+async-std = "1.11.0"
+futures = "0.3.28"
+getrandom = { version = "0.2" }
+rand = {version = "0.8", default-features = false}
+rand_core = {version = "0.6", default-features = false}
+serde = { version = "1.0.188", features = ["derive"] }
+serde_json = "1.0.107" 
+namada_light_sdk = { git = "https://github.com/anoma/namada.git", rev = "v0.31.8"} # The feature `asynchronous` is used by default. For the `blocking` feature, add the features = ["blocking"] line.
+tendermint-config = "0.34.0"
+tendermint-rpc = { version = "0.34.0", features = ["http-client"]}
+tokio = {version = "1.8.2", default-features = false}
+tempfile = "3.8.0"
+async-trait = "0.1.74"
+markdown-gen = "1.2.1"
+reqwest = "0.11.22"
+minio = "0.1.0"
+itertools = "0.12.0"
+
+[build-dependencies]
+vergen = { version = "8.0.0", features = ["build", "git", "gitcl"] }
+```
+
+## Asynchronous vs blocking
+
+The light sdk is compartmentalized into two features: `asynchronous` and `blocking`. The `asynchronous` feature is used by default. For the `blocking` feature, add the `features = ["blocking"]` line to the `namada_light_sdk` dependency in your `cargo.toml` file.
+
+```toml
+...
+namada_light_sdk = { git = "https://github.com/anoma/namada.git", rev = "v0.31.8", features = ["blocking"]}
+...
+```
+
+These features differ in the way that they interact with the protocol. The `asynchronous` feature uses the `async-std` runtime, while the `blocking` feature uses the `tokio` runtime. The `asynchronous` feature is recommended for new projects, as it is more efficient and easier to work with.

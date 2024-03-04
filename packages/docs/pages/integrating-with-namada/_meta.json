@@ -1,3 +1,5 @@
 {
-  "sdk" : "Using the SDK"
+  "sdk" : "Using the SDK",
+  "light-sdk": "Using the Light SDK",
+  "indexer": "Using the Indexer"
 }
