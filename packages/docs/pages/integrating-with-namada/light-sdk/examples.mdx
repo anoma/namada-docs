@@ -27,10 +27,23 @@ let transfer = Transfer::new(
         global_args
     );
 // In order to broadcast the transaction, it must be signed. This is difficult at the moment and more docs will be provided soon.
-// For now, the wallet must be created and the tx args may be left empty. The signing data and sign function must be provided, along with the user data.
-let signature = namada_light_sdk::namada_sdk::signing::sign_tx(wallet, args, tx, signing_data, sign, user_data)
-transfer = transfer.attach_signatures(signer, signature);
-transfer = transfer.attach_fee(fee, denominated_amount, fee_payer, epoch, gas_limit);
+// For now, the below code can be replicated.
+let targets = vec![transfer.payload().raw_header_hash()];
+let mut secret_keys = BTreeMap::new();
+secret_keys.insert(0, secret_key);
+
+let signer_pub_key = secret_key.to_public();
+let signer_address = namada_light_sdk::namada_sdk::address::Address::from(signer_pub_key);
+
+let signature = namada_light_sdk::namada_sdk::tx::Signature::new(targets, secret_keys, Some(signer_address));
+
+transfer = transfer.attach_signatures(signer_pub_key, signature);
+let fee = namada_light_sdk::namada_sdk::token::DenominatedAmount::from_str("10").unwrap();
+let gas_limit = namada_light_sdk::namada_sdk::tx::data::GasLimit::from_str("20000").unwrap();
+
+transfer = transfer.attach_fee(fee, amount, signer_pub_key, epoch, gas_limit);
+let fee_targets = vec![transfer.payload().sechashes()];
+let fee_signature = namada_light_sdk::namada_sdk::tx::Signature::new(targets, secret_keys, Some(signer_address));
 transfer = transfer.attach_fee_signature(signer, signature);
 
 // Once signed and the fee_payer and signature is added, the payload can be retrieved and broadcasted
