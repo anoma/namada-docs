@@ -16,6 +16,7 @@ let source_address = namada_light_sdk::namada_sdk::address::Address::from_str("t
 let target_address = namada_light_sdk::namada_sdk::address::Address::from_str("tnam1v4ehgw36xq6ngs3ng5crvdpngg6yvsecx4znjdfegyurgwzzx4pyywfexuuyys69gc6rzdfnryrntx").unwrap(); // replace with a valid target address
 let token_address = namada_light_sdk::reading::blocking::query_native_token(tendermint_addr).unwrap();
 let amount = namada_light_sdk::namada_sdk::token::DenominatedAmount::from_str("10000").unwrap();
+// Construct the raw transaction struct
 let transfer = Transfer::new(
         source_address,
         target_address,
@@ -25,6 +26,15 @@ let transfer = Transfer::new(
         None,
         global_args
     );
+// In order to broadcast the transaction, it must be signed. This is difficult at the moment and more docs will be provided soon.
+// For now, the wallet must be created and the tx args may be left empty. The signing data and sign function must be provided, along with the user data.
+let signature = namada_light_sdk::namada_sdk::signing::sign_tx(wallet, args, tx, signing_data, sign, user_data)
+transfer = transfer.attach_signatures(signer, signature);
+transfer = transfer.attach_fee(fee, denominated_amount, fee_payer, epoch, gas_limit);
+transfer = transfer.attach_fee_signature(signer, signature);
+
+// Once signed and the fee_payer and signature is added, the payload can be retrieved and broadcasted
 let transfer_tx = transfer.payload()
+let response = namada_light_sdk::writing::blocking::broadcast_tx(tendermint_addr, transfer_tx).unwrap();
 ```
 
