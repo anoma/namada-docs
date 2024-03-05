@@ -64,7 +64,7 @@ namada client become-validator \
 ```
 
 <Callout type="info">
-The commission rate is a parameter that determines the percentage of the rewards that the validator will take from the delegators. The `max-commission-rate-change` is the maximum change in the commission rate that can occur in one epoch.
+A validator’s commission rate is the percentage of the rewards that the validator keeps from its delegators. A validator can change its commission rate with a transaction. The `max-commission-rate-change` is the maximum allowable change in a validator’s commission rate from one epoch to the next. This parameter is set uniquely for a given validator upon their creation and cannot be changed once the validator is initialized.
 </Callout>
 
 The validator account will now have the same alias as the established account.
