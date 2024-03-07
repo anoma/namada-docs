@@ -1,0 +1,135 @@
+import { Callout } from 'nextra-theme-docs'
+import Expandable from '../../components/Expandable'
+
+# Introduction to the Namada Protocol
+
+The Namada protocol is a proof-of-stake layer 1 blockchain protocol. State transitions are governed by validity predicates, and rules of the protocol are defined by protocol parameters. The following section describes key parameters and concepts, and how to query them.
+
+## Epochs
+
+The system relies on the concept of epochs. An epoch is a range of consecutive blocks identified by consecutive natural numbers. Each epoch lasts a minimum duration and includes a minimum number of blocks since the beginning of the last epoch. These are defined by protocol parameters.
+
+To query the current epoch, the following command can be run:
+
+```shell copy
+namadac query-protocol-parameters
+```
+
+In order to query the current epoch, the following command can be run:
+
+```shell copy
+namada client epoch
+```
+## Protocol parameters
+
+All of the current protocol parameters can be queried using the following command:
+```shell copy
+namada query-protocol-parameters
+```
+
+This will display the list of protocol parameters.
+E.g:
+
+<Expandable>
+```text
+Governance Parameters
+    Min. proposal fund: 500.000000
+    Max. proposal code size: 600000
+    Min. proposal voting period: 3
+    Max. proposal period: 27
+    Max. proposal content size: 10000
+    Min. proposal grace epochs: 6
+
+Public Goods Funding Parameters
+    Pgf inflation rate: 0.1
+    Steward inflation rate: 0.01
+
+Protocol parameters
+    Min. epoch duration: 1
+    Min. number of blocks: 4
+    Max. block duration: 30
+    VP allowlist: []
+    Transactions allowlist: []
+    Max block gas: 20000000
+    Fee unshielding gas limit: 20000
+    Fee unshielding descriptions limit: 15
+    Gas cost table:
+        tnam1qxgfw7myv4dh0qna4hq0xdg6lx77fzl7dcem8h7e: Amount { raw: 1 }
+PoS parameters
+    Pipeline length: 2
+    Unbonding length: 3
+    Cubic slashing window length: 1
+    Max. consensus validator slots: 128
+    Validator stake threshold: 1000000
+    Duplicate vote minimum slash rate: 0.001
+    Light client attack minimum slash rate: 0.001
+    Liveness window: 100 blocks
+    Liveness threshold: 0.9
+    Block proposer reward: 0.125
+    Block vote reward: 0.1
+    Max inflation rate: 0.1
+    Target staked ratio: 0.6667
+    Inflation kP gain: 0.25
+    Inflation kD gain: 0.25
+    Votes per raw token: 1
+```
+</Expandable>
+
+
+### Governance parameters
+
+- Min. proposal fund: The minimum amount of tokens required to submit a proposal.
+- Max. proposal code size: The maximum size of the code that can be submitted in a proposal.
+- Min. proposal voting period: The minimum duration of the voting period for a proposal.
+- Max. proposal period: The maximum duration of the proposal period.
+- Max. proposal content size: The maximum number of characters of the content that can be submitted in a proposal.
+- Min. proposal grace epochs: The minimum number of epochs that a proposal can be in the grace period.
+
+<Callout>
+The *grace period* is defined as the epochs **between** the end of the voting period and the `grace epoch` as defined on the proposal. The grace epoch is the final epoch of the grace period.
+</Callout>
+
+### Public Goods Funding Parameters
+
+- Pgf inflation rate: The inflation rate for the Public Goods Funding.
+- Steward inflation rate: The inflation rate for the Steward.
+
+### Protocol parameters
+
+- Min. epoch duration: The minimum number of seconds per epoch.
+- Min. number of blocks: The minimum number of blocks per epoch.
+- Max. block duration: The maximum number of seconds per block.
+- VP allowlist: The list of validity predicates (their wasm hashes) that are "whitelisted" and can be invoked in transactions.
+- Transactions allowlist: The list of transactions (their wasm hashes) that are "whitelisted" and can be invoked in transactions.
+- Max block gas: The maximum amount of gas that a block can consume.
+- Fee unshielding gas limit: The maximum amount of gas that a fee unshielding transaction can consume.
+- Fee unshielding descriptions limit: The maximum number of characters that can be included in the description of a fee unshielding transaction.
+- Gas cost table: The gas cost table for the different tokens (indicated by address) that can pay for gas.
+
+### PoS parameters
+
+- Pipeline length: The number of epochs that a validator must wait before they can unbond their stake.
+- Unbonding length: The number of epochs that a validator must wait before they can withdraw their stake after unbonding.
+- Cubic slashing window length: The number of epochs between the point of a validator's infraction and the point at which they are slashed.
+- Max. consensus validator slots: The maximum number of consensus validator slots. These are sorted by bonded stake. Any validator with a stake below the "validator stake threshold" will not be participating in consensus.
+
+### Protocol parameters
+
+- Validator stake threshold: The minimum amount of tokens that a validator must have in order to be eligible for consensus.
+- Duplicate vote minimum slash rate: The minimum slashing rate for a duplicate vote.
+- Light client attack minimum slash rate: The minimum slashing rate for a light client attack.
+- Liveness window: The number of blocks that are considered for the liveness check (a slashable event), counted by number of blocks that a validator signs
+- Liveness threshold: The proportion (decimal) of blocks that a validator must sign within the window in order to be considered live.
+- Block proposer reward: The reward for the block proposer.
+- Block vote reward: The reward for the block voter.
+- Max inflation rate: The maximum inflation rate.
+- Target staked ratio: The target ratio of the total staked tokens to the total supply.
+- Inflation kP gain: The `kp` (proportional) gain for the inflation parameter in the PD controller.
+- Inflation kD gain: The `kd` (second order) gain for the inflation parameter.
+- Votes per raw token: The number of votes per raw token bonded.
+
+
+
+
+
+
