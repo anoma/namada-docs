@@ -37,4 +37,12 @@ Because of the nature of cubic slashing, validators are not slashed immediately 
 namada query-protocol-parameters
 ```
 
+## Active Set 
+
+The parameters also define a `max-validator-slots` parameter. This parameter defines the maximum number of validators that can be actively participating in consensus at any given time. The active set is the set of validators that are currently active. The active set is updated at the end of each epoch. The active set can be queried with the following command:
+
+```shell copy
+namadac bonded-stake
+```
+
 
