@@ -110,4 +110,19 @@ namada client withdraw \
 
 Upon success, the withdrawn tokens will be credited back `aliace`'s account and debited from the PoS system.
 
+### Claiming rewards
 
+Validators and delegators that have bonded tokens accrue protocol rewards (for not misbehaving) and transaction fees. These rewards need to be claimed.
+
+```shell copy
+namada client claim-rewards \
+  --validator validator-1
+```
+
+These rewards will immediately be credited to the validtor's account.
+
+Additionally, you can query the pending reward tokens without claiming by running:
+
+```bash copy
+namadac rewards --validator <validator-address>
+```

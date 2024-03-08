@@ -20,7 +20,21 @@ First, you may want to list some available validators you can stake to:
 namadac bonded-stake
 ```
 
-Once you've found the address of your favourite validator, you can bond to them with the following command:
+If you have a specific tenderimnt key of a validator but do not know the address, you can use the following command to find the address:
+
+```bash copy
+namadac find-validator --tendermint-key <validator-tendermint-key> # Similarly you can find the tendermint key from the address by providing the argument --validator <validator-address> instead
+```
+
+<Callout>
+Before bonding to a validator, it is important to know their commision rate. This is the percentage of the block rewards that the validator will take as a fee for their services. You can find this information by running the following command:
+```bash copy
+namadac commission-rate --validator <validator-address>
+```
+Typically, the commission rate is between 0% and 5%.
+</Callout>
+
+Once you've found the address of your favorite validator, you can bond to them with the following command:
 
 ```bash copy
 namadac bond --source <delegator-address> --validator <validator-address> --amount <amount>
@@ -45,6 +59,14 @@ The pipeline length of the chain and other important proof-of-stake parameters c
 
 ```bash copy
 namadac query-protocol-parameters
+```
+
+## Querying delegations
+
+It is possible to query processed delegations through the client
+
+```shell copy
+namadac delegations --owner <delegator-address>
 ```
 
 ## Unbonding

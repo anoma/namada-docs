@@ -1,0 +1,74 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Validator actions
+
+## Commission-rate changes
+
+A validator can change their commission rate through the `change-commission` command:
+
+```bash copy
+namadac change-commission-rate --validator <validator> --commission-rate <commission-rate>
+```
+
+The `max-commission-rate-change` is unique to each validator and cannot be changed.
+
+## Metadata changes
+
+A validator can change their metadata through the `change-metadata` command:
+
+```bash copy
+namadac change-metadata --validator <validator> --description <description> --email <email> --discord-handle <discord-handle> --website <website> --avatar <avatar>
+```
+Apart from `--validator`, not all of the fields are required, but at least one of them is.
+
+## Deactivation and reactivation
+
+A validator can deactivate their validator (stop validating) through the `deactivate` command:
+
+```bash copy
+namadac deactivate-validator --validator <validator-address>
+```
+This means that the validator will no longer participate in the consensus protocol. This becomes active at the end of the current epoch + `pipeline_length`. All bonds and delegations associated with the validator remain in tact. Delegators can still delegate to the validator, but the validator will not be able to participate in consensus until it is reactivated.
+
+To reactivate a validator, use the `reactivate` command:
+
+```bash copy
+namadac reactivate-validator --validator <validator-address>
+```
+This will reactivate the validator at the end of the current epoch + `pipeline_length`.
+
+## Consensus Key Management
+
+The consensus key is crucial for validators as it is used to sign blocks and participate in the CometBFT consensus protocol. This key ensures that only authorized validators can propose and vote on blocks, contributing to the network's overall security.
+
+### Changing the Consensus Key
+Validators are able to change their consensus key, allowing for enhanced security and key rotation practices. This process is essential for maintaining the security of the validator's operations and protecting against potential compromise.
+
+To change the consensus key, validators can use the following command:
+
+```bash
+VALIDATOR_ADDRESS="<your-validator-address>"
+SIGNING_KEYS="<your-signing-key>"
+namada client change-consensus-key --validator $VALIDATOR_ADDRESS --signing-keys $SIGNING_KEYS
+```
+
+<Callout type="info" emoji="🔑">
+The new consensus key will be recorded in the `wallet.toml` file and is scheduled to become active 2 blocks before the pipeline offset from the epoch at the moment of activation. This timing ensures a smooth transition. It is essential for validators to plan the key rotation accordingly to ensure continuous participation in block validation without interruption.
+</Callout>
+
+### Generating a New Consensus Key
+After the transition period, validators must replace the current `priv_validator_key.json` with the newly generated key. This step is crucial for activating the new consensus key for block signing.
+
+To generate a new consensus key, use the following command:
+
+```bash
+namadaw convert --alias <new-consensus-key>
+```
+
+This command will create a new consensus key, which validators should securely store and use to replace the existing `priv_validator_key.json` file. It is critical for validators to perform this step correctly.
+
+After updating the consensus key, validators can find out their new validator address with the following command:
+
+```bash
+namadaw find --alias <new-consensus-key>
+```
