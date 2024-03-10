@@ -19,7 +19,7 @@ Below is an example of a `PGFProposal` that a governance participant could submi
             "motivation": "Nobody knows technical research better than me. Trust me. I know it. I have the best technical research. I will be the best steward. Last night, Namada called me and said, Stewie, thank you. I will make public goods funding great again",
             "details": "As a genius baby, I possess an unmatched level of intelligence and a visionary mindset. I will utilize these qualities to solve the most complex problems, and direct public goods funding towards weapons of mass destruction ... i mean open source software for weapons of mass destruction"
         },
-        "author": "stewie",
+        "author": "<address-of-author>"",
         "voting_start_epoch": 3,
         "voting_end_epoch": 6,
         "grace_epoch": 12
@@ -27,18 +27,17 @@ Below is an example of a `PGFProposal` that a governance participant could submi
     "data": {
         "continuous": [
             {
-                "target": {
-                    "amount": 420,
-                    "address": "<address-of-recipient>"
-                },
-                "action": "add"
+                "Internal": {
+                    "amount": "1000",
+                    "target": "<address-of-recipient>"
+                }
             }
         ],
         "retro": [
             {
-                "target": {
-                    "amount": 1337,
-                    "address": "<address-of-recipient>"
+                "Internal": {
+                    "amount": "1500",
+                    "target": "<address-of-recipient>"
                 }
             }
         ]
