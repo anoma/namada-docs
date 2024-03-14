@@ -7,7 +7,10 @@ The error
 ```
 src/apps/namada lib could not compile due to previous errors. Exited with exit code:
 ```
-is a common error that can sometimes mean your computer ran out of memory when compiling. To resolve this, I have found closing all other applications and recompiling once or twice will do the trick. Otherwise more RAM will be needed.
+is a common error that can sometimes mean your computer ran out of memory when compiling. To resolve this, try closing all other applications and recompiling once or twice more.
+Otherwise more RAM will be needed.  
+
+Instead of adding more physical RAM, you can also try adding 16GB of [swap space](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-22-04).
 
 ### Compiling for the first time
 Compilation errors due to missing library installations when building the binaries for the first time can be a common problem. 
@@ -65,7 +68,7 @@ This issue can be resolved by running
 ```bash copy
 rustup target add wasm32-unknown-unknown
 ```
-(Yes the name of the target is `wasm32-unknown-unknown`. This is not the compiler unable to tell which version/release it is).
+(Yes, the name of the target is `wasm32-unknown-unknown`. This is not the compiler unable to tell which version/release it is).
 
 #### OpenSSL
 
@@ -85,10 +88,11 @@ Could not find directory of OpenSSL installation, and this `-sys` crate cannot
   and include information about your system as well as this message.
 ```
 
-Then the solution is spelled out for you. You need to install the development packages of OpenSSL. For Ubuntu, this is `libssl-dev`. For Fedora, this is `openssl-devel`. For other distributions, please refer to the [OpenSSL website](https://www.openssl.org/).
+You need to install the development packages of OpenSSL. For Ubuntu, this is `libssl-dev`. For Fedora, this is `openssl-devel`. For other distributions, please refer to the [OpenSSL website](https://www.openssl.org/).
 
 For Ubuntu, this can be achieved through
 
 ```bash copy
 sudo apt-get install libssl-dev
 ```
+import { RouteMatcher } from "next/dist/server/future/route-matchers/route-matcher"
