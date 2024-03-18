@@ -142,6 +142,7 @@ These are the pieces of this puzzle you want to keep your 👀 on:
  - `chains.key_name` specifies the key of the signer who signs a transaction from the relayer. The key should be generated before starting the relayer.
  - `chains.event_source` specifies the URL of the chain's websocket. This must be the same as the `rpc_address` for Hermes to work properly.
  - `chains.gas_price.denom` specifies the token that the relayer pays for IBC transactions. `chains.gas_price.price` isn't used for now in Namada.
+ - `trusting_period` specifies the maximum period before which the client can not expire. This should be not more than unbonding time in the particular chain. 
 
 You can see more details of configuration in [the official document](https://hermes.informal.systems/documentation/configuration).
 </Callout>
