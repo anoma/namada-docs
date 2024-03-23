@@ -82,4 +82,31 @@ After updating the consensus key, validators can find out their new validator ad
 namadaw find --alias <new-consensus-key>
 ```
 
+## Commission
 
+To query a validator's commission rate, the following command can be run:
+
+```shell copy
+namadac commission-rate --validator <validator-address>
+```
+
+To change a validator's commission rate, the following command can be run:
+
+```shell copy
+namadac change-commission-rate \
+  --validator <validator-address> \
+  --commission-rate <new-commission-rate>
+```
+
+## Change Metadata
+
+To change a validator's metadata, the following command can be run:
+
+```shell copy
+namadac change-metadata \
+  --validator <validator-address> \
+  --email <email> \
+  --avatar <avatar-url>\
+  --description <description> \
+  --website <website-url>
+```
