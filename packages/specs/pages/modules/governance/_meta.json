@@ -1,7 +1,8 @@
 {
-    "on-chain" : "On chain governance",
-    "off-chain" : "Off chain governance",
-    "proposal" : "Proposals",
-    "storage" : "Storage",
-    "public-goods-funding" : "Public goods funding"
+    "design": "Design rationale",
+    "data-types": "Data types",
+    "storage": "Storage layout",
+    "vp": "Validity predicate logic",
+    "txs": "Transactions",
+    "handlers": "Handlers"
 }

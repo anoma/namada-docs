@@ -1,0 +1,7 @@
+import { Callout } from 'nextra-theme-docs'
+
+## Design Rationale
+
+The fungible token validity predicate authorises token balance changes on the basis of conservation-of-supply and approval-by-sender. Namada implements a "multitoken" validity predicate, in that all tokens have the same logic and can share one VP (with appropriate storage distinctions).
+
+Transfers between the balances with the same `{token_addr}` are allowed. Specifically, Namada can transfer a token from `#Multitoken/{token_addr}/balance/{sender_addr}` to `#Multitoken/{token_addr}/balance/{receiver_addr}`.

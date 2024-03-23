@@ -1,0 +1,47 @@
+import { Callout } from 'nextra-theme-docs'
+
+## Data types
+
+### Epoched data
+
+Epoched data is data associated with a specific epoch that is set in advance.
+The data relevant to the PoS system in the ledger's state are epoched. Each data can be uniquely identified. These are:
+
+- [System parameters](#system-parameters). Discrete values for each epoch in which the parameters have changed.
+- [Validator sets](#validator-sets). Discrete values for each epoch.
+- Total voting power. A sum of all validators' voting power, excluding jailed validators. A delta value for each epoch.
+- [Validators' consensus key, state and total bonded tokens](#validator). Identified by the validator's address.
+- [Bonds](#bonds) are created by self-bonding and delegations. They are identified by the pair of source address and the validator's address.
+
+Changes to the epoched data do not take effect immediately. Instead, changes in epoch `n` are queued to take effect in the epoch `n + pipeline_length` for most cases and `n + pipeline_length + unbonding_length + cubic_slash_window_width` for [unbonding](#unbond) actions. Should the same validator's data or same bonds (i.e. with the same identity) be updated more than once in the same epoch, the later update overrides the previously queued-up update. For bonds and unbonds, the token amounts are added up. Once the epoch `n` has ended, the queued-up updates for epoch `n + pipeline_length` are final and the values become immutable.
+
+Additionally, any account may submit evidence for [a slashable misbehavior](#slashing).
+
+### Validator
+
+A validator must have a public consensus key.
+
+A validator may be in one of the following states:
+
+- *inactive*:
+  A validator is not being considered for block creation and cannot receive any new delegations.
+- *candidate*:
+  A validator is considered for block creation and can receive delegations.
+
+For each validator (in any state), the system also tracks total bonded tokens as a sum of the tokens in their self-bonds and delegated bonds. The total bonded tokens determine their voting voting power by multiplication by the `votes_per_token` [parameter](#system-parameters). The voting power is used for validator selection for block creation and is used in governance related activities.
+
+#### Validator sets
+
+A *candidate* validator that is not jailed (see [slashing](#slashing)) can be in one of the three sets:
+
+- `consensus` - consensus validator set, capacity limited by the `max_validator_slots` [parameter](#system-parameters)
+- `below_capacity` - validators below consensus capacity, but above the threshold  set by `min_validator_stake` [parameter](#system-parameters)
+- `below_threshold` - validators with stake below `min_validator_stake` [parameter](#system-parameters)
+
+From all the *candidate* validators, in each epoch the ones with the most voting power limited up to the `max_validator_slots` [parameter](#system-parameters) are selected for the `consensus` validator set. Whenever stake of a validator is changed, the validator sets must be updated at the appropriate offset matching the stake update.
+
+The limit on `min_validator_stake` [parameter](#system-parameters) is introduced, because the protocol needs to iterate through the validator sets in order to copy the last known state into a new epoch when epoch changes (to avoid offloading this cost to a transaction that is unlucky enough to be the first one to update the validator set(s) in some new epoch) and also to [distribute rewards](./reward-distribution.mdx) to `consensus` validators and to record unchanged validator products for validators `below_capacity`, who do not receive rewards in the current epoch.
+
+### Delegator
+
+A delegator may have any number of delegations to any number of validators. Delegations are stored in [bonds](#bonds).

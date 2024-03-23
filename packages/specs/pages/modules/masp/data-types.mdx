@@ -1,4 +1,4 @@
-## Asset name schema
+## Data Types
 
 MASP notes carry balances that are some positive integer amount of an
 asset type. Per both the MASP specification and the implementation, the
@@ -58,3 +58,36 @@ asset name segments would be:
 - ID: an ID segment
 
 This could be serialized to, e.g., `addr123/addr456/tSPY/i12345`.
+
+### Note Format
+The note structure encodes an asset's type, its quantity and its owner.
+More precisely, it has the following format:
+```
+struct Note {
+  // Diversifier for recipient address
+  d: jubjub::SubgroupPoint,
+  // Diversified public transmission key for recipient address
+  pk_d: jubjub::SubgroupPoint,
+  // Asset value in the note
+  value: u64,
+  // Pedersen commitment trapdoor
+  rseed: Rseed,
+  // Asset identifier for this note
+  asset_type: AssetType,
+  // Arbitrary data chosen by note sender
+  memo: [u8; 512],
+}
+```
+For cryptographic details and further information, see
+[Note Plaintexts and Memo Fields](https://zips.z.cash/protocol/protocol.pdf#noteptconcept).
+Note that this structure is required only by the client; the VP only
+handles commitments to this data.
+
+Diversifiers are selected by the client and used to
+diversify addresses and their associated keys. `v` and `t` identify the
+asset type and value. Asset identifiers are derived from asset names,
+which are arbitrary strings (in this case, token/other asset VP
+addresses). The derivation must deterministically result in an
+identifier which hashes to a valid curve point.
+
+

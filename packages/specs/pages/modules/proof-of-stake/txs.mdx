@@ -1,0 +1,52 @@
+import { Callout } from 'nextra-theme-docs'
+
+## Transactions
+
+#### Validator actions
+
+- *become validator*:
+Any account that is not a validator already and that doesn't have any delegations may request to become a validator. It is required to provide a public consensus key. For the action applied in epoch `n`, the validator's state will be set to *candidate* for epoch `n + pipeline_length` and the consensus key is set for epoch `n + pipeline_length`.
+- *deactivate*:
+Only a validator whose state at or before the `pipeline_length` offset is *candidate* account may *deactivate*. For this action applied in epoch `n`, the validator's account is set to become *inactive* in the epoch `n + pipeline_length`.
+- *reactivate*:
+Only an *inactive* validator may *reactivate*. Similarly to *become validator* action, for this action applied in epoch `n`, the validator's state will be set to *candidate* for epoch `n + pipeline_length`.
+- *self-bond*:
+A validator may lock-up tokens into a [bond](#bonds) only for its own validator's address.
+- *unbond*:
+Any self-bonded tokens may be partially or fully [unbonded](#unbond).
+- *withdraw unbonds*:
+Unbonded tokens may be withdrawn in or after the [unbond's epoch](#unbond).
+- *change consensus key*:
+Set the new consensus key. When applied in epoch `n`, the key is set for epoch `n + pipeline_length`.
+- *change commission rate*:
+Set the new commission rate. When applied in epoch `n`, the new value will be set for epoch `n + pipeline_length`. The commission rate change must be within the `max_commission_rate_change` limit set by the validator.
+
+#### Delegator actions
+
+- *delegate*:
+An account which is not a validator may delegate tokens to any number of validators. This will lock-up tokens into a [bond](#bonds).
+- *undelegate*:
+Any delegated tokens may be partially or fully [unbonded](#unbond).
+- *withdraw unbonds*:
+Unbonded tokens may be withdrawn in or after the [unbond's epoch](#unbond).
+
+
+## Bonds
+
+A bond locks-up tokens from validators' self-bonding and delegators' delegations. For self-bonding, the source address is equal to the validator's address. Only validators can self-bond. For a bond created from a delegation, the bond's source is the delegator's account.
+
+For each epoch, bonds are uniquely identified by the pair of source and validator's addresses. A bond created in epoch `n` is written into epoch `n + pipeline_length`. If there already is a bond in the epoch `n + pipeline_length` for this pair of source and validator's addresses, its tokens are incremented by the newly bonded amount.
+
+Any bonds created in epoch `n` increment the bond's validator's total bonded tokens by the bond's token amount and update the voting power for epoch `n + pipeline_length`.
+
+The tokens put into a bond are immediately deducted from the source account.
+
+### Unbond
+
+An unbonding action (validator *unbond* or delegator *undelegate*) requested by the bond's source account in epoch `n` creates an "unbond" with withdrawable epoch set to `n + pipeline_length + unbounding_length + cubic_slash_window_width`. We also store the epoch of the bond(s) from which the unbond is created in order to determine if the unbond should be slashed if a fault occurred within the range of bond epoch (inclusive) and withdrawable epoch (exclusive). The "bond" from which the tokens are being unbonded is decremented in-place (in whatever epoch it was created in).
+
+Any unbond that is initiated in epoch `n` decrements the bond validator's stake (voting power) starting at epoch `n + pipeline_length`, with slashing applied. The token amount that is decremented is equal to the unbonded token amount, minus the amount of tokens that has already been slashed.
+
+An "unbond" with withdrawable epoch set to `n` may be withdrawn by the bond's source address in or any time after the epoch `n`. Once withdrawn, the unbond is deleted and the tokens are credited to the source account. Slashed tokens for the relevant unbond are also recomputed during withdrawing, as it is possible that new slashes that affect the unbond were discovered after the initialization of the unbond. After computing the number of tokens to be slashed from the total unbonded token amount, the slashed token amount is transferred from the PoS address to the slash pool address, while the remaining token amount is transferred from the PoS address to the bond's source address.
+
+Unlike bonding and unbonding where token changes are delayed to some future epochs (pipeline or unbonding offset), the token withdrawal applies immediately, as these withdrawable tokens are no longer contributing to any validator's stake at this point.

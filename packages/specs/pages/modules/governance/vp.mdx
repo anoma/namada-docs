@@ -1,6 +1,6 @@
-import { Steps } from 'nextra-theme-docs'
+import { Callout } from 'nextra-theme-docs'
 
-# On-chain governance
+## VP logic
 
 ## Governance Address
 
@@ -64,45 +64,6 @@ Examples of such code execution could be:
 
 This means that corresponding VPs will also be invoked.
 
-## Proposal transaction
-
-The on-chain proposal transaction will have the following structure, where `author` address will be address of the account submitting the proposal, and hence the address which receives any deposited funds.
-
-```rust
-struct Proposal {
-    id: u64,
-    content: Vec<u8>,
-    author: Address,
-    r#type: ProposalType, // This is an enum, in which Wasm code is embedded for DefaultProposal
-    votingStartEpoch: Epoch,
-    votingEndEpoch: Epoch,
-    graceEpoch: Epoch,
-}
-```
-
-The optional proposal wasm code will be embedded inside the `ProposalType` enum variants to better perform validation through type checking.
-
-## Vote transaction
-
-Vote transactions have the following structure:
-
-```rust
-struct OnChainVote {
-    id: u64,
-    voter: Address,
-    yay: ProposalVote,
-}
-```
-where `ProposalVote` is an enum representing a `Yay`, `Nay`, or `Abstain` vote: the yay variant also contains the specific memo (if any) required for that proposal.
-
-Storage writes for a vote transaction are described [here](./storage.mdx#votes).
-
-If non-validating accounts are allowed to vote, delegates will be able to vote only for $\frac{2}{3}$ of the total voting period, while delegators can vote until the end of the voting period. 
-If only validators are allowed to vote for the `ProposalType` in question, they are allowed to vote for the entire voting window.
-
-If a delegator votes differently to its delegate, the delegate's vote will be *overridden* 
-(e.g. if a delegator has a voting power of 200 and votes opposite to the delegate, then 200 will be subtracted from the voting power of the involved delegate).
-
 
 ## Tallying votes
 
@@ -137,6 +98,10 @@ Tallying is computed with the following rules:
 
 All the computation is done at the start of `grace_epoch` on data collected at the epoch specified in the `voting-end` field of the proposal.
 
+## Tallying votes offline
+
+Offline votes are tallied under the same mechanism as on-chain vote tallying, but instead of reading the data from storage it will require a list of serialized json votes.
+The voting power for each delegate/delegator is calculated based on their respective bonded-stake from the latest block in that epoch (in principle it could be any block in the epoch, since voting-power does not change within an epoch).
 
 ### Refund and Proposal Execution mechanism
 

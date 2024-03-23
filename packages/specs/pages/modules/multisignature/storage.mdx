@@ -1,0 +1,16 @@
+import { Callout } from 'nextra-theme-docs'
+
+## Storage keys
+
+Once this transaction is executed, the following storage writes are made in association, under the storage subspace of that user:
+- The `vp_user` address
+{/* Find storage key */}
+- The threshold of the multisignature account
+- The list of public keys for the signers of the multisignature account
+
+A rust storage implementation is shown below:
+```rust
+/$Address/threshold/: u8
+/$Address/pubkeys/: LazyVec<PublicKey>
+```
+

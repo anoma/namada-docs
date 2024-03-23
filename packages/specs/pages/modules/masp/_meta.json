@@ -1,8 +1,8 @@
 {
-  "ledger-integration": "Ledger integration",
-  "asset-type": "Asset type",
-  "burn-and-mint": "Burn & mint",
-  "convert-circuit": "Convert circuit",
-  "trusted-setup": "Trusted setup",
-  "shielded-pool-incentives": "Shielded pool rewards"
+    "design": "Design rationale",
+    "data-types": "Data types",
+    "storage": "Storage layout",
+    "vp": "Validity predicate logic",
+    "txs": "Transactions",
+    "handlers": "Handlers"
 }

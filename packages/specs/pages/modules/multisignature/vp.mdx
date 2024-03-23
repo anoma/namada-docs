@@ -1,0 +1,21 @@
+import { Callout } from 'nextra-theme-docs'
+
+## VP logic
+
+All user-owner accounts use the default `vp_user` validity predicate for verifying state changes.
+The `vp_user` validity predicate asserts that at least `k` out of `n` valid signatures are present in the signed transaction data for every transaction originating from the user.
+
+To perform the validity checks, the VP requires two pieces of information:
+
+1. The multisignature threshold
+2. A list of valid signers' public keys
+
+This data defines the requirements of a valid transaction operating on the multisignature address and is written [in storage](#storage) when the account is created. 
+
+To verify the correctness of the signatures, the VP checks the following conditions:
+
+1. Enough **unique** signatures for the given threshold are provided
+2. Enough **valid** signatures for the given threshold are provided
+
+If implemented in this fashion, a couple efficiency gains are made:
+Step 1 allows for short-circuiting the validation process and avoid unnecessary processing and storage access. Each signature is validated **only** against the public key found in the list at the specified index. Step 2 halts as soon as it retrieves enough valid signatures to match the threshold, meaning that the remaining signatures are not unnecessarily verified.

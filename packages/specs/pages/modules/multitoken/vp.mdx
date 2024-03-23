@@ -1,0 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
+## VP logic
+
+Balance changes are validated by the multitoken validity predicate, including minted and burned tokens. If a token is minted or burned, i.e. when `#Multitoken/{token_addr}/balance/minted` is updated in the transaction, not only is the total minted balance checked, but so is the minter's validity predicate. The minter should be set in a transaction minting the token. For example, when a token is received over IBC, the received token will be minted for the receiver's balance `#Multitoken/{ibc_token}/balance/{receiver_addr}`. The minted balance `#Multitoken/{ibc_token}/balance/minted` is also increased by the amount of the received token. The minted amount is checked by the multitoken validity predicate. The multitoken validity predicate additionally checks that the minter's validity predicate and the IBC validity predicate were called (IBC validity predicate checks the minted amount is correct for the corresponding IBC operation).
