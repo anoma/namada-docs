@@ -103,7 +103,7 @@ namadac change-commission-rate \
 To query a validator's metadata, the following command can be run:
 
 ```shell copy
- namadac validator-metadata --validator <validator-address>
+namadac validator-metadata --validator <validator-address>
 ```
 
 To change a validator's metadata, the following command can be run:
@@ -116,4 +116,20 @@ namadac change-metadata \
   --description <description> \
   --website <website-url> \
   --discord-handle <discord-handle>
+```
+
+## Deactivate
+
+To deactivate a validator, the following command can be run:
+
+```shell copy
+namadac deactivate-validator --validator <validator-address>
+```
+
+## Reactivate
+
+To reactivate a validator, the following command can be run:
+
+```shell copy
+namadac reactivate-validator --validator <validator-address>
 ```
