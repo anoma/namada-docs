@@ -100,6 +100,12 @@ namadac change-commission-rate \
 
 ## Change Metadata
 
+To query a validator's metadata, the following command can be run:
+
+```shell copy
+ namadac validator-metadata --validator <validator-address>
+```
+
 To change a validator's metadata, the following command can be run:
 
 ```shell copy
@@ -108,5 +114,6 @@ namadac change-metadata \
   --email <email> \
   --avatar <avatar-url>\
   --description <description> \
-  --website <website-url>
+  --website <website-url> \
+  --discord-handle <discord-handle>
 ```
