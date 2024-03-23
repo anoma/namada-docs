@@ -177,6 +177,7 @@ The relayer account should have some balance to pay the fee of transactions. Bef
 To sign each transaction, the relayer's key should be added to Hermes with `keys add` command in advance. It requires the `wallet.toml` which should have the key of `chains.key_name`. Once the key has been added, Hermes doesn't need the wallet anymore.
 ```bash copy
 hermes --config $HERMES_CONFIG keys add --chain $CHAIN_ID --key-file $WALLET_PATH
+hermes --config $HERMES_CONFIG keys add --chain $CHAIN_ID --mnemonic-file $SEED_PATH
 ```
 
 Hermes will store the key in `~/.hermes/keys/${CHAIN_ID}` as default. You can specify the directory by setting `chains.key_store_folder` in the config file.
@@ -186,6 +187,19 @@ If you want to use an encrypted key with a password, you have to set an environm
 </Callout>
 
 It is now possible to set up the client.
+
+# Verify configuration files
+After editing `config.toml` and adding wallet keys, it’s time to test the configurations and ensure the system is healthy. Run the following:
+
+```bash copy
+hermes health-check
+hermes config validate
+```
+If everything was set up correctly, you should see output like:
+``` bash copy
+SUCCESS performed health check for all chains in the config
+SUCCESS "configuration is valid"
+```
 
 ### Create IBC channel
 The "create channel" command (below) creates not only the IBC channel but also the necessary IBC client connection.
