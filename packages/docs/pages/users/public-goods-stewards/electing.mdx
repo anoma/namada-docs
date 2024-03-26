@@ -90,3 +90,22 @@ namadac resign-steward --steward my-steward-address
 ```
 
 Read more about the other methods of losing stewardship in the [specs](https://specs.namada.net/modules/goverance/public-goods-funding/becoming-a-steward#losing-stewardship-status).
+
+## Update steward commissions
+
+The `commissions.json` file contains the information about the reward distribution. It is a JSON file with the following structure:
+
+```json
+{
+    "reward_distribution": {
+        "tnam...": "1"
+    }
+}
+```
+
+Update steward commissions can be done at any point. 
+Through the CLI it can be done with the command:
+
+```shell copy
+namadac  update-steward-rewards --steward my-steward-address --data-path <path/to/commissions.json>
+```
