@@ -19,7 +19,7 @@ We distinguish two kinds of keys:
 
 ### Shielding transfers
 
-To conduct a shielding transfer, the user must first be in possession of a
+To conduct a shielded transfer, the user must first be in possession of a
 transparent account with some token balance.
 
 #### Generate your Spending Key
@@ -51,6 +51,11 @@ Payment addresses can be reused or discarded as the user likes, and any relation
 between addresses cannot be deciphered by any other user without the spending key.
 </Callout>
 
+#### Sync the notes
+
+Before conducting any shielded transactions, it is useful to sync the notes.
+This can be achieved using `namadac shielded-sync`.
+
 #### Send your shielding transfer
 
 Once one has a payment address, one can transfer a balance from their
@@ -72,6 +77,10 @@ balance:
 ```shell copy
 namadac balance --owner <your-spending-key-alias>
 ```
+
+<Callout>
+It is not possible to view a balance by querying the payment address. The spending key must be specified as the `--owner` of the balance.
+</Callout>
 
 ### Shielded transfers
 
