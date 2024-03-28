@@ -1,0 +1,51 @@
+# **Query**
+
+This is the complete query related to Namada
+
+Including: account,pgf,proposal,proposal-result,proposal-votes
+
+## query-account
+
+```txt
+namadac query-account --owner <WALLET>
+```
+
+Return the results will return the `Threshold` and `Public` key of the address.
+
+## query-pgf
+
+```
+namadac query-pgf
+```
+
+Return the results will return the `Pgf stewards , Reward distribution`, `Pgf fundings` key of the address.
+
+## query-proposal
+
+```
+namadac query-proposal --proposal-id <ID>
+```
+
+Return the results will return the PGF type of the proposal, `author`, `content`, `StartEpoch`, `EndEpoch`, `GraceEpoch`, `Status`
+
+## query-proposal-result
+
+```
+namadac query-proposal-result --proposal-id <ID>
+```
+
+Return the results will return the outcome of the proposal, whether it's `Passed` or `Rejected`, including the total number of votes for `yay`, `nay`, `abstain`, and the threshold (fraction) of the total voting power needed to tally.
+
+## query-proposal-votes
+
+```
+namadac query-proposal-votes --proposal-id <ID>
+```
+
+Return the results of all wallets that have voted `yay` or `nay` on the proposal
+
+```
+namadac query-proposal-votes --proposal-id <ID> --voter <WALLET>
+```
+
+Return the result of a specific wallet that has voted on a specific proposal
