@@ -1,0 +1,114 @@
+# Commands
+
+Usage: `namadac utils [OPTIONS] <COMMAND>`
+
+## join-network
+
+Configure Namada to join an existing network.
+See [the networks page](../networks.mdx) for details on how to join a network.
+```shell copy
+namadac utils join-network --chain-id <some-chain-id>
+```
+
+## fetch-wasms
+
+Ensure pre-built wasms are present.
+```shell copy
+namadac utils fetch-wasms --chain-id <chain-id>
+```
+
+
+## validate-wasm
+
+Check that the provided wasm code is valid by the Namada standards.
+```shell copy
+namadac utils validate-wasm --code-path <code-path> --chain-id <chain-id>
+```
+
+## init-network
+
+Initialize a new test network.
+
+```shell copy
+namadac utils init-network --templates-path <templates-path> --wasm-checksums-path <wasm-checksums-path> 
+--chain-prefix <chain-prefix> --genesis-time <genesis-time> --chain-id <chain-id>
+```
+
+## derive-genesis-addresses
+
+Derive account addresses from a genesis txs toml file.
+```shell copy
+namadac utils derive-genesis-addresses --path <path> --chain-id <chain-id>
+```
+
+## genesis-bond
+
+Bond to a validator at pre-genesis.
+```shell copy
+namadac utils genesis-bond --validator <validator> --amount <amount> --path <path> --chain-id <chain-id>
+```
+
+## init-genesis-established-account
+
+Initialize an established account available at genesis.
+```shell copy
+namadac utils init-genesis-established-account --path <path> --chain-id <chain-id>
+```
+
+## init-genesis-validator
+
+Initialize genesis validator's address, consensus key and validator account key and use it in the ledger's node. Appends validator creation and self-bond txs to a .toml file containing an established account tx.
+```shell copy
+namadac utils init-genesis-validator --alias <alias> --address <address> --path <path>
+ --net-address <net-address> --commission-rate <commission-rate> --max-commission-rate-change <max-commission-rate-change>
+ --self-bond-amount <self-bond-amount> --email <email> --chain-id <chain-id>
+```
+
+## pk-to-tm
+
+Convert a validator's consensus public key to a Tendermint address.
+```shell copy
+namadac utils pk-to-tm --public-key <public-key> --chain-id <chain-id>
+```
+
+## default-base-dir
+
+Print the default base directory that would be used if --base-dir or NAMADA_BASE_DIR were not used to set the base directory.
+```shell copy
+namadac utils default-base-dir
+```
+
+## epoch-sleep
+
+Query for the current epoch, then sleep until the next epoch.
+```shell copy
+namadac utils epoch-sleep
+```
+
+## validate-genesis-templates
+
+Validate genesis templates.
+```shell copy
+namadac utils validate-genesis-templates --path <path> --chain-id <chain-id>
+```
+
+## test-genesis
+
+Dry run genesis files and get a report on problems that may be found.
+```shell copy
+namadac utils test-genesis --path <path> --chain-id <chain-id>
+```
+
+## sign-genesis-txs
+
+Sign genesis transaction(s).
+```shell copy
+namadac utils sign-genesis-txs --path <path> --chain-id <chain-id>
+```
+
+## help
+
+Print this message or the help of the given subcommand(s).
+```shell copy
+namadac utils [COMMAND] --help
+``` 

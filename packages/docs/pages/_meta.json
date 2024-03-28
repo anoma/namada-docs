@@ -4,5 +4,6 @@
   "users": "User Guide",
   "operators": "Operator Guide",
   "integrating-with-namada" : "Integration Guide",
-  "networks": "Networks"
+  "networks": "Networks",
+  "utils": "Utils"
 }
