@@ -111,10 +111,10 @@ let http_client = reqwest::Client::new();
 let wallet = Wallet::from_mnemonic("your mnemonic here").unwrap();
 let wallet: namada_sdk::wallet::Wallet<FsWalletUtils> = FsWalletUtils::new(PathBuf::from("wallet.toml"));
 let shielded_ctx = FsShieldedUtils::new(Path::new("masp/").to_path_buf());
-let namada_impl = NamadaImpl::new(http_client, wallet, shielded_ctx, NullIo)
+let namada = NamadaImpl::new(http_client, wallet, shielded_ctx, NullIo)
         .await
         .expect("unable to construct Namada object")
         .chain_id(ChainId::from_str(CHAIN_ID).unwrap());
 ```
 
-This object will be referenced throughout the documentation as `namada_impl`.
+This object will be referenced throughout the documentation as `namada`.
