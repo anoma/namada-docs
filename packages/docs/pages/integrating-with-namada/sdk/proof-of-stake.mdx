@@ -9,8 +9,9 @@ The `namada_impl` object is assumed to have been constructed as described in the
 </Callout>
 
 ```rust 
-// We assume we have a namada object that is already initialized
+use namada_sdk::signing::default_sign;
 
+// We assume we have a namada object that is already initialized
 let bond_tx_builder = namada            
             .new_bond(validator_address.clone(), amount)
             .source(source_address.clone())
