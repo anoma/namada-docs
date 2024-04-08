@@ -9,10 +9,9 @@ The `namada_impl` object is assumed to have been constructed as described in the
 </Callout>
 
 ```rust 
-// We assume we have a namada_impl object that is already initialized
+// We assume we have a namada object that is already initialized
 
-let bond_tx_builder = namada_impl
-            
+let bond_tx_builder = namada            
             .new_bond(validator_address.clone(), amount)
             .source(source_address.clone())
             .signing_keys(vec![source_public_key]);
@@ -22,7 +21,7 @@ let (mut bond_tx, signing_data) = bond_tx_builder
     .await
     .expect("unable to build bond");
 
-namada_impl
+namada
     .sign(
         &mut bond_tx,
         &bond_tx_builder.tx,
