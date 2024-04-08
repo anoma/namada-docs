@@ -52,8 +52,16 @@ In order to make the transfer shielded, we need to the only difference is to use
 It is important to use the shielded extended `SpendingKey` as the source.
 
 ```rust
-
-use namada::types::masp::{ExtendedSpendingKey, PaymentAddress, TransferSource, TransferTarget};
+use std::str::FromStr;
+use namada_sdk::{
+    masp::{
+        PaymentAddress,
+        TransferSource,
+        TransferTarget,
+    },
+    masp_primitives::zip32::ExtendedSpendingKey,
+    address::Address,
+};
 
 // Make sure to replace 'secret-ex' with an actual Namada extended spending key
 let source = ExtendedSpendingKey::from_str("secret-ex").unwrap();
