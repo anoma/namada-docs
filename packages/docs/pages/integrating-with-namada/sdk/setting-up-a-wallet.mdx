@@ -25,6 +25,8 @@ use namada_sdk::wallet::fs::FsWalletUtils;
 The SDK can create a wallet from a mnemonic phrase. The mnemonic phrase is a 24 word phrase that can be used to restore a wallet. 
 
 ```rust
+use namada_sdk::bip39::Mnemonic;
+
 let mnemonic = Mnemonic::from_phrase(MNEMONIC_CODE, namada_sdk::bip39::Language::English)
 ```
 
