@@ -14,8 +14,8 @@ use namada_sdk::NamadaImpl;
 
 ```rust
 // SecretKey, common and SchemeType give access to Namada cryptographic keys and their relevant implementations. Namada supports ED25519 and SECP256K1 keys.
-use namada_sdk::types::key::common::SecretKey;
-use namada_sdk::types::key::{common, SchemeType};
+use namada_sdk::key::common::SecretKey;
+use namada_sdk::key::{common, SchemeType};
 // Filesystem wallet utilities (stores the path of the wallet on the filesystem)
 use namada_sdk::wallet::fs::FsWalletUtils;
 ```
