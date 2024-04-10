@@ -60,21 +60,22 @@ use namada_sdk::{
         TransferTarget,
     },
     masp_primitives::zip32::ExtendedSpendingKey,
-    address::Address,
+    key::common::PublicKey,
 };
 
-// Make sure to replace 'secret-ex' with an actual Namada extended spending key
+// Make sure to replace "secret-ex" with an actual Namada extended spending key
 let source = ExtendedSpendingKey::from_str("secret-ex").unwrap();
 // Make sure to replace "payment-addr-ex" with an actual Namada payment address
 let destination = PaymentAddress::from_str("payment-addr-ex").unwrap();
-let fee_payer = 
+// Make sure to replace "public-key" with an actual Namada public key
+let fee_payer = PublicKey::from_str("public-key");
+let amount = /* Needed amount here */;
 let mut transfer_tx_builder = namada
         .new_transfer(
-            TransferSource::ExtendedSpendingKey(source),
-            TransferTarget::Address(Address::from(&destination.public_key)),
+            TransferSource::ExtendedSpendingKey(source.into()),
+            TransferTarget::PaymentAddress(destination),
             namada.native_token(),
             amount,
         )
-        // Make sure to replace "transparent-address-ex" with an actual Namada transparent address
-        .signing_keys(vec![Address::from_str("transparent-address-ex").ok()]);
+        .signing_keys(vec![fee_payer]);
 ```
