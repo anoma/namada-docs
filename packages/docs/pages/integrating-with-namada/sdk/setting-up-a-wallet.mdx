@@ -61,16 +61,15 @@ In the second part of the above function, the key is derived from the mnemonic p
 It is also possible to create the sdk wallet from scratch. This is more involved because it requires generating a new store for the wallet to exist in.
 
 ```rust
-use std::path::PathBuf;
-
-use namada::{
-    sdk::wallet::{
-        alias::Alias, ConfirmationResponse, GenRestoreKeyError, Store, StoredKeypair, Wallet,
-        WalletUtils,
+use namada_sdk::{
+    wallet::{
+        Store,
+        StoredKeypair,
+        Wallet,
+        WalletIo,
     },
-    types::{
-        address::Address,
-        key::{common::SecretKey, PublicKeyHash},
+    address::Address,
+    key::{common::SecretKey, PublicKeyHash},
     },
 };
 use rand::rngs::OsRng;
@@ -82,7 +81,7 @@ pub struct SdkWallet {
 impl SdkWallet {
     pub fn new(sk: SecretKey, nam_address: Address) -> Self {
         let store = Store::default();
-        let mut wallet = Wallet::new(PathBuf::new(), store);
+        let mut wallet = Wallet::new(SdkWalletUtils {}, store);
         let stored_keypair = StoredKeypair::Raw(sk.clone());
         let pk_hash = PublicKeyHash::from(&sk.to_public());
         let alias = "alice".to_string();
@@ -94,37 +93,19 @@ impl SdkWallet {
 
 pub struct SdkWalletUtils {}
 
-impl WalletUtils for SdkWalletUtils {
-    type Storage = PathBuf;
-
+impl WalletIo for SdkWalletUtils {
     type Rng = OsRng;
+}
 
-    fn read_decryption_password() -> zeroize::Zeroizing<std::string::String> {
-        panic!("attempted to prompt for password in non-interactive mode");
+impl Clone for SdkWalletUtils {
+    fn clone(&self) -> Self {
+        SdkWalletUtils::new()
     }
+}
 
-    fn read_encryption_password() -> zeroize::Zeroizing<std::string::String> {
-        panic!("attempted to prompt for password in non-interactive mode");
-    }
-
-    fn read_alias(_prompt_msg: &str) -> std::string::String {
-        panic!("attempted to prompt for alias in non-interactive mode");
-    }
-
-    fn read_mnemonic_code() -> std::result::Result<namada::bip39::Mnemonic, GenRestoreKeyError> {
-        panic!("attempted to prompt for mnemonic in non-interactive mode");
-    }
-
-    fn read_mnemonic_passphrase(_confirm: bool) -> zeroize::Zeroizing<std::string::String> {
-        panic!("attempted to prompt for mnemonic in non-interactive mode");
-    }
-
-    fn show_overwrite_confirmation(
-        _alias: &Alias,
-        _alias_for: &str,
-    ) -> namada::sdk::wallet::store::ConfirmationResponse {
-        // Automatically replace aliases in non-interactive mode
-        ConfirmationResponse::Replace
+impl SdkWalletUtils {
+    fn new() -> Self {
+        Self {}
     }
 }
 ```
