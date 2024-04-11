@@ -73,6 +73,12 @@ balance:
 namadac balance --owner <your-spending-key-alias>
 ```
 
+In order to view actual and updated spending key's balance, one have to run shielded sync:
+
+```shell copy
+namadac shielded-sync --from-height <block-height-before-transaction>
+```
+
 ### Shielded transfers
 
 Once the user has a shielded balance, it can be transferred to a
