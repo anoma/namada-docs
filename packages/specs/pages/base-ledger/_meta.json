@@ -3,5 +3,6 @@
   "execution": "Execution model",
   "replay-protection": "Replay protection",
   "block-space-allocator": "Block space allocator",
-  "fee-system": "Fee system"
+  "fee-system": "Fee system",
+  "state": "State"
 }

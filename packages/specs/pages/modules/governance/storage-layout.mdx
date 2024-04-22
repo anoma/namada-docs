@@ -1,0 +1,30 @@
+import { Callout } from 'nextra-theme-docs'
+
+## Storage keys
+
+### On-chain `Proposals`
+
+
+
+### Offline proposals
+
+Offline proposals are represented as JSON objects with the following structure:
+
+```
+{
+  content: Base64<Vec<u8>>,
+  author: Address,
+  tallyEpoch: Epoch,
+  signature: Base64<Vec<u8>>
+}
+```
+
+The signature is produced over the hash of the concatenation of: `content`, `author`, and `tallyEpoch`. 
+Proposal types are not supported off-chain.
+
+#### Proposal fields
+
+- `content`: The proposal content (encoded). This is the actual proposal that will be voted on.
+- `author`: The address of the proposal author.
+- `tallyEpoch`: The epoch in which the proposal will be tallied. This epoch must already exist when tallying occurs. If the chain is halted, this means choosing an epoch in the past (e.g. the most recent epoch).
+- `signature`: The signature of the proposal author over the hash of the concatenation of: `content`, `author`, and `tallyEpoch`

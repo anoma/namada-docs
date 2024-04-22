@@ -17,14 +17,6 @@ Namada also supports shielded actions, which allow users to hold their assets sh
 
 You can find an introduction to Namada from a product perspective [here](https://namada.net/blog/introducing-namada-multichain-asset-agnostic-data-protection).
 
-### What is Anoma?
-
-Anoma is an intent-centric architecture for decentralized counterparty discovery, solving, and settlement. You can find the Anoma specs [here](https://specs.anoma.net).
-
-### How does Namada relate to Anoma?
-
-Anoma is a full-stack architecture designed with a long term perspective, while Namada is a specific chain and featureset designed to provide practical data protection now.
-
 ### Why Namada?
 
 Data protection should be default and inherent in the systems we use for transacting, yet safe and user-friendly multi-asset data protection doesn't yet exist in the blockchain ecosystem.
@@ -41,6 +33,7 @@ Users of Namada earn rewards for shieldiing assets and contributing to shared da
 These documents describe the behavior of the Namada protocol. This description is organized into five sub-sections:
 
 1. [Base Ledger](./base-ledger.mdx): This section describes the core ledger functionality of the Namada protocol. This includes the consensus, execution model, fee system, and environment in which modules operate.
+2. [Components](./components.md): This section describes components (specific abstractions) shared by multiple Namada modules. This includes the PD controller.
 2. [Modules](./modules.mdx): This section describes the modules that make up the Namada protocol. Each module is a distinct part of the protocol grouping a related set of features that can be understood in isolation from other modules.
 
 This book is written using [NextraJS](https://nextra.site/). The source can be found in the [Namada Docs repository](https://github.com/anoma/namada-docs/tree/master/packages/specs).
