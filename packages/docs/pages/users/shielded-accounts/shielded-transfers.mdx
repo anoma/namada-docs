@@ -3,7 +3,7 @@ import { Callout } from 'nextra-theme-docs'
 # Shielded Transfers
 
 In Namada, shielded transfers are enabled by the [Multi-Asset Shielded Pool](https://specs.namada.net/masp/ledger-integration.html?highlight=MASP#masp-integration-spec) (MASP).
-The MASP is a zero-knowledge circuit ([zk-SNARK](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)) that extends the [Zcash Sapling circuit](https://raw.githubusercontent.com/zcash/zips/master/protocol/sapling.pdf) to add support for sending arbitrary assets. All assets in the pool share the same anonymity set, this means that the more transactions are issued to MASP, the stronger are the privacity guarantees.
+The MASP is a zero-knowledge circuit ([zk-SNARK](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)) that extends the [Zcash Sapling circuit](https://raw.githubusercontent.com/zcash/zips/master/protocol/sapling.pdf) to add support for sending arbitrary assets. All assets in the pool share the same anonymity set, this means that the more transactions are issued to MASP, the stronger are the data protection guarantees.
 
 ## Using MASP
 
@@ -71,6 +71,12 @@ balance:
 
 ```shell copy
 namadac balance --owner <your-spending-key-alias>
+```
+
+In order to view actual and updated spending key's balance, one must first run shielded sync:
+
+```shell copy
+namadac shielded-sync --from-height <block-height-before-transaction>
 ```
 
 ### Shielded transfers

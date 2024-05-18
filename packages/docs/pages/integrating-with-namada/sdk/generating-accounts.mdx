@@ -4,7 +4,7 @@
 Representing accounts using the Namada SDK is straightforward. An account on Namada is defined by its public key(s) and private key(s) (plural for multisignatures). The public key(s) is/are used to identify the account and the private key is used to sign transactions. In the below snippet, we represent the account using the public key and private key.
 
 ```rust
-use namada_sdk::types::key::common::{PublicKey, SecretKey};
+use namada_sdk::key::common::{PublicKey, SecretKey};
 struct SimpleAccount {
     public_key: PublicKey,
     private_key: SecretKey
@@ -14,7 +14,7 @@ struct SimpleAccount {
 For a multisignature account, we can represent this through a vector of keys.
 
 ```rust
-use namada_sdk::types::key::common::{PublicKey, SecretKey};
+use namada_sdk::key::common::{PublicKey, SecretKey};
 struct MultisigAccount {
     public_keys: Vec<PublicKey>,
     private_keys: Vec<SecretKey>
@@ -24,7 +24,7 @@ struct MultisigAccount {
 Multisignature accounts, because they are initialized by an on-chain transaction, will always have their public key revealed to the ledger. However, when keypairs are generated in an offline fashion, the user must submit a transaction in order to reveal their public key. Because of this, it is helpful to add the field `revealed` to the account struct.
 
 ```rust
-use namada_sdk::types::key::common::{PublicKey, SecretKey};
+use namada_sdk::key::common::{PublicKey, SecretKey};
 struct Account {
     public_key: PublicKey,
     private_key: SecretKey,
@@ -39,7 +39,7 @@ In order to reveal the public key of an implicit account, the user must submit a
 ```rust
 use namada_sdk::io::NullIo;
 use namada_sdk::NamadaImpl;
-use namada_sdk::types::chain::ChainId;
+use namada_sdk::chain::ChainId;
 
 
 // Define the namada implementation (assuming we have a wallet, http_client, and shielded_ctx)
