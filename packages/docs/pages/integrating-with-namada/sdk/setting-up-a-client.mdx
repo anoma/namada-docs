@@ -101,7 +101,7 @@ This client will allow us to make asynchronous calls to the network and handle t
 
 ## Instantiating a Namada Implementation object
 
-When constructing transactions using the sdk, we almost alwasy need a `namada_impl` object. 
+When constructing transactions using the sdk, we almost alwasy need a `namada` object. 
 
 ```rust
 use namada_sdk::NamadaImpl; // This module allows us to access the NamadaImpl struct, which is needed for most transactions
@@ -111,10 +111,10 @@ let http_client = reqwest::Client::new();
 let wallet = Wallet::from_mnemonic("your mnemonic here").unwrap();
 let wallet: namada_sdk::wallet::Wallet<FsWalletUtils> = FsWalletUtils::new(PathBuf::from("wallet.toml"));
 let shielded_ctx = FsShieldedUtils::new(Path::new("masp/").to_path_buf());
-let namada_impl = NamadaImpl::new(http_client, wallet, shielded_ctx, NullIo)
+let namada = NamadaImpl::new(http_client, wallet, shielded_ctx, NullIo)
         .await
         .expect("unable to construct Namada object")
         .chain_id(ChainId::from_str(CHAIN_ID).unwrap());
 ```
 
-This object will be referenced throughout the documentation as `namada_impl`.
+This object will be referenced throughout the documentation as `namada`.

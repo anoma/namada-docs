@@ -66,26 +66,64 @@ host = '127.0.0.1'
 port = 3001
 
 [[chains]]
-id = 'namada-test.0a4c6786dbda39f786'  # set your chain ID
+id = 'shielded-expedition.88f17d1d14'  # set your chain ID
 type = 'Namada'
-rpc_addr = 'http://127.0.0.1:27657'  # set the IP and the port of the chain
+rpc_addr = 'http://127.0.0.1:26657'  # set the IP and the port of the chain
 grpc_addr = 'http://127.0.0.1:9090'  # not used for now
 event_source = { mode = 'push', url = 'ws://127.0.0.1:27657/websocket', batch_delay = '500ms' }  # set the IP and the port of the chain
 account_prefix = ''  # not used
 key_name = 'relayer'  # The key is an account name you made
 store_prefix = 'ibc'
-gas_price = { price = 0.001, denom = 'atest1v4ehgw36x9ry2dphx5mrvdjxgez5gdengeq5gs2pg3znx32yg9p5yv2zg3pnjvf4g9q5x329epndn0' }  # the price isn't used for now, the denom should be a raw token address
+trusting_period = '4752s'
+gas_price = { price = 0.0001, denom = 'tnam1qxvg64psvhwumv3mwrrjfcz0h3t3274hwggyzcee' }  # the price isn't used for now, the denom should be a raw token address retrieve denom by namadaw address find --alias "naan"
+rpc_timeout = '30s'
+memo_prefix = ''
+
+[chains.packet_filter]
+policy = 'allow'
+list = [
+  ['transfer', '<channel-id>'], #channel-id leading to the counterparty channel you want to configure IBC
+]
 
 [[chains]]
-id = 'namada-test.647287156defa8728c'
-type = 'Namada'
-rpc_addr = 'http://127.0.0.1:28657'
-grpc_addr = 'http://127.0.0.1:9090'
+id = 'axelar-testnet-lisbon-3'
+type = 'CosmosSdk'
+rpc_addr = 'http://127.0.0.1:28657' # RPC of the counterparty chain
+grpc_addr = 'http://127.0.0.1:28090' # gRPC of the counterparty chain
 event_source = { mode = 'push', url = 'ws://127.0.0.1:28657/websocket', batch_delay = '500ms' }
-account_prefix = ''
+rpc_timeout = '10s'
+account_prefix = 'axelar'
 key_name = 'relayer'
 store_prefix = 'ibc'
-gas_price = { price = 0.001, denom = 'atest1v4ehgw36xazry3pn89q5xv3ngyungs3hxc65vwp3xez5zdp3xppy2v6yxc65zsfegyc5yd2ptuf9d8' }
+default_gas = 5000000
+max_gas = 15000000
+gas_price = { price = 0.001, denom = 'uaxl' }
+gas_multiplier = 1.1
+max_msg_num = 30
+max_tx_size = 800000
+clock_drift = '5s'
+max_block_time = '30s'
+trusting_period = '5days' # should be less than unbonding period of the counterparty channel
+ccv_consumer_chain = false
+sequential_batch_tx = false
+memo_prefix = ''
+
+[chains.trust_threshold]
+numerator = "1"
+denominator = "3"
+
+[chains.packet_filter]
+ policy = 'allow'
+ list = [
+   ['transfer', '<channel-id>'], # channel id of the Namada side
+ ]
+
+[chains.packet_filter.min_fees]
+
+[chains.address_type]
+derivation = "cosmos"
+
+# Add all channels you want to process
 ```
 </details>
 
@@ -100,9 +138,11 @@ These are the pieces of this puzzle you want to keep your 👀 on:
  - `chains.id` is the name of the chain
  - `chains.rpc_address` specifies the port that the channel is communicating through, and will be the argument for the `ledger_address` of Namada when interacting with the ledger (will become clearer later)
      - Make sure to change the IP address to the IP address of your local machine that is running this node!
+ - `chains.grpc_addr` currently is not used in Namada but needs to be configured for other Cosmos chains
  - `chains.key_name` specifies the key of the signer who signs a transaction from the relayer. The key should be generated before starting the relayer.
  - `chains.event_source` specifies the URL of the chain's websocket. This must be the same as the `rpc_address` for Hermes to work properly.
- - `chains.gas_price.denom` specifies the token that the relayer pays for IBC transactions. `chains.gas_price.price` isn't used for now.
+ - `chains.gas_price.denom` specifies the token that the relayer pays for IBC transactions. `chains.gas_price.price` isn't used for now in Namada.
+ - `trusting_period` specifies the maximum period before which the client can not expire. This should be not more than unbonding time in the particular chain. 
 
 You can see more details of configuration in [the official document](https://hermes.informal.systems/documentation/configuration).
 </Callout>
@@ -150,26 +190,26 @@ export HERMES=$(pwd) # if needed
 ```
 Check the binary:
 ```bash copy
-./target/release/hermes --version #or sudo cp ./target/release/hermes /usr/local/bin/
+./target/release/hermes --version
 ```
 
 <Callout type="info">
 It is recommended to now add hermes to `$PATH` such that it is callable without any pre-fixes.
 For ubuntu users, this can be achieved by
 ```bash copy
-cp ./target/release/hermes /usr/local/bin/
+sudo cp ./target/release/hermes /usr/local/bin/
 ```
 </Callout>
 
 ## Setting up the relayer
 
 ### Create the relayer account
-On each chain, there must be a `relayer` account. The alias should be the same as `chains.key_name` in the config. On a namada chain, this can be done by running
+On each chain, there must be a `relayer` account. The alias should be the same as `chains.key_name` in the config. On a Namada chain, this can be done by running
 ```bash copy
 namadaw gen --alias relayer
 ```
 
-This will generate a key for the relayer account. The key will be stored in the `wallet.toml` that is found in the [base directory](./ledger/base-directory.mdx) of the node, inside the `chain-id` folder. For example, if the `chain-id` is `namada-test.0a4c6786dbda39f786`, the `wallet.toml` will be found in `$HOME/.local/share/namada/namada-test.0a4c6786dbda39f786/wallet.toml` (on a ubuntu machine where `base-dir` has not been set up properly).
+This will generate a key for the relayer account. The key will be stored in the `wallet.toml` that is found in the [base directory](./ledger/base-directory.mdx) of the node, inside the `chain-id` folder. For example, if the `chain-id` is `shielded-expedition.88f17d1d14`, the `wallet.toml` will be found in `$HOME/.local/share/namada/shielded-expedition.88f17d1d14/wallet.toml` (on a ubuntu machine where `base-dir` has not been set up properly).
 
 The relayer account should have some balance to pay the fee of transactions. Before creating an IBC channel or relaying an IBC packet, you need to transfer the fee token to the relayer account.
 
@@ -177,6 +217,7 @@ The relayer account should have some balance to pay the fee of transactions. Bef
 To sign each transaction, the relayer's key should be added to Hermes with `keys add` command in advance. It requires the `wallet.toml` which should have the key of `chains.key_name`. Once the key has been added, Hermes doesn't need the wallet anymore.
 ```bash copy
 hermes --config $HERMES_CONFIG keys add --chain $CHAIN_ID --key-file $WALLET_PATH
+hermes --config $HERMES_CONFIG keys add --chain $CHAIN_ID --mnemonic-file $SEED_PATH
 ```
 
 Hermes will store the key in `~/.hermes/keys/${CHAIN_ID}` as default. You can specify the directory by setting `chains.key_store_folder` in the config file.
@@ -186,6 +227,19 @@ If you want to use an encrypted key with a password, you have to set an environm
 </Callout>
 
 It is now possible to set up the client.
+
+# Verify configuration files
+After editing `config.toml` and adding wallet keys, it’s time to test the configurations and ensure the system is healthy. Run the following:
+
+```bash copy
+hermes health-check
+hermes config validate
+```
+If everything was set up correctly, you should see output like:
+``` bash copy
+SUCCESS performed health check for all chains in the config
+SUCCESS "configuration is valid"
+```
 
 ### Create IBC channel
 The "create channel" command (below) creates not only the IBC channel but also the necessary IBC client connection.
@@ -204,7 +258,14 @@ hermes --config $HERMES_CONFIG \
 Note that the above `CHAIN_IDs` will depend on your own setup, so do check this for yourself!
 </Callout>
 
-When the creation has been completed, you can see the channel IDs. For example, the following text shows that a channel with ID `7` has been created on Chain A `namada-test.0a4c6786dbda39f786`, and a channel with ID `12` has been created on Chain B `namada-test.647287156defa8728c`. You will need the channel IDs for a transfer over IBC. It means that you have to specify `channel-7` as a channel ID (The prefix `channel-` is always required) for a transfer from Chain A to Chain B. Also, you have to specify `channel-12` as a channel ID for a transfer from Chain B to Chain A.
+When the creation has been completed, you can see the channel IDs. For example, the following text shows that a channel with ID `955` has been created on Chain A `shielded-expedition.88f17d1d14`, and a channel with ID `460` has been created on Chain B `axelar-testnet-lisbon-3`. You will need the channel IDs for a transfer over IBC. It means that you have to specify `channel-955` as a channel ID (The prefix `channel-` is always required) for a transfer from Chain A to Chain B. Also, you have to specify `channel-460` as a channel ID for a transfer from Chain B to Chain A.
+
+Remember the ClientId for each of the chains, we will need them on the next step: `07-tendermint-2996` for `shielded-expedition.88f17d1d14` and `07-tendermint-884` for `axelar-testnet-lisbon-3`
+
+```bash copy
+export CLIENT_A_ID="<replace-with-client-a-id>"
+export CLIENT_B_ID="<replace-with-client-b-id>"
+```
 
 <Expandable>
 ```
@@ -213,23 +274,23 @@ SUCCESS Channel {
     a_side: ChannelSide {
         chain: BaseChainHandle {
             chain_id: ChainId {
-                id: "namada-test.0a4c6786dbda39f786",
+                id: "shielded-expedition.88f17d1d14",
                 version: 0,
             },
             runtime_sender: Sender { .. },
         },
         client_id: ClientId(
-            "07-tendermint-0",
+            "07-tendermint-2996",
         ),
         connection_id: ConnectionId(
-            "connection-3",
+            "connection-1479",
         ),
         port_id: PortId(
             "transfer",
         ),
         channel_id: Some(
             ChannelId(
-                "channel-7",
+                "channel-955",
             ),
         ),
         version: None,
@@ -237,23 +298,23 @@ SUCCESS Channel {
     b_side: ChannelSide {
         chain: BaseChainHandle {
             chain_id: ChainId {
-                id: "namada-test.647287156defa8728c",
-                version: 0,
+                id: "axelar-testnet-lisbon-3",
+                version: 3,
             },
             runtime_sender: Sender { .. },
         },
         client_id: ClientId(
-            "07-tendermint-1",
+            "07-tendermint-884",
         ),
         connection_id: ConnectionId(
-            "connection-2",
+            "connection-679",
         ),
         port_id: PortId(
             "transfer",
         ),
         channel_id: Some(
             ChannelId(
-                "channel-12",
+                "channel-460",
             ),
         ),
         version: None,
@@ -262,6 +323,33 @@ SUCCESS Channel {
 }
 ```
 </Expandable>
+
+### Change Hermes configuration
+
+Now when the channels are created we need to update the [Hermes configuration](#Make-Hermes-config-file)
+
+```bash copy
+...
+[chains.packet_filter]
+policy = 'allow'
+list = [
+  ['transfer', '<channel-id>'], #channel-id leading to the counterparty channel you want to use for IBC
+]
+...
+```
+
+### Update IBC clients
+
+In order to have IBC channels running they need active IBC clients they rely on. When clients are not in use they tend to expire and to prevent this they are required to be updated manually.
+
+The "update channel" command (below) update the actual state of the client in the particular chain.
+
+```bash copy
+hermes update client --host-chain $CHAIN_A_ID --client $CLIENT_A_ID
+hermes update client --host-chain $CHAIN_B_ID --client $CLIENT_B_ID
+```
+
+It is recommended to perform this manual update or use specific scripts to automate it. Otherwise, you risk your clients will be expired. The restoration is possible only from the Governance of the specific chain.
 
 ## Start the relayer
 Once you run Hermes, it monitors chains via the nodes and relays packets according to monitored events.
