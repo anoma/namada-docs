@@ -1,6 +1,6 @@
 {
-  "objects-and-txs": "Objects and Txs",
-  "cubic-slashing": "Cubic slashing",
-  "reward-distribution": "Reward distribution",
-  "inflation-system": "Inflation system"
+  "design-overview": "Design overview",
+  "types-and-storage": "Types and storage",
+  "validity-conditions": "Validity conditions",
+  "transaction-actions": "Transaction actions"
 }
