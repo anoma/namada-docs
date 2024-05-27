@@ -55,10 +55,8 @@ For example, a MacOS user would run something along the lines of:
 python3 ./scripts/gen_localnet.py \
 --localnet-dir genesis/localnet \
 --mode release # Assuming the binaries were built using `make build-release` \
---parameters '{"parameters": {"max_expected_time_per_block": 10}, "pos_params": {"pipeline_len": 5}}' 
+--parameters '{"parameters": {"max_expected_time_per_block": 10}, "pos_params": {"pipeline_len": 5}}'
 # In order to change max_expected_time_per_block to 10 seconds from the default 30, and the pipeline length to 5 epochs from the default 2.
---num-nodes 2 # OPTIONAL: To run the localnet with 2 nodes
---num-vals 2 # OPTIONAL: To run the localnet with 2 validators
 ```
 
 ### Modifying the genesis configuration file
