@@ -1,4 +1,5 @@
 import { Callout } from 'nextra-theme-docs'
+import { Steps } from 'nextra-theme-docs'
 
 # The Namada Campfire Testnet ⛺🔥
 
@@ -15,40 +16,74 @@ The most up-to-date docs on joining Campfire ⛺🔥 can be found [here](https:/
 ### Pre-requisites
 
 <Callout type="warning" emoji="❗">
-Currently, Campfire ⛺🔥 docs only detail support for Ubuntu machines. 
+Currently, Campfire ⛺🔥 docs only detail support for Ubuntu machines. However, the steps should be the same for any OS which can run Namada.
 </Callout>
 
-The user will need to have installed the [Stack-Orchestrator](https://github.com/vknowable/stack-orchestrator), which is a general tool for quickly and flexibly launching and managing a software stack in a containerized environment. The docs are found in the [README](https://github.com/vknowable/stack-orchestrator/#readme) of the repo, and the tool can be installed by running the following command:
+The user will need to have completed the steps to install [Namada](../../introduction/install.mdx) and [CometBFT](../../introduction/installing-cometbft.mdx) as per usual.
 
+### Joining the network
+
+<Callout type="info" emoji="🏕️">
+Check the testnet [info page](https://testnet.luminara.icu) which should have all info and links needed to join the network, including
+the current chain-id, peers, wasm files, etc.  
+
+This page is automatically re-generated on chain creation so the info contained should always be current.
+</Callout>
+
+Configuring your node to join Campfire is similar to any other public testnet, with a couple minor differences.
+
+<Steps>
+### Set config server
+First, set this environment variable to instruct `namadac` to download the chain configs from an alternate URL.
 ```bash copy
-git clone https://github.com/vknowable/stack-orchestrator.git
-cd stack-orchestrator
-scripts/namada-quick-install.sh
-exit
+export NAMADA_NETWORK_CONFIGS_SERVER="https://testnet.luminara.icu/configs"
 ```
 
-Once this is completed, it is recommended to install Namada through the following Docker image (and the version in this command may need to be [updated accordingly](https://testnet.luminara.icu):
-
+### Join network
+Run this command to download the chain configs. Don't forget the `--dont-prefetch-wasm` flag as we'll manually download and copy
+the wasm files into the chain directory in the next step.
 ```bash copy
-export NAMADA_TAG=v0.23.1
-docker pull spork666/namada:$NAMADA_TAG
-docker image tag spork666/namada:$NAMADA_TAG cerc/namada:local
-mkdir -p ~/.local/share/namada
+namadac utils join-network --chain-id $CHAIN_ID --dont-prefetch-wasm
 ```
 
-### Running the node
-
-Once this is completed, the user can run the following command to start the node:
-
+### Download and extract the chain wasm files
+Download the wasm files from the link on [https://testnet.luminara.icu](https://testnet.luminara.icu) and copy them into the `wasm`
+directory inside your Namada base-dir.
 ```bash copy
-curl -o ~/luminara.env https://testnet.luminara.icu/luminara.env
-laconic-so --stack public-namada deploy --env-file ~/luminara.env up
-echo "export CONTAINER=$(docker ps -q)" | sudo tee -a /etc/profile
-CONTAINER=$(docker ps -q)
+wget https://testnet.luminara.icu/wasm.tar.gz
+tar -xf wasm.tar.gz
+cp wasm/* ~/.local/share/namada/$CHAIN_ID/wasm/
 ```
 
-The relevant and more detailed docs are found [here](https://knowabl.notion.site/From-scratch-to-syncing-in-10-minutes-c0a56b34cdec447fbe2a5cd8f559f0bb).
+### Update persistent peers
+Check [https://testnet.luminara.icu](https://testnet.luminara.icu) for a current persistent peer (or ask in the Discord server) and
+add it to your node's `config.toml` file (located at `<NAMADA_BASE_DIR>/$CHAIN_ID/config.toml`).
+```bash copy
+# actual value will be different
+persistent_peers = "tcp://0e51028c038607680cde50fdb08b6931e869ce6a@143.198.36.225:26656”
+```
+
+### (Optional) Sync using a snapshot
+For faster syncing, you can download a recent snapshot from  [https://testnet.luminara.icu](https://testnet.luminara.icu).  
+
+You will need to install lz4:
+```bash copy
+sudo apt install lz4
+```
+
+Once you have downloaded the snapshot, you can extract it with:
+```bash copy
+lz4 -c -d <snapshot filename>.tar.lz4  | tar -x -C $HOME/temp
+```
+
+After extracting, use the `db` folder to replace `NAMADA_BASE_DIR/$CHAIN_ID/db` and the `data` folder to replace NAMADA_BASE_DIR/$CHAIN_ID/cometbft/data`.
+
+### Start your node!
+```bash copy
+NAMADA_LOG=info CMT_LOG_LEVEL=p2p:none,pex:error NAMADA_CMT_STDOUT=true namada node ledger run
+```
+</Steps>
 
 ## Interacting with the testnet
 
-The [Luminara collective](https://luminara.icu) has also composed a [Namada CLI cheat sheet](https://www.notion.so/Namada-CLI-cheat-sheet-b54b220610bd4e7e91548e32d7ac3c8a) that is available and useful for any Namada user.
+Campfire includes a faucet, public rpc, wallet interface, indexer, and (hopefully soon) explorer. Check the [landing page](https://testnet.luminara.icu) for links and further info.

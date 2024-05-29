@@ -9,22 +9,22 @@ The Namada protocol is a proof-of-stake layer 1 blockchain protocol. State trans
 
 The system relies on the concept of epochs. An epoch is a range of consecutive blocks identified by consecutive natural numbers. Each epoch lasts a minimum duration and includes a minimum number of blocks since the beginning of the last epoch. These are defined by protocol parameters.
 
-To query the current epoch, the following command can be run:
+To query the epoch duration parameters, the following command can be run:
 
 ```shell copy
 namadac query-protocol-parameters
 ```
 
-In order to query the current epoch, the following command can be run:
+In order to query the current epoch of the chain, the following command can be run:
 
 ```shell copy
-namada client epoch
+namadac epoch
 ```
 ## Protocol parameters
 
 All of the current protocol parameters can be queried using the following command:
 ```shell copy
-namada query-protocol-parameters
+namadac query-protocol-parameters
 ```
 
 This will display the list of protocol parameters.
@@ -80,19 +80,21 @@ PoS parameters
 
 - Min. proposal fund: The minimum amount of tokens required to submit a proposal.
 - Max. proposal code size: The maximum size of the code that can be submitted in a proposal.
-- Min. proposal voting period: The minimum duration of the voting period for a proposal.
-- Max. proposal period: The maximum duration of the proposal period.
+- Min. proposal voting period: The minimum duration (in epochs) of the voting period for a proposal.
+- Max. proposal period: The maximum duration (in epochs) of the proposal period.
 - Max. proposal content size: The maximum number of characters of the content that can be submitted in a proposal.
 - Min. proposal grace epochs: The minimum number of epochs that a proposal can be in the grace period.
 
 <Callout>
-The *grace period* is defined as the epochs **between** the end of the voting period and the `grace epoch` as defined on the proposal. The grace epoch is the final epoch of the grace period.
+The *grace period* is defined as the epochs **between** the end of the voting period and the `grace epoch` as defined on the proposal. The grace epoch is the final epoch of the grace period.  
+
+Any changes enacted by a passing proposal (for example, changes to the protocol parameters) will take effect at the end of the grace period.
 </Callout>
 
 ### Public Goods Funding Parameters
 
-- Pgf inflation rate: The inflation rate for the Public Goods Funding.
-- Steward inflation rate: The inflation rate for the Steward.
+- Pgf inflation rate: The inflation rate for the Public Goods Funding -- the percentage of newly minted tokens that are allotted to the PGF treasury.
+- Steward inflation rate: The inflation rate for the Steward account(s) -- the percentage of newly minted tokens allotted to funding PGF Steward operations (such as reviewing PGF recipient nominees).
 
 ### Protocol parameters
 
@@ -120,6 +122,7 @@ The *grace period* is defined as the epochs **between** the end of the voting pe
 - Light client attack minimum slash rate: The minimum slashing rate for a light client attack.
 - Liveness window: The number of blocks that are considered for the liveness check (a slashable event), counted by number of blocks that a validator signs
 - Liveness threshold: The proportion (decimal) of blocks that a validator must sign within the window in order to be considered live.
+Any active validator in the consensus set falling below this threshold will be jailed for inactivity.
 - Block proposer reward: The reward for the block proposer.
 - Block vote reward: The reward for the block voter.
 - Max inflation rate: The maximum inflation rate.

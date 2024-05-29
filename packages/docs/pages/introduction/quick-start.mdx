@@ -9,24 +9,30 @@ Getting started with Namada is as simple as:
  
 Install the Namada binaries (`namada`, `namadan`, `namadaw`, `namadac`) and place them in your `$PATH`.  
 
-You can [build from source](#) or [download prebuilt binaries](#) from the Releases page of the Namada Github repo. [Docker images](#) are also available.
+You can [build from source](./install/source.mdx) or [download prebuilt binaries](./install/binaries.mdx) from the Releases page of the Namada Github repo.
+[Docker images](./install/docker.mdx) are also available.
  
 ### Install CometBFT
  
-[Install CometBFT](#) and place it in your `$PATH`.
+Namada requires CometBFT `v0.37.2` for consensus. [Install CometBFT](./installing-cometbft.mdx) and place it in your `$PATH`.
 
 ### Join a Network
  
 See the [networks page](../networks.mdx) for details on how to join a network. Joining a network is a one-step process to download the proper genesis files, wasm code and checksums, and initialize your node's storage and configuration.
-You can join a [testnet](#), [localnet](#), or (soon) [mainnet](#).
+You can join a [testnet](../networks/testnets.mdx), [localnet](../operators/networks/local-network.mdx), or (soon) [mainnet](../networks/mainnets.mdx).  
 
-See [the networks page](../networks.mdx) for details on how to join a network. The rest of this guide will assume you have joined a network using the `namadac utils join-network --chain-id <some-chain-id>` command.
+You will need to know the chain-id of the network you wish to join. You can then join as a full (non-validator) node by running:
+```shell copy
+namadac utils join-network --chain-id <chain-id> --add-persistent-peers
+```
 
-See [all utilities command](../utils.mdx).
+The newly initialized chain data will be found in your [base directory](../operators/ledger/base-directory.mdx).  
 
-## Run a ledger node
+(See the list of all [utilities](../utils.mdx) commands.)
 
-We recommend this step with [tmux](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/), which allows the node to keep running without needing the terminal to be open indefinitely. If not, skip to the subsequent step.
+### Run a ledger node
+
+You can start your node with:
 
 ```shell copy
 namadan ledger run
@@ -37,16 +43,17 @@ For a more verbose output, one can run:
 ```shell copy
 NAMADA_LOG=info CMT_LOG_LEVEL=p2p:none,pex:error NAMADA_CMT_STDOUT=true namadan ledger run
 ```
-To keep your node running in the background after closing your terminal, you will likely want to use either tmux or a systemd service file. See the section on [Running a full node](#) for more detail on this, as well as configuration options and environment variables.  
+To keep your node running in the background after closing your terminal, you will likely want to use either tmux or a systemd service file.
+See the section on [Running a full node](../operators/ledger/running-a-full-node.mdx) for more detail on this, as well as configuration options and environment variables.  
 
-Instead of syncing your own node, you can use a [public rpc](#) for most functionality.
+Instead of syncing your own node, you can use a [public rpc](./public-rpc.mdx) for most functionality.
 
 ### Wait for your Node to Finish Syncing
 This can take several hours depending on the chain height and your system specs.
 
 ### Create an Account
  
-Create a new implicit account in order to receive tokens:
+Create a new [implicit](../users/transparent-accounts.mdx) account in order to receive tokens:
 
 ```shell copy
 namadaw gen --alias <your-go-to-alias>
@@ -66,14 +73,15 @@ Known transparent addresses:
 
 ### Get Some Tokens from the Faucet (Testnet Only)
  
-Testnet tokens can be sourced from the [faucet](https://faucet.heliax.click).
+Check [here](../networks/testnets/faucet.mdx) for a list of testnet faucets.
+(If your testnet is not listed, ask in the Discord server for more info.)
 
 ### Explore 🚀
 
 There's a variety of cool things you can do next!
-- [Shield some NAM or other tokens](#)
-- [Bond (delegate) some tokens to a validator](#)
-- [Become a validator yourself](#)
-- [Participate in governance by creating or voting on proposals](#)
-- [Send or recieve tokens from another chain via IBC](#)
+- [Shield some NAM or other tokens](../users/shielded-accounts/shielded-transfers.mdx)
+- [Bond (delegate) some tokens to a validator](../users/delegators.mdx)
+- [Become a validator yourself](../operators/validators.mdx)
+- [Participate in governance by creating or voting on proposals](../users/governance.mdx)
+- [Send or recieve tokens from another chain via IBC](../users/ibc.mdx)
 </Steps>

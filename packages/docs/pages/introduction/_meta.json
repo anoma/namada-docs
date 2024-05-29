@@ -3,5 +3,6 @@
   "install": "Installing Namada",
   "installing-cometbft": "Installing CometBFT",
   "privacy": "Privacy and Opsec",
-  "security": "Security"
+  "security": "Security",
+  "public-rpc": "Using a Public RPC"
 }

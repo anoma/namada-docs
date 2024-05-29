@@ -1,0 +1,25 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Using a Public RPC
+
+Instead of syncing and operating your own node to interact with a network, most functionality of `namadac`, such as querying the chain state or submitting transactions,
+can be done using a full node operated by someone else. When these nodes are provided for public use, they are commonly called 'Public RPCs'
+and are generally offered by established operators as a public service.
+
+<Callout type="warning">
+When using an RPC node that is not your own, first verify that the operator can be trusted, and that the node is up to date with the rest of the chain.
+</Callout>
+
+## Using the --node flag
+
+These instructions assume you have already completed the steps to [install Namada](./install.mdx) and [join a network](../networks.mdx).  
+
+From here, instead of proceeding to start the ledger and sync your node with the rest of the chain, you can use `namadac` to interact
+with the network by using the `--node` flag and providing the address of a public RPC node.  
+
+For example, to query the balance of an account using a public RPC, you can run:
+```bash copy
+namadac balance --owner <tnam address> --token nam --node https://some-node.xyz:443
+```
+
+In fact, this is not fundamentally different from normal usage of `namadac` -- except that normally an rpc address of `localhost:26657` (corresponding to your own local full node) is implied.
