@@ -82,7 +82,9 @@ In order to vote on a proposal, we need a valid proposal id. We can retrieve the
 Once we have the proposal id, we can vote on the proposal using the following code:
 
 ```rust
-    let proposal_id = 1 as u64 // placeholder, replace with actual proposal id
+    use namada_sdk::signing::default_sign;
+
+    let proposal_id = 1 as u64; // placeholder, replace with actual proposal id
     let vote = String::from("Yay");
     let signing_public_key = signing_key.to_public();
 

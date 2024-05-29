@@ -7,40 +7,33 @@ import { SpecsAscii } from '../components/SpecsAscii'
 
 ## What is Namada?
 
-Namada is a sovereign proof-of-stake layer-one blockchain, using the [CometBFT](https://cometbft.com/) (nee Tendermint) BFT consensus algorithm. Namada enables multi-asset private transfers for any native or non-native asset using a [multi-asset shielded pool](https://research.metastate.dev/multi-asset_shielded_pool/) derived from the [Sapling circuit](https://z.cash/upgrade/sapling/).
+Namada is a sovereign proof-of-stake layer-one blockchain, using the [CometBFT](https://cometbft.com/) (nee Tendermint) BFT consensus algorithm. Namada enables multi-asset shielded transfers for any native or non-native asset using a [multi-asset shielded pool](https://research.metastate.dev/multi-asset_shielded_pool/) derived from the [Sapling circuit](https://z.cash/upgrade/sapling/).
 
 Namada features full IBC protocol support, a natively integrated [Ethereum bridge](./modules/ethereum-bridge.mdx), a modern [proof-of-stake system](./modules/proof-of-stake.mdx) with cubic slashing, a [stake-weighted governance signalling mechanism](./modules/governance.mdx), and a dual continuous/retroactive [public goods funding system](./modules/governance/public-goods-funding.mdx).
 
-Users of the MASP are [rewarded](./modules/masp/shielded-pool-incentives.mdx) for their contributions to the privacy set in the form of native protocol tokens (NAM). 
+Users of the MASP are [rewarded](./modules/masp/shielded-pool-incentives.mdx) for their contributions to the shielded set in the form of native protocol tokens (NAM). 
 
-Namada also supports shielded actions, which allow users to hold their assets privately on Namada most of the time while occasionally unshielding specific assets in order to interact with existing applications on transparent chains.
+Namada also supports shielded actions, which allow users to hold their assets shielded on Namada most of the time while occasionally unshielding specific assets in order to interact with existing applications on transparent chains.
 
-You can find an introduction to Namada from a product perspective [here](https://blog.namada.net/introducing-namada-interchain-asset-agnostic-privacy/).
-
-### What is Anoma?
-
-Anoma is an intent-centric, privacy-preserving architecture for decentralized counterparty discovery, solving, and settlement. You can find the Anoma specs [here](https://specs.anoma.net).
-
-### How does Namada relate to Anoma?
-
-Anoma is a full-stack architecture designed with a long term perspective, while Namada is a specific chain and featureset designed to provide practical privacy now.
+You can find an introduction to Namada from a product perspective [here](https://namada.net/blog/introducing-namada-multichain-asset-agnostic-data-protection).
 
 ### Why Namada?
 
-Privacy should be default and inherent in the systems we use for transacting, yet safe and user-friendly multi-asset privacy doesn't yet exist in the blockchain ecosystem.
+Data protection should be default and inherent in the systems we use for transacting, yet safe and user-friendly multi-asset data protection doesn't yet exist in the blockchain ecosystem.
 Up until now, users have had the choice of either a sovereign chain that reissues assets (e.g. [Zcash](https://z.cash/))
-or a privacy preserving solution built on an existing smart contract chain. Both have large trade-offs: in the former case, users don't have assets that they actually want to transact with, and in the latter case, the restrictions of existing platforms mean that users leak non-trivial metadata, and the protocols may be expensive and clunky to use.
+or a data protection solution built on an existing smart contract chain. Both have large trade-offs: in the former case, users don't have assets that they actually want to transact with, and in the latter case, the restrictions of existing platforms mean that users leak non-trivial metadata, and the protocols may be expensive and clunky to use.
 
 Namada supports any fungible or non-fungible asset on an IBC-compatible blockchain
-as well as fungible or non-fungible assets sent over a custom Ethereum bridge (such as ERC20 tokens and ERC721 tokens, respectively). Once assets are on Namada, shielded transfers are cheap and all assets contribute to the same anonymity set.
+as well as fungible or non-fungible assets sent over a custom Ethereum bridge (such as ERC20 tokens and ERC721 tokens, respectively). Once assets are on Namada, shielded transfers are cheap and all assets contribute to the same shielded set.
 
-Users of Namada earn rewards, retain privacy of assets, and contribute to shared privacy.
+Users of Namada earn rewards for shielding assets and contributing to shared data protection.
 
 ### Layout of this specification
 
 These documents describe the behavior of the Namada protocol. This description is organized into five sub-sections:
 
 1. [Base Ledger](./base-ledger.mdx): This section describes the core ledger functionality of the Namada protocol. This includes the consensus, execution model, fee system, and environment in which modules operate.
+2. [Components](./components.md): This section describes components (specific abstractions) shared by multiple Namada modules. This includes the PD controller.
 2. [Modules](./modules.mdx): This section describes the modules that make up the Namada protocol. Each module is a distinct part of the protocol grouping a related set of features that can be understood in isolation from other modules.
 
 This book is written using [NextraJS](https://nextra.site/). The source can be found in the [Namada Docs repository](https://github.com/anoma/namada-docs/tree/master/packages/specs).

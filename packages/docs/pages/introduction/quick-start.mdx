@@ -20,9 +20,14 @@ You can [build from source](#) or [download prebuilt binaries](#) from the Relea
 See the [networks page](../networks.mdx) for details on how to join a network. Joining a network is a one-step process to download the proper genesis files, wasm code and checksums, and initialize your node's storage and configuration.
 You can join a [testnet](#), [localnet](#), or (soon) [mainnet](#).
 
-### Start the Ledger Node
- 
-Start your node with:
+See [the networks page](../networks.mdx) for details on how to join a network. The rest of this guide will assume you have joined a network using the `namadac utils join-network --chain-id <some-chain-id>` command.
+
+See [all utilities command](../utils.mdx).
+
+## Run a ledger node
+
+We recommend this step with [tmux](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/), which allows the node to keep running without needing the terminal to be open indefinitely. If not, skip to the subsequent step.
+
 ```shell copy
 namadan ledger run
 ```
