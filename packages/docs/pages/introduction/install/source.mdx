@@ -11,27 +11,34 @@ Please note that, although installing from source is the recommended route for i
 Ensure the correct [pre-requisites](./source/pre-requisites.mdx) have been downloaded and installed.
 
 ## Installing Namada
-Once all the required dependencies have been installed, the next step is to clone the source code from the [Namada repository](https://github.com/anoma/namada) and build it with:
+Once all the required dependencies have been installed, you can run the following to clone the source code from the [Namada repository](https://github.com/anoma/namada) and build it.  
+
+When joining mainnet or a public testnet, please first refer to the network's supporting documentation (or ask in the Discord server)
+to find which version of the software you will need.
 
 ```shell copy
 git clone https://github.com/anoma/namada.git
-cd namada 
+cd namada
+git checkout <required Namada version>
 make install
 ```
-
+{/*
 <Callout type="warning">
 During internal and private testnets, checkout the latest testnet branch using `git checkout $NAMADA_TESTNET_BRANCH`.
 Where `$NAMADA_TESTNET_BRANCH` is the name of the testnet branch, which will be specified in the [testnet documentation](../../networks/testnets.mdx).
 </Callout>
+*/}
 
 ## Adding binaries to `$PATH`
 The binaries should be added to `$PATH` from the `make install` command. 
 However, if this for some reason did not work, a solution may be to copy the binaries 
-from `namada/target/release` to `$HOME/.local/bin/` for example: 
+from `namada/target/release` to `/usr/local/bin/` for example: 
+
 
 ```shell copy 
-cp namada/target/release/namada* $HOME/.local/bin/
+cp namada/target/release/namada* /usr/local/bin/
 ```
+You can verify the binaries are correctly added to `$PATH` by running the command `which namada`.
 
 ## Using the binaries
 See the page on [using namada binaries](./binaries/overview-of-binaries.mdx) for more information.

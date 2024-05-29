@@ -1,26 +1,38 @@
-# From Docker
+# Running Namada with Docker
 
 ## Pre-requisites
 
-In order to run any docker images, you need to have docker installed. You can find instructions on how to install docker for your machine [here](https://docs.docker.com/get-docker/).
+In order to run any Docker images, you must first have Docker installed. You can find installation instructions for your machine [here](https://docs.docker.com/get-docker/).
 
 ## Downloading the docker image
-The Namada docker image can be found [here](https://github.com/anoma/namada/pkgs/container/namada).
+The Namada Docker image can be found [here](https://github.com/anoma/namada/pkgs/container/namada).
 
-Under the `Tags` tab, you can find the latest version of the docker image. Click on the link for the correct version of Namada that you are trying to install. For example, if you are trying to install Namada v0.16.0, you would click on the link for `v0.16.0`.
+Under the `Tags` tab, you can find the latest version of the Docker image. Click on the link for the correct version of Namada that you are trying to install. For example, if you are trying to install Namada v0.37.0, you would click on the link for `v0.37.0`.
 
-You can find the tag of the downloaded docker image by running `docker images`. The tag will be the first column of the output.
+To download the Docker image, run:
+```bash copy
+docker pull ghcr.io/anoma/namada:namada-v0.37.0
+```
 
+You can list any downloaded Docker image by running `docker images`. The tag will be the first column of the output.
+```bash copy
+~$ docker images
+REPOSITORY                                    TAG              IMAGE ID       CREATED         SIZE
+ghcr.io/anoma/namada                          namada-v0.37.0   b9729acaabab   5 days ago      211MB
+```
+
+In this case, the full name of the downloaded image is `ghcr.io/anoma/namada:namada-v0.37.0`.
 
 ## Running the docker image
 
-Once you have downloaded the docker image, it will be useful to export some environment variables:
+Once you have downloaded the Docker image, it will be useful to export some environment variables:
 
 ```bash copy
 export CHAIN_ID=<chain-id>
+export DOCKER_IMAGE=ghcr.io/anoma/namada:namada-v0.37.0
 ```
 
-The following docker run command will run the ledger node:
+The following Docker run command will run the ledger node:
 
 ```bash copy
 docker run -P -i -t $DOCKER_IMAGE <namada command>

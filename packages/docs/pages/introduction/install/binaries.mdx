@@ -1,7 +1,7 @@
 # Install From Binaries
 
 ## Pre-requisites
-There are certain pre-requisites that need to be installed before installing Namada via binaries. 
+The following prerequisites are needed to use the pre-compiled binaries: 
 
 These are: 
 - [CometBFT](./binaries/prerequisites.mdx#installing-cometbft)
@@ -9,7 +9,7 @@ These are:
 
 ## Downloading the binaries
 
-Now that you have all dependencies installed, you can download the latest binary release from our [releases page](https://github.com/anoma/namada/releases) by choosing the appropriate architecture.
+After installing the prerequisites, you can download the latest binary release from our [releases page](https://github.com/anoma/namada/releases) by choosing the appropriate architecture.
 
 The below code will download all the binaries for the latest release for all supported operating systems.
 ```shell copy
@@ -26,11 +26,11 @@ Unzip the `tar` using the following command:
 tar -xzvf namada*.tar.gz
 ```
 
-## Placing the binaries onto `$PATH`
-For ubuntu and mac machines, the following command should work for placing namada into path.
+## Placing the binaries into `$PATH`
+For Ubuntu and Mac machines, the following command should work for placing the Namada binaries into your `$PATH`.
 
 Once inside the directory containing the binaries:
 ```bash copy
 sudo cp ./namada* /usr/local/bin/
 ```
-
+Verify that the binaries are in your `$PATH` by running the command `which namada`.
