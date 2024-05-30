@@ -1,5 +1,6 @@
 {
   "sdk" : "Using the SDK",
   "light-sdk": "Using the Light SDK",
-  "indexer": "Using the Indexer"
+  "indexer": "Using the Indexer",
+  "interface": "Namada Interface"
 }

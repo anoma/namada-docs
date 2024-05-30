@@ -1,0 +1,41 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Implicit accounts
+
+An implicit account is the simplest account type. It is derived from a keypair and can be used to authorize certain transactions such as sending and staking tokens, or paying [fees](../fees.mdx).
+Implicit accounts have no code attached to them, and can only have one key controlling it.
+
+## Generating an implicit account
+You can generate a new implicit account using the CLI. The new keypair will be added to your `wallet.toml` under the alias you provide.
+
+<Callout type="info">
+The 'alias' of an account simply provides a convenient way of referring to addresses stored in your `wallet.toml` file by name.
+It is not intrinsic to the account.
+</Callout>
+
+```shell copy
+namada wallet gen --alias <choose an alias>
+```
+
+You will be prompted to provide a password, as the keys are stored to disk encrypted. Carefully remember this password; you will need it to sign transactions with your key.
+The encryption password is _not_ a part of key generation randomness.  
+
+After generating the new key, a twenty-four word mnemonic will be displayed, which can be used to recover your account. Write this down immediately and
+store it safely offline, as it will not be displayed again.
+
+<Callout type="error" emoji="🚨">
+WARNING: Keep your mnemonic code and passphrase safe.
+Loss of either can result in you being locked out of your accounts with no chance of recovering your funds.
+</Callout>
+
+##### Derivation path
+
+Namada wallet supports keypair generation using a [mnemonic code](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) and [HD derivation path](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
+
+<Callout type="info">
+The default HD path for Namada is `m/44'/877'/0'/0'/0'`.
+</Callout>
+
+Optionally, the user may specify an additional passphrase that _is used_ as a part of keypair generation randomness.
+
+

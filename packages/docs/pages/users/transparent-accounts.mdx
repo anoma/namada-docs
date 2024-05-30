@@ -1,106 +1,24 @@
-import { Callout } from 'nextra-theme-docs'
-
 # An Introduction to Namada Addresses
 
 All accounts in Namada have a unique address, exactly one Validity Predicate and optionally any additional data in its dynamic storage sub-space.
 
 There are currently 3 types of account addresses:
-- **Implicit:** An implicit account is derived from your keypair and can be used to authorize certain transactions from the account. Implicit accounts have no code attached to them, and can only have one key controlling it. This differs it from established accounts, which can support multiple keys.
-- **Established:** An established account is a associated with one or more cryptographic keys. Each account has the `vp_user` predicate which validate any associated transaction. The main purpose of this code is to ensure that the multisignature threshold is correctly met and stores the keys that verify transactions. All established accounts will be initialized through on-chain transactions, unlike implicit accounts, which exist as soon as the keypair is generated.
-- **Internal:** Special internal accounts, such as protocol parameters account, PoS and IBC.
+- **Implicit:** An implicit account is the simplest account type. It is derived from a keypair and can be used to authorize certain transactions such as sending and staking tokens, or paying [fees](./fees.mdx).
+Implicit accounts have no code attached to them, and can only have one key controlling it. This differs it from established accounts,
+which can support multiple keys.
+- **Established:** Unlike implicit accounts, which exist as soon as the keypair is generated, an established account must be initialized
+with an on-chain transaction. It is associated with one or [more](./transparent-accounts/multisignature.mdx) cryptographic keys. An established account
+has the `vp_user` validity predicate which validates any associated transaction to ensure that the multisignature threshold is correctly met.
+- **Internal:** These are special internal accounts, such as those for the protocol parameters, proof of stake and IBC modules.
 
-## Manage keypairs
+## Managing keypairs
 
 Namada uses [ed25519](https://en.wikipedia.org/wiki/EdDSA#Ed25519) keypairs for signing cryptographic operations on the blockchain.
 
-To manage your keys, various sub-commands are available under:
+The `namadaw` binary is used for key management. Various sub-commands are available under:
 
 ```shell copy
-namada wallet --help
+namadaw --help
 ```
 
-### Generate a keypair
-
-It is possible to generate keys using the CLI. By doing so, an implicit account address is also derived in the process and added to storage.
-
-<Callout type="info" emoji="🤡">
-Note the use  of the placeholder `keysha` for the key parameter. This is a completely configurable parameter, and should just refer to the alias of the key signing the transaction (that has a positive nam balance).
-</Callout>
-
-```shell copy
-KEY_ALIAS="keysha"
-namada wallet gen --alias $KEY_ALIAS
-```
-
-<Callout type="info">
-The derived implicit address shares the same `keysha` alias. The previous command has the same effect as `namada wallet gen --alias keysha`.
-</Callout>
-
-By default, the keys are stored encrypted.
-The encryption password is _not_ a part of key generation randomness.
-
-Namada wallet supports keypair generation using a [mnemonic code](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) and [HD derivation path](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
-To generate a keypair for a default path use
-```shell copy
-KEY_ALIAS="keysha"
-namada wallet gen --alias $KEY_ALIAS --hd-path default
-```
-
-<Callout type="info">
-The default HD path for Namada is `m/44'/877'/0'/0'/0'`.
-</Callout>
-
-Optionally, the user may specify an additional passphrase that _is used_ as a part of keypair generation randomness.
-
-<Callout type="error" emoji="🚨">
-WARNING: Keep your mnemonic code and passphrase safe.
-Loss of any of them would inevitably lead to impossible account recovery.
-</Callout>
-
-### Restore the keypair
-
-To recover the keypair from your mnemonic code and passphrase use
-```shell copy
-namada wallet derive --alias keysha --hd-path default
-```
-
-This will ask you to then enter a passphrase (unless you add the `--unsafe-dont-encrypt` flag),
-and then will ask you to enter your mnemonic code.
-
-### List all known keys
-
-```shell copy
-namada wallet list --keys
-```
-
-## Manage addresses
-
-
-To manage addresses, similar to keys, various sub-commands are available:
-
-```shell copy
-namada wallet --help
-```
-
-### Generate an implicit address
-
-Let's call the implicit address `accountant`:
-```shell copy
-namada wallet gen --alias accountant
-```
-
-```shell copy
-namada wallet gen --alias keysha --hd-path default
-```
-generates an address using a [mnemonic code](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) and [HD derivation path](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
-
-### Restore the address
-
-```shell copy
-namada wallet derive --alias keysha --hd-path default
-```
-### List all known addresses
-
-```shell copy
-namada wallet list --addr
-```
+See also: [File system wallet](../users/wallet/file-system-wallet.mdx) for examples and additional info on using `namadaw` to manage your keys.

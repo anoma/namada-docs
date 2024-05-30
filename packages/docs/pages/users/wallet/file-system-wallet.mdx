@@ -1,11 +1,64 @@
+import { Callout } from 'nextra-theme-docs'
+
 ## File System Wallet
 
-By default, the Namada Wallet is stored under `.namada/{chain_id}/wallet.toml` where keys are stored encrypted. You can change the default base directory path with `--base-dir` and you can allow the storage of unencrypted keypairs with the flag `--unsafe-dont-encrypt`.
+The filesystem wallet stores your encrypted keypairs on disk in your Namada base directory. It is the default wallet option when using the Namada CLI "out of the box."
 
-If the wallet doesn't already exist, it will be created for you as soon as you run a command that tries to access the wallet. A newly created wallet will be pre-loaded with some internal addresses like `pos`, `pos_slash_pool`, `masp` and more.
+By default, the Namada Wallet is contained in the file `<NAMADA_BASE_DIR>/{chain_id}/wallet.toml`, where keys are stored encrypted. You can change the default base directory path with `--base-dir` and you can allow the storage of unencrypted keypairs with the flag `--unsafe-dont-encrypt`.
+
+If the wallet doesn't already exist, it will be created for you as soon as you run a command that tries to access the wallet, or upon [joining a network](../../networks.mdx).
+A newly created wallet will be pre-loaded with some internal addresses like `pos`, `pos_slash_pool`, `masp` and more.
 
 Currently, the Namada client can load the password via:
 
 - **Stdin:** the client will prompt for a password.
 - **Env variable:** by exporting a ENV variable called `NAMADA_WALLET_PASSWORD` with a value of the actual password.
 - **File:** by exporting an ENV variable called `NAMADA_WALLET_PASSWORD_FILE` with a value containing the path to a file containing the password.
+
+### Common wallet operations
+
+The `namadaw` wallet binary handles all key and wallet management functionality. You can use `namadaw <subcommand> --help` to explore
+all available wallet commands.
+
+##### Create a new keypair
+This will create a new keypair and save it in your wallet under the provided alias (for convenience). You will be prompted for a
+password to encrypt the private key. Afterwards, your mnemonic will be printed to the terminal, which you should safely store in case
+you need to restore your key at a later date.
+
+```bash copy
+namadaw gen --alias <your alias>
+```
+
+<Callout type="warning" emoji="❗">
+Write down your mnemonic and store it securely -- this is the only time it will be shown. You can use your mnemonic to recover
+your account if you lose access (for example, if your laptop stops working or is stolen). If you are locked out of your account, and
+you haven't saved your mnemonic, your funds will be lost forever.  
+
+Also carefully note the encryption password you provided -- you will need to provide it any time you make a transaction.
+</Callout>
+
+##### List your addresses
+Once you've created a new keypair, you'll want to know the address to which you can send tokens. You do this by listing all known
+addresses in your wallet and looking for the alias you've just created:
+
+```bash copy
+namadaw list
+```
+
+or, if you only want to search for a specific address:
+
+```bash copy
+namadaw find --alias <your alias>
+```
+
+##### Recover an address from a mnemonic
+You can recover an existing key from a mnemonic and add it to your wallet with:
+```bash copy
+namadaw derive --alias <choose an alias>
+```
+(You will be prompted to enter the mnemonic).
+
+#### Using the Pregenesis flag
+Normally, you will be expected to join a network before using the wallet; and `namadaw` will throw an error when an existing chain context is not found.
+However, there may be times when you want to use `namadaw` prior to joining a chain -- for example, when generating a keypair to
+recieve a token allotment in the genesis block of a future chain. In these cases, you can use the flag `--pre-genesis` with your `namadaw` commands.

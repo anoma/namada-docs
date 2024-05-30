@@ -1,0 +1,27 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Established accounts
+
+Unlike implicit accounts, which exist as soon as the keypair is generated, an established account must be initialized
+with an on-chain transaction. It is associated with one or [more](./multisignature.mdx) cryptographic keys.
+
+## Generating an established account
+
+<Callout type="info">
+Before submitting the transaction to initialize an established account, you must have created an [implicit](./implicit-accounts.mdx) account and funded it with enough
+funds to pay for the transaction [fees](../fees.mdx).
+</Callout>
+
+Initializing an established account entails submitting an `init-account` transaction on-chain to associate the account with
+one or more public keys. We'll use the aliases `my-implicit` and `my-established` in this example, where the `my-implicit` account is assumed to have been previously been
+created and funded.  
+
+We can create a new established account `my-established` and associate it with the public key of `my-implicit` with:
+```
+namadac init-account --alias my-established --public-keys my-implicit --signing-keys my-implicit --threshold 1
+```
+Note that:
+- the implicit account `my-implicit` is required to sign the init-account transaction and pay the associated fees (with the `--signing-keys` argument)
+- One public key is being associated with the account, and the signing threshold is 1. Technically, all established accounts are multisignature accounts
+and therefore a 'typical' established account can be considered a '1 of 1' multisignature account. See [here](./multisignature.mdx) 
+for further details on using multisignature accounts with multiple keys.
