@@ -6,5 +6,6 @@
   "delegators": "Bonding and Proof-of-stake",
   "governance": "Governance and Public Goods Funding",
   "public-goods-stewards": "PGF",
-  "ibc": "IBC transfers"
+  "ibc": "IBC transfers",
+  "query": "Querying the chain"
 }

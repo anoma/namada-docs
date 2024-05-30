@@ -1,153 +1,137 @@
 import { Callout } from 'nextra-theme-docs'
+import { Steps } from 'nextra-theme-docs'
 
 # Multisignature accounts on Namada
 
-Multisignature accounts (multisigs) are accounts on Namada that allow for multiple signers. There are many benefits of having multisigs, including but not limited to 
+Multisignature accounts (multisigs) are accounts on Namada that allow for multiple signers. There are many benefits to multisignature accounts, including but not limited to: 
 
 - Increased security
 - Ability to share wallets
 - Better recovery options
 
-For this reason, all accounts on Namada are multisignature accounts by default.
+For this reason, all established accounts on Namada are multisignature accounts by default.  
 
-## Initialising a multisignature account
+A multisignature account can be described as an "x of y" account, where x is the 'threshold' or required number of signatures on a transaction
+and y is the total number of keys associated with the account. For example, a 3 of 5 multisig will need at least three of the parties to sign any transaction.
 
-Before creating an account, a user must generate at least one cryptographic `key`, that will be used to sign transactions.
+## Example: Initialising a multisignature account
+Here is the process to generate a 2 of 3 multisig account:
 
-The following method will generate such a key:
-```shell
-namadaw gen \
---alias my-key1
-```
-A second key can be generated as well (which will be useful for multisigs):
-```shell
-namadaw gen \
---alias my-key2
-```
-
-Accounts on Namada are initialized through the following method:
-
-**Non-multisig account (single signer)**
-```shell
-namadac init-account \
---alias my-multisig-alias \
---public-keys my-key1 \
---signing-keys my-key1
+<Steps>
+### Create three signing keys
+Assuming we have three parties -- Alice, Bob, and Charlie -- on the multisig, they each need to first generate their keypairs.
+```bash copy
+namadaw gen --alias alice
+namadaw gen --alias bob
+namadaw gen --alias charlie
 ```
 
-**Multisig account (at leat 2 signers)**
-```shell
-namadac init-account \
---alias my-multisig-alias \
---public-keys my-key1,my-key2 \
---signing-keys my-key1,my-key2 \
---threshold 2
+### Fund an implicit account for transaction fees
+Recall from the section on [established accounts](./established-accounts.mdx) that we will need to provide an implicit account to
+sign and to pay the gas costs of the `init-account` transaction. This can be any account you own, whether or not it's party to the multisig.
+In this example, Alice will cover the transaction fees and we'll assume she already has sufficient NAM in her account.
+
+### Init-account
+The `init-account` transaction is no different from a typical established account, except for threshold and number of public keys associated.
+(In fact, a typical established account is simply a 1 of 1 multisig.)  
+
+The `--signing-keys` flag indicates that Alice is signing and paying fees for this transaction.
+```bash copy
+namadac init-account --alias abc-multisig\
+  --public-keys alice,bob,charlie --threshold 2 \
+  --signing-keys alice
 ```
+
+</Steps>
 
 
 ## Submitting a multisignature transaction
-In order to submit a multisignature transaction, an offline transaction must first be constructed. 
+A multisignature transaction requires that an offline transaction first be constructed so that it can be signed by each required party before
+being submitted to the chain. 
 
-### Constructing an offline transaction
-<Callout type="warning">
-For `v0.23.0` there are certain limitations to the offline transaction construction. Please be weary of any bugs that may arise.
-</Callout>
+<Steps>
+### Dump the raw tx
+The `--dump-tx` argument will write the transaction to disk. A folder is required to be specified where the transaction will be dumped.
 
-The `--dump-tx` argument allows a user to do this. A folder is required to be specified where the transaction will be dumped.
-
-```shell
+```bash copy
 mkdir tx_dumps
+namadac transfer --source abc-multisig --target <destination address> \
+  --token nam --amount 2 \
+  --signing-keys alice \
+  --dump-tx --output-folder-path tx_dumps
+
+# Example output:
+Transaction serialized to tx_dumps/FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3.tx.
 ```
 
-This can be done through the following method:
-```shell
-namadac transfer \
---source my-multisig-alias \
---target some-established-account-alias \
---token NAM \
---amount 100 \
---signing-keys my-key1 \
---dump-tx \
---output-folder-path tx_dumps
-```
+### Sign the transaction with two of the three Keys
+This command will sign the transaction with Alice's key. Afterwards, repeat the command using Bob's key.
 
-What this means is that the transaction has been constructed, and is ready to be signed. 
-
-Within the specified folder, a `.tx` file will be created. This file contains the hexadecimal representation of the transaction bytes. This file can be used to sign the transaction.
-
-### Signing the transaction
-
-The next step is to sign the transaction. `my-key1` can sign the transaction through the following method:
-```shell
+```bash copy
+cd tx_dumps
 namadac sign-tx \
---tx-path "<path-to-file>" \
---signing-keys my-key1 \
---owner my-multisig-alias
+  --tx-path FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3.tx \
+  --signing-keys alice \
+  --owner abc-multisig
 ```
-
-<Callout type="info">
-Note that any number of `--signing-keys` could sign the transaction in this stage. This will produce multiple signatures, which can be used to submit the transaction.
-</Callout>
-
-
-Which means that the signature has been saved to this file (located in the current directory). 
-
-Let's save this as an alias:
-```shell
-export SIGNATURE_ONE="offline_signature_FB7246E3FC43F59D8AEEC234EBFDB9DF1AC9BB7B14E536D05A7E2617CA41D4CD_0.tx"
+You should have created two new files, one with Alice's signature and one with Bob's:
+```bash copy
+# contents of tx_dumps directory
+FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3.tx
+offline_signature_FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3_tpknam1qpnpmq2mpxaag9e0xcczgc0w66pzaxvpnhysjsm8h5tgmajgvunwck67w5j.tx
+offline_signature_FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3_tpknam1qqjnwcwpjy09ty4v0z6jwpkr04m3q2h0dgr6j62dfs4g6q6l4dk5yy5we05.tx
 ```
+To make things easier in the next step, we'll save these filenames to the shell variables `TX`, `SIG1` and `SIG2`.
 
-Ensure to sign the transaction with at least k-of-n keys, where k is the minimum number of signatures required to submit a transaction, and n is the total number of keys. In this example, k=2 and n=2.
+### Submit transaction on-chain
+Since we have enough signatures to meet the threshold of this account, we can submit the transaction. Note that we need to specify
+an account that will pay the transaction fees.
 
-Then let's say this signing produces another signature which we save to the alias `SIGNATURE_TWO`.
-
-### Submitting the transaction
-
-The final step is to submit the transaction. This can be done through the following method:
-```shell
+```bash copy
 namadac tx \
---tx-path "tx_dumps/a45ef98a817290d6fc0efbd480bf66647ea8061aee1628ce09b4af4f4eeed1c2.tx" \
---signatures $SIGNATURE_ONE $SIGNATURE_TWO \
---owner my-multisig-alias \
---gas-payer my-key1
+  --tx-path $TX
+  --signatures $SIG1 $SIG2
+  --owner abc-multisig
+  --gas-payer alice
 ```
-
 <Callout type="info">
-Note the lack of commas used in the `--signatures` argument. This is because the argument is a list of files, not a list of signatures.
-Also note the `tx_dumps` folder. This is the folder where the transaction was dumped to as specified in `--output-folder-path` in the previous step.
+Note the lack of commas used in the `--signatures` argument.
 </Callout>
 
-## Changing the multisig threshold
-It is possible to change the multisig threshold of an account. This can be done through the following method:
+</Steps>
+
+
+## Changing the multisig threshold or associated keys
+It is possible to change the multisig threshold of an existing account. This can be done by submitting a valid `update-account` transaction.  
+
+For example, to change the threshold on our multisig to 1:
 ```shell
 namadac update-account \
---address my-multisig-address \
+--address abc-multisig \
+--public-keys alice,bob,charlie \
 --threshold 1 \
---signing-keys my-key1,my-key2
+--signing-keys alice,bob
 ```
+<Callout type="info">
+Note: you must include both the threshold and the list of public keys to be assosicated with this account, even if there is no change to one of those values.
+</Callout>
 
+<Callout type="info" emoji="💡">
+Updating an account's threshold or public keys requires submitting a valid transaction meeting the existing requirements -- the `update-account`
+transaction is no different from any other transaction in that regard. Therefore, you may need to follow the steps described in the previous section to first dump the `update-account` transaction
+to a file and collect the required signatures.
+</Callout>
+
+### Querying the threshold and public keys of an account
 One can check that the threshold has been updated correctly by running:
 ```shell
 namadac query-account \
---owner my-multisig-address
+--owner abc-multisig
 ```
-Which will yield the threshold of 1, together with the two public keys.
-
-## Changing the public keys of a multisig account
-It is possible to change the public keys of a multisig account. This can be done through the following method:
-```shell
-namadac update-account \
---address my-multisig-address \
---public-keys my-key3,my-key4,my-key5 \
---signing-keys my-key1,my-key2
-```
-
-Which will change the public keys of the multisig account from `my-key1` and `my-key2` to the keys `my-key3`, `my-key4` and `my-key5` (assuming they exist in the wallet).
-
-The public-keys provided to the argument `--public-keys` will become the new signers of the multisig. The list must be a list of public keys, separated by commas, and without spaces. There must be at least 1 public key in the list, and the length of list must be at least the threshold of the multisig account.
+Which will list the threshold and all associated public keys of an account.
 
 ## A video tutorial
 
-Skip all the boring reading and watch a video tutorial instead:
+Skip all the boring reading and watch a video tutorial instead!
 
 <iframe src="https://player.vimeo.com/video/873749851?h=ee68c142e2&title=0&byline=0&portrait=0" width="640" height="416" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
