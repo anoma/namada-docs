@@ -1,0 +1,70 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Shielded IBC
+
+You can send assets to another IBC compliant chain, such as a Cosmos SDK chain or another Namada chain, using the
+`ibc-transfer` command in `namadac`.
+
+This section covers sending assets to and from a shielded ( `znam` ) address.
+
+## Prerequisites
+
+- An active IBC connection has been created and maintained between the two chains by operators running relayer 
+software such as [Hermes](https://github.com/heliaxdev/hermes). 
+- You will need to know the corresponding channel id
+
+## IBC transfer to a shielded address
+{/* TODO: instructions are out of date? */}
+
+Before sending your IBC transfer, you will need to generate a MASP
+
+Before `namadac ibc-transfer`, you need to generate a proof of the following IBC transfer for the shielding transfer
+ to the destination Namada. The command `namadac ibc-gen-shielded` generates the proof and outputs a file including 
+ required data. In this case, Chain B is the destination chain.
+```bash copy
+namadac --base-dir ${BASE_DIR_B} ibc-gen-shielded \
+  --output-folder-path ${OUTPUT_PATH} \
+  --target ${payment_addr_b} \
+  --token apfel \
+  --amount 100 \
+  --port-id transfer \
+  --channel-id channel-0 \
+  --node ${LEDGER_ADDRESS_B}
+```
+Then, you can send the token from the source chain by setting the proof in the ICS-20 packet's memo field. 
+The following example is to send tokens from the source Namada (Chain A). The `${memo_path}` should be the file 
+path created by `namadac ibc-gen-shielded` on the destination chain.
+```bash copy
+namadac --base-dir ${BASE_DIR_A} ibc-transfer \
+  --source ${spending_key_a} \
+  --receiver ${payment_addr_b} \
+  --token apfel \
+  --amount 100 \
+  --channel-id channel-0 \
+  --memo-path ${memo_path} \
+  --node ${LEDGER_ADDRESS_A}
+```
+
+When the source chain is a Cosmos-SDK based chain, the memo should be set as string with `--memo` option.
+```bash copy
+memo=$(cat ${memo_path})
+gaiad tx ibc-transfer transfer \
+  ${CHANNEL_ID} \
+  ${RECEIVER_PAYMENT_ADDRESS} \
+  ${AMOUNT}${IBC_TOKEN_ADDRESS} \
+  --from ${COSMOS_ALIAS} \
+  --memo ${memo} \
+  --node ${COSMOS_RPC_ENDPOINT} \
+  --fees 5000uatom
+```
+
+You can do unshielding transfers over IBC without generating a proof.
+```bash copy
+namadac --base-dir ${BASE_DIR_A} ibc-transfer \
+  --source ${spending_key_a} \
+  --receiver ${RECEIVER_RAW_ADDRESS} \
+  --token nam \
+  --amount 100 \
+  --channel-id channel-0 \
+  --node ${LEDGER_ADDRESS_A}
+```

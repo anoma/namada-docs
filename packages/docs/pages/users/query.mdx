@@ -1,51 +1,53 @@
-# **Query**
+# Querying Overview
 
-This is the complete query related to Namada
+Querying a Namada chain is done using the client `namadac`.  
 
-Including: account,pgf,proposal,proposal-result,proposal-votes
+This section details several common queries; see all available commands with `namadac --help`.
 
-## query-account
+#### query-account
 
 ```txt
 namadac query-account --owner <WALLET>
 ```
 
-Return the results will return the `Threshold` and `Public` key of the address.
+Returns the `Threshold` and `Public` key(s) of an established account.
 
-## query-pgf
+#### query-pgf
 
 ```
 namadac query-pgf
 ```
 
-Return the results will return the `Pgf stewards , Reward distribution`, `Pgf fundings` key of the address.
+Returns the list of PGF Stewards, their reward distribution, and active PGF streaming payments.
 
-## query-proposal
+#### query-proposal
 
 ```
 namadac query-proposal --proposal-id <ID>
 ```
 
-Return the results will return the PGF type of the proposal, `author`, `content`, `StartEpoch`, `EndEpoch`, `GraceEpoch`, `Status`
+Returns info on a given proposal, including its type, author, content, StartEpoch, EndEpoch, GraceEpoch, and Status.
 
-## query-proposal-result
+#### query-proposal-result
 
 ```
 namadac query-proposal-result --proposal-id <ID>
 ```
 
-Return the results will return the outcome of the proposal, whether it's `Passed` or `Rejected`, including the total number of votes for `yay`, `nay`, `abstain`, and the threshold (fraction) of the total voting power needed to tally.
+Returns the outcome of a given proposal, including whether it's Passed/Rejected, the total number of votes for yay/nay/abstain, and the threshold (fraction) of the total voting power needed to tally.
 
-## query-proposal-votes
+#### query-proposal-votes
 
 ```
 namadac query-proposal-votes --proposal-id <ID>
 ```
 
-Return the results of all wallets that have voted `yay` or `nay` on the proposal
+Returns the results of all wallets that have voted `yay` or `nay` on the proposal
 
 ```
 namadac query-proposal-votes --proposal-id <ID> --voter <WALLET>
 ```
 
-Return the result of a specific wallet that has voted on a specific proposal
+Returns the result of a specific wallet that has voted on a specific proposal
+
+{/* TODO: add more queries*/}

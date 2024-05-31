@@ -1,31 +1,35 @@
+import { Steps } from 'nextra-theme-docs'
 import { Callout } from 'nextra-theme-docs'
 
-# Shielded Transfers
+# Shielding Assets
 
-Once the user has a shielded balance, it can be transferred to a another shielded address. This is known as a __shielded transfer__.
+You can shield assets in the MASP by making a transfer from a transparent address to a shielded address. This is known
+as a __shielding transfer__.  
 
-## Making a shielded transfer
+Assets can also be sent directly to a shielded address through IBC -- see the section on [Shielded IBC](../../users/ibc/shielded-ibc.mdx) for details.
 
-Before making a shielded transfer, it is recommended to first sync the local shielded context:
-```bash copy
-namadac shielded-sync --spending-keys <your-spend-key>
-```
+## Making a shielding transfer
 
-To make a shielded transfer, you must possess the relevant spending key. See the [glossary](./glossary.mdx) for
-an explanation on the types of keys and addresses used with the MASP.
+To conduct a shielding transfer, the user must first be in possession of a transparent account with some token balance.
 
+<Steps>
+
+### Generate a spending key
+See [Shielded Key Management](./masp-keys.mdx) for details on how to do this.
+
+### Derive a new shielded address (aka: payment address)
+You can (and should) derive multiple shielded addresses for the same spending key.
+
+### Send your shielding transfer
 ```bash copy
 namadac transfer \
-  --source <your-spend-key> \
-  --target <destination-transparent-address> \
+  --source <your-transparent-address> \
+  --target <your-shielded-address> \
   --token <token-address> \
-  --amount <amount-to-unshield> \
-  --gas-payer <your-implicit-account>
+  --amount <amount-to-shield>
 ```
-<Callout>
-Note: you must provide an implicit account you control containing funds for transcation fees.
-</Callout>
 
+</Steps>
 
 ### Viewing your balance
 To view the up-to-date balance of your spending key (or viewing key), you must first run the `shielded-sync` command to
