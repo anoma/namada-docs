@@ -1,0 +1,30 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Unshielding Assets
+
+You can unshield assets in the MASP by making a transfer from a shielded address to a transparent address. This is known as an __unshielding transfer__.
+
+Assets can also be sent directly from a shielded address through IBC -- see the section on Shielded IBC for details.
+
+## Making an unshielding transfer
+
+Before making an unshielding transfer, it is recommended to first sync the local shielded context:
+```bash copy
+namadac shielded-sync --spending-keys <your-spend-key>
+```
+
+To make an unshielding transfer, you must possess the relevant spending key. See the [glossary](./glossary.mdx) for
+an explanation on the types of keys and addresses used with the MASP.
+
+```bash copy
+namadac transfer \
+  --source <your-spend-key> \
+  --target <destination-transparent-address> \
+  --token <token-address> \
+  --amount <amount-to-unshield> \
+  --gas-payer <your-implicit-account>
+```
+<Callout>
+Note: you must provide an implicit account you control containing funds for transcation fees. This does not have to be
+the same as the target.
+</Callout>

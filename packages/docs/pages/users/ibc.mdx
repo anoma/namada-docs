@@ -1,120 +1,18 @@
 import { Callout } from 'nextra-theme-docs'
 
-# Transferring assets over IBC
+# Transferring Assets over IBC
 
-It is possible to make ibc transfers using the Namada cli with the command `namadac ibc-transfer`. The assumed pre-requisites are that a channel has been created and Hermes is running with the proper config on two nodes.
+Namada features full IBC protocol support, which means non-native assets can be brought over from any IBC compatible
+chain (such as Cosmos SDK chains). As a result, users can enjoy the combined benefits of another chain's ecosystem, assets
+and features with Namada's [MASP](./shielded-accounts/).
 
-In order to conduct an IBC transfer using Namada's `ibc-transfer` command, we will need to know the `base-dir` and `node` of each instance (and other transfer parameters).
-`base-dir` is the base directory of each node, see [base-dir](../operators/ledger/base-directory.mdx) for more information.
-`node` is the `rpc_addr` of the relayer.
-You can run
-```shell
-grep "rpc_addr" ${HERMES_CONFIG}
-```
-to find the address.
+The assumed prerequisites are that an active IBC connection has been created and maintained between the two chains by
+operators running relayer software such as [Hermes](https://github.com/heliaxdev/hermes).  
 
-<Callout>
- **For the local node ONLY**
+This section will be focused on IBC transfers from a user perspective. For info on operating an IBC relayer, see 
+[this](../operators/ibc.mdx) page in the Operators section.
 
-To find your ledger address for Chain A, you can run the following command
-```bash copy
-export BASE_DIR_A="${HERMES}/data/namada-a/.namada"
-export LEDGER_ADDRESS_A="$(grep "rpc_address" ${BASE_DIR_A}/${CHAIN_A_ID}/setup/validator-0/.namada/${CHAIN_A_ID}/config.toml)"
-```
-</Callout>
-
-The [channel ID](../operators/ibc.mdx) for this chain will depend on the order in which one created the channel. Since we have only opened one channel, the `channel-id` is `channel-0`, but as more are created, these increase by index incremented by 1. The channel-id should be communicated by the relayer.
-
-Assuming that the open channel is `channel-0`, you can save it in an environment variable by running
-```bash copy
-export CHANNEL_ID="channel-0"
-```
-
-The inter-blockchain transfers from Chain A can be achieved by
-```bash copy
-namadac --base-dir ${BASE_DIR_A}
-    ibc-transfer \
-        --amount ${AMOUNT} \
-        --source ${SOURCE_ALIAS} \
-        --receiver ${RECEIVER_RAW_ADDRESS} \
-        --token ${TOKEN_ALIAS} \
-        --channel-id ${CHANNEL_ID} \
-        --node ${LEDGER_ADDRESS_A}
-```
-Where the above variables in `${VARIABLE}` must be substituted with appropriate values. The raw address of the receiver can be found by `namadaw --base-dir ${BASE_DIR_B} address find --alias ${RECEIVER}`.
-
-E.g.
-```bash copy
-namadac --base-dir ${BASE_DIR_A}
-    ibc-transfer \
-    --amount 100 \
-    --source albert \
-    --receiver atest1d9khqw36g56nqwpkgezrvvejg3p5xv2z8y6nydehxprygvp5g4znj3phxfpyv3pcgcunws2x0wwa76 \
-    --token nam \
-    --channel-id channel-0 \
-    --node http://127.0.0.1:27657
-```
-
-Once the transaction has been submitted, a relayer will need to relay the packet to the other chain. This is done automatically by the relayer running Hermes. If the packet is never successfully relayed, the funds are returned to the sender after a timeout. See more information in the [specs](https://specs.namada.net/modules/ibc).
-
-## Transferring assets back from Cosmos-SDK based chains
-
-When a transfer has been made to a Cosmos-SDK based chain, the ibc transfer is conducted as above. However, when transferring back from the cosmos-based chain, clearly the `namadac ibc-transfer` command will not work. Instead, you want to use [`gaiad`](https://github.com/cosmos/gaia).
-
-```bash
-gaiad tx ibc-transfer transfer transfer ${CHANNEL_ID} ${RECEIVER_RAW_ADDRESS} ${AMOUNT}${IBC_TOKEN_ADDRESS} --from ${COSMOS_ALIAS} --node ${COSMOS_RPC_ENDPOINT} --fees 5000uatom
-```
-
-for example:
-
-```bash copy
-gaiad tx ibc-transfer transfer transfer channel-0 atest1d9khqw368qcyx3jxxu6njs2yxs6y2sjyxdzy2d338pp5yd35g9zrv334gceng3z9gvmryv2pfdddt4 10ibc/281545A262215A2D7041CE1B518DD4754EC7097A1C937BE9D9AB6F1F11B452DD --from my-cosmos-address --node https://rpc.sentry-01.theta-testnet.polypore.xyz:443 --fees 5000uatom
-```
-
-## Shielding transfer
-Before `namadac ibc-transfer`, you need to generate a proof of the following IBC transfer for the shielding transfer to the destination Namada. The command `namadac ibc-gen-shielded` generates the proof and outputs a file including required data. In this case, Chain B is the destination chain.
-```bash copy
-namadac --base-dir ${BASE_DIR_B} ibc-gen-shielded \
-  --output-folder-path ${OUTPUT_PATH} \
-  --target ${payment_addr_b} \
-  --token apfel \
-  --amount 100 \
-  --port-id transfer \
-  --channel-id channel-0 \
-  --node ${LEDGER_ADDRESS_B}
-```
-Then, you can send the token from the source chain by setting the proof in the ICS-20 packet's memo field. The following example is to send tokens from the source Namada (Chain A). The `${memo_path}` should be the file path created by `namadac ibc-gen-shielded` on the destination chain.
-```bash copy
-namadac --base-dir ${BASE_DIR_A} ibc-transfer \
-  --source ${spending_key_a} \
-  --receiver ${payment_addr_b} \
-  --token apfel \
-  --amount 100 \
-  --channel-id channel-0 \
-  --memo-path ${memo_path} \
-  --node ${LEDGER_ADDRESS_A}
-```
-
-When the source chain is a Cosmos-SDK based chain, the memo should be set as string with `--memo` option.
-```bash copy
-memo=$(cat ${memo_path})
-gaiad tx ibc-transfer transfer \
-  ${CHANNEL_ID} \
-  ${RECEIVER_PAYMENT_ADDRESS} \
-  ${AMOUNT}${IBC_TOKEN_ADDRESS} \
-  --from ${COSMOS_ALIAS} \
-  --memo ${memo} \
-  --node ${COSMOS_RPC_ENDPOINT} \
-  --fees 5000uatom
-```
-
-You can do unshielding transfers over IBC without generating a proof.
-```bash copy
-namadac --base-dir ${BASE_DIR_A} ibc-transfer \
-  --source ${spending_key_a} \
-  --receiver ${RECEIVER_RAW_ADDRESS} \
-  --token nam \
-  --amount 100 \
-  --channel-id channel-0 \
-  --node ${LEDGER_ADDRESS_A}
-```
+### Resources
+- [How IBC Works](https://www.ibcprotocol.dev/how-ibc-works): A brief, beginner-friendly overview of IBC
+- [What is IBC?](https://tutorials.cosmos.network/academy/3-ibc/1-what-is-ibc.html): A detailed, developer-focused look
+at the design and functionality of the protocol

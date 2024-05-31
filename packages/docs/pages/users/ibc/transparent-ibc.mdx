@@ -1,0 +1,69 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Transparent IBC
+
+You can send assets to another IBC compliant chain, such as a Cosmos SDK chain or another Namada chain, using the
+`ibc-transfer` command in `namadac`.
+
+This section covers sending assets to and from a transparent ( `tnam` ) address.
+
+## Prerequisites
+
+- An active IBC connection has been created and maintained between the two chains by operators running relayer 
+software such as [Hermes](https://github.com/heliaxdev/hermes). 
+- You will need to know the corresponding channel id
+
+## IBC transfers from Namada to another chain
+
+To make an outgoing IBC transfer from a Namada transparent address:
+```bash copy
+namadac ibc-transfer \
+  --source <your-transparent-address> \
+  --receiver <address-on-receiving-chain> \
+  --token <token-address> \
+  --amount <amount>
+  --channel-id <channel-id>
+```
+Note:
+- the `receiver` address is the address on the receiving chain -- if you are sending to another Namada chain, this would start with `tnam...`, 
+while if you're sending to a Cosmos SDK chain it might start with `cosmos...` or some other prefix.
+- the `channel-id` parameter is a string, for example `channel-27`.
+
+#### Example: Sending NAM to the Cosmos Hub
+```bash copy
+namadac ibc-transfer \
+  --source my-namada-wallet \
+  --receiver cosmos1y3q368qj8d2ged5xcdz96wtt3n5f9zq6ql0p7k \
+  --token nam \
+  --amount 10 \
+  --channel-id channel-42
+```
+
+Once the transaction has been submitted, a relayer will need to relay the packet to the other chain. 
+This is done automatically by the relayer running Hermes. If the packet is never successfully relayed, the funds are 
+returned to the sender after a timeout. See more information in the [specs](https://specs.namada.net/modules/ibc).
+
+## Transferring assets into Namada from Cosmos SDK chains
+
+To transfer assets back from a Cosmos SDK chain, you will post an IBC transaction on that chain using its corresponding
+client software.  
+
+For the Cosmos Hub, you will use [`gaiad`](https://github.com/cosmos/gaia). Other chains will have their own corresponding client;
+however all Cosmos SDK based clients will share approximately the same commands and operation. Consult the documentation
+of the counterparty chain when in doubt.
+
+#### Example: Sending ATOM from the Cosmos Hub to Namada
+
+```bash
+gaiad tx ibc-transfer transfer \
+  transfer \
+  channel-64 \
+  tnam1qzgmrvz0zdjtgdu7yq6hl46wdg7za2t2hg5t85c7 \
+  10000000uatom \
+  --from my-cosmos-wallet \
+  --fees 5000uatom
+```
+<Callout>
+The double use of 'transfer' in the above command is not a typo. The command takes an IBC port name as one of its parameters; 
+and the name of the port happens to be 'transfer'.
+</Callout>

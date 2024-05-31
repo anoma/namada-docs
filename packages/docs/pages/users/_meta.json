@@ -1,11 +1,11 @@
 {
   "wallet": "Using the Namada wallet",
-  "transparent-accounts": "Transparent accounts",
-  "shielded-accounts": "The MASP",
+  "transparent-accounts": "Transparent Accounts",
+  "shielded-accounts": "MASP & Shielded Transfers",
   "fees": "Fees on Namada",
   "delegators": "Bonding and Proof-of-stake",
   "governance": "Governance and Public Goods Funding",
   "public-goods-stewards": "PGF",
   "ibc": "IBC transfers",
-  "query": "Querying the chain"
+  "query": "Querying the Chain"
 }

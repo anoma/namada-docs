@@ -58,6 +58,20 @@ namadaw derive --alias <choose an alias>
 ```
 (You will be prompted to enter the mnemonic).
 
+#### Adding an existing key or address to your wallet
+
+If you know the raw value of a key or address, you can add it to your wallet under an alias so you can more conveniently refer to it later.
+
+```bash copy
+namadaw add --alias <choose-an-alias> --value <transparent-secret-key|transparent-public-key|transparent-address|spending-key|viewing-key|payment-address>
+```
+
+#### Removing a key/address
+You can remove all keys/addresses associated with an alias from your wallet with:
+```bash copy
+namadaw remove --alias <your-alias> --do-it
+```
+
 #### Using the Pregenesis flag
 Normally, you will be expected to join a network before using the wallet; and `namadaw` will throw an error when an existing chain context is not found.
 However, there may be times when you want to use `namadaw` prior to joining a chain -- for example, when generating a keypair to

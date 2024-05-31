@@ -1,8 +1,26 @@
 # The MASP
 
-The multi-asset shielded pool (MASP) is a zero knowledge circuit that allows users to make transfers in a way that does not reveal the sender, receiver, or amount. Each transfer is a zero knowledge proof itself, and is often referred to as a "note". From the users perspective, the construction of these zero knowledge proofs occur behind the scenes.
+Namada affords users data-protection through its multi-asset shielded pool (MASP), which supports shielded transfers with any native or non-native asset.
+The MASP is a zero-knowledge circuit ([zk-SNARK](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)) that 
+extends the [Zcash Sapling circuit](https://raw.githubusercontent.com/zcash/zips/master/protocol/sapling.pdf) to add support for sending arbitrary 
+assets. All assets in the pool share the same anonymity set -- meaning that the more transactions are issued to MASP, the stronger the 
+data protection guarantees for all users.  
 
-The MASP is inspired by the work produced by the Electric Coin Company (ECC) who developed Zcash, and builds on the Sapling Circuit by implementing multi-asset functionality. In addition to the MASP, Namada has also implemented a zero knowledge circuit for rewarding shielded set contributions in a shielded manner. This circuit is called the Convert Circuit (CC for short).
+The MASP allows users to make transfers in a way that does not reveal the sender, receiver, or amount. Each transfer is a zero knowledge proof itself, and is often referred to as a "note". 
+From the users perspective, the construction of these zero knowledge proofs occur behind the scenes.  
 
-More technical details of these circuits can be found in the [specs](https://specs.namada.net) as well as [this blog post](https://namada.net/blog/understanding-the-masp-and-cc-circuits).
+Users of the MASP are [rewarded](./shielded-accounts/shielded-rewards.mdx) for their contributions to the shielded set in the form of native protocol tokens (NAM).
+
+### Inspiration
+
+The MASP is inspired by the work produced by the Electric Coin Company (ECC) who developed Zcash, and builds on the Sapling Circuit by implementing multi-asset functionality. 
+In addition to the MASP, Namada has also implemented a zero knowledge circuit for rewarding shielded set contributions in a shielded manner. 
+This circuit is called the Convert Circuit (CC for short).  
+
+If you are familiar with Zcash, the set of interactions you can execute with Namada's MASP are similar:
+- [Shielding transfers](./shielded-accounts/shielding.mdx): transparent to shielded address
+- [Shielded transfers](./shielded-accounts/shielded-transfers.mdx): shielded to shielded address
+- [Unshielding transfers](./shielded-accounts/unshielding.mdx): shielded to transparent address
+
+More technical details of these circuits can be found in the [specs](https://specs.namada.net/modules/masp) as well as [this blog post](https://namada.net/blog/understanding-the-masp-and-cc-circuits).
 
