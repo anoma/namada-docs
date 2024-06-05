@@ -1,41 +1,36 @@
 import { Callout } from 'nextra-theme-docs'
 
-# The Namada Ledger
+# Running a Full Node
+This section of the guide covers running a full (non-consensus) node. For information on running a validator node, see [Validator setup](./validators/validator-setup.mdx).  
 
-In order to make any interactions with the Namada blockchain through the Namada *client* `namadac`, the ledger must be running. 
+A step-by-step guide to setting up and running a full node can be found [here](./ledger/running-a-full-node.mdx).
 
-To start a local Namada ledger node, one can run:
+## The Namada ledger
+
+By starting the ledger process, your node will attempt to connect with network peers and sync to the latest block:
 
 ```shell copy
-namada ledger
+namada node ledger run
 ```
 
 <Callout>
 **Note**: You must have [joined a network](../networks.mdx) before you start the ledger. It throws an error if no network has been configured.
-
-The node will attempt to connect to the persistent validator nodes and other peers in the network, and synchronize to the latest block.
-
-By default, the ledger will store its configuration and state in your [base directory](./ledger/base-directory.mdx). 
-You can use the `--base-dir` CLI global argument or `BASE_DIR` environment variable to change it.
-
-Assuming you do not have a custom base_dir, you can export the BASE_DIR environment variable as follows:
-
-```shell copy
-export BASE_DIR=$(namadac utils default-base-dir)
-```
 </Callout>
 
-When the ledger is run for the first time, the MASP-parameters will be downloaded. This is essential for producing the zero knowledge proofs required to make shielded transactions.
+### MASP parameters
+When the ledger is run for the first time, the MASP-parameters will be downloaded. This is essential for producing the zero knowledge proofs required to make shielded transactions.  
+
+The default location of the MASP params is `$HOME/.masp-params`.
 
 ### The ledger wasm files
-The ledger will also download the genesis block, which contains the initial state of the blockchain.
+When running the `join-network` command, the ledger will also download the genesis files, which contain the initial state of the blockchain.
 The ledger also needs access to the built WASM files that are used in the genesis block. 
 These files are included in release and shouldn't be modified, otherwise your node will fail with a consensus error on the genesis block. 
 By default, these are expected to be in the `wasm` directory inside the chain directory that's in the base directory, i.e `$BASE_DIR/$CHAIN_ID/wasm`.
 The wasm directory can also be set with the `--wasm-dir` CLI global argument, `NAMADA_WASM_DIR` [environment variable](./ledger/env-vars.mdx) or the configuration file.
 
 ### Ledger configuration
-The ledger configuration is stored in `$BASE_DIR/$CHAIN_ID/config.toml` (with
+The [ledger configuration](./ledger/env-vars.mdx) is stored in `$BASE_DIR/$CHAIN_ID/config.toml` (with
 default `--base-dir`). It is created when you join the network. You can modify
 that file to change the configuration of your node. All values can also be set
 via [environment variables](./ledger/env-vars.mdx). 

@@ -37,8 +37,21 @@ $HOME/Library/Application\ Support/Namada
 Within these folders, you should see the following files and folders:
 
 ```bash copy
-global-config.toml
-<some-chain-id>/
-<some-chain-id>.toml
-pre-genesis # If you are a pre-genesis validator
+.
+└── $BASE_DIR/
+    ├── global-config.toml
+    └── $CHAIN_ID/
+        ├── balances.toml
+        ├── chain.toml
+        ├── cometbft/
+        ├── config.toml
+        ├── db/
+        ├── parameters.toml
+        ├── tokens.toml
+        ├── transactions.toml
+        ├── tx_wasm_cache/
+        ├── validity_predicates.toml
+        ├── vp_wasm_cache/
+        ├── wallet.toml
+        └── wasm/
 ```

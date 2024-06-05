@@ -1,16 +1,41 @@
 import { Callout } from 'nextra-theme-docs'
+import { Steps } from 'nextra-theme-docs'
 
 # Full Node Setup
-Before starting a full node, the unique identifier of the `chain-id` will be needed, which will be released as soon as the genesis file is ready. 
+This section details the setup procedure for a full node. If you intend to run a validator node, please see the [Validator setup](../validators/validator-setup.mdx) guide instead.
 
+### Prerequisites
+- A machine that meets the [requirements](../hardware.mdx) for a full node
+- An associated public IPv4 address with port 26656 reachable from anywhere for P2P connections 
+- You have already [installed](../../introduction/install.mdx) Namada and its prerequisites
+- You know the unique `chain-id` identifier of the network you wish to join. The chain-id is publicly released once the genesis files have been prepared
+
+<Steps>
 ### Join the network
-Once the `chain-id` has been distributed, it is possible to join the network with the `CHAIN_ID`:
+Once the `chain-id` has been distributed, it is possible to [join the network](../networks.mdx) with the `CHAIN_ID`. This step will download the `.tar.gz` archive 
+containing the genesis files for the chain and initialize the node store in your [`BASE_DIR`](../ledger/base-directory.mdx).
 ```bash copy
   export CHAIN_ID="namada-mainnet" ## (replace with the actual chain-id)
-  NAMADA_NETWORK_CONFIGS_SERVER="https://github.com/anoma/namada-shielded-expedition/releases/download/shielded-expedition.88f17d1d14" namada client utils join-network --chain-id $CHAIN_ID
-  ```
+  namada client utils join-network --chain-id $CHAIN_ID --add-persistent-peers
+```
+<Callout>
+You can specify the location from which to download the genesis `.tar.gz` by exporting the environment variable `NAMADA_NETWORK_CONFIGS_SERVER` prior to running the `join-network` command. 
+This is useful for joining a community-run or local testnet.  
+
+By default, `join-network` will attempt to download the genesis files from `https://github.com/heliaxdev/anoma-network-config/releases/download/$CHAIN_ID`.
+</Callout>
+
+
+### Check/Update persistent peers
+To sync block data, your node will need to connect with existing peers on the network. Peer addresses can be provided in the node's [configuration](./env-vars.mdx) in 
+the field `persistent_peers`.  
+
+Your `persistent_peers` entry will need to contain at least one peer which is active and accepting incoming connections (the more, the better). If you used the 
+`--add-persistent-peers` flag during the join-network step, your persistent peers will be pre-populated with the addresses of the genesis validators. However, if you're [having trouble](../troubleshooting.mdx) 
+syncing, you may wish to check the Discord server for an updated list.
 
 ### Start your node and sync
+This command will start syncing your node with the network (an environment variable is being used here to set the [logging configuration](./logging-config.mdx)):
 ```bash copy
   CMT_LOG_LEVEL=p2p:none,pex:error namada node ledger run
 ```
@@ -25,18 +50,39 @@ NAMADA_LOG=info CMT_LOG_LEVEL=p2p:none,pex:error NAMADA_CMT_STDOUT=true namada n
 tail -f -n 20 logs-${TIMESTAMP}.txt ## (in another shell)
 ```
 
-### Running namada as a systemd service
+### Done!
+You should soon see messages similar to the following in your logs to indicate that your node has begun syncing blocks:
+```bash copy
+INFO namada_node::shell: Committed block hash: 0c56ebc5ae17ef503c675ad8a9b255e69258e7e4915f91e161f98d3b0040a0c1, height: 2650
+committed state                              module=state height=2650 num_txs=0 app_hash=0C56EBC5AE17EF503C675AD8A9B255E69258E7E4915F91E161F98D3B0040A0C1
+indexed block exents                         module=txindex height=2650
+```
+
+You can also easily check your node's last committed block with the following command:
+```
+# namadac block
+Last committed block height: 8612, time: 2024-06-04T18:17:06.136117438+00:00
+```
+By comparing it with the current height of the chain from a public source (such as a block explorer), you can monitor how your node is progressing.  
+
+If your node does not show indications of syncing, proceed to the [troubleshooting](../troubleshooting.mdx) section.
+</Steps>
+## Running the `namada ledger` as a systemd service
 <Callout type="info">
 The below script is a community contribution by Encipher88, and currently only works on Ubuntu machines.
 It has served useful for many validators.
 </Callout>
+
+For operators using Ubuntu, it is common to use the `systemd` service manager to run the ledger process in the background. Advantages of this method 
+include automatic restart upon crash and integrated logging.  
+
 The below assumes you have installed namada from source, with `make install`. It at least assumes the respective binaries are in `/usr/local/bin/`.
 
 ```bash copy
 which namada ## (should return /usr/local/bin/namada)
 ```
 
-The below makes a service file for systemd, which will run namada as a service. This is useful for running a node in the background, and also for auto-restarting the node if it crashes.
+We define a new process as a systemd service by creating a `unit file` in `/etc/systemd/system/`:
 ```bash copy
 sudo tee /etc/systemd/system/namadad.service > /dev/null <<EOF
 [Unit]
@@ -57,7 +103,7 @@ LimitNOFILE=65535
 WantedBy=multi-user.target
 EOF
 ```
-Enable the service with the below commands:
+Enable the service with the below commands. This sets the service to start automatically on system reboot.
 ```bash copy
 sudo systemctl daemon-reload
 sudo systemctl enable namadad
@@ -80,5 +126,3 @@ sudo systemctl restart namadad
 ```bash copy
 sudo journalctl -u namadad -f -o cat
 ```
-
-

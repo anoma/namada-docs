@@ -1,19 +1,36 @@
 # Validators on Namada
 
-Namada is a proof-of-stake blockchain, which means that the validators are the ones who are responsible for both voting on state-transitions and proposing new blocks.
+Namada is a proof-of-stake blockchain, which means that the validators are the ones who are responsible for both voting on state-transitions and proposing new blocks.  
 
-### What is a genesis validator? How does it differ from a post-genesis Validator?
+Validating on Namada is permissionless; the only requirement is that a validator has sufficient [stake](./validators/staking.mdx) bonded to qualify for the active 
+consensus set.  
 
-A (pre-)genesis validator is a validator who is proposed to be a validator in the genesis block of the blockchain. If the genesis file is accepted by the network, then the (pre-)genesis validators are able to conduct validating activities on the blockchain, with the stake specified in the genesis file. These validators are setup with the correct consensus keys, which must match those specified in the genesis file.
+Active validators not meeting a liveness threshold (by signing a specified percentage of recent blocks) are subject to [jailing](./validators/jailing.mdx) for 
+inactivity. Validators who double-sign are subject to [cubic slashing](./validators/cubic-pos.mdx).
 
-A post-genesis validator, on the other hand, is a validating account which was created sometime after the genesis block. These accounts are initiated by the `init-validator` command.
+### Pre-genesis vs Post-genesis validators
+The procedure for initializing a validator differs on whether it's done before or after the genesis block of the network.
+- A pre-genesis validator is a validator who is proposed to be a validator in the genesis block of the blockchain. If the genesis file is accepted by the network, 
+then the pre-genesis validators are able to conduct validating activities on the blockchain, with the stake specified in the genesis file, 
+from the very first block. These validators are setup with the correct consensus keys, which must match those specified in the genesis file. The procedure for a 
+pre-genesis is slightly more involved because it involves generating and signing a pre-genesis transaction and coordinating offchain with the community for inclusion in the 
+proposed genesis block.
+
+- A post-genesis validator, on the other hand, is a validating account which was created sometime after the genesis block. The procedure for initializing a 
+post-genesis validator is to begin by [syncing a full node](./ledger/running-a-full-node.mdx) and then instantiate a validator account with the 
+`init-validator` command.
 
 ### How do I become a validator?
 
-#### Pre-requisites
-Validators require stake in the form of NAM in order to participate in the consensus process. The amount of stake required is specified in the genesis file. In order to become a validator, you must have at least the minimum amount of stake required.
+#### Hardware requirements
+A validator node must meet the [minimum hardware requirements](./hardware.mdx), which may be higher than those of a full node.
 
-In addition, the validator node must meet the [minimum hardware requirements](./hardware.mdx).
+#### Stake requirements
+Validators require stake in the form of NAM in order to participate in the consensus process. There are two stake thresholds to keep in mind: 
+- There are a limited number of validating slots in the active consensus set, as specified by the genesis file parameter `max_validator_slots`. For example, if
+`max_validator_slots = 100`, then you must rank within the top 100 active validators by stake to participate in consensus.
+- Additionally, a minimum stake amount is specified by the genesis file parameter `validator_stake_threshold`. You must have at least this amount of stake to 
+participate in consensus, regardless of whether the active set is full.
 
 #### Steps
 
@@ -22,9 +39,10 @@ See these steps for [setting up a genesis validator](./networks/genesis-flow/par
 See these steps for [setting up a post-genesis validator](./validators/validator-setup.mdx).
 
 
-## Outline
+## Contents
 The validator docs describe the process and actions available to validators on the Namada blockchain. The following is a list of the topics covered in the validator docs:
 - [Validator setup](./validators/validator-setup.mdx)
 - [Staking](./validators/staking.mdx)
 - [Validator actions](./validators/validator-actions.mdx)
 - [Jailing](./validators/jailing.mdx)
+- [Cubic proof of stake](./validators/cubic-pos.mdx)

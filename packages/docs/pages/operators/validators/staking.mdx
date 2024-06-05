@@ -1,8 +1,14 @@
 import { Callout } from "nextra-theme-docs";
 
-# Bonding (Staking)
+# Staking (Bonding)
 
-We discuss two types of bonding: 
+For further details on how to bond, unbond and claim rewards, see the [Bonding and Proof-of-stake](../../users/delegators.mdx) 
+page in the Users section.  
+
+A validator typically has some combination of self-bonded stake and stake delegated to it by other token holders. The validator and delegators share the reward and 
+risk of slashing impact with each other.
+
+We discuss two types of bonding here: 
 1. [Non-self bonding](#non-self-bonding-delegating) (referred to as delegating in many other ecosystems, but not to be confused with governance delegation on Namada)
 2. [Self-bonding](#self-bonding)
 
@@ -109,6 +115,16 @@ namada client withdraw \
 ```
 
 Upon success, the withdrawn tokens will be credited back `aliace`'s account and debited from the PoS system.
+
+## Staking rewards
+
+Validators who are participating in the active consensus set generate staking rewards for proposing blocks and voting on finalizing blocks. Rewards are funded through 
+the continuous minting of new tokens (inflation). The amount of rewards paid out to validators is proportional to their 'voting power' (percentage of total bonded tokens staked with them) 
+and the chain's maximum annual inflation rate.  
+
+Validators pay out rewards to their delegators, minus the validator's commission rate.  
+
+The rewards mechanism provides economic incentive for both validators and delegators in securing the chain.
 
 ### Claiming rewards
 
