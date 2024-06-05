@@ -3,7 +3,6 @@ The transaction module exposes various modules (objects) to construct transactio
 
 ```rust
 pub mod account; // contains functions to create transactions for account module
-pub mod bridge; // contains functions to create transactions for bridge module
 pub mod governance; // contains functions to create transactions for governance module
 pub mod ibc; // contains functions to create transactions for ibc module
 pub mod pgf; // contains functions to create transactions for pgf module
@@ -56,20 +55,6 @@ impl InitAccount {
 ```
 
 A public key can be constructed from a string using the `::from_str()` method. The `vp_code_hash` is a hash that is found under the `wasm` folder.
-
-### Bridge
-
-```rust
-pub use namada_sdk::eth_bridge_pool::{GasFee, TransferToEthereum};
-pub struct BridgeTransfer(Tx);
-impl BridgeTransfer {
-    pub fn new(
-        transfer: TransferToEthereum,
-        gas_fee: GasFee,
-        args: GlobalArgs,
-    ) -> Self {...}
-}
-```
 
 ### Governance
 
