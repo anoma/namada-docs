@@ -16,13 +16,14 @@ Transfers to/from a `znam...` address (that is, to/from the [MASP](../shielded-a
 For help creating a new account, see the sections on [Generating an implicit account](../transparent-accounts/implicit-accounts.mdx) or [Using the file system wallet](../../users/wallet/file-system-wallet.mdx).
 </Callout>
 
-To submit a regular token transfer from your account to the `validator-1` address:
+To send a transparent transfer -- that is, a transfer from one transparent address to another -- we use the `transparent-transfer` command. Transparent transfers are so 
+named because all associated info (including sender, receiver, asset and amount) is publicly visible on-chain.
 
 ```shell copy
-namada client transfer \
-  --source <your address or alias> \
-  --target <destination address or alias> \
-  --token <token alias or address> \
+namada client transparent-transfer \
+  --source $SOURCE \
+  --target $TARGET \
+  --token $TOKEN \
   --amount 10
 ```
 
@@ -33,7 +34,7 @@ This command will attempt to find and use the key of the source address to sign 
 To query token balances for a specific token and/or owner:
 
 ```shell copy
-namada client balance --token <token alias or address> --owner <account alias or address>
+namada client balance --token $TOKEN --owner $ACCOUNT
 ```
 
 <Callout type="info">

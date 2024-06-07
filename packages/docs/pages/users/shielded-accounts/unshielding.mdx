@@ -10,21 +10,23 @@ Assets can also be sent directly from a shielded address through IBC -- see the 
 
 Before making an unshielding transfer, it is recommended to first sync the local shielded context:
 ```bash copy
-namadac shielded-sync --spending-keys <your-spend-key>
+namadac shielded-sync --spending-keys $SPENDING_KEY
 ```
 
 To make an unshielding transfer, you must possess the relevant spending key. See the [glossary](./glossary.mdx) for
 an explanation on the types of keys and addresses used with the MASP.
 
+Use the `unshield` command to make an unshielding transfer to a target transparent (`tnam`) address by providing the spending key associated with a source shielded (`znam`) address:
+
 ```bash copy
-namadac transfer \
-  --source <your-spend-key> \
-  --target <destination-transparent-address> \
-  --token <token-address> \
-  --amount <amount-to-unshield> \
-  --gas-payer <your-implicit-account>
+namadac unshield \
+  --source $SPENDING_KEY \
+  --target $TRANSPARENT_ACCOUNT \
+  --token $TOKEN \
+  --amount $AMOUNT \
+  --gas-payer $IMPLICIT_ACCOUNT
 ```
 <Callout>
-Note: you must provide an implicit account you control containing funds for transcation fees. This does not have to be
+Note: you must provide an implicit account which you control containing funds for transcation fees. This does not have to be
 the same as the target.
 </Callout>
