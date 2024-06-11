@@ -2,28 +2,30 @@ import { Callout } from 'nextra-theme-docs'
 
 # Shielded Transfers
 
-Once the user has a shielded balance, it can be transferred to a another shielded address. This is known as a __shielded transfer__.
+Once the user has a [shielded balance](./shielding.mdx), it can be transferred to a another shielded address. This is known as a __shielded transfer__.
 
 ## Making a shielded transfer
 
 Before making a shielded transfer, it is recommended to first sync the local shielded context:
 ```bash copy
-namadac shielded-sync --spending-keys <your-spend-key>
+namadac shielded-sync --spending-keys $SPENDING_KEY
 ```
 
 To make a shielded transfer, you must possess the relevant spending key. See the [glossary](./glossary.mdx) for
 an explanation on the types of keys and addresses used with the MASP.
 
+Use the `transfer` command to make a shielded transfer to a target shielded (`znam`) address by providing the spending key associated with the source shielded (`znam`) address:
+
 ```bash copy
 namadac transfer \
-  --source <your-spend-key> \
-  --target <destination-transparent-address> \
-  --token <token-address> \
-  --amount <amount-to-unshield> \
-  --gas-payer <your-implicit-account>
+  --source $SPENDING_KEY \
+  --target $PAYMENT_ADDRESS \
+  --token $TOKEN \
+  --amount $AMOUNT \
+  --gas-payer $IMPLICIT_ACCOUNT
 ```
 <Callout>
-Note: you must provide an implicit account you control containing funds for transcation fees.
+Note: you must provide an implicit account which you control containing funds for transcation fees.
 </Callout>
 
 
@@ -31,11 +33,11 @@ Note: you must provide an implicit account you control containing funds for tran
 To view the up-to-date balance of your spending key (or viewing key), you must first run the `shielded-sync` command to
 sync the local shielded context with any MASP notes owned by your spending/viewing key:
 ```bash copy
-namadac shielded-sync --spending-keys <your-spend-key>
+namadac shielded-sync --spending-keys $SPENDING_KEY
 ```
 or
 ```bash copy
-namadac shielded-sync --viewing-keys <your-viewing-key>
+namadac shielded-sync --viewing-keys $VIEWING_KEY
 ```
 
 <Callout>
@@ -45,7 +47,8 @@ The first time you wish to check the balance of a spending/viewing key, you must
 
 After the sync has completed, check your balance with:
 ```bash copy
-namadac balance --owner <your-spend-or-viewing-key> --token <token address>
+namadac balance --owner $SPENDING_KEY --token $TOKEN
 ```
+(A viewing key can also be provided here instead of `$SPENDING_KEY`)  
 
 This will display the combined balance of all shielded addresses associated with that spending/viewing key.

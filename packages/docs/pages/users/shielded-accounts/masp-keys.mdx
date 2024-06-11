@@ -4,13 +4,15 @@ import { Callout } from 'nextra-theme-docs'
 
 This section will detail the commands to generate spending keys, viewing keys and payment addresses with `namadaw`.  
 
-For an explanation of the different types of keys and addresses, see the [glossay](./glossary.mdx).
+For an explanation of the different types of keys and addresses, see the [glossary](./glossary.mdx).
 
 ### Generating a spending key and viewing key
 
-Create a new spending key with:
+The first step before interacting with the MASP is to create a spending key. A spending key is loosely analogous to the private key you may be familiar with 
+from [transparent accounts](../transparent-accounts.mdx), in the sense that it grants one the authority to spend tokens in the associated account (and must always be 
+kept secret). Create a new spending key with:
 ```bash copy
-namadaw gen --shielded --alias <your-spending-key-alias>
+namadaw gen --shielded --alias $SPENDING_KEY_ALIAS
 ```
 <Callout>
 This command will also generate a corresponding Viewing Key sharing
@@ -36,9 +38,10 @@ namadaw list --shielded --unsafe-show-secret --decrypt
 
 ### Generating a payment address
 
-Once you have created a spending key, it can be used to derive a payment address:
+Once you have created a spending key, it can be used to derive a payment address. A payment address begins with `znam` and is a public-facing address which you can 
+share when you wish to receive tokens.
 ```bash copy
-namadaw gen-payment-addr --alias <your-payment-address-alias> --key <your-spend-key-alias>
+namadaw gen-payment-addr --alias $PAYMENT_ADDRESS_ALIAS --key $SPENDING_KEY_ALIAS
 ```
 <Callout>
 It is possible (and recommended) to generate multiple payment addresses from the same spending key.
@@ -54,7 +57,7 @@ namadaw list --shielded
 
 You can recover an existing spending key from your mnemonic and add it to your wallet with:
 ```bash copy
-namadaw derive --alias <your-spend-key-alias> --shielded
+namadaw derive --alias $SPENDING_KEY_ALIAS --shielded
 ```
 
 ### Adding an existing key or payment address to your wallet
@@ -62,11 +65,12 @@ namadaw derive --alias <your-spend-key-alias> --shielded
 If you know the raw value of a spending key, viewing key or payment address, you can add it to your wallet under an alias so you can more conveniently refer to it later.
 
 ```bash copy
-namadaw add --alias <choose-an-alias> --value <spending-key|viewing-key|payment-address>
+namadaw add --alias $ALIAS --value $HEX_VALUE
 ```
+where `$HEX_VALUE` is the hex value of a spending key, viewing key or payment address.
 
 ### Removing a key/address
 You can remove all keys/addresses associated with an alias from your wallet with:
 ```bash copy
-namadaw remove --alias <your-alias> --do-it
+namadaw remove --alias $ALIAS --do-it
 ```
