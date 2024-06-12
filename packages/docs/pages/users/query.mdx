@@ -7,7 +7,7 @@ This section details several common queries; see all available commands with `na
 #### query-account
 
 ```txt
-namadac query-account --owner <WALLET>
+namadac query-account --owner $OWNER_ADDRESS
 ```
 
 Returns the `Threshold` and `Public` key(s) of an established account.
@@ -23,7 +23,7 @@ Returns the list of PGF Stewards, their reward distribution, and active PGF stre
 #### query-proposal
 
 ```
-namadac query-proposal --proposal-id <ID>
+namadac query-proposal --proposal-id $ID
 ```
 
 Returns info on a given proposal, including its type, author, content, StartEpoch, EndEpoch, GraceEpoch, and Status.
@@ -31,7 +31,7 @@ Returns info on a given proposal, including its type, author, content, StartEpoc
 #### query-proposal-result
 
 ```
-namadac query-proposal-result --proposal-id <ID>
+namadac query-proposal-result --proposal-id $ID
 ```
 
 Returns the outcome of a given proposal, including whether it's Passed/Rejected, the total number of votes for yay/nay/abstain, and the threshold (fraction) of the total voting power needed to tally.
@@ -39,13 +39,13 @@ Returns the outcome of a given proposal, including whether it's Passed/Rejected,
 #### query-proposal-votes
 
 ```
-namadac query-proposal-votes --proposal-id <ID>
+namadac query-proposal-votes --proposal-id $ID
 ```
 
 Returns the results of all wallets that have voted `yay` or `nay` on the proposal
 
 ```
-namadac query-proposal-votes --proposal-id <ID> --voter <WALLET>
+namadac query-proposal-votes --proposal-id $ID --voter $VOTER_ADDRESS
 ```
 
 Returns the result of a specific wallet that has voted on a specific proposal

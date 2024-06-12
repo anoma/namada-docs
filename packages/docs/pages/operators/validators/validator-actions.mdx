@@ -28,12 +28,12 @@ A validator can update their metadata at any time with the `change-metadata` com
 
 ```bash copy
 namadac change-metadata \
-  --validator <validator> \
-  --description <description> \
-  --email <email> \
-  --discord-handle <discord-handle> \
-  --website <website> \
-  --avatar <avatar>
+  --validator $VALIDATOR_ADDRESS \
+  --description $DESCRIPTION \
+  --email $EMAIL \
+  --discord-handle $DISCORD_HANDLE \
+  --website $WEBSITE \
+  --avatar $AVATAR
 ```
 Apart from `--validator`, not all of the fields are required (but at least one of them is).
 
@@ -42,7 +42,7 @@ Apart from `--validator`, not all of the fields are required (but at least one o
 You can deactivate your validator with the `deactivate` command:
 
 ```bash copy
-namadac deactivate-validator --validator <validator-address>
+namadac deactivate-validator --validator $VALIDATOR_ADDRESS
 ```
 Once deactivated, the validator will no longer participate in the consensus protocol. 
 This will take effect at the end of the current epoch + `pipeline_length`. All bonds and delegations associated with the validator remain intact. 
@@ -51,7 +51,7 @@ Delegators can still delegate to the validator, but as the validator is inactive
 To reactivate your validator, use the `reactivate` command:
 
 ```bash copy
-namadac reactivate-validator --validator <validator-address>
+namadac reactivate-validator --validator $VALIDATOR_ADDRESS
 ```
 This will reactivate the validator at the end of the current epoch + `pipeline_length`.
 
@@ -86,7 +86,7 @@ It is essential for validators to plan the key rotation accordingly to ensure co
 To generate a new consensus key, use the following command:
 
 ```bash
-namadaw convert --alias <new-consensus-key>
+namadaw convert --alias $NEW_CONSENSUS_KEY
 ```
 
 This command will create a new consensus key, which validators should securely store and use to replace the existing `priv_validator_key.json` file. 
@@ -95,7 +95,7 @@ It is critical for validators to perform this step correctly.
 After updating the consensus key, validators can find their new validator address with the following command:
 
 ```bash
-namadaw find --alias <new-consensus-key>
+namadaw find --alias $NEW_CONSENSUS_KEY
 ```
 
 ### Withdrawing rewards
@@ -103,7 +103,7 @@ When a delegator bonds tokens to an active validator, [staking rewards](./stakin
 before they are credited to the delegator's account. The same holds true for when the validator has self-bonded. Rewards can be withdrawn with the command:
 
 ```bash
-namadac claim-rewards --validator <validator>
+namadac claim-rewards --validator $VALIDATOR_ADDRESS
 ```
 
 ### Submitting an unjail transaction

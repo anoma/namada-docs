@@ -23,13 +23,13 @@ namadac bonded-stake
 If you have a specific tenderimnt key of a validator but do not know the address, you can use the following command to find the address:
 
 ```bash copy
-namadac find-validator --tendermint-key <validator-tendermint-key> # Similarly you can find the tendermint key from the address by providing the argument --validator <validator-address> instead
+namadac find-validator --tendermint-key $VALIDATOR_TENDERMINT_KEY # Similarly you can find the tendermint key from the address by providing the argument --validator <validator-address> instead
 ```
 
 <Callout>
 Before bonding to a validator, it is important to know their commision rate. This is the percentage of the block rewards that the validator will take as a fee for their services. You can find this information by running the following command:
 ```bash copy
-namadac commission-rate --validator <validator-address>
+namadac commission-rate --validator $VALIDATOR_ADDRESS
 ```
 Typically, the commission rate is between 0% and 5%.
 </Callout>
@@ -37,19 +37,19 @@ Typically, the commission rate is between 0% and 5%.
 Once you've found the address of your favorite validator, you can bond to them with the following command:
 
 ```bash copy
-namadac bond --source <delegator-address> --validator <validator-address> --amount <amount>
+namadac bond --source $DELEGATOR_ADDRESS --validator $VALIDATOR_ADDRESS --amount $AMOUNT
 ```
 
 <Callout type="info">
 Because the validator alias sometimes clashes with the alias for the implicit account and or established account in the wallet, it is recommended to use the validator address instead of the alias.
 In order to find the validator address, you can use the following command:
 ```bash copy
-namadaw list --addr | grep <validator-alias>
+namadaw list --addr | grep $VALIDATOR_ALIAS
 ```
 then make sure it is the corresponding `tnam` address.
 </Callout>
 
-The `<delegator-address>` is your account address from which you would like to stake NAM tokens. Validators who would like to self-bond do not need to provide the `--source` argument.
+The `$DELEGATOR_ADDRESS` is your account address from which you would like to stake NAM tokens. Validators who would like to self-bond do not need to provide the `--source` argument.
 
 If you have the alias for an address saved in your wallet, you can also pass it as an argument.
 
@@ -66,7 +66,7 @@ namadac query-protocol-parameters
 It is possible to query processed delegations through the client
 
 ```shell copy
-namadac delegations --owner <delegator-address>
+namadac delegations --owner $DELEGATOR_ADDRESS
 ```
 
 ## Unbonding
@@ -77,7 +77,7 @@ This process is identical to [unbonding tokens from a validator](../operators/va
 The command to unbond is similar to the bonding command:
 
 ```bash copy
-namadac unbond --source <delegator-address> --validator <validator-address> --amount <amount>
+namadac unbond --source $DELEGATOR_ADDRESS --validator $VALIDATOR_ADDRESS --amount $AMOUNT
 ```
 
 After a successful unbond transaction, the unbonded NAM tokens will be available for withdrawal after `pipeline_length + unbonding_length + cubic_slashing_window_length` epochs. Once again, the values of these three parameters can be queried from the chain.
@@ -86,7 +86,7 @@ After a successful unbond transaction, the unbonded NAM tokens will be available
 When the full unbonding period has passed, you can withdraw the unbonded NAM using the following command:
 
 ```bash copy
-namadac withdraw --source <delegator-address> --validator <validator-address>
+namadac withdraw --source $DELEGATOR_ADDRESS --validator $VALIDATOR_ADDRESS
 ```
 
 This transaction will immediately transfer all fully unbonded NAM tokens back to the `delegator-address` account, increasing your transferable balance.
@@ -94,7 +94,7 @@ This transaction will immediately transfer all fully unbonded NAM tokens back to
 You may also query some information regarding how many NAM tokens are available for withdrawal with the following command:
 
 ```bash copy
-namadac bonds --owner <delegator-address>
+namadac bonds --owner $DELEGATOR_ADDRESS
 ```
 
 ## Redelegating
@@ -103,7 +103,7 @@ In certain circumstances, you may want to switch the validator that holds your b
 You can accomplish this with a redelegating the bonded tokens rather than unbonding, withdrawing, and then bonding again. Use the following command:
 
 ```bash copy
-namadac redelegate --owner <delegator-address> --source-validator <source-validator> --destination-validator <destination-validator> --amount <amount>
+namadac redelegate --owner $DELEGATOR_ADDRESS --source-validator $SOURCE_VALIDATOR_ADDRESS --destination-validator $DEST_VALIDATOR_ADDRESS --amount $AMOUNT
 ```
 
 The `delegator-address` is your address, the `source-validator` is the validator that currently holds your bond, and the `destination-validator` is your desired new validator to hold your bond.
@@ -116,7 +116,7 @@ Inflationary rewards for proof-of-stake are computed and minted once per epoch, 
 In order to claim rewards that are owed to you for bonded NAM tokens, run the following command:
 
 ```bash copy
-namadac claim-rewards --source <delegator-address> --validator <validator-address>
+namadac claim-rewards --source $DELEGATOR_ADDRESS --validator $VALIDATOR_ADDRESS
 ```
 
 Successful execution of this transaction will immediately transfer the the reward tokens you are owed to your `delegator-address`, incrementing your transparent balance.
@@ -124,7 +124,7 @@ Successful execution of this transaction will immediately transfer the the rewar
 Additionally, you can query the pending reward tokens without claiming by running:
 
 ```bash copy
-namadac rewards --source <delegator-address> --validator <validator-address>
+namadac rewards --source $DELEGATOR_ADDRESS --validator $VALIDATOR_ADDRESS
 ```
 
 ## Interacting with jailed validators

@@ -11,7 +11,7 @@ When the protocol determines that a validator will be jailed, the jailing and va
 You can check if a validator is jailed by querying its state with the following command:
 
 ```bash copy
-namadac validator-state --validator <validator_address>
+namadac validator-state --validator $VALIDATOR_ADDRESS
 ```
 
 ## Unjailing a validator
@@ -19,14 +19,14 @@ namadac validator-state --validator <validator_address>
 Once jailed, validators remain jailed indefinitely. They can only be unjailed by an `unjail-validator` transaction using the validator's signing keys. This can be done with the following command:
 
 ```bash copy
-namadac unjail-validator --validator <validator_address>
+namadac unjail-validator --validator $VALIDATOR_ADDRESS
 ```
 
 <Callout type="info">
 Because the validator alias sometimes clashes with the alias for the implicit account and or established account in the wallet, it is recommended to use the validator address instead of the alias.
 In order to find the validator address, you can use the following command:
 ```bash copy
-namadaw list --addr | grep <validator-alias>
+namadaw list --addr | grep $VALIDATOR_ADDRESS
 ```
 then make sure it is the corresponding `tnam` address.
 </Callout>
@@ -48,7 +48,7 @@ The validator will also be considered to be *frozen* until it no longer has any 
 A validator's slash history, with previously processed slashes and enqueued slashes for future processing, can be queried with the following command:
 
 ```bash copy
-namadac slashes --validator <validator_address>
+namadac slashes --validator $VALIDATOR_ADDRESS
 ```
 
 Additionally, all slashes in the network can be queried without the `--validator` flag.
