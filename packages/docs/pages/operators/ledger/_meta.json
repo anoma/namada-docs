@@ -1,6 +1,6 @@
 {
-    "env-vars": "Environment variables",
-    "running-a-full-node": "Setting up the full node",
+    "env-vars": "Node Configuration",
+    "running-a-full-node": "Full node step-by-step",
     "logging-config": "Logging configurations",
     "base-directory": "Base directory"
 }

@@ -1,7 +1,7 @@
 {
   "proof-of-stake": "Cubic proof of stake",
   "validator-setup": "Validator setup",
-  "staking": "Staking",
   "validator-actions": "Validator actions",
+  "staking": "Staking",
   "jailing": "Jailing"
 }

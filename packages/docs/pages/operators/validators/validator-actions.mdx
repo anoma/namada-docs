@@ -1,63 +1,87 @@
 import { Callout } from 'nextra-theme-docs'
 
-# Validator actions
+# Validator Actions
 
-## Commission-rate changes
+This section details commands that are commonly useful to validator operators.
 
-A validator can change their commission rate through the `change-commission` command:
+### Commission-rate changes
+
+A validator can change their commission rate through the `change-commission-rate` command:
 
 ```bash copy
 namadac change-commission-rate --validator <validator> --commission-rate <commission-rate>
 ```
 
-The `max-commission-rate-change` is unique to each validator and cannot be changed.
+<Callout>
+The maximum allowed change in commision rate per epoch is specified by the validator's `max-commission-rate-change` parameter.  
 
-## Metadata changes
+The `max-commission-rate-change` can only be set on validator initialization; it cannot be changed later.
+</Callout>
 
-A validator can change their metadata through the `change-metadata` command:
+
+### Metadata changes
+
+Each validator account has associated on-chain metadata; in addition to the (required) security email address, several optional fields (such as name, avatar, etc.) 
+can be provided. These are commonly displayed in applications such as block explorers or wallets to visually distinguish validators from one another.  
+
+A validator can update their metadata at any time with the `change-metadata` command:
 
 ```bash copy
-namadac change-metadata --validator <validator> --description <description> --email <email> --discord-handle <discord-handle> --website <website> --avatar <avatar>
+namadac change-metadata \
+  --validator <validator> \
+  --description <description> \
+  --email <email> \
+  --discord-handle <discord-handle> \
+  --website <website> \
+  --avatar <avatar>
 ```
-Apart from `--validator`, not all of the fields are required, but at least one of them is.
+Apart from `--validator`, not all of the fields are required (but at least one of them is).
 
-## Deactivation and reactivation
+### Deactivation and reactivation
 
-A validator can deactivate their validator (stop validating) through the `deactivate` command:
+You can deactivate your validator with the `deactivate` command:
 
 ```bash copy
 namadac deactivate-validator --validator <validator-address>
 ```
-This means that the validator will no longer participate in the consensus protocol. This becomes active at the end of the current epoch + `pipeline_length`. All bonds and delegations associated with the validator remain in tact. Delegators can still delegate to the validator, but the validator will not be able to participate in consensus until it is reactivated.
+Once deactivated, the validator will no longer participate in the consensus protocol. 
+This will take effect at the end of the current epoch + `pipeline_length`. All bonds and delegations associated with the validator remain intact. 
+Delegators can still delegate to the validator, but as the validator is inactive, it will not generate staking rewards until it is reactivated.
 
-To reactivate a validator, use the `reactivate` command:
+To reactivate your validator, use the `reactivate` command:
 
 ```bash copy
 namadac reactivate-validator --validator <validator-address>
 ```
 This will reactivate the validator at the end of the current epoch + `pipeline_length`.
 
-## Consensus Key Management
-
-The consensus key is crucial for validators as it is used to sign blocks and participate in the CometBFT consensus protocol. This key ensures that only authorized validators can propose and vote on blocks, contributing to the network's overall security.
-
 ### Changing the Consensus Key
-Validators are able to change their consensus key, allowing for enhanced security and key rotation practices. This process is essential for maintaining the security of the validator's operations and protecting against potential compromise.
+A validator's consensus key is used to sign blocks and participate in the CometBFT consensus protocol. 
+This key ensures that only authorized validators can propose and vote on blocks, contributing to the network's overall security. 
+It is crucial that all validators keep their consensus keys secret and secure.  
 
-To change the consensus key, validators can use the following command:
+Validators are able to change their consensus key, allowing for enhanced security and key rotation practices. 
+This process is essential for maintaining the security of the validator's operations and protecting against potential compromise.
+
+To change their consensus key, validators can use the following command:
 
 ```bash
 VALIDATOR_ADDRESS="<your-validator-address>"
 SIGNING_KEYS="<your-signing-key>"
-namada client change-consensus-key --validator $VALIDATOR_ADDRESS --signing-keys $SIGNING_KEYS
+namadac change-consensus-key --validator $VALIDATOR_ADDRESS --signing-keys $SIGNING_KEYS
 ```
 
 <Callout type="info" emoji="🔑">
-The new consensus key will be recorded in the `wallet.toml` file and is scheduled to become active 2 blocks before the pipeline offset from the epoch at the moment of activation. This timing ensures a smooth transition. It is essential for validators to plan the key rotation accordingly to ensure continuous participation in block validation without interruption.
+The new consensus key will be recorded in the `wallet.toml` file and is scheduled to become active 2 blocks before the pipeline offset from the epoch at the moment of 
+activation. This timing ensures a smooth transition.  
+
+After the transition period, validators must replace the current `priv_validator_key.json` with the newly generated key. 
+This step is crucial for activating the new consensus key for block signing.  
+
+It is essential for validators to plan the key rotation accordingly to ensure continuous participation in block validation with minimal interruption.
 </Callout>
 
 ### Generating a New Consensus Key
-After the transition period, validators must replace the current `priv_validator_key.json` with the newly generated key. This step is crucial for activating the new consensus key for block signing.
 
 To generate a new consensus key, use the following command:
 
@@ -65,10 +89,35 @@ To generate a new consensus key, use the following command:
 namadaw convert --alias <new-consensus-key>
 ```
 
-This command will create a new consensus key, which validators should securely store and use to replace the existing `priv_validator_key.json` file. It is critical for validators to perform this step correctly.
+This command will create a new consensus key, which validators should securely store and use to replace the existing `priv_validator_key.json` file. 
+It is critical for validators to perform this step correctly.
 
-After updating the consensus key, validators can find out their new validator address with the following command:
+After updating the consensus key, validators can find their new validator address with the following command:
 
 ```bash
 namadaw find --alias <new-consensus-key>
 ```
+
+### Withdrawing rewards
+When a delegator bonds tokens to an active validator, [staking rewards](./staking.mdx) accrue in the form of the native token. These rewards need to be claimed 
+before they are credited to the delegator's account. The same holds true for when the validator has self-bonded. Rewards can be withdrawn with the command:
+
+```bash
+namadac claim-rewards --validator <validator>
+```
+
+### Submitting an unjail transaction
+See the section on [jailing](./jailing.mdx) for further info.
+
+### Voting on governance
+An important function of validators is active participation in governance. It is particularly important for validators to vote on governance proposals because 
+they vote on behalf of not only their self-bonded stake, but any delegated stake which has not submitted a vote of their own.  
+
+In other words, a validator's vote determines the 'default' vote for all its delegators. A delegator wishing to vote differently can override this by submitting a 
+vote transaction of their own, which they may do at any time before the end of the voting period (including after the validator has voted).
+
+<Callout type='warning'>
+Validators have a shortened voting window -- they can only cast votes during the first two-thirds of a proposal's voting period.  
+
+This is to allow delegators time to check how their delegatee validator has voted, in case they wish to vote differently.
+</Callout>
