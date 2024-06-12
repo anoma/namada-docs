@@ -1,39 +1,104 @@
 import { Callout } from 'nextra-theme-docs'
 import Expandable from '../../components/Expandable'
+import { Steps } from 'nextra-theme-docs'
 
 # Relaying on Namada
 
-This document describes how to operate a relayer for the Inter-Blockchain Communication (IBC) protocol with Namada. This documentation covers being able to create connections through IBC as well as setting up local chains of Namada for testing purposes.
+This section of the documentation describes how to operate a relayer on Namada, how to open IBC connections with other IBC compatible chains and how to 
+test your relayer setup by making a connection between two mock local chains.
 
 
-This document covers essential steps for using IBC with Namada:
+## Introduction
+Relayers are a crucial piece of infrastructure that allow IBC compatible chains to pass messages to one another. 
+A relayer is responsible for posting IBC packets to the destination chain, as well as performing other IBC functions 
+such as creating channels, updating the light client states and checking for misbehavior.  
 
-1. [Configure Hermes](#configure-hermes)
-2. [Install Hermes](#install-hermes)
+Operating a relayer is permissionless. If at least one relayer is not running on a given channel between two chains, 
+they will not be able to pass messages to each other on that channel. IBC transfers that are attempted but not picked 
+up by a relayer will timeout and the tokens will be refunded to the sender.
+
+To operate a relayer, you will need:
+- A dedicated server
+- [Hermes](#install-hermes); the relayer software. Heliax maintains a fork of Hermes compatible with Namada.
+- Full nodes on both chains; a relayer needs to access several weeks worth of chain history and to frequently post 
+transactions to both chains. For testing, a public RPC node may suffice, but for production it is highly recommended 
+for reliability that relayer operators also operate both full nodes themselves.
+- Gas funds for each chain; since relayers will need to regularly post transactions to both chains, they will need a 
+wallet on each with enough funds to cover gas costs (monitoring and topping up as necessary).  
+
+
+This document covers the essentials for installing, configuring and running a relayer on Namada:
+
+1. [Installing Hermes](#install-hermes)
+2. [Configuring Hermes](#configure-hermes)
 3. [Setting up the relayer](#setting-up-the-relayer)
-4. [Start the relayer](#start-the-relayer)
-5. [Set up local Namada chains](#set-up-local-namada-chains-using-the-hermes-script)
+4. [Creating an IBC channel](#creating-an-ibc-channel)
+5. [Running the relayer](#start-the-relayer)
 
-The below is intended for those that wish to relay IBC message transfers between two Namada chains. There is of course the capability to do this between any two IBC compatible chains (such as a Cosmos chain).
-In this case, it is necessary to have a node running on both the destination and the source chain in order to make any package transfers.
-Below, we discuss first how to enable this connection between two pre-existing chains by Hermes, and second, setting up two Namada local chains for this purpose.
+And for setting up a testing environment by running two local Namada chains, see the section 
+[Testing with local Namada chains](#set-up-local-namada-chains-using-the-hermes-script)
 
+<Steps>
+### Installing Hermes
+Heliax maintains a fork of the Hermes relayer software. You can download a prebuilt binary or build it from source.
 
-## Configure Hermes
-Hermes is an IBC relayer to relay IBC packets between chains.
-Namada uses a [fork of Hermes supporting Namada chains](https://github.com/heliaxdev/hermes/tree/v1.7.4-namada-beta7).
+#### From binaries
+One can download the latest binary release from our [releases page](https://github.com/heliaxdev/hermes/releases) by choosing the appropriate architecture.
 
-### Make Hermes config file
-One essential piece of the puzzle is to create a `config.toml` file that describes what connections will be set up that the relayer will be responsible for.
+E.g.
+```bash copy
+export TAG="v1.8.2-namada-beta11" # or the appropriate release for your version of namada
+export ARCH="x86_64-unknown-linux-gnu" # or "aarch64-apple-darwin"
+curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/download/${TAG}/hermes-${TAG}-${ARCH}.tar.gz
+tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
+```
+
+<Callout type="info">
+For some systems, `/usr/local/bin` is a protected directory. In this case, you may need to run the above command with `sudo`.
+I.e 
+```bash copy
+sudo tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
+```
+This is also true for the command `cp ./target/release/hermes /usr/local/bin/` below (see the comment).
+</Callout>
+
+#### From source
+```bash copy
+export TAG="v1.8.2-namada-beta11" # or the appropriate release for your version of namada
+
+git clone https://github.com/heliaxdev/hermes.git
+git checkout $TAG
+cd hermes
+cargo build --release --bin hermes
+export HERMES=$(pwd) # if needed
+```
+Check the binary:
+```bash copy
+./target/release/hermes --version
+```
+
+<Callout type="info">
+It is recommended to now add hermes to `$PATH` such that it is callable without any pre-fixes.
+For ubuntu users, this can be achieved by
+```bash copy
+sudo cp ./target/release/hermes /usr/local/bin/
+```
+</Callout>
+
+### Configuring Hermes
+
+#### Make Hermes config file
+Hermes' `config.toml` file defines which chains and channels the relayer will be responsible for. First, create that file:
 
 ```bash copy
-export HERMES_CONFIG="<choose path for hermes config>/config.toml"
+export HERMES_CONFIG="$HOME/.hermes/config.toml"
 touch $HERMES_CONFIG
 ``` 
 
-If you don't specify the file path, `~/.hermes/config.toml` is read as default.
+When running Hermes commands, if you don't specify the config file path, `~/.hermes/config.toml` is read as default.
 
-You can find an example of the config file below. Essentially, you change only the chain IDs, the RPC addresses, and the key names in the config file for Namada. If you don't have nodes, please set up nodes manually or through our [scripts](#set-up-local-namada-chains-using-the-hermes-script).
+__You can find an example of the config file below__. Essentially, you change only the chain IDs, the RPC addresses, and the key names in the config file for Namada. 
+If you don't have nodes, please set up nodes manually or through our [scripts](#set-up-local-namada-chains-using-the-hermes-script).
 
 <details>
 <summary>Example: config.toml</summary>
@@ -139,7 +204,8 @@ These are the pieces of this puzzle you want to keep your 👀 on:
  - `chains.rpc_address` specifies the port that the channel is communicating through, and will be the argument for the `ledger_address` of Namada when interacting with the ledger (will become clearer later)
      - Make sure to change the IP address to the IP address of your local machine that is running this node!
  - `chains.grpc_addr` currently is not used in Namada but needs to be configured for other Cosmos chains
- - `chains.key_name` specifies the key of the signer who signs a transaction from the relayer. The key should be generated before starting the relayer.
+ - `chains.key_name` specifies the key of the signer who signs a transaction from the relayer. The key should be generated before starting the relayer and 
+ will need to be kept topped up with gas funds.
  - `chains.event_source` specifies the URL of the chain's websocket. This must be the same as the `rpc_address` for Hermes to work properly.
  - `chains.gas_price.denom` specifies the token that the relayer pays for IBC transactions. `chains.gas_price.price` isn't used for now in Namada.
  - `trusting_period` specifies the maximum period before which the client can not expire. This should be not more than unbonding time in the particular chain. 
@@ -147,76 +213,33 @@ These are the pieces of this puzzle you want to keep your 👀 on:
 You can see more details of configuration in [the official document](https://hermes.informal.systems/documentation/configuration).
 </Callout>
 
-### Export environment variables
-The relaying user will need to save certain environment variables. These are:
+#### Export environment variables
+You may find it convenient to save certain environment variables. These are:
 ```bash copy
 export CHAIN_A_ID="<replace-with-chain-a-id>"
 export CHAIN_B_ID="<replace-with-chain-b-id>"
 export HERMES_CONFIG="<replace-with-hermes-config-path>"
 ```
 
-## Install Hermes
-Before conducting any IBC operations, one must download Heliax's fork Hermes binary or build it from source.
+### Setting up the relayer
 
-### From binaries
-One can download the latest binary release from our [releases page](https://github.com/heliaxdev/hermes/releases) by choosing the appropriate architecture.
-
-E.g.
-```bash copy
-export TAG="v1.7.4-namada-beta7"
-export ARCH="x86_64-unknown-linux-gnu" # or "aarch64-apple-darwin"
-curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/download/${TAG}/hermes-${TAG}-${ARCH}.tar.gz
-tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
-```
-
-<Callout type="info">
-For some systems, `/usr/local/bin` is a protected directory. In this case, you may need to run the above command with `sudo`.
-I.e 
-```bash copy
-sudo tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
-```
-This is also true for the command `cp ./target/release/hermes /usr/local/bin/` below (see the comment).
-</Callout>
-
-### From source
-```bash copy
-export TAG="v1.7.4-namada-beta7"
-
-git clone https://github.com/heliaxdev/hermes.git
-git checkout $TAG
-cd hermes
-cargo build --release --bin hermes
-export HERMES=$(pwd) # if needed
-```
-Check the binary:
-```bash copy
-./target/release/hermes --version
-```
-
-<Callout type="info">
-It is recommended to now add hermes to `$PATH` such that it is callable without any pre-fixes.
-For ubuntu users, this can be achieved by
-```bash copy
-sudo cp ./target/release/hermes /usr/local/bin/
-```
-</Callout>
-
-## Setting up the relayer
-
-### Create the relayer account
+#### Create the relayer account
 On each chain, there must be a `relayer` account. The alias should be the same as `chains.key_name` in the config. On a Namada chain, this can be done by running
 ```bash copy
 namadaw gen --alias relayer
 ```
 
-This will generate a key for the relayer account. The key will be stored in the `wallet.toml` that is found in the [base directory](./ledger/base-directory.mdx) of the node, inside the `chain-id` folder. For example, if the `chain-id` is `shielded-expedition.88f17d1d14`, the `wallet.toml` will be found in `$HOME/.local/share/namada/shielded-expedition.88f17d1d14/wallet.toml` (on a ubuntu machine where `base-dir` has not been set up properly).
+This will generate a key for the relayer account. The key will be stored in the `wallet.toml` that is found in the [base directory](./ledger/base-directory.mdx) of the node, inside the `chain-id` folder. For example, if the `chain-id` is `shielded-expedition.88f17d1d14`, the `wallet.toml` will be found in `$HOME/.local/share/namada/shielded-expedition.88f17d1d14/wallet.toml` (on a Ubuntu machine where `base-dir` has not been changed from default).
 
 The relayer account should have some balance to pay the fee of transactions. Before creating an IBC channel or relaying an IBC packet, you need to transfer the fee token to the relayer account.
 
-### Add the relayer key to Hermes
-To sign each transaction, the relayer's key should be added to Hermes with `keys add` command in advance. It requires the `wallet.toml` which should have the key of `chains.key_name`. Once the key has been added, Hermes doesn't need the wallet anymore.
+#### Add the relayer key to Hermes
+To sign each transaction, the relayer's key should be added to Hermes with `keys add` command in advance. 
+It requires the `wallet.toml` which should have the key of `chains.key_name`. Once the key has been added, Hermes doesn't 
+need the wallet anymore. (Rather than providing the `wallet.toml`, you can instead provide a text file which contains the 24 word mnemonic for your key.)
 ```bash copy
 hermes --config $HERMES_CONFIG keys add --chain $CHAIN_ID --key-file $WALLET_PATH
+# or
 hermes --config $HERMES_CONFIG keys add --chain $CHAIN_ID --mnemonic-file $SEED_PATH
 ```
 
@@ -226,10 +249,8 @@ Hermes will store the key in `~/.hermes/keys/${CHAIN_ID}` as default. You can sp
 If you want to use an encrypted key with a password, you have to set an environment variable `NAMADA_WALLET_PASSWORD_FILE` for the password file or `NAMADA_WALLET_PASSWORD` to avoid entering the password for each transaction submission.
 </Callout>
 
-It is now possible to set up the client.
-
-# Verify configuration files
-After editing `config.toml` and adding wallet keys, it’s time to test the configurations and ensure the system is healthy. Run the following:
+#### Verify configuration files
+After editing `config.toml` and adding wallet keys, it's time to test the configurations and ensure the system is healthy. Run the following:
 
 ```bash copy
 hermes health-check
@@ -241,8 +262,21 @@ SUCCESS performed health check for all chains in the config
 SUCCESS "configuration is valid"
 ```
 
-### Create IBC channel
-The "create channel" command (below) creates not only the IBC channel but also the necessary IBC client connection.
+### Creating an IBC channel
+All IBC transfers between two chains take place along a given IBC channel associated with a given IBC connection.  
+
+Channels must be maintained after creation by regularly submitting headers to keep the client state up to date with 
+the counterparty chain. A client that is allowed to fall out of date may expire, and further IBC transfers along the 
+channel will not be possible until the client is revived through governance. Operators should not create new channels 
+on public networks unneccessarily; instead, they should relay on existing channels if possible. 
+
+<Callout type='warning'>
+The same asset transferred through different channels will not be fungible on the destination chain. Therefore, to avoid 
+confusion and liquidity fragmentation, it is good etiquette to check with a chain's community before creating any 
+new channels and to use existing channels whenever possible.
+</Callout>
+
+If no existing channel can be used, the "create channel" command (below) creates not only the IBC channel but also the necessary IBC client connection.
 
 ```bash copy
 hermes --config $HERMES_CONFIG \
@@ -258,9 +292,15 @@ hermes --config $HERMES_CONFIG \
 Note that the above `CHAIN_IDs` will depend on your own setup, so do check this for yourself!
 </Callout>
 
-When the creation has been completed, you can see the channel IDs. For example, the following text shows that a channel with ID `955` has been created on Chain A `shielded-expedition.88f17d1d14`, and a channel with ID `460` has been created on Chain B `axelar-testnet-lisbon-3`. You will need the channel IDs for a transfer over IBC. It means that you have to specify `channel-955` as a channel ID (The prefix `channel-` is always required) for a transfer from Chain A to Chain B. Also, you have to specify `channel-460` as a channel ID for a transfer from Chain B to Chain A.
+When the creation has been completed, you can see the channel IDs. For example, the output text below shows that a channel with ID `955` has been created on Chain A `shielded-expedition.88f17d1d14`, 
+and a channel with ID `460` has been created on Chain B `axelar-testnet-lisbon-3`.  
 
-Remember the ClientId for each of the chains, we will need them on the next step: `07-tendermint-2996` for `shielded-expedition.88f17d1d14` and `07-tendermint-884` for `axelar-testnet-lisbon-3`
+Note the channel id's, as you will need to specify the channel IDs when making a transfer over IBC. You specify `channel-955` as a channel ID 
+for a transfer from Chain A to Chain B. Also, you specify 
+`channel-460` as a channel ID for a transfer from Chain B to Chain A. (The prefix `channel-` is always required) 
+
+Also note the ClientId for each of the chains; we will need them on the next step:  
+`07-tendermint-2996` for `shielded-expedition.88f17d1d14` and `07-tendermint-884` for `axelar-testnet-lisbon-3`
 
 ```bash copy
 export CLIENT_A_ID="<replace-with-client-a-id>"
@@ -324,9 +364,11 @@ SUCCESS Channel {
 ```
 </Expandable>
 
-### Change Hermes configuration
+#### Update Hermes configuration
 
-Now when the channels are created we need to update the [Hermes configuration](#Make-Hermes-config-file)
+By default, Hermes will attempt to relay packets on all channels between the chains listed in its configuration file.
+We can restrict Hermes to only relay packets on our newly created channels by updating the [Hermes configuration](#Make-Hermes-config-file) 
+with the following (for each chain):
 
 ```bash copy
 ...
@@ -338,50 +380,53 @@ list = [
 ...
 ```
 
-### Update IBC clients
+### Running the relayer
+While Hermes is running, it monitors chains via the nodes and relays packets according to monitored events. You will 
+likely want to use `systemd`, `tmux`, `Docker` or some similar solution to ensure Hermes is running persistently in the background.  
 
-In order to have IBC channels running they need active IBC clients they rely on. When clients are not in use they tend to expire and to prevent this they are required to be updated manually.
+The command to run Hermes is simply:
+```bash copy
+hermes --config $HERMES_CONFIG start
+```
 
-The "update channel" command (below) update the actual state of the client in the particular chain.
+You can see more details of Hermes at [the official documentation](https://hermes.informal.systems/).
+
+
+#### Updating IBC clients
+
+In order to keep IBC channels open for transfers, they must have active IBC clients. An IBC client on chain A references 
+the state of chain B, and vice versa. These clients must be regularly updated to maintain trust guarantees; if they are 
+allowed to lapse, the client will enter an 'expired' state and no further IBC transfers will be allowed on that channel 
+until the client is revived through governance.  
+
+Whenever Hermes relays an IBC transfer, it will automatically update the clients on both chains. However, since reviving 
+an expired client through governance is a time-consuming task, it is worthwhile to regularly submit manual updates to 
+avoid any issues should transfer frequency be lower than expected.  
+
+The "update channel" command (below) manually updates the state of a client on a particular chain.
 
 ```bash copy
 hermes update client --host-chain $CHAIN_A_ID --client $CLIENT_A_ID
 hermes update client --host-chain $CHAIN_B_ID --client $CLIENT_B_ID
 ```
 
-It is recommended to perform this manual update or use specific scripts to automate it. Otherwise, you risk your clients will be expired. The restoration is possible only from the Governance of the specific chain.
+It is recommended to schedule the above commands to run periodically (using a scheduler such `cron` or `systemd`) so that any client expiration issues can be avoided entirely.
 
-## Start the relayer
-Once you run Hermes, it monitors chains via the nodes and relays packets according to monitored events.
-```bash copy
-hermes --config $HERMES_CONFIG start
-```
+### Done!
+You're now ready to test [transferring assets between the two chains.](../users/ibc.mdx)
 
-You can see more details of Hermes at [the official document](https://hermes.informal.systems/).
+</Steps>
 
-After the sync, you can create the channel and start Hermes as explained [above](#create-ibc-channel).
-```bash copy
-# create a channel
-hermes --config $HERMES_CONFIG \
-  create channel \
-  --a-chain $CHAIN_A_ID \
-  --b-chain $CHAIN_B_ID \
-  --a-port transfer \
-  --b-port transfer \
-  --new-client-connection --yes
-```
-
-### Transferring assets over IBC
-It is now possible to [transfer assets between the two chains.](../users/ibc.mdx)
-
-## Set up local Namada chains using the Hermes script
-The script `setup-namada` will set up two chains with one validator node, copy necessary files for Hermes, and make an account for Hermes on each ledger. Also, it will make a Hermes' config file `config_for_namada.toml` in the `hermes` directory.
+## Testing with local Namada chains
+The script `setup-namada` in the Heliax Hermes repo will set up two chains, each with one validator node, copy necessary files for Hermes, 
+and make an account for Hermes on each ledger. Also, it will make a Hermes' config file `config_for_namada.toml` 
+in the `hermes` directory.
 
 First, you will need to export some environment variables:
 
 ```bash copy
 export NAMADA_DIR="<path-to-namada-source-directory>"
-export TAG="v1.7.4-namada-beta7"
+export TAG="v1.8.2-namada-beta11" # or the appropriate hermes version for your namada version
 ```
 
 ```bash copy
