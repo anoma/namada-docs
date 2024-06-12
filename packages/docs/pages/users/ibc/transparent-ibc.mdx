@@ -18,11 +18,11 @@ software such as [Hermes](https://github.com/heliaxdev/hermes).
 To make an outgoing IBC transfer from a Namada transparent address:
 ```bash copy
 namadac ibc-transfer \
-  --source <your-transparent-address> \
-  --receiver <address-on-receiving-chain> \
-  --token <token-address> \
-  --amount <amount>
-  --channel-id <channel-id>
+  --source $YOUR_TRANSPARENT_ADDRESS \
+  --receiver $ADDRESS_ON_RECEIVING_CHAIN \
+  --token $TOKEN_ADDRESS \
+  --amount $AMOUNT
+  --channel-id $CHANNEL_ID
 ```
 Note:
 - the `receiver` address is the address on the receiving chain -- if you are sending to another Namada chain, this would start with `tnam...`, 

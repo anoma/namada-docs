@@ -19,7 +19,7 @@ with the network by using the `--node` flag and providing the address of a publi
 
 For example, to query the balance of an account using a public RPC, you can run:
 ```bash copy
-namadac balance --owner <tnam address> --token nam --node https://some-node.xyz:443
+namadac balance --owner $TNAM_ADDRESS --token nam --node https://some-node.xyz:443
 ```
 
 In fact, this is not fundamentally different from normal usage of `namadac` -- except that normally an rpc address of `localhost:26657` (corresponding to your own local full node) is implied.

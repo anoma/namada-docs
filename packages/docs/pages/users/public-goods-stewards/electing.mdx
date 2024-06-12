@@ -63,9 +63,9 @@ The CLI command to submit a proposal is:
 ```shell copy
 namadac init-proposal \
         --pgf-stewards \
-        --data-path <path/to/steward_proposal.json>
+        --data-path $PATH_TO/steward_proposal.json
 ```
-where `<path/to/steward_proposal.json>` is the path to the `steward_proposal.json` file.
+where `$PATH_TO/steward_proposal.json` is the path to the `steward_proposal.json` file.
 
 ### Becoming elected
 
@@ -86,7 +86,7 @@ Resigning as a steward can be done at any point.
 Through the CLI it can be done with the command:
 
 ```shell copy
-namadac resign-steward --steward my-steward-address
+namadac resign-steward --steward $STEWARD_ADDRESS
 ```
 
 Read more about the other methods of losing stewardship in the [specs](https://specs.namada.net/modules/goverance/public-goods-funding/becoming-a-steward#losing-stewardship-status).
@@ -107,5 +107,5 @@ Update steward commissions can be done at any point.
 Through the CLI it can be done with the command:
 
 ```shell copy
-namadac  update-steward-rewards --steward my-steward-address --data-path <path/to/commissions.json>
+namadac  update-steward-rewards --steward $STEWARD_ADDRESS --data-path $PATH_TO/commissions.json
 ```

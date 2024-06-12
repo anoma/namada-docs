@@ -40,7 +40,7 @@ The result of this query will inform the epoch from which your bonds will be act
 Because the PoS system is just an account, you can query its balance, which is the sum of all currently bonded tokens as well as the unbonded tokens that have not yet been withdrawn:
 
 ```shell copy
-namada client balance --owner PoS
+namada client balance --owner pos
 ```
 
 ## Self-bonding
@@ -140,5 +140,5 @@ These rewards will immediately be credited to the validtor's account.
 Additionally, you can query the pending reward tokens without claiming by running:
 
 ```bash copy
-namadac rewards --validator <validator-address>
+namadac rewards --validator $VALIDATOR_ADDRESS
 ```
