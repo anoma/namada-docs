@@ -1,28 +1,104 @@
 import { Callout } from 'nextra-theme-docs'
+import { Steps } from 'nextra-theme-docs'
 
-## Hardware Wallet
+# Hardware Wallet (Ledger)
 
 <Callout type="info">
-The Namada Ledger app is currently in active development and not recommended for use. Information below may be out-of-date.
+The Namada Ledger app is currently in active development and not recommended for general use. Information below may be out-of-date.
 </Callout>
 
-Namada's web wallet extension is compatible with the [Ledger](https://www.ledger.com/) hardware. This guide will walk you through the process of setting up your Ledger device to work with Namada.
+You can use a [Ledger](https://www.ledger.com/) hardware wallet with either the Namada web wallet extension or the CLI. 
+This guide will walk you through the process of setting up your Ledger device to work with Namada.
 
-### Prerequisites
-A ledger device with the latest firmware installed. You can find instructions on how to update your firmware [here](https://support.ledger.com/hc/en-us/articles/360002731113-Update-device-firmware).
+## Prerequisites
+- A ledger device with the latest firmware installed. You can find instructions on how to update your firmware [here](https://support.ledger.com/hc/en-us/articles/360002731113-Update-device-firmware).
 
-Install the javascript npm package [here](https://www.npmjs.com/package/@zondax/ledger-namada).
+{/* Install the javascript npm package [here](https://www.npmjs.com/package/@zondax/ledger-namada). */}
 
-In order to use the ledger with the web wallet, you will need to install the [Namada Web Wallet](./web-wallet.mdx#install).
+- In order to use the ledger with the web wallet, you will need to install the [Namada Web Wallet](./web-wallet.mdx#installation).
 
-### Connecting your Ledger
-1. Open the Namada web extension.
-2. Under settings, click on the `Connect Ledger` button.
-3. Set an alias for the account that ledger will control the keys for.
-4. You can choose to connect to the ledger via `USB` (recommended) or `HID` (Human Interface Devices). 
-5. The ledger will ask you to confirm the connection. Confirm this connection on your ledger device. 
-6. Once completed, the extension will show the address of the account that the ledger is controlling the keys for.
-7. You can now close the information window and use the ledger to sign transactions.
+## Installing the Ledger app
+Before proceeding, we need to install the Namada Ledger app on our device:
+<Steps>
+###### 1. Open Ledger Live and connect your device via USB
+###### 2. Click the 'My Ledger' tab to display the app catalog
+###### 3. Find the 'Namada' app in the list and click 'Install'
+</Steps>
 
-### Sending transactions with the ledger
-See the [web wallet](./web-wallet.mdx#sending-transactions) guide for instructions on how to send transactions with the web wallet.
+## Using the Ledger with the Web Wallet
+You can use your Ledger with the [Namada Extension](./web-wallet.mdx) (Web Wallet):
+<Steps>
+### Open Namada Extension
+In your browser, open the Namada Extension and click __'Add Keys'__.  
+
+### Connect Ledger
+From the options provided, choose __'Connect to Ledger hardware wallet'__.  
+
+On the next page, under __Step 1 (Connect and unlock your ledger...)__, click __Next__. You will be prompted in the browser to select your device and allow a USB connection.
+
+### Open the Namada Ledger app
+Open the Namada app in your Ledger. You should see 'Namada Ready' displayed on the device.  
+
+### Derive address
+Continue following the prompts in the browser -- click __Next__ under __Step 2 (Open the Namada App)__. You will be asked to review on your device; this means an address has 
+been derived, which you can display by scrolling right on the device. Scroll right once more and 'Approve' on the device to continue.  
+
+### Import your keys
+In the browser, you will be asked to give your account a name. Choose any name you like (e.g. 'My Ledger') and click Next.  
+
+You will see your derived transparent address and public key displayed in the browser; the address will match the one displayed on the Ledger earlier. Your address and public key 
+will be saved to the Web Wallet under the provided account name. Close the page when you're ready -- your Ledger is now ready for use.
+
+### Sign a transaction
+(details)
+
+</Steps>
+
+## Using the Ledger with the CLI
+{/* This section is WIP */}
+You can also use your Ledger to sign transactions from the Namada CLI:
+
+<Steps>
+### Install dependencies
+As outlined on the Official [Ledger Support](https://support.ledger.com/hc/en-us/articles/4404389606417-Download-and-install-Ledger-Live?docs=true) page, first perform these 
+steps to ensure USB connectivity:
+
+```bash copy
+wget -q -O - https://raw.githubusercontent.com/LedgerHQ/udev-rules/master/add_udev_rules.sh | sudo bash
+sudo add-apt-repository universe
+sudo apt install libfuse2
+```
+
+### Add your Ledger keys to your `namadaw` file-system wallet
+With your Ledger connected, the following command will add your transparent (`tnam`) address and public key to your [file-system wallet](./file-system-wallet.mdx):
+```bash copy
+namadaw derive --use-device --alias $ALIAS
+```
+Where `$ALIAS` is any name you choose.  
+
+<Callout emoji="🔑">
+The above command uses the HD derivation path `m/44'/877'/0'/0'/0'` by default; other paths can be specified using the `--hd-path` flag. See the section on 
+[HD-derivation paths](./hd-path.mdx) for further info.
+</Callout>
+
+You can check that your key has been added to your wallet with:
+```bash copy
+namadaw list
+```
+<Callout type="info">
+Naturally, only your public key and address will be stored in your file-system wallet -- not your private key, which is controlled by the Ledger.
+</Callout>
+
+### Sign a transaction
+Now, with the Ledger still connected, we can sign transactions. For example:
+```bash copy
+namadac transparent-transfer \
+  --source $LEDGER_ALIAS \
+  --target $DESTINATION_ADDRESS \
+  --token $TOKEN \
+  --amount $AMOUNT \
+  --use-device
+```
+You will be prompted to sign the transaction with your Ledger. Review the transaction on your device by scrolling with the arrow buttons, and select 'Approve' to sign and 
+submit the transaction.
+</Steps>
