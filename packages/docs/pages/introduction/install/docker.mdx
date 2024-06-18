@@ -1,27 +1,31 @@
+import { Steps } from 'nextra-theme-docs'
+
 # Running Namada with Docker
 
 ## Pre-requisites
 
 In order to run any Docker images, you must first have Docker installed. You can find installation instructions for your machine [here](https://docs.docker.com/get-docker/).
 
-## Downloading the docker image
-The Namada Docker image can be found [here](https://github.com/anoma/namada/pkgs/container/namada).
+## Downloading the Docker image
+Namada images for various versions can be found in Namada's [container registry](https://github.com/anoma/namada/pkgs/container/namada) on GitHub.
 
-Under the `Tags` tab, you can find the latest version of the Docker image. Click on the link for the correct version of Namada that you are trying to install. For example, if you are trying to install Namada v0.37.0, you would click on the link for `v0.37.0`.
+Under the `Tags` tab, you can find the latest version of the Docker image. Click on the link for the correct version of Namada that you are trying to install. 
+For example, if you are trying to install Namada v0.39.0, you would click on the link for `v0.39.0`.
 
 To download the Docker image, run:
 ```bash copy
-docker pull ghcr.io/anoma/namada:namada-v0.37.0
+NAMADA_VERSION=v0.39.0 # or whichever version you wish to download
+docker pull ghcr.io/anoma/namada:namada-$NAMADA_VERSION
 ```
 
 You can list any downloaded Docker image by running `docker images`. The tag will be the first column of the output.
-```bash copy
+```bash
 ~$ docker images
 REPOSITORY                                    TAG              IMAGE ID       CREATED         SIZE
-ghcr.io/anoma/namada                          namada-v0.37.0   b9729acaabab   5 days ago      211MB
+ghcr.io/anoma/namada                          namada-v0.39.0   b9729acaabab   5 days ago      211MB
 ```
 
-In this case, the full name of the downloaded image is `ghcr.io/anoma/namada:namada-v0.37.0`.
+In this case, the full name of the downloaded image is `ghcr.io/anoma/namada:namada-v0.39.0`.
 
 ## Running the docker image
 
@@ -29,28 +33,77 @@ Once you have downloaded the Docker image, it will be useful to export some envi
 
 ```bash copy
 export CHAIN_ID=<chain-id>
-export DOCKER_IMAGE=ghcr.io/anoma/namada:namada-v0.37.0
+export DOCKER_IMAGE=ghcr.io/anoma/namada:$NAMADA_VERSION
 ```
 
-The following Docker run command will run the ledger node:
+You can run commands in a Docker container by the following method:
 
 ```bash copy
-docker run -P -i -t $DOCKER_IMAGE <namada command>
+docker run -P -it --rm $DOCKER_IMAGE {namada-command}
 ```
 
-Where `<namada command>` is any command you would run after `namada` in the terminal. For example, if you wanted to run `namada client utils join-network --chain-id $CHAIN_ID`, you would run:
+Where `{namada command}` is any command you would run after `namada` in the terminal. For example, if you wanted to run `namada client utils join-network --chain-id $CHAIN_ID`, you would run:
 
 ```bash copy
-docker run -P -i -t $DOCKER_IMAGE client utils join-network --chain-id $CHAIN_ID
+docker run -P -it --rm $DOCKER_IMAGE client utils join-network --chain-id $CHAIN_ID
 ```
 
-Then in order to run any other ledger commands, one can run:
+### Persisting data with Docker volumes
+If you tried to run the above example using the `join-network` command, you would notice that while the command runs successfully, you have no way to make use of the chain data 
+after the command completes and the container exits (as it only existed inside the now-exited container). You can persist the chain data using a Docker volume, which binds a 
+directory on your host machine to a directory inside a container's filesystem. The volume syntax is as follows:
+```bash
+-v {directory-on-host-machine}:{directory-inside-container}
+```
+or
+```bash
+-v {named-volume}:{directory-inside-container}
+```
 
+### Example: Joining a network with a full node
+There are many possible ways of working with Docker containers and volumes depending on your needs and system setup; here is one example of how it could be done.
+
+<Steps>
+##### Create a directory on your host OS
+The directory can be located anywhere you like; we'll use the default `base-dir` location:
 ```bash copy
-docker /bin/bash -c "/bin/bash","-c", "<namada command>"
+mkdir ~/.local/share/namada
 ```
 
-## Alternative method (building the docker image yourself)
+##### Set directory permissions
+The newly created directory will be 'owned' by our current user (on the host OS). Unless we set the appropriate permissions for the directory on the host OS, the Namada 
+container will not be able to write to it.  
+
+When you run a command inside a container using the Namada Docker image, it will be run under a user named `namada` with a user-id `1000`. Knowing this, we can set the 
+permissions on our directory appropriately (this command may require `sudo`):
+```bash copy
+chown -R 1000:1000 ~/.local/share/namada
+```
+
+##### `join-network` using a volume
+Now we can run the `join-network` command while including the `-v` flag to create a new volume. We will map the `base-dir` inside the container to the directory 
+`~/.local/share/namada` we created in steps 1 and 2. This will allow us to persist the `base-dir` for future use:
+```bash copy
+docker run -P -it --rm -v $HOME/.local/share/namada:/home/namada/.local/share/namada $DOCKER_IMAGE client utils join-network --chain-id $CHAIN_ID
+```
+
+If we check the directory `~/.local/share/namada` on our host machine, we should see it has been populated with the genesis files for our `$CHAIN_ID`.
+
+##### Edit `persistent_peers`
+Since we've mapped the chain data to a directory on the host filesystem, we can access/edit it directly if needed. Suppose we need to update our `persistent_peers` before starting 
+the ledger; we can do so by directly editing the file `~/.local/share/namada/$CHAIN_ID/config.toml`.  
+
+_Note:_ The owner of these files is the `namada` user inside the container. Therefore, accessing the files from your host OS in this way may require you to use `sudo` to obtain 
+necessary read/write permissions.
+
+##### Start the ledger
+We can now start a container using our chain-data by once again passing the volume to the `docker run` command:
+```bash copy
+docker run -P -it --rm -v $HOME/.local/share/namada:/home/namada/.local/share/namada $DOCKER_IMAGE node ledger run
+```
+</Steps>
+
+## Building the Docker image
 
 Alternatively, you can build the docker image yourself!
 
@@ -61,30 +114,14 @@ export CHAIN_ID=<chain-id>
 export BRANCH=<namada-version>
 ```
 
-For example if you wanted to build the docker image for Namada v0.16.0 and chain-id `public-testnet-69.0.b20a1337aa1`, you would run:
-
-```bash copy
-export CHAIN_ID=public-testnet-69.0.b20a1337aa1
-export BRANCH=v0.28.2 #The latest branch of Namada
-```
-
 Then you can build the docker image by running:
 
 ```bash copy
-git clone https://github.com/anoma/namada-sdk-starter.git
-cd namada-sdk-starter/docker/namada-with-chain/
-docker build --build-arg BRANCH=$BRANCH --build-arg CHAIN_ID=$CHAIN_ID -t namada_testnet_image .
+git clone https://github.com/anoma/namada.git
+cd namada
+docker build -f docker/namada/Dockerfile --build-arg BRANCH=$BRANCH --build-arg CHAIN_ID=$CHAIN_ID -t namada:$BRANCH .
 ```
+_Note:_ Don't forget the trailing `.`  
 
-Which will save the image to your local docker images. You can find the tag of the downloaded docker image by running `docker images`. The tag will be the first column of the output.
-
-Save this docker image as an environment variable 
-```bash copy
-export DOCKER_IMAGE=<tag>
-```
-
-Then you can run the docker image by running:
-
-```bash copy
-docker run -P -i -t $DOCKER_IMAGE
-```
+If the value of `$BRANCH` is `v0.39.0`, the above command will build an image named `namada:v0.39.0`. You can replace the image name `namada:$BRANCH` with 
+any name you like.
