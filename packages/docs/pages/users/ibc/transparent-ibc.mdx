@@ -3,7 +3,7 @@ import { Callout } from 'nextra-theme-docs'
 # Transparent IBC
 
 You can send assets to another IBC compliant chain, such as a Cosmos SDK chain or another Namada chain, using the
-`ibc-transfer` command in `namadac`.
+`ibc-transfer`.
 
 This section covers sending assets to and from a transparent ( `tnam` ) address.
 
@@ -18,15 +18,15 @@ software such as [Hermes](https://github.com/heliaxdev/hermes).
 To make an outgoing IBC transfer from a Namada transparent address:
 ```bash copy
 namadac ibc-transfer \
-  --source $YOUR_TRANSPARENT_ADDRESS \
-  --receiver $ADDRESS_ON_RECEIVING_CHAIN \
+  --source $SOURCE_ADDRESS \
+  --receiver $RECV_ADDRESS \
   --token $TOKEN_ADDRESS \
-  --amount $AMOUNT
+  --amount $AMOUNT \
   --channel-id $CHANNEL_ID
 ```
 Note:
-- the `receiver` address is the address on the receiving chain -- if you are sending to another Namada chain, this would start with `tnam...`, 
-while if you're sending to a Cosmos SDK chain it might start with `cosmos...` or some other prefix.
+- the `receiver` address is the raw address on the receiving chain -- if you are sending to another Namada chain, this would start with `tnam...`, 
+while if you're sending to a Cosmos SDK chain it might start with `cosmos...`, `osmo...`, or some other prefix.
 - the `channel-id` parameter is a string, for example `channel-27`.
 
 #### Example: Sending NAM to the Cosmos Hub
@@ -67,3 +67,29 @@ gaiad tx ibc-transfer transfer \
 The double use of 'transfer' in the above command is not a typo. The command takes an IBC port name as one of its parameters; 
 and the name of the port happens to be 'transfer'.
 </Callout>
+
+## Querying IBC balances
+You can query an account's balance of tokens received through IBC similarly to other tokens, using the 'IBC denom' token name which is a function of 
+the IBC port, channel, and token name (or address) on the originating chain:  
+
+```
+IBC denom = {receiving_port}/{receiving_channel}/{token_name}
+```
+
+<Callout type='warning'>
+Sending the same asset through two different IBC channels will result in two different token denoms on the receiving chain, which will not be fungible with 
+each other. This is expected behavior as defined in the IBC protocol.
+</Callout>
+
+#### Example: Balance query
+If we have sent 100 NAM (token address `tnam1q87wtaqqtlwkw927gaff34hgda36huk0kgry692a`) from chain A to chain B over IBC, where the port is `transfer` and channel __on the receiving chain__ 
+is `channel-0`, we can check the balance on chain B using either of these (equivalent) commands:
+
+```bash copy
+namadac balance --owner $ALIAS --token transfer/channel-0/nam
+# or
+namadac balance --owner $ALIAS --token transfer/channel-0/tnam1q87wtaqqtlwkw927gaff34hgda36huk0kgry692a
+
+# Output:
+# transfer/channel-0/nam: 100
+```
