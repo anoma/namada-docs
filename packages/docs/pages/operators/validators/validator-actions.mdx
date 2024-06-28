@@ -33,9 +33,19 @@ namadac change-metadata \
   --email $EMAIL \
   --discord-handle $DISCORD_HANDLE \
   --website $WEBSITE \
-  --avatar $AVATAR
+  --avatar $AVATAR \
+  --name $NAME
 ```
-Apart from `--validator`, not all of the fields are required (but at least one of them is).
+Only the `--validator` argument is required along with at least one of the other arguments listed above. In order to remove a piece of metadata (aside from the required `email`), pass `""` as an argument.
+
+For example, in order to change the validator name and description but remove the existing discord handle, one would run:
+
+```bash copy
+namadac change-metadata --validator $VALIDATOR_ADDRESS \
+  --description $NEW_DESC \
+  --discord-handle "" \
+  --name $NEW_NAME
+```
 
 ### Deactivation and reactivation
 

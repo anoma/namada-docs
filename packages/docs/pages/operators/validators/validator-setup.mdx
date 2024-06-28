@@ -34,6 +34,17 @@ Post-genesis validators are validators that become initialized after the genesis
 Before initializing your validator account, you must first [set up a full node](../ledger/running-a-full-node.mdx) and sync it with 
 the head of the chain.
 
+### Generate and fund an implicit account
+In the next step, we will be sending an on-chain transaction to initialize our validator. Therefore, we must first generate an implicit 
+account and fund it with enough tokens to cover transaction [gas fees](../../users/fees.mdx).  
+
+Use the following commands to generate a new implicit account and display its address. See the sections on [implicit accounts](../../users/transparent-accounts/implicit-accounts.mdx) 
+and the [filesystem wallet](../../users/wallet/file-system-wallet.mdx) for further details on working with implicit accounts.
+```bash copy
+namadaw gen --alias $IMPLICIT_ALIAS
+namadaw list --addr
+```
+
 ### Initialize a new validator account
 A validator account can be initialized from an [established account](../../users/transparent-accounts/established-accounts.mdx) by submitting an on-chain transaction. 
 `namadac init-validator` will create a new established account and convert it to a validator account in a single command.
@@ -47,7 +58,10 @@ namadac init-validator \
   --commission-rate 0.05 \
   --max-commission-rate-change 0.01 \
   --email $EMAIL \
-  --alias $ALIAS
+  --alias $VALIDATOR_ACCOUNT_ALIAS \
+  --account-keys $IMPLICIT_ALIAS \
+  --signing-keys $IMPLICIT_ALIAS \
+  --threshold 1
 ```
 __Note:__
 - `commission-rate` is the percentage of staking rewards kept by the validator for all tokens bonded to it. A validator can change its commission rate 
@@ -55,7 +69,11 @@ by no more than `max-commission-rate-change` per epoch. The `max-commission-rate
 Typical values are `0.05` (5%) and `0.01` (1%) respectively but validator are free to choose otherwise.
 - `email` should be set to a dedicated infra/security email account that you monitor regularly. It may be used to notify validators of urgent security issues, patches 
 or chain upgrades.
-- `alias` is used to reference your account by name in your wallet; it does not appear on-chain.
+- `alias` is used to reference your newly created validator account by name in your wallet; it does not appear on-chain. Rather, your 
+validator's on-chain name is determined by the `name` value in its [validator metadata](./validator-actions.mdx#metadata-changes).
+- a validator account is a special type of (on-chain) [established account](../../users/transparent-accounts/established-accounts.mdx). 
+Given that the command creates a new established account, you will need to have already created an [implicit account](../../users/transparent-accounts/implicit-accounts.mdx) 
+(`$IMPLICIT_ALIAS`) and funded it with enough tokens to cover transaction gas costs.
 
 You can optionally provide any of the following additional information to identify your validator on-chain (frequently displayed in block explorers):
 - `name`: An on-chain display name (similar to 'moniker' in Cosmos SDK chains)
@@ -82,5 +100,7 @@ after bonding sufficient stake to place in the active consensus set, you must wa
 
 </Steps>
 
-## Validator account keys
+{/* ## Validator account keys
+TODO?
+*/}
 
