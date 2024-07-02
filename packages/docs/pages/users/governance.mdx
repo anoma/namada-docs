@@ -1,8 +1,22 @@
 # Governance
 
-The Namada governance mechanism gives users the possibility to upgrade the protocol dynamically.
+The Namada governance mechanism gives the community of users and operators the ability to upgrade the protocol dynamically. Additionally, governance can be used for social coordination.
 
-There are two different mechanism to create a proposal:
+Any user account can submit a [governance proposal](./governance/on-chain-governance.mdx) on-chain that contains some metadata and optionally some code for the protocol to execute if the proposal is accepted. Accounts that have active bonds can vote on the proposals with voting power proportional to their bonded token amount.
 
-- [On-chain proposals](./governance/on-chain-governance.mdx): Proposal is voted on and tallied on-chain. This can optionally include proposal code to be executed if the proposal is accepted.
-- [Off-chain proposals](./governance/off-chain-governance.mdx)
+Governance proposals must contain the following metadata related to the epochs for voting and execution:
+- `start_epoch`: the first epoch in which users can vote on the proposal.
+- `end_epoch`: the epoch in which the voting period stops. The last epoch in which votes can be submitted is the epoch before this.
+- `activation_epoch`: the epoch in which any governance proposal code is executed by the protocol. The execution occurs while finalizing the first block of this epoch before processing any transactions.
+
+Additionally, validator accounts may only vote in approximately the first 2/3 of the active voting period.
+
+A user who submits a governance proposal on-chain also must put an additional token amount - the `min_proposal_fund` - to be held while the proposal is active. This fee is refunded to the proposal author if the proposal passes, but otherwise the fee is kept in the governance account.
+
+The governance system is configured by the following parameters:
+
+- `min_proposal_fund:` the fee needed to submit a proposal
+- `min_proposal_voting_period:` minimum allowed number of epochs between a proposal's start and end epochs
+- `max_proposal_period:` maximum allowed number of epochs between a proposal's start and activation_epoch
+- `min_proposal_grace_epochs:` minimum allowed number of epochs between a proposal's end and activation epochs
+- `max_proposal_latency:` maximum allowed epochs between a proposal's start epoch and the current epoch in which the proposal tx is submitted

@@ -1,0 +1,108 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Governance actions
+
+## Submitting the proposal
+While in the same directory as your final `proposal.json` file, you can submit the proposal with:
+
+**For a default proposal:**
+
+```shell copy
+namada client init-proposal --data-path proposal.json 
+```
+
+**For non-default proposals:**
+
+One of the flags `--pgf-stewards`, `--pgf-funding`, `--eth` must be specified. For example, for a PGF steward proposal:
+
+```shell copy
+namada client init-proposal --pgf-stewards --data-path proposal.json
+```
+
+## Query the proposal
+If the submitted transaction was accepted, the user can query all the proposals with:
+
+```shell copy
+namada client query-proposal
+```
+
+or a single proposal with
+
+```shell copy
+namada client query-proposal --proposal-id 0
+```
+
+where `0` is the proposal id.
+
+## Vote on a proposal
+
+Only delegators and validators can vote on proposals. A delegator or validator can send a vote with the following command:
+
+```shell copy
+namada client vote-proposal \
+    --proposal-id $ID \
+    --vote yay \
+    --address $YOUR_ADDRESS
+```
+where `--vote` can be either `yay`, `nay` or `abstain`.
+
+<Callout type="info">
+The `--address` flag needs to be the address of the delegator or validator that is voting. You may also use the `--gas-payer` flag to specify the address of the account that will pay for the gas.
+</Callout>
+
+
+## Check the result
+
+As soon as the ledger reaches the epoch defined in the json as `voting_end_epoch`, no more votes will be accepted.
+The code defined in `proposal_code` json field will be executed at the beginning of `activation_epoch` epoch. You can use the following commands to check the status of a proposal:
+
+```shell copy
+namada client query-proposal --proposal-id $ID
+```
+
+or to just check the result:
+
+```shell copy
+namada client query-proposal-result --proposal-id $ID
+```
+
+<Callout type="info">
+It is important to note that the proposal will only be executed at the start of the `activation_epoch` epoch if it has passed. If it has not passed, the proposal will be rejected and the code will not be executed.
+
+Another important note is that the voting period differs between validators and non-validators. The validators have a shorter voting period than the delegators. This is defined in the `parameters.toml`. This is to ensure that the non-validators have enough time to vote on the proposals (so that the validators cannot vote in the last block against the non-validators preference). See the specs for more information.
+</Callout>
+
+## Submit a governance proposal with wasm code attached (advanced)
+
+First you will need a valid `.wasm` file. You then need to read this file into a vector of bytes. This can be done with the following small python script:
+
+```python
+with open(wasm_file_path, "rb") as f:
+    byte_vec = list(f.read())
+print(str(byte_vec))
+```
+
+The output can then be copied into the `data` field of the proposal json. E.g `"data": [1,255,3,4,5,182,7,81,90,10]`.
+
+Additionally, there is a script in the namada repo called `add_proposal_wasm_code.py` (TODO: link to this when merged!!) that can be used to add the wasm data to a proposal template like `template_proposal.json` (LINK TO THIS TOO!):
+
+```shell copy
+python3 add_proposal_wasm_code.py --proposal-path $JSON_FILE --wasm-path $$WASM_FILE
+```
+
+This command will add the wasm data to the `$JSON_FILE`.
+
+When submitting this proposal, it is likely that the gas requirement will be large. Therefore, it is recommended to supply both the `--gas-limit` and `--gas-price` flags.
+
+```shell copy
+namadac init-proposal --data-path proposal.json --gas-limit 500000 --gas-price 0.01
+```
+
+<Callout type="info">
+Hint: use the `--dry-run` feature to figure out how much gas will be needed and use `namadac query-protocol-paramters` to see the current minimum gas price.
+</Callout>
+
+## A video tutorial
+Skip all the boring text and watch a video tutorial on how to submit a proposal:
+
+<iframe src="https://player.vimeo.com/video/914426953?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="640" height="416" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen></iframe>
