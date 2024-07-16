@@ -1,4 +1,5 @@
 import Expandable from "../../../components/Expandable";
+import { Callout } from "nextra-theme-docs";
 
 # Spinning up a local network
 
@@ -71,6 +72,18 @@ The ledger can be run through the familiar command:
 ```shell
 ./target/release/namada ledger # Assuming the binaries were built using `make build-release`
 ```
+
+<Callout>
+If you receive the error `Failed to construct Namada chain context...` you need to set the variable `NAMADA_BASE_DIR`
+
+```shell
+export NAMADA_BASE_DIR=/$(pwd)/.namada/validator-0
+
+# or pass it as the parameter --base-dir
+./target/release/namada ledger --base-dir="/$(pwd)/.namada/validator-0"
+```
+
+</Callout>
 
 ## Cleaning up
 
