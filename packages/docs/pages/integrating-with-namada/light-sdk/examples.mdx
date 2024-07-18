@@ -12,8 +12,8 @@ let tendermint_addr = "http://localhost:26657";
 ### Transfer
 
 ```rust
-let source_address = namada_light_sdk::namada_sdk::address::Address::from_str("tnam1v4ehgw36xq6ngs3ng5crvdpngg6yvsecx4znjdfegyurgwzzx4pyywfexuuyys69gc6rzdfnryrntx").unwrap(); // replace with a valid source address
-let target_address = namada_light_sdk::namada_sdk::address::Address::from_str("tnam1v4ehgw36xq6ngs3ng5crvdpngg6yvsecx4znjdfegyurgwzzx4pyywfexuuyys69gc6rzdfnryrntx").unwrap(); // replace with a valid target address
+let source_address = namada_light_sdk::namada_sdk::address::Address::from_str("tnam1qp326qxmkncgwavskar9lfwm68x04vu8sg80crm4").unwrap(); // replace with a valid source address
+let target_address = namada_light_sdk::namada_sdk::address::Address::from_str("tnam1qp326qxmkncgwavskar9lfwm68x04vu8sg80crm4").unwrap(); // replace with a valid target address
 let token_address = namada_light_sdk::reading::blocking::query_native_token(tendermint_addr).unwrap();
 let amount = namada_light_sdk::namada_sdk::token::DenominatedAmount::from_str("10000").unwrap();
 // Construct the raw transaction struct
