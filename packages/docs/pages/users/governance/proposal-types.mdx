@@ -32,11 +32,10 @@ The actions can be either `add` or `remove` and the address is the address of
 the steward to be added or removed. In this way you can propose multiple add/remove actions at once.
 
 ```json
-"data" : [
-        {
-            "add": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q"
-        }
-    ]     
+"data" : {
+    "add": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q",
+    "remove": ["tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75vaaaaa", "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75vbbbbb"]
+}
 ```
 
 ## PGF Proposal
@@ -57,7 +56,6 @@ the amount specified will be sent upon execution of the proposal at the beginnin
             {
                 "Internal": 
                     {
-                        
                         "amount": "1337",
                         "target": "tnam1q9rxk49a7y6fp8h5qwz47d6jhml0km2w2y7emqyz"
                         
@@ -67,14 +65,13 @@ the amount specified will be sent upon execution of the proposal at the beginnin
         "retro" : [
             {
                 "Internal": 
-                    {
-                        
+                    { 
                         "amount": "1337",
                         "target": "tnam1q9rxk49a7y6fp8h5qwz47d6jhml0km2w2y7emqyz"
                     }
             }
         ]
-    },  
+    }
 ```
 
 
