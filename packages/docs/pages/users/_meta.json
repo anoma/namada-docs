@@ -5,7 +5,7 @@
   "fees": "Fees on Namada",
   "delegators": "Bonding and Proof-of-stake",
   "governance": "Governance",
-  "public-goods-stewards": "Public Goods Funding (PGF)",
+  "public-goods-funding": "Public Goods Funding (PGF)",
   "ibc": "IBC transfers",
   "query": "Querying the Chain"
 }

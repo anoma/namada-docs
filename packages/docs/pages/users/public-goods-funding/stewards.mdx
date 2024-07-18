@@ -1,0 +1,115 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Stewards
+
+A public goods steward can consist of an arbitrary number of people or can be a single person.
+The only requirement is that the steward's multisignature account is elected by the community through a governance proposal.
+
+For this reason, the first step to becoming a steward is to create a multisignature account. 
+This can be done using the commands found in the [multisignature documentation](../transparent-accounts/multisignature.mdx). 
+
+No more than `maximum_number_of_stewards` are allowed to exist at any given time; this parameter that controls the upper bound on stewards can be changed via governance.
+
+## Becoming a steward
+Once the multisig account is created, the steward can submit a governance proposal to nominate themselves for election as a steward.
+A steward proposal to elect a multisig account may only be submitted by that same account.
+
+### Submitting a steward governance proposal
+A special governance proposal must be submitted in order to elect a steward. This is done with the following command:
+
+```shell copy
+namadac init-proposal \
+        --pgf-stewards \
+        --data-path $PATH_TO/steward_proposal.json
+```
+where `$PATH_TO/steward_proposal.json` is the path to the `steward_proposal.json` file.
+
+The structure of the proposal `steward_proposal.json` looks like a default proposal but with an altered `"data"` section:
+
+```json
+{
+    "proposal" :{
+        "content": {
+            "title": "Stewie for Steward",
+            "authors": "stewie@heliax.dev",
+            "discussions-to": "forum.namada.net/t/stewies-manifesto/1",
+            "created": "2024-01-01T00:00:01Z",
+            "license": "MIT",
+            "abstract": "Stewie is an expert in zero-knowledge cryptography that would like to identify influential cryptographers to receive funding to continue their work.",
+            "motivation": "Funding cryptography research will help Namada and other blockchain projects innovate and flourish.",
+            "details": "We will describe here certain areas of ZK research that should receive funding."
+        },
+        "author": "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn",
+        "voting_start_epoch": 3,
+        "voting_end_epoch": 6,
+        "activation_epoch": 12
+    },
+    "data" : {
+        "add" : "atestatest1v4ehgw36g4pyg3j9x3qnjd3cxgmyz3fk8qcrys3hxdp5xwfnx3zyxsj9xgunxsfjg5u5xvzyzrrqtn",
+        "remove": []
+    }    
+}
+```
+
+The `"data"` field contains the structure that allows either the addition or removal of 
+a multisignature account from the list of stewards. In this case, the `"action"` is `"add"`, 
+and the `"address"` is the address of the multisignature account that will be elected as a steward. 
+In this case, the proposal does not call to remove any stewards, and so this field is an empty list `[]`.
+A steward proposal may propose to remove more than one steward at a time.
+
+<Callout>
+In the motivation and abstract field, it is important to make clear what type of 
+public goods funding the steward will be focusing on. 
+The *areas of public goods funding* can be found in the 
+[public goods funding specs](https://specs.namada.net/modules/governance/public-goods-funding.html#funding-focuses).
+</Callout>
+
+### Becoming elected
+
+Once the proposal is submitted, it will be voted on by the community (see [voting](./voting.mdx)) like any other governance proposal.
+
+Once a multisignature account is elected (which occurs at the beginning of the `activation_epoch`), it will be able to submit proposals to the public goods funding pool (see [submitting proposals](./proposing.mdx#proposing-funding)).
+
+## Removing stewards
+
+There are three ways that a steward can lose their stewardship:
+
+#### 1. Resign as a steward
+A steward account may resign their position at any point. Through the CLI it can be done with the command:
+
+```shell copy
+namadac resign-steward --steward $STEWARD_ADDRESS
+```
+
+#### 2. Funding proposal veto with removal
+If a steward submits a funding proposal that receives at least as many `nay` votes as `2/3` of the total active voting power, then the steward is immediately removed in addition to the veto of the proposal.
+
+#### 3. Removal through a governance proposal
+A steward may be removed by a steward governance proposal as described [above](./stewards.mdx#submitting-a-steward-governance-proposal).
+For removal, the `"remove"` list within the `"data"` field of the json file would contain the relevant steward address.
+
+## Steward inflation
+A PGF steward also receives inflationary NAM tokens at the beginning of every epoch.
+The steward inflation rate is a constant parameter `stewards_inflation_rate` that can be changed via governance.
+
+Each PGF steward receives an inflation amount according to `stewards_inflation_rate`; this amount is given to each steward and not divided among them.
+
+#### Steward's reward distribution
+A steward may also designate certain portions of its steward inflation to be minted to other addresses.
+This distribution can be set with the following steward commission CLI command:
+
+```shell copy
+namadac  update-steward-rewards --steward $STEWARD_ADDRESS --data-path $PATH_TO/steward_rewards.json
+```
+
+The file `steward_rewards.json` contains the desired reward distribution with the structure:
+
+```json
+{
+    "reward_distribution": {
+        "tnam...aaa": "0.3",
+        "tnam...bbb": "0.3",
+        "tnam...ccc": "0.4"
+    }
+}
+```
