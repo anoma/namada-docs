@@ -11,11 +11,11 @@ Multisignature accounts (multisigs) are accounts on Namada that allow for multip
 
 For this reason, all established accounts on Namada are multisignature accounts by default.  
 
-A multisignature account can be described as an "x of y" account, where x is the 'threshold' or required number of signatures on a transaction
-and y is the total number of keys associated with the account. For example, a 3 of 5 multisig will need at least three of the parties to sign any transaction.
+A multisignature account can be described as an "**x** *of* **y**" account, where **x** is the 'threshold' or required number of signatures on a transaction
+and **y** is the total number of keys associated with the account. For example, a *3 of 5* multisig will need at least three of the parties to sign any transaction.
 
 ## Example: Initialising a multisignature account
-Here is the process to generate a 2 of 3 multisig account:
+Here is the process to generate a *2 of 3* multisig account:
 
 <Steps>
 ### Create three signing keys
@@ -33,7 +33,7 @@ In this example, Alice will cover the transaction fees and we'll assume she alre
 
 ### Init-account
 The `init-account` transaction is no different from a typical established account, except for threshold and number of public keys associated.
-(In fact, a typical established account is simply a 1 of 1 multisig.)  
+(In fact, a typical established account is simply a *1 of 1* multisig.)  
 
 The `--signing-keys` flag indicates that Alice is signing and paying fees for this transaction.
 ```bash copy
@@ -55,7 +55,7 @@ The `--dump-tx` argument will write the transaction to disk. A folder is require
 
 ```bash copy
 mkdir tx_dumps
-namadac transfer --source abc-multisig --target <destination address> \
+namadac transfer --source abc-multisig --target $TARGET \
   --token nam --amount 2 \
   --signing-keys alice \
   --dump-tx --output-folder-path tx_dumps
@@ -74,7 +74,7 @@ namadac sign-tx \
   --signing-keys alice \
   --owner abc-multisig
 ```
-You should have created two new files, one with Alice's signature and one with Bob's:
+You should have created two new files -- one with Alice's signature and one with Bob's.
 ```bash copy
 # contents of tx_dumps directory
 FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3.tx
@@ -85,13 +85,13 @@ To make things easier in the next step, we'll save these filenames to the shell 
 
 ### Submit transaction on-chain
 Since we have enough signatures to meet the threshold of this account, we can submit the transaction. Note that we need to specify
-an account that will pay the transaction fees.
+an implicit account that will pay the transaction fees.
 
 ```bash copy
 namadac tx \
-  --tx-path $TX
-  --signatures $SIG1 $SIG2
-  --owner abc-multisig
+  --tx-path $TX \
+  --signatures $SIG1 $SIG2 \
+  --owner abc-multisig \
   --gas-payer alice
 ```
 <Callout type="info">
@@ -113,7 +113,7 @@ namadac update-account \
 --signing-keys alice,bob
 ```
 <Callout type="info">
-Note: you must include both the threshold and the list of public keys to be assosicated with this account, even if there is no change to one of those values.
+Note: you must include both the threshold and the list of public keys to be associated with this account, even if there is no change to one of those values.
 </Callout>
 
 <Callout type="info" emoji="💡">
@@ -128,7 +128,7 @@ One can check that the threshold has been updated correctly by running:
 namadac query-account \
 --owner abc-multisig
 ```
-Which will list the threshold and all associated public keys of an account.
+This will list the threshold and all associated public keys of an account.
 
 ## A video tutorial
 
