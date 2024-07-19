@@ -29,10 +29,10 @@ namada client query-proposal
 or a single proposal with
 
 ```shell copy
-namada client query-proposal --proposal-id 0
+namada client query-proposal --proposal-id $ID
 ```
 
-where `0` is the proposal id.
+where `$ID` is the proposal id.
 
 ## Vote on a proposal
 
@@ -92,10 +92,10 @@ python3 add_proposal_wasm_code.py --proposal-path $JSON_FILE --wasm-path $$WASM_
 
 This command will add the wasm data to the `$JSON_FILE`.
 
-When submitting this proposal, it is likely that the gas requirement will be large. Therefore, it is recommended to supply both the `--gas-limit` and `--gas-price` flags.
+When submitting this proposal, it is likely that the gas requirement will be large. Therefore, it is recommended to supply at least the `--gas-limit` flag.
 
 ```shell copy
-namadac init-proposal --data-path proposal.json --gas-limit 500000 --gas-price 0.01
+namadac init-proposal --data-path proposal.json --gas-limit 500000
 ```
 
 <Callout type="info">
