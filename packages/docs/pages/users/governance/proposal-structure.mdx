@@ -45,4 +45,4 @@ A proposal author should manually set the following fields in the `proposal.json
 - `voting_end_epoch`: an epoch that is at least `min_proposal_voting_period` epochs further into the future than `voting_start_epoch` at which point no more votes are accepted.
 - `activation_epoch`: an epoch that is at least `min_proposal_grace_epochs` epochs further into the future than `voting_end_epoch`, at which any associated WASM code will be executed.
 
-The `data` field and its contents are dependent on the [type of proposal](./proposal-types.mdx) being submitted. In a default proposal, data is optiona, but if included then it is a vector of bytes corresponding to WASM code. In a PGF-related proposal, the data contents take another form.
+The `data` field and its contents are dependent on the [type of proposal](./proposal-types.mdx) being submitted. In a default proposal, data is optional, but if included then it is a vector of bytes corresponding to WASM code. In a PGF-related proposal, the data contents take another form.

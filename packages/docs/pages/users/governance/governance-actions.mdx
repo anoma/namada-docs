@@ -20,19 +20,17 @@ namada client init-proposal --pgf-stewards --data-path proposal.json
 ```
 
 ## Query the proposal
-If the submitted transaction was accepted, the user can query all the proposals with:
-
-```shell copy
-namada client query-proposal
-```
-
-or a single proposal with
+If the submitted transaction was accepted, the user can query the proposal with its proposal ID:
 
 ```shell copy
 namada client query-proposal --proposal-id $ID
 ```
 
-where `$ID` is the proposal id.
+Additionally, the user can query some of the most recent proposals with:
+
+```shell copy
+namada client query-proposal
+```
 
 ## Vote on a proposal
 
