@@ -52,7 +52,10 @@ The `--address` flag needs to be the address of the delegator or validator that 
 ## Check the result
 
 As soon as the ledger reaches the epoch defined in the json as `voting_end_epoch`, no more votes will be accepted.
-The code defined in `proposal_code` json field will be executed at the beginning of `activation_epoch` epoch. You can use the following commands to check the status of a proposal:
+At the beginning of the `activation_epoch`, the votes are tallied.
+If the proposal passes, the code defined in `proposal_code` json field will be executed at this time.
+
+You can use the following commands to check the status of a proposal:
 
 ```shell copy
 namada client query-proposal --proposal-id $ID
@@ -65,12 +68,24 @@ namada client query-proposal-result --proposal-id $ID
 ```
 
 <Callout type="info">
-It is important to note that the proposal will only be executed at the start of the `activation_epoch` epoch if it has passed. If it has not passed, the proposal will be rejected and the code will not be executed.
+If the proposal has not passed, it will be rejected, and the code will not be executed.
 
-Another important note is that the voting period differs between validators and non-validators. The validators have a shorter voting period than the delegators. This is defined in the `parameters.toml`. This is to ensure that the non-validators have enough time to vote on the proposals (so that the validators cannot vote in the last block against the non-validators preference). See the specs for more information.
+Another important note is that the voting period differs between validators and non-validators. The validators have a shorter voting period than the delegators. This is to ensure that the non-validators have enough time to vote on the proposals (so that the validators cannot vote in the last block against the non-validators preference). See the specs for more information.
 </Callout>
 
-## Submit a governance proposal with wasm code attached (advanced)
+### Tally types
+The governance mechanism defines different criteria depending on proposal type in order for the proposal to pass:
+
+**Default proposals** require at least 2/3 of the total active voting power to have voted AND the `yay` voting power must be at least 2/3 of the combined `yay + nay` voting power.
+
+**PGF steward proposals** require at least 1/3 of the total acive voting power to have voted AND the `yay` voting power must be larger than the `nay` voting power.
+
+**Funding proposals** are tallied differently depending on if the proposal author is a PGF steward:
+- Non-steward: the funding proposal is tallied in the same way as the PGF steward proposal (above).  
+- Steward: the proposal can pass without any votes at all. However, the network can veto the proposal if 1/3 of the total active voting power votes, and the `nay` votes are larger than the `yay` votes.
+In other words, the proposal passes if less than 1/3 of the total voting power votes OR there are more `yay` votes than `nay` votes.
+
+## Submit a governance proposal with wasm code attached
 
 First you will need a valid `.wasm` file. You then need to read this file into a vector of bytes. This can be done with the following small python script:
 
