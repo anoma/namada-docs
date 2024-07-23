@@ -70,6 +70,9 @@ So in the example above for a PGF funding in the native NAM token, the amount `1
 ## Voting on the funding proposal
 Voting on the funding proposal is done the same way as any other normal proposal, as described [here](../governance/governance-actions.mdx#vote-on-a-proposal).
 
-If a funding proposal was submitted by a PGF steward, then voting on the proposal is not needed, as a steward funding proposal requires no `yay` votes to pass.
-However, this kind of funding proposal can be vetoed by the community if the proposal receives more `nay` votes than `1/3` of the total active voting power.
-Additionally, if the proposal receives at least as many `nay` votes as `2/3` of the total active voting power, then the steward account will be removed from the set of PGF stewards.
+If a funding proposal was submitted by a PGF steward, then voting on the proposal is not needed for it to pass, as a steward funding proposal requires no `yay` votes to pass.
+
+However, this kind of funding proposal can be vetoed by the voting community if at least 1/3 of the total active voting power does vote on the proposal AND there are more `nay` votes than `yay` votes.
+
+Additionally, a steward can be removed and stripped of its stewardship if the voting results are significantly disfavorable.
+The steward would be removed if at least 2/3 of the total voting power voted AND there were at least twice as many `nay` votes as `yay` votes (`nay >= 2/3 * (yay + nay)`).
