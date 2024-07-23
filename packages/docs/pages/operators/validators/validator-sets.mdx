@@ -1,0 +1,37 @@
+import { Callout } from "nextra-theme-docs";
+
+# Validator sets
+
+Validators are grouped into sets that determine what behaviors are permitted to the validator and what data is stored on-chain.
+
+There are three validator sets - consensus, below-capacity, and below-threshold - that are discriminated by the stake / voting power of their respective validators.
+
+Two protocol parameters determine the composition of each validator set:
+- `max_validator_slots`: the maximum number of validators allowed to participate in consensus of any block
+- `validator_stake_threshold`: the minimum stake required to participate in consensus
+
+With this in mind, each of the three validator sets is defined:
+- **Consensus:** the set of validators that participates in consensus and voting on blocks. It contains the validators with the most voting power and cannot exceed `max_validator_slots` size. Validators in this set also require greater than `validator_stake_threshold` staked tokens.
+- **Below-capacity:** contains the validators who have greater than `validator_stake_threshold` stake but are not one of the top `max_validator_slots` validators. These are next in line to join the `consensus` set should space open up.
+- **Below-threshold:** contains all active validators with less than `validator_stake_threshold` stake
+
+Any validator that is in one of the three validator sets above can be considered an ***active*** validator.
+
+## Querying the validator set of a given validator
+
+A validator's `state` can indicate the validator set to which it belongs. This can be queried at the CLI with:
+```bash copy
+namadac validator-state --validator $VALIDATOR_ADDRESS --epoch $EPOCH
+```
+The `--epoch` argument is optional; if not provided, the `state` will be queried at the current epoch.
+
+## Jailed and Inactive validators
+
+Validators that are considered to be `jailed` or `inactive` cannot belong to one of the three aforementioned validator sets.
+Extra restrictions are enforced and other transactions may be required in order for these validators to become eligible for consideration in consensus.
+
+**Jailed** validators have committed protocol infractions or not maintained liveness requirements of consensus validators.
+They can only return to an active validator set by submitting a successful `unjail` transaction. See more details [here](./jailing.mdx). 
+
+**Inactive** validators have manually removed themselves from consideration in consensus activities with a `deactivate` transaction.
+This can typically signal that a validator has ceased operations and might signal delegators to unbond from it. See more details [here](./validator-actions.mdx#deactivation-and-reactivation).

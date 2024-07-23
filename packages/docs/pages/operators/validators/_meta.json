@@ -3,5 +3,6 @@
   "validator-setup": "Validator setup",
   "validator-actions": "Validator actions",
   "staking": "Staking",
+  "validator-sets": "Validator sets",
   "jailing": "Jailing"
 }
