@@ -73,11 +73,10 @@ jobs:
             "TARGET=${{ matrix.make.path }}"
 
   checks:
-    runs-on: ${{ matrix.os }}
+    runs-on: [ubuntu-22.04]
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]
         lychee_version: [lycheeverse/lychee@v0.13.0]
         make:
           - name: docs
