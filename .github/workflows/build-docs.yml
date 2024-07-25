@@ -90,8 +90,14 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      - name: Install tools
-        run: |
-          curl -k https://installer.heliax.click/${{ matrix.lychee_version }}! | bash
-      - name: Check broken links for ${{ matrix.make.name }}
-        run: lychee --offline packages/${{ matrix.make.path }}/pages/
+      - name: Link Checker
+        id: lychee
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --offline packages/${{ matrix.make.path }}/pages/
+      - name: Install cargo-spellcheck
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-spellcheck
+      - name: Run cargo-spellcheck
+        run: cargo spellcheck --code 1
