@@ -1,0 +1,78 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Proposing funding
+Namada has two different types of public goods funding: continuous and retroative.
+
+Recipients of continuous PGF receive tokens at the beginning of every epoch when inflation is minted.
+
+Recipients of retroactive PGF receive tokens in a one-time transfer upon the successful execution of such a governance proposal, which also would occur at the beginning of an epoch.
+
+In both cases of PGF, the recipient addresses can be either native Namada addresses or addresses on other IBC-compatible blockchains that have open channels with Namada.
+
+## Submitting the funding proposal
+
+A funding proposal can be submitted with the following CLI command:
+
+```shell copy
+namada client init-proposal \
+    --pgf-funding \
+    --data-path funding_proposal.json
+```
+
+The structure of `funding_proposal.json` is demonstrated with the following example:
+
+```json
+{
+    "proposal": {
+        "content": {
+            "title": "Fund Jonny's cryptography PhD",
+            "authors": "stewie@heliax.dev",
+            "discussions-to": "forum.namada.net/t/jonny-cryptography/1",
+            "created": "2024-01-01T00:00:01Z",
+            "license": "MIT",
+            "abstract": "Fund Jonny's cryptography PhD focusing on elliptic curves.",
+            "motivation": "Jonny is the world's most promising cryptography prodigy.",
+            "details": "It is important for humanity to support Jonny in his cryptography research."
+        },
+        "author": "tnam1qp326qxmkncgwavskar9lfwm68x04vu8sg80crm4",
+        "voting_start_epoch": 3,
+        "voting_end_epoch": 6,
+        "activation_epoch": 12
+    },
+    "data": {
+        "continuous": [
+            {
+                "Internal": {
+                    "amount": "1000",
+                    "target": "tnam1qp326qxmkncgwavskar9lfwm68x04vu8sg80aaaa"
+                }
+            }
+        ],
+        "retro": [
+            {
+                "Internal": {
+                    "amount": "1500",
+                    "target": "tnam1qp326qxmkncgwavskar9lfwm68x04vu8sg80bbbb"
+                }
+            }
+        ]
+    }
+}
+```
+
+In the `"data"` section, both the `"continuous"` and `"retro"` fields contain a list of PGF targets.
+The `"Internal"` keyword is used to indicate on-chain funding in the native token, whereas for funding over IBC to another chain, the `"IBC"` keyword would be used.
+The attributes of an `"IBC"` object look like [this](../governance/proposal-types.mdx#ibc-pgf-proposals).
+
+The value in the `"amount"` attribute is the raw token amount in that token's denomination.
+So in the example above for a PGF funding in the native NAM token, the amount `1000` corresponds to `0.001 NAM`, since the Namada token denomination is `6`.
+
+## Voting on the funding proposal
+Voting on the funding proposal is done the same way as any other normal proposal, as described [here](../governance/governance-actions.mdx#vote-on-a-proposal).
+
+If a funding proposal was submitted by a PGF steward, then voting on the proposal is not needed for it to pass, as a steward funding proposal requires no `yay` votes to pass.
+
+However, this kind of funding proposal can be vetoed by the voting community if at least 1/3 of the total active voting power does vote on the proposal AND there are more `nay` votes than `yay` votes.
+
+Additionally, a steward can be removed and stripped of its stewardship if the voting results are significantly disfavorable.
+The steward would be removed if at least 2/3 of the total voting power voted AND there were at least twice as many `nay` votes as `yay` votes (`nay >= 2/3 * (yay + nay)`).

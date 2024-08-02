@@ -106,7 +106,7 @@ When constructing transactions using the sdk, we almost alwasy need a `namada` o
 ```rust
 use namada_sdk::NamadaImpl; // This module allows us to access the NamadaImpl struct, which is needed for most transactions
 
-let source_address = Address::from_str("tnam1v4ehgw36xq6ngs3ng5crvdpngg6yvsecx4znjdfegyurgwzzx4pyywfexuuyys69gc6rzdfnryrntx").unwrap();
+let source_address = Address::from_str("tnam1qp326qxmkncgwavskar9lfwm68x04vu8sg80crm4").unwrap();
 let http_client = reqwest::Client::new();
 let wallet = Wallet::from_mnemonic("your mnemonic here").unwrap();
 let wallet: namada_sdk::wallet::Wallet<FsWalletUtils> = FsWalletUtils::new(PathBuf::from("wallet.toml"));

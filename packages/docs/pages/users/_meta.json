@@ -4,8 +4,8 @@
   "shielded-accounts": "MASP & Shielded Transfers",
   "fees": "Fees on Namada",
   "delegators": "Bonding and Proof-of-stake",
-  "governance": "Governance and Public Goods Funding",
-  "public-goods-stewards": "PGF",
+  "governance": "Governance",
+  "public-goods-funding": "Public Goods Funding (PGF)",
   "ibc": "IBC transfers",
   "query": "Querying the Chain"
 }

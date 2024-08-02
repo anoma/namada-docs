@@ -1,4 +1,5 @@
 {
-  "on-chain-governance": "On-chain proposals",
-  "off-chain-governance": "Off-chain proposals"
+  "proposal-structure": "Structure of a proposal",
+  "proposal-types": "Types of proposals",
+  "governance-actions": "Participating in governance"
 }
