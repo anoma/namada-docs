@@ -97,7 +97,7 @@ print(str(byte_vec))
 
 The output can then be copied into the `data` field of the proposal json. E.g `"data": [1,255,3,4,5,182,7,81,90,10]`.
 
-Additionally, there is a script in the namada repo called `add_proposal_wasm_code.py` (TODO: link to this when merged!!) that can be used to add the wasm data to a proposal template like `template_proposal.json` (LINK TO THIS TOO!):
+Additionally, there is a script in the namada repo called [`add_proposal_wasm_code.py`](https://github.com/anoma/namada/blob/main/scripts/add_proposal_wasm_code.py) that can be used to add the wasm data to a proposal template like `template_proposal.json` (LINK TO THIS TOO!):
 
 ```shell copy
 python3 add_proposal_wasm_code.py --proposal-path $JSON_FILE --wasm-path $$WASM_FILE
