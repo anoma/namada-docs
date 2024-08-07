@@ -1,103 +1,140 @@
 import Expandable from '../../components/Expandable';
-import { Callout } from 'nextra-theme-docs'
+import { Callout, Steps } from 'nextra-theme-docs'
 
 # Namada Indexer
 
-In collaboration with [Zondax](https://zondax.ch/), an indexer for the Namada blockchain has been born.
+The [namada-indexer](https://github.com/anoma/namada-indexer) crawls a Namada blockchain to map details such as transactions, validator set updates, POS rewards, 
+governance proposals and more. It stores the results in a Postgres database where it can be queried via a REST api.  
 
-The Namada indexer (a.k.a `namadexer`) constantly queries the Namada blockchain, and together with the [SDK](./sdk.mdx), is able to map blocks, transactions, along with other valuable information into a relational database (postgres).
-
-This is especially useful for performing analytics over the blockchain, including storing historical data in a way that could be easily queried.
+Namada-indexer was created to power the [Namadillo](./interface.mdx) interface; however it can be generally useful for any application that needs to query historical data 
+or perform analytics over the blockchain.
 
 ## Setting up
 
-The namada indexer's source code can be found [here](https://github.com/zondax/namadexer) and is simple to set up.
+The *namada-indexer* source code can be found [here](https://github.com/anoma/namada-indexer).  
 
-The `namadexer` works best together with [Docker](https://www.docker.com/products/docker-desktop)
+It's recommended to use [Docker/Docker Compose](https://www.docker.com/products/docker-desktop) to run the indexer.
 
+### Prerequisites
+- *(required)*: an available Namada RPC node
+- *(required)*: [Docker and Docker Compose](https://www.docker.com/products/docker-desktop)
+- *(optional but recommended)*: [Just](https://github.com/casey/just) -- see the project's README for installation instructions for your system
+
+### RPC configuration
+To configure your RPC node to serve historical data to the indexer, you will need to open its `config.toml` file (located in `~/.local/share/namada/$CHAIN_ID` by default) 
+and find the setting `storage_read_past_height_limit`. Change the default value of `3600` to an appropriately high number.  
+
+If you see the following error in your logs when running the indexer, it indicates that you have this value configured too low:
+```
+Info log: RPC error: Cannot query more than 3600 blocks in the past (configured via `shell.storage_read_past_height_limit`)., error code: 1
+```
+
+## Running the indexer
+The following steps will help you configure and run *namada-indexer*.
+<Steps>
+### Clone repo
+Begin by cloning the indexer repo:
 ```bash
-git clone https://github.com/Zondax/namadexer.git
-cd namadexer
-make compose
+git clone https://github.com/anoma/namada-indexer.git
+cd namada-indexer
 ```
 
-## Running the server and db
-Once the DockerFile has run, it is straightforward to both set up the postgres database as well as the server that will query the database.
+### Set environment variables
+The indexer configuration is stored in its `.env` file, found in the base directory of the repo. Refer to `.env_sample` to see which values can be set.  
 
-Make sure that `postgres` [is installed](https://www.postgresql.org/download/) on the local machine.
-
-**Run postgres in docker**
-```bash
-make postgres 
-# or run (and change arguments, e.g port):
-# docker run --name postgres -e POSTGRES_PASSWORD=wow -e POSTGRES_DB=blockchain -p 5432:5432 -d postgres
+Create that file now:
 ```
-Once the postgres server is up and running, it is time to set up the server that will query the postgres db.
-
-Execute the following command in order to set up the server
-```
-make run_server
+cp .env_sample .env
 ```
 
-If successful, the server should be running as a daemon on the localhost at port `30303`.
-
-## Run the indexer
-
-First, ensure that the `Settings.toml` within `config/Settings.toml` is configured correctly.
-
-<Expandable>
-```toml
-log_level = "info"
-network = "public-testnet-14"
-
-[database]
-host = "0.0.0.0:5435"
-user = "postgres"
-password = "wow"
-dbname = "blockchain"
-# Optional field to configure a timeout if database connection 
-# fails.
-connection_timeout = 20
-
-
-[server]
-serve_at = "0.0.0.0"
-port = 30303
-
-[indexer]
-tendermint_addr = "0.0.0.0"
-port = 26657
-
-[jaeger]
-enable = false
-host = "localhost"
-port = 6831
-
-[prometheus]
-host = "0.0.0.0"
-port = 9000
+It will have the following default values:
+```
+DATABASE_URL=postgres://postgres:password@postgres:5432/namada-indexer
+TENDERMINT_URL=http://host.docker.internal:27657
+CACHE_URL=redis://dragonfly:6379
+WEBSERVER_PORT=5000
 ```
 
-</Expandable>
+Change the value of `TENDERMINT_URL` to the url of your RPC node.
 
-<Callout type="info" emoji="👀">
-**Interpreting the toml**
+### (Recommended) Change Postgres username and password
+The default username and password (`postgres` and `password` respectively) will work for local development, however they should be changed if your indexer will be publicly accessible.  
 
-It is important to change the following parameters:
+First, open the file `docker-compose-db.yml` and change the default values to something more secure:
+```
+environment:
+  POSTGRES_PASSWORD: NEW_PASSWORD
+  POSTGRES_USER: NEW_USERNAME
+  PGUSER: NEW_USERNAME
+  POSTGRES_DB: namada-indexer
+```
 
-1. `indexer.tendermint_addr` - This should be the address and corresponding port of a synced Namada full node
+Then, update the Postgres url in your `.env` file with the new values.  
 
-2. `database.host` - This should be the tcp address (with port) where the postgres database is running.
+The schema for the url is `postgres://{user_name}:{password}@{host}:{port}/{database_name}`
+```
+DATABASE_URL=postgres://NEW_USERNAME:NEW_PASSWORD@postgres:5432/namada-indexer
+```
+
+### Build the containers
+Build the indexer containers by running:
+```
+docker compose build
+```
+
+Instead of building yourself, you can check the repo's [container registry](https://github.com/anoma/namada-indexer/pkgs/container/namada-indexer) for 
+recent images.
+
+### Start the indexer
+Start all indexer containers with this command:
+```
+just docker-up
+```
+You can expect to see some database connection errors in the logs during the time the database is being initialized -- these are normal and will resolve within a couple minutes.
+<Callout type="info">
+Assuming you want to keep the indexer running persistently in the background, you will likely want to perform this step using something like `screen` or `tmux`.  
+
+*Eg.* In Ubuntu, using `screen`:
+1. Start a new screen session: `screen -S indexer`
+2. Start the indexer: `just docker-up`
+3. Detach from the session, allowing it to run in the background: Press `Ctrl+A` and then `d`
+4. To re-attach to the session at a later time: `screen -d -r indexer`
 </Callout>
+Stop the indexer with `Ctrl+c`. Remove all associated data with `docker compose down --volumes`.
+</Steps>
 
-Once the setup is complete, it is possible to start the indexer
+## REST API
+Once the indexer has been started, the `webserver` container will serve requests at the port given by `WEBSERVER_PORT` in the `.env` file.  
 
-```bash
-make run_indexer
+Available endpoints are documented in the `swagger.yml` file inside the repo.  
+
+*Eg.* to query the latest indexed block:
+```
+curl localhost:5000/api/v1/chain/block/latest
+
+# response
+{"block":"163445"}
 ```
 
 ## Querying the database
+You can also query the Postgres database directly.  
 
-The pre-defined endpoints to query the database are described in the documentation [here](https://github.com/Zondax/namadexer/blob/main/docs/04-server.md).
+*Eg.* to perform a simple query using `pgcli` on Ubuntu:
+<Steps>
+### Install `pgcli`
+```
+sudo apt install pgcli
+```
+### Connect to the database
+(If you changed your Postgres username and/or password above, use the updated values.)
+```
+pgcli postgres://postgres:password@localhost:5435/namada-indexer
+```
+### Run a query
+*Eg.* Find a wrapper transaction by its hash:
+```
+SELECT * FROM wrapper_transactions WHERE id = 'cece56db36322f9b0728a0f2e127ef33c410a9fab74e2b9e135f97903c6c2c4e';
+```
+</Steps>
 
-
+If you prefer to use a GUI, there are many free options available such as [Beekeeper Studio](https://www.beekeeperstudio.io/get-community) and [pgAdmin](https://www.pgadmin.org/download/).
