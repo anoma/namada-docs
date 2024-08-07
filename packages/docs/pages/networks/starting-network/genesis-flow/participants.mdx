@@ -2,7 +2,7 @@ import { Callout } from 'nextra-theme-docs'
 import { Steps } from 'nextra-theme-docs'
 
 # Pre-genesis participants
-This section contains details on the pre-genesis process and instructions on how participants can generate, sign and submit each available type of pre-genesis 
+This section contains details on the pre-genesis process and instructions on how participants can generate, sign, and submit each available type of pre-genesis 
 transaction.
 
 ## Genesis state
@@ -14,7 +14,7 @@ Initial token allocations are given in the chain's `balances.toml` file, and the
 derived as a result of applying the pre-genesis transactions given in the chain's `transactions.toml` file.
 
 To produce an initial validator set in a decentralized manner, network participants (i.e. users and operators) are given the opportunity to generate and submit a 
-pre-genesis transaction in which they initialize their validators and/or bond stake to another genesis validator.
+pre-genesis transaction in which they can initialize their validators and/or bond stake to a genesis validator.
 
 Prospective pre-genesis transactions are then collected in a single location (typically a GitHub repo) where they can be reviewed by the 
 [network coordinator](./coordinator.mdx) and selected for inclusion in the genesis block. The finalized set of pre-genesis transactions are 
@@ -205,11 +205,11 @@ The `--net-address` specifies the network address of the validator node given by
 
 The `--alias` flag is the moniker name of the validator account in your wallet.
 
-The `--commission-rate` and `--max-commision-rate` flags are the commission rate and the maximum permitted commission rate change of the validator account per epoch. See the validator docsfor more info.
+The `--commission-rate` and `--max-commision-rate` flags are the commission rate and the maximum permitted commission rate change of the validator account per epoch. See the [validator docs](../../../operators/validators/validator-setup.mdx#initialize-a-new-validator-account) for more info.
 
 The `--email` flag is the email address of the validator account. This is used for the validator account to receive notifications from the network coordinator and other participants.
 
-The optional flags `--name`, `--discord-handle`, `--avatar`, `--website` and `--description` configure additional optional on-chain metadata which identify your validator.
+The optional flags `--name`, `--discord-handle`, `--avatar`, `--website` and `--description` configure additional optional on-chain metadata that identify your validator.
 
 The `--address` flag is the `tnam...` address of the established account that was generated in the previous section.
 
@@ -252,7 +252,7 @@ namadac utils genesis-bond \
 
 ### Signing transactions
 
-In the case of init-validator and bond transactions, after generating your pre-genesis transaction (but before submitting it for inclusion in the genesis block) you must 
+For validator initialization and bonding transactions, after generating your pre-genesis transaction (but before submitting it for inclusion in the genesis block), you must 
 sign it with the relevant private key. You can do this using the `sign-genesis-txs` command.  
 
 The command will check for the necessary private key in the [pre-genesis wallet](#pre-genesis-wallet). If you are signing an init-validator 
