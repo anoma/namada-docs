@@ -1,0 +1,48 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Creating a proposal
+
+To create a governance proposal, a user must have an address on-chain, a balance of more than `min_proposal_fund` NAM tokens, and a json file containing the proposal details and data.
+
+To get your address that you will need to use, you can look in the wallet using your account alias (`my-new-acc` in this example):
+
+```shell copy
+namada wallet find --alias `my-new-acc`
+```
+
+Now, we need to create a json file `proposal.json` holding the content of our proposal. Copy the below text into a json file.
+
+```json
+{
+    "proposal": {
+        "content": {
+            "title": "Text",
+            "authors": "Text",
+            "discussions-to": "URL",
+            "created": "YYYY-MM-DDTHH:MM:SSZ",
+            "license": "<insert-license>",
+            "abstract": "Text",
+            "motivation": "Text",
+            "details": "Text",
+            "requires": "Number"
+        },
+        "author": "tnam-author-address",
+        "voting_start_epoch": <Number>,
+        "voting_end_epoch": <Number>,
+        "activation_epoch": <Number>
+    },
+    "data": "TODO-ADD-DATA-IF-NEEDED"
+}
+```
+
+Most of the fields within `"content"` are self-explanatory. The `requires` field references an id in quotations of another proposal that must be passed before this proposal can be executed. The `created` field must contain the creation time in the format `YYYY-MM-DDTHH:MM:SSZ`.
+
+
+A proposal author should manually set the following fields in the `proposal.json`:
+
+- `author`: the `tnam` address of `my-new-acc`;
+- `voting_start_epoch`: a future epoch in which you want the voting to begin.
+- `voting_end_epoch`: an epoch that is at least `min_proposal_voting_period` epochs further into the future than `voting_start_epoch` at which point no more votes are accepted.
+- `activation_epoch`: an epoch that is at least `min_proposal_grace_epochs` epochs further into the future than `voting_end_epoch`, at which any associated WASM code will be executed.
+
+The `data` field and its contents are dependent on the [type of proposal](./proposal-types.mdx) being submitted. In a default proposal, data is optional, but if included then it is a vector of bytes corresponding to WASM code. In a PGF-related proposal, the data contents take another form.

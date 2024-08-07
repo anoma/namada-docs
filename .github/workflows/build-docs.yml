@@ -2,10 +2,6 @@ name: Build docker images
 
 on:
   workflow_dispatch:
-    inputs:
-      tag:
-        description: 'The docker image tag'
-        required: true
   push:
     branches:
       - master
@@ -16,13 +12,15 @@ env:
 
 jobs:
   docker:
-    runs-on: ${{ matrix.os }}
+    runs-on: [ubuntu-22.04]
     needs: [checks]
+    env:
+      GIT_LFS_SKIP_SMUDGE: 1
+      REGISTRY_URL: ghcr.io
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]
-        make:
+        docker:
           - name: Build Specs image
             image: specs
             path: specs
@@ -35,50 +33,33 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
-          version: v0.9.1
-      - name: Login to private registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ secrets.REGISTRY_URL }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ secrets.REGISTRY_URL }}/namada-${{ matrix.make.image }}-docs
-          tags: |
-            type=schedule
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=raw,value=latest
-      - name: ${{ matrix.make.name }}
-        uses: docker/build-push-action@v4
+          registry: ${{ env.REGISTRY_URL }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: ${{ matrix.docker.name }}
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
           push: ${{ github.ref == 'refs/heads/master' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY_URL }}/anoma/namada-docs:${{ matrix.docker.image }}-main
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            "TARGET=${{ matrix.make.path }}"
+            "TARGET=${{ matrix.docker.path }}"
 
   checks:
-    runs-on: ${{ matrix.os }}
+    runs-on: [ubuntu-22.04]
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]
-        lychee_version: [lycheeverse/lychee@v0.13.0]
         make:
           - name: docs
             path: docs
@@ -90,8 +71,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      - name: Install tools
-        run: |
-          curl -k https://installer.heliax.click/${{ matrix.lychee_version }}! | bash
-      - name: Check broken links for ${{ matrix.make.name }}
-        run: lychee --offline packages/${{ matrix.make.path }}/pages/
+      - name: Link Checker
+        id: lychee
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --offline packages/${{ matrix.make.path }}/pages/

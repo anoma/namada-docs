@@ -1,0 +1,92 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Types of governance proposals
+
+There are three types of governance proposals: default, PGF, and Steward. Below, the differences are described by showing what the `data` field in the governance proposal typically looks like.
+
+## Default Proposal 
+
+The data field for default proposals is optional. If a proposal has code attached that is intended to execute in the state machine (such as changing the value of a protocol parameter), then the code must be compiled to WASM and then encoded into bytes, which are provided as the input to the data field.
+
+```json
+"data" : [1,255,3,4,5,182,7,81,90,10] # a vector of bytes
+```
+
+<Callout type="info" emoji="">
+In order to read the path to bytes, one can use a simple python script.
+```python
+with open(file_path, "rb") as f:
+    byte_vec = f.read()
+print(byte_vec)
+```
+
+Additionally, the namada github repository contains a script called [`add_proposal_wasm_code.py`](https://github.com/anoma/namada/blob/main/scripts/add_proposal_wasm_code.py) that attaches any wasm code to a proposal json file.
+</Callout>
+
+## Steward Proposal
+
+A steward proposal is used to propose the addition or removal of an address from the list of PGF stewards, which are detailed [here](../public-goods-funding/stewards.mdx).
+
+The data field for steward proposals is a **list** of actions to be taken. 
+The actions can be either `add` or `remove` and the address is the address of 
+the steward to be added or removed. In this way you can propose multiple add/remove actions at once.
+
+```json
+"data" : {
+    "add": "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75v90c8q",
+    "remove": ["tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75vaaaaa", "tnam1qql6qme020vw7pfw4ruavrwxujf9lf8z75vbbbbb"]
+}
+```
+
+## PGF Proposal
+
+The data field for PGF proposals contains both continuous and retroactive PGF funding actions. 
+Within each action, the user can include multiple payments in the form of a vector. 
+Within each payment, the target field contains the address of the recipient as well 
+as the amount of NAM that they will receive. For continuous PGF funding, the amount 
+specified will be sent at the end of each epoch. There is also the option to remove a 
+recipient from the continuous PGF funding, by specifying an already existing continuous 
+funding payment, and then setting the amount to "0". For retroactive PGF funding, 
+the amount specified will be sent upon execution of the proposal at the beginning of the `activation_epoch`.
+
+```json
+"data" :
+    {
+        "continuous" : [
+            {
+                "Internal": 
+                    {
+                        "amount": "1337",
+                        "target": "tnam1q9rxk49a7y6fp8h5qwz47d6jhml0km2w2y7emqyz"
+                        
+                    }
+        }
+        ],
+        "retro" : [
+            {
+                "Internal": 
+                    { 
+                        "amount": "1337",
+                        "target": "tnam1q9rxk49a7y6fp8h5qwz47d6jhml0km2w2y7emqyz"
+                    }
+            }
+        ]
+    }
+```
+
+
+
+#### IBC PGF proposals
+
+For a PGF proposal that is to be executed on an IBC chain, the `"Internal"` data structure will be substituted with "IBC" and have the following contents:
+
+```json
+"IBC": 
+    {
+        
+        "amount": "1337",
+        "target": "tnam1q9rxk49a7y6fp8h5qwz47d6jhml0km2w2y7emqyz",
+        "port_id": "<port-id>",
+        "channel_id": "<channel-id>"
+    }
+```
