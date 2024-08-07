@@ -33,7 +33,7 @@ After this is completed, the network coordinator will publish the `balances.toml
 
 ### Collecting pre-genesis transactions
 
-Once the participants have [submitted their keys and addresses](./participants.mdx#submitting-keys-and-addresses) the network coordinator must collect the signed pre-genesis transactions from the pre-genesis network participants. The network coordinator must ensure that the total number of pre-genesis transaction files collected is equal to the total number of pre-genesis network participants.
+Once the participants have [submitted their keys and addresses](./participants.mdx#submitting-keys-and-addresses) the network coordinator must collect the signed pre-genesis transactions from the pre-genesis network participants.  
 
 The network coordinator then aggregates these transaction files into one file and saves it as the `transactions.toml` file to be used in the generation of the genesis block.
 
@@ -41,7 +41,25 @@ The `transactions.toml` file is validated by the network coordinator to ensure t
 
 ### Generating the genesis block
 
-Once the network coordinator has collected the pre-genesis public keys, allocated pre-genesis NAM balances, and collected pre-genesis transactions, the network coordinator is ready to generate the genesis block.
+Once the network coordinator has collected the pre-genesis public keys, allocated pre-genesis NAM balances, and collected pre-genesis transactions, the network coordinator is ready to generate the genesis block.  
+
+The following command can be used to generate a `.tar.gz` archive that packages all genesis files needed to bootstrap any new node which wishes to join the chain.
+
+```
+namadac utils init-network \
+  --genesis-time $GENESIS_TIME \
+  --wasm-checksums-path $CHECKSUMS_PATH \
+  --chain-prefix $CHAIN_PREFIX \
+  --templates-path $TEMPLATES_PATH
+```
+where:
+- `GENESIS_TIME` is a string containing the desired network start time in the format `YYYY-MM-DDTHH:MM:SS.000000000+00:00`. Nodes will not attempt to make blocks before this time.
+- `CHECKSUMS_PATH` is the path to the chain's `checksums.json` file
+- `CHAIN_PREFIX` is a string of alphanumeric characters that will be used as the first part of the chain-id, chosen by the network coordinator
+- `TEMPLATES_PATH` is the path to a directory containing the five `toml` files required to create the genesis block -- `balances.toml`, `transactions.toml`, `tokens.toml`, `paramaters.toml` and `validity-predicates.toml`
+
+After successfully running the command, a file will be generated with the name `$CHAIN_ID.tar.gz` containing the genesis contents. The network coordinator must host this file so that 
+other nodes can download and apply it to their nodes ahead of the genesis time.
 
 
 </Steps>

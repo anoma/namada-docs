@@ -1,7 +1,7 @@
 import { Callout } from 'nextra-theme-docs'
 import { Steps } from 'nextra-theme-docs'
 
-# Pre-genesis process
+# Pre-genesis participants
 This section contains details on the pre-genesis process and instructions on how participants can generate, sign and submit each available type of pre-genesis 
 transaction.
 
@@ -11,14 +11,14 @@ A chain always starts from an initial state (the 'genesis state'), which is defi
 files define an initial allocation of tokens to various accounts, along with an initial validator set and stake distribution.  
 
 Initial token allocations are given in the chain's `balances.toml` file, and the initial validator set and stake distribution are 
-given in the chain's `transactions.toml` file.
+derived as a result of applying the pre-genesis transactions given in the chain's `transactions.toml` file.
 
 To produce an initial validator set in a decentralized manner, network participants (i.e. users and operators) are given the opportunity to generate and submit a 
 pre-genesis transaction in which they initialize their validators and/or bond stake to another genesis validator.
 
-Prospective pre-genesis transactions are then collected in a single location (typically a GitHub repo) where they can be reviewed by a 
-network launch coordinator and selected for inclusion in the genesis block. The finalized set of pre-genesis transactions are 
-published in the chain configuration tarball used to bootstrap all nodes. Should validators with a sufficient amount of stake 
+Prospective pre-genesis transactions are then collected in a single location (typically a GitHub repo) where they can be reviewed by the 
+[network coordinator](./coordinator.mdx) and selected for inclusion in the genesis block. The finalized set of pre-genesis transactions are 
+published in the chain configuration `.tar.gz` file used to bootstrap all nodes. Should validators with a sufficient amount of stake 
 choose to proceed to launch the chain with the proposed configuration, it will signal social consensus of the legitimacy of the genesis state.
 
 ## Pre-genesis network participants
@@ -32,6 +32,8 @@ The pre-genesis network participants are the entities that are participating in 
 
 ### Notes:
 
+Before getting to the pre-genesis transaction procedure in the next section, it's helpful to keep the following in mind:
+
 #### Pre-genesis wallet
 Whenever you perform a pre-genesis action that requires a public or private key (such as generating or signing pre-genesis transactions), 
 the Namada client will attempt to find them in the pre-genesis wallet, which is located at `$BASE_DIR/pre-genesis/wallet.toml`. 
@@ -43,11 +45,13 @@ namadaw --pre-genesis gen --alias $ALIAS
 ```
 
 #### Implicit accounts
-[Implicit accounts](../../../users/transparent-accounts/implicit-accounts.mdx) have no pre-genesis logic attached -- they simply exist by 
+Unlike established and validator accounts (which exist on-chain), [implicit accounts](../../../users/transparent-accounts/implicit-accounts.mdx) have no pre-genesis logic attached -- they simply exist by 
 virtue of being part of Namada's address space. Possessing the private key that corresponds to an implicit account permits one to spend 
-any tokens that may or may not be present at that address. Genesis allocations are specified in the chain's `balances.toml` file.
+any tokens that may or may not be present at that address. Therefore, an implicit account can be given a genesis allocation in the chain's `balances.toml` file, 
+by specifying its public key and an amount, but does not require any accompanying pre-genesis transaction.
 
-## Pre-genesis flow
+## Pre-genesis process
+This section gives instructions on the order of operations and commands used by pre-genesis participants when creating their pre-genesis transaction(s). It only applies before network launch.
 
 <Steps>
 
@@ -62,29 +66,13 @@ ALIAS="<your-key-alias>"
 namadaw --pre-genesis gen --alias $ALIAS
 ```
 
-After the user has entered their passwords and written down their mnemonic phrase, the namada cli will save the keys to the `pre-genesis` folder inside the [base directory](../../ledger/base-directory.mdx).
+After the user has entered their passwords and written down their mnemonic phrase, the Namada cli will save the keys to the `pre-genesis` folder inside the [base directory](../../ledger/base-directory.mdx).
 
 In order to print the keys, the user can run the following command:
 
 ```bash
-# Not recommended in production since it will print the private key to the terminal (which can be recovered)
-cat $BASE_DIR/pre-genesis/wallet.toml
+namadaw --pre-genesis find --alias $ALIAS
 ```
-
-It is the public keys that the pre-genesis network participants must submit to the network coordinator.
-
-```toml
-# Example wallet.toml
-[public_keys]
-alice = "ED25519_PK_PREFIXtpknam1qq2vscpcvhdwht9tldj9ntxnknandhnerhzd6d42xqzukw2kpcfpudh3dl2"
-
-...
-
-[addresses]
-alice = "tnam1qq97eqvv4lam8ds00j9em2s2f0r8e7r60qw9fdfq"
-```
-
-It is then the right hand side of each of these fields that is submitted to the network coordinator, i.e `ED25519_PK_PREFIXtpknam1qq2vscpcvhdwht9tldj9ntxnknandhnerhzd6d42xqzukw2kpcfpudh3dl2` and `tnam1qq97eqvv4lam8ds00j9em2s2f0r8e7r60qw9fdfq` in the example above.
 
 The network coordinator should specify the schema in which the pre-genesis network participants should submit their public keys and addresses. A toml file with the following schema is recommended:
 
@@ -93,6 +81,9 @@ The network coordinator should specify the schema in which the pre-genesis netwo
 "public-key" = "ED25519_PK_PREFIXtpknam1qpjs6jrjuu5cj508ys7ezee4r40v8as6vz4j3ddc9qm68nfhf5n7clp4xse"
 "address" = "tnam1qq5skuga54tfs7422hzz8sqvk3s6lhe2dg32jjhd"
 ```
+<Callout type="info">
+Remember, a public key begins with `tpknam`, whereas an address begins with `tnam`.
+</Callout>
 
 ### Submitting keys and addresses
 
@@ -100,7 +91,7 @@ After the network coordinator has published the location (conventionally a GitHu
 
 ### Generating transactions
 
-Participants are also responsible for generating the genesis-block transactions that set the initial state of the blockchain, including initialising 
+Participants are also responsible for generating the genesis-block transactions that set the initial state of the blockchain, including initializing 
 genesis validator accounts and bonding to them. However, it is only possible to make transactions that require value once the balances of the keys 
 become agreed upon (i.e. once the `balances.toml` file has been published).  
 
@@ -108,6 +99,8 @@ The available pre-genesis transactions are:
 - initialize an established account
 - initialize a validator from an established account
 - bond stake to a genesis validator
+
+More details on generating each type of pre-genesis transaction follow below.
 
 #### Initialize an established account
 
@@ -132,7 +125,7 @@ namadac utils init-genesis-established-account \
 The `aliases` argument specifies the public key(s) to be associated with the account, and the `path` argument 
 specifies the output file.  
 
-After initializing a pre-genesis established account you may proceed to "promoting" it to a pre-genesis validator account (see below), however 
+**Note:** After initializing a pre-genesis established account you may proceed to "promoting" it to a pre-genesis validator account (see below), however 
 you are not required to do so.  
 
 If the `init-genesis-established-account` command is successful, you will see output similar to the following:
@@ -144,7 +137,7 @@ IMPORTANT: keep a note of this address, especially if you plan to use it for a v
 Wrote genesis tx to: {output file location}
 ```
 
-This will generate a `transactions.toml` file that contains the pre-genesis transaction that will establish the account. The `transactions.toml` file should look something like this:
+This will generate a `transactions.toml` file that contains the pre-genesis transaction that will establish the account. The `transactions.toml` file should look similar to:
 
 ```toml
 [[established_account]]
@@ -169,7 +162,7 @@ namadac utils init-genesis-established-account \
 This step will require the `balances.toml` file to have been published by the network coordinator.
 </Callout>
 
-To initialize a pre-genesis validator, you must first have followed the steps above to initialize a pre-genesis established account 
+**Note:** To initialize a pre-genesis validator, you must first have followed the steps above to initialize a pre-genesis established account 
 and generate a transaction `toml` file.  
 
 The following command will generate a pre-genesis transaction which initializes a validator account:
@@ -233,7 +226,7 @@ Validator account address: tnam1q8lsztqqhpjxdwzw88mqqc2mun7dvpxvas3v2dxk
 ```
 
 <Callout type="warning">
-IMPORTANT: Make a secure backup of the validator keys created in this step. They are located in the folder `$BASE_DIR/pre-genesis/$VALIDATOR_ALIAS`
+**IMPORTANT:** Make a secure backup of the validator keys created in this step. They are located in the folder `$BASE_DIR/pre-genesis/$VALIDATOR_ALIAS`
 </Callout>
 
 #### Bond to a pre-genesis validator account
@@ -243,9 +236,6 @@ This step will require the `balances.toml` file to have been published by the ne
 </Callout>
 
 You can generate a pre-genesis transaction to bond tokens to a genesis validator (assuming you have tokens allocated to your account at genesis).
-<Callout type="info">
-This step is intended for pre-genesis participants who have been allocated `NAM` and want to bond to a genesis validator that is not their own. If you want to bond to your own genesis validator, please follow the steps in [Initialize a pre-genesis validator account](#initialize-a-pre-genesis-validator-account) and use the `--self-bond` argument.
-</Callout>
 
 You can generate a pre-genesis transaction to bond tokens to a genesis validator (assuming you have tokens allocated to your account at genesis). 
 To do so, first add your genesis account to your pre-genesis wallet using its mnemonic or private key.  
@@ -278,7 +268,9 @@ When signing a bond transaction, the `alias` can be omitted:
 namadac utils sign-genesis-txs --path $INPUT_FILE --output $OUTPUT_FILE
 ```
 
+<Callout type="info">
 Transactions that only initialize an established account do not need to be signed (attempting to sign one will simply output the original file).
+</Callout>
 
 ### Submitting transactions
 
