@@ -1,0 +1,65 @@
+import { Steps } from 'nextra-theme-docs'
+
+## The network coordinator
+
+The network coordinator is responsible for:
+
+    1. [Setup](#setup)
+    2. [Collecting pre-genesis public keys](#collecting-pre-genesis-public-keys)
+    3. [Allocating pre-genesis NAM balances](#allocating-pre-genesis-nam-balances)
+    4. [Collecting pre-genesis transactions](#collecting-pre-genesis-transactions)
+    5. [Generating the genesis block](#generating-the-genesis-block)
+
+### Setup
+
+The genesis ceremony preparation includes creating a coordinated location for the pre-genesis network participants to submit their public keys. The network coordinator is responsible for setting up this location. Conventionally, the network coordinator will host a git repository that allows the pre-genesis network participants to submit their public keys. The network coordinator must ensure that the git repository is publicly accessible and that the pre-genesis network participants are able to submit their public keys in a secure manner.
+
+Further, the network coordinator is responsible for making clear timelines for the various steps in the genesis ceremony. The network coordinator must ensure that the pre-genesis network participants are aware of the timelines and that they are able to submit their public keys, transactions, and be online in due time.
+
+<Steps>
+
+### Collecting pre-genesis public keys
+
+The ceremony begins by the network coordinator collecting the public keys of the pre-genesis network participants. The network coordinator must ensure that the total number of pre-genesis public keys collected is equal to the total number of pre-genesis network participants.
+
+Conventionally, the network coordinator hosts a git repository that allows the pre-genesis network participants to submit their public keys. The network coordinator must ensure that the git repository is publicly accessible and that the pre-genesis network participants are able to submit their public keys in a secure manner.
+
+### Allocating pre-genesis NAM balances
+
+Once the participants have [submitted their keys and addresses](./participants.mdx#submitting-keys-and-addresses), the network coordinator must allocate balances to these addresses/public keys. The coordinator will often have prior identity information associated with desired balances, which they will then associate with the public keys and addresses in order to set the correct balances in `balances.toml`. The coordinator must also ensure that the total pre-genesis NAM balances allocated to the pre-genesis network participants is equal to the total NAM supply.
+
+After this is completed, the network coordinator will publish the `balances.toml` file that contains the pre-genesis NAM balances allocated to the pre-genesis network participants. The `balances.toml` file should be published at the same location to which the pre-genesis public keys were submitted.
+
+
+### Collecting pre-genesis transactions
+
+Once the participants have [submitted their keys and addresses](./participants.mdx#submitting-keys-and-addresses), the network coordinator must collect the signed pre-genesis transactions from the pre-genesis network participants.  
+
+The network coordinator then aggregates these transaction files into one file and saves it as the `transactions.toml` file to be used in the generation of the genesis block.
+
+The `transactions.toml` file is validated by the network coordinator to ensure that each transaction has been correctly signed by each pre-genesis network participant. The network coordinator must ensure that the `transactions.toml` file is valid before proceeding to the next step.
+
+### Generating the genesis block
+
+Once the network coordinator has collected the pre-genesis public keys, allocated pre-genesis NAM balances, and collected pre-genesis transactions, the network coordinator is ready to generate the genesis block.  
+
+The following command can be used to generate a `.tar.gz` archive that packages all genesis files needed to bootstrap any new node which wishes to join the chain.
+
+```
+namadac utils init-network \
+  --genesis-time $GENESIS_TIME \
+  --wasm-checksums-path $CHECKSUMS_PATH \
+  --chain-prefix $CHAIN_PREFIX \
+  --templates-path $TEMPLATES_PATH
+```
+where:
+- `GENESIS_TIME` is a string containing the desired network start time in the format `YYYY-MM-DDTHH:MM:SS.000000000+00:00`. Nodes will not attempt to make blocks before this time.
+- `CHECKSUMS_PATH` is the path to the chain's `checksums.json` file
+- `CHAIN_PREFIX` is a string of alphanumeric characters that will be used as the first part of the chain-id, chosen by the network coordinator
+- `TEMPLATES_PATH` is the path to a directory containing the five `toml` files required to create the genesis block -- `balances.toml`, `transactions.toml`, `tokens.toml`, `paramaters.toml` and `validity-predicates.toml`
+
+After successfully running the command, a file will be generated with the name `$CHAIN_ID.tar.gz` containing the genesis contents. The network coordinator must host this file so that 
+other nodes can download and apply it to their nodes ahead of the genesis time.
+
+
+</Steps>

@@ -193,16 +193,16 @@ make build-release
 4. Once this has been completed, **the node must tesync from genesis** (see below)
 
 **How to resync from genesis:**
-1. As a precautionary measure, make a backup of your pregenesis keys
+1. As a precautionary measure, make a backup of your pre-genesis keys
 ```bash copy
-mkdir backup-pregenesis && cp -r .namada/pre-genesis backup-pregenesis/
+mkdir backup-pre-genesis && cp -r .namada/pre-genesis backup-pre-genesis/
 ```
 2. Delete the relevant folder in .namada
 ```bash copy
 rm -r .namada/public-testnet-3.0.81edd4d6eb6
 rm .namada/public-testnet-3.0.81edd4d6eb6.toml
 ```
-WARNING: Do not delete the entire `.namada` folder, as it contains your pre-genesis keys. If this is accidentally done, you will have to copy over the backup-pregenesis file. 
+WARNING: Do not delete the entire `.namada` folder, as it contains your pre-genesis keys. If this is accidentally done, you will have to copy over the backup-pre-genesis file. 
 
 3. Rejoin the network
 ```bash copy
