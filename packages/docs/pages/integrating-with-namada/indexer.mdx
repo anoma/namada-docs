@@ -1,13 +1,26 @@
 import Expandable from '../../components/Expandable';
 import { Callout, Steps } from 'nextra-theme-docs'
 
-# Namada Indexer
+# Namada Indexers
+
+There are two actively maintained indexers built for Namada -- *Undexer* and *namada-indexer*.
+
+## Undexer
+
+[Undexer](https://github.com/hackbg/undexer) is a community-led project developed by the Mandragora and HackBG teams. It indexes transaction details, validator set updates, 
+governance proposals and more, and serves the indexed data via a REST api.  
+
+Detailed installation and usage instructions for *Undexer* can be found on the project's [repo](https://github.com/hackbg/undexer).
+
+## Namada-Indexer
 
 The [namada-indexer](https://github.com/anoma/namada-indexer) crawls a Namada blockchain to map details such as transactions, validator set updates, POS rewards, 
 governance proposals and more. It stores the results in a Postgres database where it can be queried via a REST api.  
 
-Namada-indexer was created to power the [Namadillo](./interface.mdx) interface; however it can be generally useful for any application that needs to query historical data 
-or perform analytics over the blockchain.
+*Namada-indexer* was created to power the [Namadillo](./interface.mdx) interface; however it can be generally useful for any application that needs to query historical data 
+or perform analytics over the blockchain.  
+
+The remainder of this page will detail the process of configuring, running, and querying *namada-indexer*.
 
 ## Setting up
 
