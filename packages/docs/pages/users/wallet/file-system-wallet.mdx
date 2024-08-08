@@ -26,7 +26,7 @@ password to encrypt the private key. Afterwards, your mnemonic will be printed t
 you need to restore your key at a later date.
 
 ```bash copy
-namadaw gen --alias <your alias>
+namadaw gen --alias $YOUR_ALIAS
 ```
 
 <Callout type="warning" emoji="❗">
@@ -48,13 +48,13 @@ namadaw list
 or, if you only want to search for a specific address:
 
 ```bash copy
-namadaw find --alias <your alias>
+namadaw find --alias $YOUR_ALIAS
 ```
 
 ##### Recover an address from a mnemonic
 You can recover an existing key from a mnemonic and add it to your wallet with:
 ```bash copy
-namadaw derive --alias <choose an alias>
+namadaw derive --alias $YOUR_ALIAS
 ```
 (You will be prompted to enter the mnemonic).
 
@@ -63,13 +63,13 @@ namadaw derive --alias <choose an alias>
 If you know the raw value of a key or address, you can add it to your wallet under an alias so you can more conveniently refer to it later.
 
 ```bash copy
-namadaw add --alias <choose-an-alias> --value <transparent-secret-key|transparent-public-key|transparent-address|spending-key|viewing-key|payment-address>
+namadaw add --alias $YOUR_ALIAS --value <transparent-secret-key|transparent-public-key|transparent-address|spending-key|viewing-key|payment-address>
 ```
 
 #### Removing a key/address
 You can remove all keys/addresses associated with an alias from your wallet with:
 ```bash copy
-namadaw remove --alias <your-alias> --do-it
+namadaw remove --alias $YOUR_ALIAS --do-it
 ```
 
 #### Using the pre-genesis flag
