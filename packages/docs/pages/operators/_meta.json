@@ -3,7 +3,6 @@
     "ledger": "Running a full node",
     "remote-signing": "Remote signing",
     "validators": "Validators",
-    "networks": "Starting a network",
     "ibc": "IBC Relayers",
     "troubleshooting": "Troubleshooting"
 }
