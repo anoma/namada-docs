@@ -9,10 +9,18 @@ on:
 
 env:
   GIT_LFS_SKIP_SMUDGE: 1
+  NEXT_TELEMETRY_DISABLED: 1
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
 
 jobs:
   docker:
-    runs-on: [ubuntu-22.04]
+    runs-on: [ubuntu-latest]
     needs: [checks]
     env:
       GIT_LFS_SKIP_SMUDGE: 1
@@ -55,8 +63,44 @@ jobs:
           build-args: |
             "TARGET=${{ matrix.docker.path }}"
 
+  cloudfront:
+    runs-on: [ubuntu-latest]
+    needs: [checks]
+    if: ${{ github.ref == 'refs/heads/master' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        make:
+          - name: Specs image
+            path: specs
+            bucket: namada-specs-frontend-prod
+          - name: Docs image
+            path: docs
+            bucket: namada-docs-frontend-prod
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Configure AWS 
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          retry-max-attempts: 3
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build ${{ matrix.make.name }}
+        run: npm run build:${{ matrix.make.path }}
+      - name: Deploy ${{ matrix.make.name }}
+        run: aws s3 sync packages/${{ matrix.make.path }}/out s3://${{ matrix.make.bucket }} --delete
+
   checks:
-    runs-on: [ubuntu-22.04]
+    runs-on: [ubuntu-latest]
     strategy:
       fail-fast: false
       matrix:
