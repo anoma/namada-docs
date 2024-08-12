@@ -1,4 +1,4 @@
-name: Build docker images
+name: Build and deploy static websites
 
 on:
   workflow_dispatch:
