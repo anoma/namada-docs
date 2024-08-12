@@ -5,11 +5,12 @@ on:
   push:
     branches:
       - master
+    paths:
+      - packages/**
   pull_request:
 
 env:
   GIT_LFS_SKIP_SMUDGE: 1
-  NEXT_TELEMETRY_DISABLED: 1
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
@@ -24,7 +25,6 @@ jobs:
     runs-on: [ubuntu-latest]
     needs: [checks]
     env:
-      GIT_LFS_SKIP_SMUDGE: 1
       REGISTRY_URL: ghcr.io
     strategy:
       fail-fast: false
@@ -68,6 +68,8 @@ jobs:
     runs-on: [ubuntu-latest]
     needs: [checks]
     if: ${{ github.ref == 'refs/heads/master' }}
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
     strategy:
       fail-fast: false
       matrix:
