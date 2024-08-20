@@ -6,10 +6,7 @@ Once the user has a [shielded balance](./shielding.mdx), it can be transferred t
 
 ## Making a shielded transfer
 
-Before making a shielded transfer, it is recommended to first sync the local shielded context:
-```bash copy
-namadac shielded-sync --spending-keys $SPENDING_KEY
-```
+Before making a shielded transfer, it is recommended to first sync the local shielded context. See how to do this [here](shielded-sync.mdx).
 
 To make a shielded transfer, you must possess the relevant spending key. See the [glossary](./glossary.mdx) for
 an explanation on the types of keys and addresses used with the MASP.
@@ -30,20 +27,8 @@ Note: you must provide an implicit account which you control containing funds fo
 
 
 ### Viewing your balance
-To view the up-to-date balance of your spending key (or viewing key), you must first run the `shielded-sync` command to
-sync the local shielded context with any MASP notes owned by your spending/viewing key:
-```bash copy
-namadac shielded-sync --spending-keys $SPENDING_KEY
-```
-or
-```bash copy
-namadac shielded-sync --viewing-keys $VIEWING_KEY
-```
-
-<Callout>
-The first time you wish to check the balance of a spending/viewing key, you must provide it to the shielded context with 
-`--spending-keys|--viewing-keys`. On subsequent runs, you can simply use `namadac shielded-sync`.
-</Callout>
+To view the up-to-date balance of your spending key (or viewing key), you must first run the [`shielded-sync`](shielded-sync.mdx) command to
+sync the local shielded context with any MASP notes owned by your spending/viewing key.
 
 After the sync has completed, check your balance with:
 ```bash copy

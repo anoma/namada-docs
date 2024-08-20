@@ -41,19 +41,8 @@ namadac shield \
 
 ### Viewing your balance
 To view the up-to-date balance of your spending key (or viewing key), you must first run the `shielded-sync` command to
-sync the local shielded context with any MASP notes owned by your spending/viewing key:
-```bash copy
-namadac shielded-sync --spending-keys $SPENDING_KEY
-```
-or
-```bash copy
-namadac shielded-sync --viewing-keys $VIEWING_KEY
-```
-
-<Callout>
-The first time you wish to check the balance of a spending/viewing key, you must provide it to the shielded context with 
-`--spending-keys|--viewing-keys`. On subsequent runs, you can simply use `namadac shielded-sync`.
-</Callout>
+sync the local shielded context with any MASP notes owned by your spending/viewing key.
+See how to do this [here](shielded-sync.mdx).
 
 After the sync has completed, check your balance with:
 ```bash copy
