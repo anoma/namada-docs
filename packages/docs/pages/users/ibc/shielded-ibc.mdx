@@ -22,28 +22,21 @@ It is no longer necessary to manually generate the MASP proof, and the `ibc-gen-
 </Callout>
 
 IBC transfers to a shielded address work similarly to those for a [tranparent address](./transparent-ibc.mdx), 
-the only difference being that we provide for `$RECV_ADDRESS` a shielded (`znam`) address instead of a transparent (`tnam`) one:
-
-```bash copy
-namadac ibc-transfer \
-  --source $SOURCE_ADDRESS \
-  --receiver $RECEIVER_PAYMENT_ADDRESS \
-  --token $TOKEN \
-  --amount $AMOUNT \
-  --channel-id $CHANNEL_ID
-```
-  
-Or, when sending from a Cosmos Sdk chain:
+the only difference being that we provide for `$RECV_ADDRESS` the internal address of MASP:
 
 ```bash copy
 gaiad tx ibc-transfer transfer \
   $CHANNEL_ID \
-  $RECEIVER_PAYMENT_ADDRESS \
+  $MASP_ADDRESS \
   ${AMOUNT}${IBC_TOKEN_ADDRESS} \
   --from $COSMOS_ALIAS \
   --node $COSMOS_RPC_ENDPOINT \
   --fees 5000uatom
 ```
+
+<Callout>
+The previous command would work even with `$RECEIVER_PAYMENT_ADDRESS` as the second argument but it is highly recommended to stick to `$MASP_ADDRESS` for privacy reasons.
+</Callout>
 
 ## IBC transfer from a shielded address
 You can also send IBC transfers from a shielded address, by providing the associated spending key as the source:
