@@ -49,21 +49,23 @@ namadac change-metadata --validator $VALIDATOR_ADDRESS \
 
 ### Deactivation and reactivation
 
-You can deactivate your validator with the `deactivate` command:
+You can manually remove your active validator from its validator set with the `deactivate` command:
 
 ```bash copy
 namadac deactivate-validator --validator $VALIDATOR_ADDRESS
 ```
-Once deactivated, the validator will no longer participate in the consensus protocol. 
-This will take effect at the end of the current epoch + `pipeline_length`. All bonds and delegations associated with the validator remain intact. 
-Delegators can still delegate to the validator, but as the validator is inactive, it will not generate staking rewards until it is reactivated.
+Once deactivated, the validator's state will become `inactive` and it will be removed from the validator set. 
+This will take effect at the beginning of `current epoch + pipeline_len`. All bonds associated with the validator remain intact, and new bonds and unbonds are still accepted. 
+From a user perspective, the deactivation of a validator would more commonly be a signal to unbond or redelegate to a new active or consensus validator.
 
-To reactivate your validator, use the `reactivate` command:
+Deactivating a `jailed` validator is prohibited, so such an operator would have to wait until they can `unjail` and then subsequently `deactivate`.
+
+To rejoin one of the validator sets and resume operations, use the `reactivate` command:
 
 ```bash copy
 namadac reactivate-validator --validator $VALIDATOR_ADDRESS
 ```
-This will reactivate the validator at the end of the current epoch + `pipeline_length`.
+The validator will be appropriately placed into one of the active validator sets at the beginning of `current_epoch + pipeline_len`.
 
 ### Changing the Consensus Key
 A validator's consensus key is used to sign blocks and participate in the CometBFT consensus protocol. 
