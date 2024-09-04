@@ -44,7 +44,7 @@ A proposal author should manually set the following fields in the `proposal.json
 
 - `author`: the `tnam` address of `my-new-acc`;
 - `voting_start_epoch`: a future epoch in which you want the voting to begin.
-- `voting_end_epoch`: an epoch that is at least `min_proposal_voting_period` epochs further into the future than `voting_start_epoch` at which point no more votes are accepted.
+- `voting_end_epoch`: an epoch that is at least `min_proposal_voting_period` epochs further into the future than `voting_start_epoch`, at which point no more votes are accepted.
 - `activation_epoch`: an epoch that is at least `min_proposal_grace_epochs` epochs further into the future than `voting_end_epoch`, at which any associated WASM code will be executed.
 
 The `data` field and its contents are dependent on the [type of proposal](./proposal-types.mdx) being submitted.
