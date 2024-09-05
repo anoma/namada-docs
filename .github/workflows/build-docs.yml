@@ -74,12 +74,15 @@ jobs:
       fail-fast: false
       matrix:
         make:
-          - name: Specs image
+          - name: Specs docs
             path: specs
             bucket: namada-specs-frontend-prod
-          - name: Docs image
+          - name: Docs docs
             path: docs
             bucket: namada-docs-frontend-prod
+          - name: Rpgf docs
+            path: community
+            bucket: namada-rpgf-frontend-prod
 
     steps:
       - name: Checkout repo
