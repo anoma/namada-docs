@@ -70,13 +70,19 @@ namada client query-proposal-result --proposal-id $ID
 <Callout type="info">
 If the proposal has not passed, it will be rejected, and the code will not be executed.
 
-Another important note is that the voting period differs between validators and non-validators. The validators have a shorter voting period than the delegators. This is to ensure that the non-validators have enough time to vote on the proposals (so that the validators cannot vote in the last block against the non-validators preference). See the specs for more information.
+Another important note is that the voting period differs between validators and non-validators.
+Validators have a shorter voting period than delegators.
+This ensures that, if a delegator would like to vote differently than the validator to which they are delegated, there is a period during which they can change their vote to their own, rather than let the validator vote using their voting power.
+This prevents validators from voting in the last block of the voting period against the true preferences of their delegators.
+See the specs for more information.
+
+The output of `namadac query-proposal-result` will detail the latest epoch in which validators can vote on a given proposal.
 </Callout>
 
 ### Tally types
 The governance mechanism defines different criteria depending on proposal type in order for the proposal to pass:
 
-**Default proposals** require at least 2/3 of the total active voting power to have voted AND the `yay` voting power must be at least 2/3 of the combined `yay + nay` voting power.
+**Default proposals** require at least 40% of the total active voting power to have voted AND the `yay` voting power must be at least 2/3 of the combined `yay + nay` voting power.
 
 **PGF steward proposals** require at least 1/3 of the total active voting power to have voted AND the `yay` voting power must be larger than the `nay` voting power.
 
