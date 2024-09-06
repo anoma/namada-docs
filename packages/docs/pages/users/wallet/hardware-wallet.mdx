@@ -124,8 +124,8 @@ Use the `--use-device` flag when you wish to sign a transaction using the Ledger
 namadac transparent-transfer \
   --source $ALIAS \
   --target $DEST_ADDRESS \
-  --token nam \
-  --amount 100 \
+  --token $TOKEN \
+  --amount $AMOUNT \
   --use-device
 ```
 When constructing the transfer, the CLI will check your wallet for the public key given under `$ALIAS`. You will then be prompted on the device to approve the transaction

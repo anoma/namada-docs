@@ -283,9 +283,7 @@ the git repository. The signed transactions `toml` file is then submitted to its
 
 </Steps>
 
-## Signing with a Ledger hardware wallet
-
-### Deriving your account
+## Using a Ledger hardware wallet
 You can sign your pre-genesis transactions using a Ledger hardware wallet.  
 
 First, refer to the [Hardware Wallet](./../../../users/wallet/hardware-wallet.mdx) section for instructions on how to install the 
@@ -293,7 +291,11 @@ Namada app on your Ledger device and how to use it with the Namada CLI.
 
 Once your Ledger is ready, connect it via USB and open the Namada Ledger app.  
 
-We begin by deriving a Ledger account and adding it to our pre-genesis wallet using this command: 
+The general procedure of generating and signing pre-genesis transactions is the same as given
+above with a few minor variations.
+
+### Deriving your account
+Before doing anything else, begin by deriving a Ledger account and adding it to the pre-genesis wallet using this command: 
 ```
 namadaw --pre-genesis derive --use-device --alias $ALIAS
 ```
