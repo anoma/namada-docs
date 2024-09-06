@@ -252,6 +252,8 @@ namadac utils genesis-bond \
 
 ### Signing transactions
 
+*See [below](#signing-with-a-ledger-hardware-wallet) for instructions on how to sign with a Ledger hardware wallet.*
+
 For validator initialization and bonding transactions, after generating your pre-genesis transaction (but before submitting it for inclusion in the genesis block), you must 
 sign it with the relevant private key. You can do this using the `sign-genesis-txs` command.  
 
@@ -263,7 +265,7 @@ To sign an init-validator transaction, use:
 namadac utils sign-genesis-txs --path $INPUT_FILE --output $OUTPUT_FILE --alias $VALIDATOR_ALIAS
 ```
 
-When signing a bond transaction, the `alias` can be omitted:
+When signing a bond transaction, the `alias` is omitted:
 ```bash copy
 namadac utils sign-genesis-txs --path $INPUT_FILE --output $OUTPUT_FILE
 ```
@@ -280,3 +282,93 @@ repo will be created where the files can be submitted via pull request. By conve
 the git repository. The signed transactions `toml` file is then submitted to its respective directory.
 
 </Steps>
+
+## Signing with a Ledger hardware wallet
+
+### Deriving your account
+You can sign your pre-genesis transactions using a Ledger hardware wallet.  
+
+First, refer to the [Hardware Wallet](./../../../users/wallet/hardware-wallet.mdx) section for instructions on how to install the 
+Namada app on your Ledger device and how to use it with the Namada CLI.  
+
+Once your Ledger is ready, connect it via USB and open the Namada Ledger app.  
+
+We begin by deriving a Ledger account and adding it to our pre-genesis wallet using this command: 
+```
+namadaw --pre-genesis derive --use-device --alias $ALIAS
+```
+(You will be asked to confirm the operation on your device.)
+
+If successful, you should see the following output:
+```
+Output:
+Using HD derivation path m/44'/877'/0'/0'/0'
+Successfully added a key and an address with alias: "..."
+```
+The default derivation path is `m/44'/877'/0'/0'/0`. You can use the flag `--hd-path` to specify a different derivation path. Use `namadaw derive --help` for more information.
+
+You can list your wallet contents with:
+```
+namadaw --pre-genesis list
+```
+You should see your address and pubic key listed under the `$ALIAS` you provided. Beside them should be the label `(external)` indicating that they are associated with a device. 
+You will need to make note of your public key in order to complete the remaining steps.
+
+### Signing the pre-genesis transaction `toml`
+The flag `--use-device` is used to indicate that a Ledger will be used for signing. When attempting to sign, have the device 
+connected to your computer with the Namada Ledger app open.
+<Callout type="info">
+Ensure the 'expert mode' toggle in the Ledger app is set to `disabled`.
+</Callout>
+
+#### Signing an `initialize-validator` pre-genesis transaction
+To create a pre-genesis initialize-validator transaction, begin by using the Ledger account public key to 
+[initialize an established account](#initialize-an-established-account). In this command, `$ALIAS` should be the alias 
+given to your Ledger account during [derivation](#deriving-your-account):
+```
+namadac utils init-genesis-established-account \
+  --path $OUTPUT_FILE \
+  --aliases $ALIAS
+```
+
+Proceed with [initializing a validator account](#initialize-a-pre-genesis-validator-account) according to the usual procedure.  
+
+Finally, sign using the following command:
+```
+namadac utils sign-genesis-txs \
+  --path $INPUT_FILE \
+  --output $OUTPUT_FILE \
+  --alias $VALIDATOR_ALIAS \
+  --use-device
+```
+
+It's important to note that both the Ledger and the validator soft wallet created when initializing your validator account 
+are required to sign the transaction.  
+- The Ledger account is checked against the public key in the `[[established_account]]` section and used to generate the corresponding signature
+- The validator soft wallet (located inside `$BASE_DIR/pre-genesis/$VALIDATOR_ALIAS/`) is used to generate the corresponding 
+signatures (`[validator_account.protocol_key]`, `[validator_account.tendermint_node_key]`, etc.)
+
+If either is not accessible, signing will fail.
+
+#### Signing a `bond` pre-genesis transaction
+To create a pre-genesis bond transaction, provide the public key associated with your Ledger account as the `$SOURCE`: 
+```
+namadac utils genesis-bond \
+  --validator $TARGET_VALIDATOR \
+  --source $SOURCE \
+  --amount $AMOUNT \
+  --path $OUTPUT_FILE
+```
+
+Signing the transaction is very similar to using a soft wallet:
+```
+namadac utils sign-genesis-txs \
+  --path $INPUT_FILE \
+  --output $OUTPUT_FILE \
+  --use-device
+```
+
+
+### Troubleshooting
+Refer to the [Troubleshooting section of the Hardware Wallet page](../../../users/wallet/hardware-wallet.mdx#troubleshooting) 
+for help resolving common errors.
