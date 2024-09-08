@@ -14,15 +14,29 @@ software such as [Hermes](https://github.com/heliaxdev/hermes).
 - You will need to know the corresponding channel id
 
 ## IBC transfer to a shielded address
-<Callout>
-Previous versions of Namada required a two-step process to make IBC transfers to a shielded address: first a MASP proof was generated using the 
-`ibc-gen-shielded` command, and this proof was included in the `memo` field of the transfer.  
 
-It is no longer necessary to manually generate the MASP proof, and the `ibc-gen-shielded` command has been removed.
-</Callout>
+First of all we need to generate the shielding data with the command:
 
-IBC transfers to a shielded address work similarly to those for a [tranparent address](./transparent-ibc.mdx), 
-the only difference being that we provide the MASP internal address as the value instead of `$RECV_ADDRESS`:
+```bash copy
+namadac ibc-gen-shielding \
+  --output-folder-path \
+  $OUTPUT_FOLDER_PATH \
+  --target \
+  $RECEIVER \
+  --token \
+  $TOKEN \
+  --amount \
+  $AMOUNT \
+  --port-id
+  $PORT_ID \
+  --channel-id \
+  $CHANNEL_ID
+```o
+
+This command will generate the shielding data in file in the provided directory and will output the path to this file, $SHIELDING_DATA_PATH.
+
+After that, IBC transfers to a shielded address work similarly to those for a [transparent address](./transparent-ibc.mdx), 
+the only differences being that we provide the MASP internal address as the value instead of `$RECV_ADDRESS` and we add a `--memo` arg with the path to the file we have just generated:
 
 ```bash copy
 gaiad tx ibc-transfer transfer \
@@ -32,6 +46,7 @@ gaiad tx ibc-transfer transfer \
   --from $COSMOS_ALIAS \
   --node $COSMOS_RPC_ENDPOINT \
   --fees 5000uatom
+  --memo $SHIELDING_DATA_PATH
 ```
 
 <Callout>
@@ -39,6 +54,7 @@ The previous command would work even with `$RECEIVER_PAYMENT_ADDRESS` as the sec
 </Callout>
 
 ## IBC transfer from a shielded address
+
 You can also send IBC transfers from a shielded address, by providing the associated spending key as the source:
 ```bash copy
 namadac ibc-transfer \
@@ -47,8 +63,7 @@ namadac ibc-transfer \
   --token $TOKEN \
   --amount $AMOUNT \
   --channel-id $CHANNEL_ID \
-  --gas-payer $IMPLICIT_ADDRESS
 ```
-<Callout>
-When sending any transaction from a shielded address, you must also provide an implicit address which you control with enough funds to cover gas costs.
-</Callout>
+When sending any transaction from a shielded address, you must also provide an implicit address which you control with enough funds to cover gas costs. Otherwise, 
+
+Gas fees can be paid like all the other transactions either directly from an implicit account adding `--gas-payer $IMPLICIT_ADDRESS` or via the MASP: for more information please refer to the [fees section](../Fees on Namada.mdx).
