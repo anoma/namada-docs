@@ -168,7 +168,7 @@ available in cache, the calls to the exposed host functions and the sections of 
 
 To summarize, the gas for a given transaction can be computed as:
 
-$$\begin{aligned} Gas & = TxSize \\ & + TxHeaderValidationFixedCost \\ & + TxRuntimeCost \\ & + NonNativeVpsRuntimeCost \\ & + NativeVpsExpensiveSections \\ & + \\ & + HostFnCallsGas\end{aligned}$$
+$$\begin{aligned} Gas & = TxSize \\ & + TxHeaderValidationFixedCost \\ & + TxRuntimeCost \\ & + NonNativeVpsRuntimeCost \\ & + NativeVpsExpensiveSections \\ & + HostFnCallsGas\end{aligned}$$
 
 <Callout type="info">
 The runtime gas meter instruments wasm modules before their execution to charge gas based on the actual opcodes that get executed. The actual code that end up running though, is an optimized version of the one declared in the WASM module: this leads to an excessive gas being charged for code that runs in the wasm context. The protocol compensates this by adjusting the non-wasm gas costs accordingly by a predefined factor.
