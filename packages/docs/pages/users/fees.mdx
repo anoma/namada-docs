@@ -5,11 +5,14 @@ import { Callout } from "nextra-theme-docs";
 In order to settle the market for Namada blockspace demand, fees are coupled with transactions. In order for any namada transaction to be considered valid, the correct corresponding fee must be paid. The exact fee is set by the user, and must be greater than or equal to the minimum `gas-price` set by governance, which is included in the genesis file under `gas_cost`.
 
 ## How fees are paid
-When explicitly stated, the gas fee is paid by the `--gas-payer` flag. If no `--gas-payer` flag is specified, the gas fee is paid by the first key in the `--signing-keys` flag.
+
+Fees are **always** paid from the balance of an **implicit** address. When explicitly stated, the gas fee is paid by the `--gas-payer` flag. If no `--gas-payer` flag is specified, the gas fee is paid by the first key in the `--signing-keys` flag. If no `--signing-keys` flag is specified, the client will try to infer the signer from the source of the transaction and use that account as the fee payer.
 
 <Callout type="info" emoji="🤡">
 Note the use  of the placeholder `keysha` for the key parameter. This is a completely configurable parameter, and should just refer to the alias of the key signing the transaction (that has a positive nam balance).
 </Callout>
+
+Let's suppose to have two accounts in our wallet, `accountant` controlling the `my-new-acc` implicit address and `keysha` controlling the `keysha-acc` implicit address.
 
 This means that in the transaction 
 ```shell copy
@@ -21,27 +24,16 @@ namada client transfer \
   --signing-keys keysha
 ```
 
-the account associated with key `keysha` will be required to pay the fee. This means that even though the account `accountant` may have a positive NAM balance, `keysha` will need to have the associated NAM in order to pay the transaction fee.
+the account `accountant` should pay the fees since it's the source of the transaction but given that the user provided the `--signing-keys` argument, the associated key `keysha` will be required to pay the fee from the balance of its implicit `keysha-acc` address. This means that even though the address `my-new-acc` may have a positive NAM balance, `keysha` will need to have the associated NAM in order to pay the transaction fee.
 
-A user can also specify a `--gas-payer` flag to specify a different account to pay the fee. This is useful in cases where the account that is signing the transaction does not have enough NAM to pay the fee. For example, if `keysha` has a balance of 5 NAM, but `accountant` has a balance of 100 NAM, then the following transaction will be valid:
-
-```shell copy
-namada client transfer \
-  --source my-new-acc \
-  --target validator-1 \
-  --token NAM \
-  --amount 10 \
-  --signing-keys keysha \
-  --gas-payer accountant
-  ```
-
-(Assuming that `accountant` exists and is in the wallet of the user)
+An identical result can be achieved with `--gas-payer keysha`. The two args `--signing-keys` and `--gas-payer` can also be used in conjuction: this is useful when we want to manually specify the signer of the transaction (if, for example, the client cannot infer the source by itself) but, at the same time, pay fees with a separate account that is not involved in the transaction.
 
 For testnet purposes, we recommend [using the faucet](../networks/testnets/faucet.mdx) to source NAM for transaction fees.
 
 ## How fees are calculated
+
 The fee for a transaction is calculated by multiplying `gas-limit` by the gas price.
-Both the `--gas-limit` and the `--gas-price` can be specified by the user. If neither is specified, the default gas limit and minimum gas price is used. The default gas limit for any transaction is currently set to `20_000`.
+Both the `--gas-limit` and the `--gas-price` can be specified by the user. If neither is specified, the default gas limit and minimum gas price is used. The default gas limit for any transaction is currently set to `200_000`.
 
 The minimum gas price is set in the genesis file under `gas_cost`.
 
@@ -65,9 +57,9 @@ namadac transfer \
 Which will output something along the lines of 
 
 ```md
-Dry-run result: Transaction is valid. Gas used: 1785;
+Dry-run result: Transaction is valid. Gas used: 147850;
 ```
-This means that we could reasonably make this transfer transaction with a `gas-limit` of 2000.
+This means that we could reasonably make this transfer transaction with a `gas-limit` of 150000.
 
 Hence, when making the transfer, we could specify the `gas-limit` as follows:
 
@@ -79,7 +71,7 @@ namadac transfer \
   --amount 10 \
   --signing-keys keysha \
   --gas-payer accountant \
-  --gas-limit 2000
+  --gas-limit 150000
 ```
 
 If for some reason, we wanted to pay a higher gas fee, we could also specify that as follows:
@@ -92,45 +84,60 @@ namadac transfer \
   --amount 10 \
   --signing-keys keysha \
   --gas-payer accountant \
-  --gas-limit 2000 \
+  --gas-limit 150000 \
   --gas-price 0.01
 ```
-This will incentivise validators to prioritise this transaction above those with a lower gas price.
 
+This **might** incentivise validators to prioritise this transaction above those with a lower gas price.
 
 ## Paying fees with tokens in the MASP
 
-It is also possible to pay for fees using the MASP. The purpose of this is to ensure that even though a user may not have NAM in their transparent balance, they can still make transparent transactions on chain. This is yet another incentive for users to keep the maximum amount of assets in the MASP.
+It is also possible to pay for fees using the MASP when dealing with a transfer transaction involving shielded inputs (shielded transfers, unshielding transfers and IBC unshielding transfers). The purpose of this is to ensure that even though a user may not have NAM in their transparent balance, they can still make transactions on chain. This is yet another incentive for users to keep the maximum amount of assets in the MASP. On top of this, paying fees via the MASP is required to prevent information leakage that could defy the purpose of the shielded pool.
 
-In order to pay for fees using the MASP, the user must specify the `--gas-spending-key` flag, and set it the alias of a spending key in your wallet. This will mean that the fees will be deducted from the shielded balance of the spending key, and unshielded to the transparent balance of the `--gas-payer` (or the address corresponding to the first key in the `--signing-keys`), before being paid for by the `--gas-payer`.
+When dealing MASP fee payment, the client will try to deduct the fees from the source of the shielded transaction and unshielded to the transparent balance of the `--gas-payer` (or the address corresponding to the first key in the `--signing-keys`), before being paid to the block proposer. If the shielded account does not have enough funds to cover the gas cost, the user must specify the `--gas-spending-key` flag, and set it the alias of another spending key in your wallet: the client will try to combine the residual balances of the original sender and this extra key to cover the entirety of the fees.
 
-For example, if the user has a spending key `spending-key-1` in their wallet, and they want to pay for the fees of a transaction using the MASP, they would run the following command:
+For example, if the user has a spending key `spending-key-1` in their wallet, and they want to pay for the fees of a shielded transfer transaction using the MASP, they would run the following command:
 
 ```shell copy 
 namadac transfer \
-  --source keysha \
-  --target address-b \
+  --source spending-key-1 \
+  --target payment-addr-b \
   --token OSMO \
   --amount 10 \
   --gas-payer keysha \
-  --gas-spending-key spending-key-1
 ```
 
-In this example, `keysha` may only have an OSMO balance in their transparent balance, but `spending-key-1` may have a positive NAM balance in their shielded balance. In this case, the NAM will be unshielded to the transparent balance of `keysha`, and then used to pay for the transaction fee.
+If `spending-key-1` cannot cover for the entire cost, the user can specify an additional spending key for fee payment:
+
+```shell copy 
+namadac transfer \
+  --source spending-key-1 \
+  --target payment-addr-b \
+  --token OSMO \
+  --amount 10 \
+  --gas-payer keysha \
+  --gas-spending-key spending-key-2
+```
+
+In these examples, `keysha` may only have an OSMO balance in their transparent balance, but `spending-key-1` (and possibly `spending-key-2`) may have a positive NAM balance in their shielded balance. In this case, the NAM will be unshielded to the transparent balance of `keysha`, and then used to pay for the transaction fee. So it is requried to unshield just the difference between the gas cost and the transparent balance of the gas payer implicit address.
+
+<Callout type="info">
+It is also possible to use MASP fee payment to pay fees for non-MASP transactions. To do so the user should create a transaction batch where the first transaction is a MASP transaction that unshield the funds for fee payment to the fee payer's address. The actual intended transaction can then be attached as the second transaction of the batch.
+</Callout>
 
 ### Using a disposable gas payer
 
-It is also possible to use a disposable gas payer to pay for transaction fees. This is useful in cases where the user does not want to reveal the identity of the `--gas-payer`. In order to use a disposable gas payer, the user must include the `--disposable-gas-payer` flag, AND also must specify a `--gas-spending-key` . This will mean that the fees will be deducted from the shielded balance of the `--gas-spending-key`, and unshielded to the transparent balance of an ephemeral transparent address before being paid for by the ephemeral address.
+It is also possible to use a disposable gas payer to pay for transaction fees. This is useful in cases where the user does not want to reveal the identity of the `--gas-payer` to prevent correlation. In order to use a disposable gas payer, the user must include the `--disposable-gas-payer` flag. This will mean that the fees will be deducted from the shielded balance of the shielded transactions source (and optionally from the balance of the `--gas-spending-key` when provided), and unshielded to the transparent balance of an ephemeral transparent address before being paid for by the ephemeral address.
 
-For example, if the user has a spending key `spending-key-1` in their wallet, and they want to pay for the fees of a transaction using a disposable address, they would run the following command:
+For example, if the user has the same two spending keys from the previous example in their wallet, and they want to pay for the fees of an unshield transfer transaction using a disposable address, they would run the following command:
 
 ```shell copy
-namadac transfer \
-  --source keysha \
-  --target address-b \
+namadac unshield \
+  --source spending-key-1 \
+  --target addr-b \
   --token OSMO \
   --amount 10 \
-  --gas-spending-key spending-key-1 \
+  --gas-spending-key spending-key-2 \
   --disposable-gas-payer
 ```
 
