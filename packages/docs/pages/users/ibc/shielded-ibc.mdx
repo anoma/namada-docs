@@ -33,7 +33,7 @@ namadac ibc-gen-shielding \
   $CHANNEL_ID
 ```
 
-This command will generate the shielding data in file in the provided directory and will output the path to this file, $SHIELDING_DATA_PATH.
+This command will generate the shielding data in a file inside the provided directory and will output the path to this file, `$SHIELDING_DATA_PATH`.
 
 After that, IBC transfers to a shielded address work similarly to those for a [transparent address](./transparent-ibc.mdx), 
 the only differences being that we provide the MASP internal address as the value instead of `$RECV_ADDRESS` and we add a `--memo` arg with the path to the file we have just generated:
