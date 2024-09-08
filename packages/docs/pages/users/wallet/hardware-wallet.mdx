@@ -12,14 +12,14 @@ Both Namada's web wallet extension and the Namada CLI are compatible with the [L
 This guide will walk you through the process of setting up your Ledger device to work with Namada.
 
 ## Prerequisites
-A Ledger device with the latest firmware installed. You can find instructions on how to update your firmware [here](https://support.ledger.com/hc/en-us/articles/360002731113-Update-device-firmware).
+You will need a Ledger device with the latest firmware installed. You can find instructions on how to update your firmware [here](https://support.ledger.com/hc/en-us/articles/360002731113-Update-device-firmware).
 
 In order to use the Ledger with the web wallet, you will need to install the [Namada Web Wallet](./web-wallet.mdx#install). To use the Ledger with the Namada CLI, 
 you will need to [install the latest version](./../../introduction/install.mdx) of Namada.
 
 ## Installing the Namada Ledger app
 <Callout type="warning">
-The Namada Ledger app is still a work in progress. Use at your own risk. At this preliminary stage of development, it is *highly* recommended that you use a device which 
+The Namada Ledger app is still a work in progress. Use at your own risk. At this preliminary stage of development, it is *highly* recommended that you use a device that 
 does not contain any existing funds.  
 
 When installing a Ledger app from any source besides the official app store, you will be shown a warning to that effect and prompted for confirmation. Please make sure you 
@@ -47,12 +47,12 @@ Before any other operations with the Ledger, we will want to derive an address a
 To derive your address using a Ledger:
 
 <Steps>
-### Open Extension and click 'Add keys'
+### Open Extension and click `Add keys`
 
-### Click 'Connect hardware wallet'
+### Click `Connect hardware wallet`
 
 ### Connect your device to your computer and Open the Namada app
-Follow the prompts and click 'Next' after each step
+Follow the prompts and click `Next` after each step
 
 ### Confirm on device
 After the following the prompts, your address and public key will be displayed on your device. Confirm the operation on your device.
@@ -60,7 +60,7 @@ After the following the prompts, your address and public key will be displayed o
 ### Name your Ledger account
 Give your account an easy to remember name.
 
-### Click 'Finish setup'
+### Click `Finish setup`
 </Steps>
 
 ### Display your address/public key
@@ -78,14 +78,14 @@ Open the extension and click the checkbox next to your Ledger account to set it 
 ### Perform your transaction
 
 ### Review transaction
-You will be presented with a browser pop-up containing a summary of the transaction. You can click 'View data' to see the 
-details of what will be submitted on-chain. You can also verify the correct public key is listed under 'Signer'. When you're 
-ready to proceed, click 'Approve'.  
+You will be presented with a browser pop-up containing a summary of the transaction. You can click `View data` to see the 
+details of what will be submitted on-chain. You can also verify the correct public key is listed under `Signer`. When you're 
+ready to proceed, click `Approve`.  
 
-You will be reminded again to connect your device and open the Namada app; click 'Submit' to send the signing request to the Ledger.
+You will be reminded again to connect your device and open the Namada app; click `Submit` to send the signing request to the Ledger.
 
 ### Approve on your device
-Review the transaction details on your device and click 'Approve' to sign and submit the transaction to the chain.
+Review the transaction details on your device and click `Approve` to sign and submit the transaction to the chain.
 </Steps>
 
 ## Using the Ledger app with the CLI
@@ -105,14 +105,14 @@ To derive your address using a Ledger:
 
 ### Derive your address/public key
 This command will derive your address and public key and add them to your wallet under an `alias` of your choosing:
-```
+```bash copy
 namadaw --use-device --alias $ALIAS
 ```
 The default derivation path is `m/44'/877'/0'/0'/0`. You can use the flag `--hd-path` to specify a different derivation path. Use `namadaw derive --help` for more information.
 
 ### Confirm in wallet
 List your wallet contents with:
-```
+```bash copy
 namadaw list
 ```
 You should see your address and pubic key listed under the `$ALIAS` you provided. Beside them should be the label `(external)` indicating that they are associated with a device.
@@ -120,7 +120,7 @@ You should see your address and pubic key listed under the `$ALIAS` you provided
 
 ### Signing a transaction
 Use the `--use-device` flag when you wish to sign a transaction using the Ledger. For example:
-```
+```bash copy
 namadac transparent-transfer \
   --source $ALIAS \
   --target $DEST_ADDRESS \
@@ -143,4 +143,4 @@ Make sure you're using the correct versions of both the Ledger app and Namada bi
 Make sure the Ledger account has been properly [added to your wallet](#importing-deriving-your-ledger-address-1).
 
 - The CLI panics part-way through signing and the Ledger reboots.  
-Make sure the 'expert mode' toggle in the Ledger app is set to `disabled`.
+Make sure the `expert mode` toggle in the Ledger app is set to `disabled`.
