@@ -31,7 +31,7 @@ namadac ibc-gen-shielding \
   $PORT_ID \
   --channel-id \
   $CHANNEL_ID
-```o
+```
 
 This command will generate the shielding data in file in the provided directory and will output the path to this file, $SHIELDING_DATA_PATH.
 
@@ -45,7 +45,7 @@ gaiad tx ibc-transfer transfer \
   ${AMOUNT}${IBC_TOKEN_ADDRESS} \
   --from $COSMOS_ALIAS \
   --node $COSMOS_RPC_ENDPOINT \
-  --fees 5000uatom
+  --fees 5000uatom \
   --memo $SHIELDING_DATA_PATH
 ```
 
@@ -64,6 +64,5 @@ namadac ibc-transfer \
   --amount $AMOUNT \
   --channel-id $CHANNEL_ID \
 ```
-When sending any transaction from a shielded address, you must also provide an implicit address which you control with enough funds to cover gas costs. Otherwise, 
 
-Gas fees can be paid like all the other transactions either directly from an implicit account adding `--gas-payer $IMPLICIT_ADDRESS` or via the MASP: for more information please refer to the [fees section](../Fees on Namada.mdx).
+Gas fees can be paid like all the other transactions either directly from an implicit account adding `--gas-payer $IMPLICIT_ADDRESS` or via the MASP: for more information please refer to the [fees section](../fees.mdx).
