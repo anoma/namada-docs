@@ -11,11 +11,11 @@ This section covers sending assets to and from a shielded ( `znam` ) address.
 
 - An active IBC connection has been created and maintained between the two chains by operators running relayer 
 software such as [Hermes](https://github.com/heliaxdev/hermes). 
-- You will need to know the corresponding channel id
+- You will need to know the corresponding channel ID.
 
 ## IBC transfer to a shielded address
 
-First of all we need to generate the shielding data with the command:
+First, we need to generate the shielding data with the command:
 
 ```bash copy
 namadac ibc-gen-shielding \
@@ -65,4 +65,5 @@ namadac ibc-transfer \
   --channel-id $CHANNEL_ID \
 ```
 
-Gas fees can be paid like all the other transactions either directly from an implicit account adding `--gas-payer $IMPLICIT_ADDRESS` or via the MASP: for more information please refer to the [fees section](../fees.mdx).
+Gas fees can be paid like all the other transactions either directly from an implicit account adding `--gas-payer $IMPLICIT_ADDRESS` or via the MASP.
+For more information please refer to the [fees section](../fees.mdx).
