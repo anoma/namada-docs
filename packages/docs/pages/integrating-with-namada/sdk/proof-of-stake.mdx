@@ -1,42 +1,42 @@
-import { Callout } from 'nextra-theme-docs'
-
 ## Proof of stake using the SDK
 
-All proof of stake functionality will be find within the `namada_sdk::proof_of_stake` module.
+You can use the SDK to construct proof-of-stake related transactions.
 
-<Callout type="info">
-The `namada_impl` object is assumed to have been constructed as described in the [setting up a client](./setting-up-a-client.mdx#instantiating-a-namada-implementation-object) section.
-</Callout>
+### Bond Transactions
+This code will construct, sign, and submit a bond transaction to the chain. This code assumes Alice's keys already exist in the wallet 
+and that you know the valid address of a target validator.
 
 ```rust 
+use namada_sdk::token::Amount;
 use namada_sdk::signing::default_sign;
 
-// We assume we have a namada object that is already initialized
-let bond_tx_builder = namada            
-            .new_bond(validator_address.clone(), amount)
-            .source(source_address.clone())
-            .signing_keys(vec![source_public_key]);
+let alice_addr = sdk.wallet().await.find_address("alice".to_string())
+  .expect("Invalid alias").into_owned();
+let validator_addr = Address::from_str("tnam1qykv7yvcx8eyjld4kuumg0whwjq8usulwy7uhlsw")
+  .expect("Invalid address");
 
+// build the bond tx
+let bond_tx_builder = sdk
+  .new_bond(validator_addr, Amount::from_u64(100000000)) // denominated amount, ie. 100 NAM
+  .source(alice_addr)
+  .signing_keys(vec![alice_acct.public_key.clone()]);
+  
 let (mut bond_tx, signing_data) = bond_tx_builder
-    .build(&namada_iml)
-    .await
-    .expect("unable to build bond");
+  .build(&sdk)
+  .await
+  .expect("Unable to build bond tx");
 
-namada
-    .sign(
-        &mut bond_tx,
-        &bond_tx_builder.tx,
-        signing_data,
-        default_sign,
-        (),
-    )
-    .await
-    .expect("unable to sign reveal bond");
+// sign the tx
+sdk.sign(&mut bond_tx, &bond_tx_builder.tx, signing_data, default_sign, ())
+  .await
+  .expect("unable to sign bond tx");
 
-let tx = namada_iml.submit(bond_tx, &bond_tx_builder.tx).await;
+//submit to the chain
+match sdk.submit(bond_tx, &bond_tx_builder.tx).await {
+  Ok(res) => println!("Tx result: {:?}", res),
+  Err(e) => println!("Tx error: {:?}", e) 
+}
 ```
-
-That will submit the bond transaction to the network.
 
 Similar proof of stake transactions such as `new_unbond`, `new_redelegation`, `new_claim_rewards` and `new_withdraw` are also available in the SDK.
 

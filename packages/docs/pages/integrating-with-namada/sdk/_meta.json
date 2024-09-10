@@ -1,9 +1,12 @@
 {
-    "setting-up-a-client" : "Setting up a client",
+    "setup": "Project setup",
+    "context": "Chain context",
+    "query": "Querying",
     "setting-up-a-wallet" : "Setting up a wallet",
     "generating-accounts": "Generating accounts",
     "constructing-transfers" : "Constructing transfers",
+    "shielded-sync": "Shielded sync",
+    "shielded-transfers": "Shielded transfers",
     "proof-of-stake" : "Proof of stake transactions",
-    "governance" : "Governance",
-    "interface-integration" : "Integrating with the interface"
+    "governance" : "Governance"
 }
