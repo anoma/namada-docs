@@ -17,7 +17,7 @@ let validator_addr = Address::from_str("tnam1qykv7yvcx8eyjld4kuumg0whwjq8usulwy7
 
 // build the bond tx
 let bond_tx_builder = sdk
-  .new_bond(validator_addr, Amount::from_u64(100000000)) // denominated amount, ie. 100 NAM
+  .new_bond(validator_addr, Amount::native_whole(100)) // whole amount, ie. 100 NAM
   .source(alice_addr)
   .signing_keys(vec![alice_acct.public_key.clone()]);
   

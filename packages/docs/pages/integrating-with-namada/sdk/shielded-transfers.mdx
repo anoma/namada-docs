@@ -1,13 +1,13 @@
 # Shielded Transfers
 
 You can construct shielded transfers similarly to transparent transfers, except that rather than providing implicit addresses as the `source` and `target`, 
-you will need to provide a spending key and payment address respectively.  
+you will need to provide a spending key and payment address, respectively.  
 
 Before building your transaction, you will want to make sure the [shielded context is synced](./shielded-sync.mdx).
 
 ### Constructing the Transfer
 
-This example assumes you have a spend key with sufficient shielded balance, a recipient payment address, and the 
+This example assumes you have a spending key with sufficient shielded balance, a recipient payment address, and the 
 public key of an implicit account with gas funds.
 
 ```rust

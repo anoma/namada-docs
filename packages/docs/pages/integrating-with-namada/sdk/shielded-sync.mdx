@@ -1,9 +1,9 @@
 # Shielded Sync
 
-Before performing MASP operations such as querying balances, you will need to sync the local shielded context with the chain. (This 
-is equivalent to running the `namadac shielded-sync` command when using the CLI.)  
+Before performing MASP operations such as querying shielded balances, you will need to sync the local shielded context with the chain (this 
+is equivalent to running the [`namadac shielded-sync`](../../users/shielded-accounts/shielded-sync.mdx) command when using the CLI).  
 
-Syncing the shielded context directly from the chain is performance intensive, so it's recommended to sync using a running 
+Syncing the shielded context directly from the chain is performance-intensive, so it's recommended to sync using a running 
 instance of the [`namada-masp-indexer`](https://github.com/anoma/namada-masp-indexer).
 
 ### Example code
@@ -104,3 +104,5 @@ println!("Syncing shielded context");
 sdk.shielded_mut().await.sync(env, config, None, &[dated_key], &[]).await.expect("Could not sync shielded context");
 println!("Shielded context synced");
 ```
+
+In the above example, one would replace the URL in the `endpoint` with the proper URL for the desired MASP indexer.

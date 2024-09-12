@@ -3,7 +3,7 @@ import { Callout } from 'nextra-theme-docs';
 # Initializing the Chain Context
 
 To begin working with the SDK, the first step is to initialize a 'Chain Context'. This is an instance of the 
-[`NamadaImpl struct`](https://github.com/anoma/namada/blob/main/crates/sdk/src/lib.rs#L659) which allows us to access 
+[`NamadaImpl struct`](https://github.com/anoma/namada/blob/main/crates/sdk/src/lib.rs#L659), which allows us to access 
 wallet storage, shielded context storage, and the RPC endpoint of our full node.  
 
 The Chain Context object also provides methods for common operations like querying the chain, constructing, signing, 
@@ -39,7 +39,7 @@ Set up shielded context storage for the current state of the shielded pool:
 let shielded_ctx = FsShieldedUtils::new("./masp".into());
 ```
 
-Create an Io object to capture the input/output streams. Since we don't need to 
+Create an IO object to capture the input/output streams. Since we don't need to 
 capture anything, we'll use `NullIo`
 ```rust
 let null_io = NullIo;
