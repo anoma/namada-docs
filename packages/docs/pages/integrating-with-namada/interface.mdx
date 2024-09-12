@@ -1,8 +1,8 @@
 # Namada Interface
 
 ## Front end development with Namada
-The [namada-interface repository](https://github.com/anoma/namada-interface) is a monorepo which contains the Namada browser extension
-and associated Namada-Interface web app. It's a great resource for developers wishing to understand how to incorporate the Namada SDK
+The [namada-interface repository](https://github.com/anoma/namada-interface) is a monorepo which contains the Namada Keychain browser extension
+and associated Namadillo web app. It's a great resource for developers wishing to understand how to incorporate the Namada SDK
 into their front-end applications.
 
 ### Installing from source (for development and experiment purposes)
@@ -11,18 +11,18 @@ into their front-end applications.
 1. Follow the instructions for the [testnets](../networks/testnets.mdx) to connect to a testnet or [set up a local node](../operators/networks/local-network.mdx).
 2. Figure out where the base directory is stored and save its location as a variable such as `export BASE_DIR=<path/to/base/dir>`.
    You can follow [these docs](../networks/testnets/migrating-testnets.mdx) to save this variable. Go ahead and save the chain id as a variable as well. You can find the chain id by running `cat $BASE_DIR/global-config.toml`. Save this chain-id to the variable `export CHAIN_ID=<CHAIN_ID>`.
-3. You will need to edit the CometBFT config in order to allow the web wallet to connect to your node.
+3. You will need to edit the CometBFT config in order to allow Namadillo to connect to your node.
    The CometBFT config will be located in `$BASE_DIR/$CHAIN_ID/cometbft/config/config.toml`. You will need to change the `cors_allowed_origins` field to `["*"]`. You can do this by running
    ```shell copy
    sed -i 's/cors_allowed_origins = \[\]/cors_allowed_origins = ["*"]/' \
            $BASE_DIR/$CHAIN_ID/cometbft/config/config.toml
    ```
 
-#### Setting up the extension
+#### Setting up the Namada Keychain extension
 1. Clone the [namada-interface repository](https://github.com/anoma/namada-interface).
 2. Follow the installation instructions in `README.md`.
-3. `cd` into the `namada-interface/apps/extension` directory and run `yarn start:chrome`. This will build the extension and place it in the `namada-interface/apps/extension/build` directory. It also starts the dev server which will watch for changes.
-4. `cd` into the `namada-interface/apps/namada-interface` directory and run `yarn dev:local` in order to launch a local instance of the web wallet.
+3. `cd` into the `namada-interface/apps/extension` directory and run `yarn start:chrome`. This will build the Namada Keychain extension and place it in the `namada-interface/apps/extension/build` directory. It also starts the dev server which will watch for changes.
+4. `cd` into the `namada-interface/apps/namadillo` directory and run `yarn dev:local` in order to launch a local instance of Namadillo.
 4. Add the extension to the browser. For example, in Chrome, you can go to `chrome://extensions/` and click `Load unpacked` and select the `namada-interface/apps/extension/build/chrome/` folder.
 
 ## Receiving tokens
