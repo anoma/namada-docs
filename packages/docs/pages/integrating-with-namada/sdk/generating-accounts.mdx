@@ -1,13 +1,15 @@
 # Generating accounts
 
-## Representing accounts
-Representing accounts using the Namada SDK is straightforward. An account on Namada is defined by its public key(s) and private key(s) (plural for multisignatures). The public key(s) is/are used to identify the account and the private key is used to sign transactions. In the below snippet, we represent the account using the public key and private key.
+### Representing accounts
+Representing accounts using the Namada SDK is straightforward. An account on Namada is defined by its public key(s) and private key(s) 
+(plural for multi-signature accounts). The public key(s) is/are used to identify the account and the private key is used to sign transactions. 
+In the below snippet, we create a struct to represent the account using the public key and private key.
 
 ```rust
 use namada_sdk::key::common::{PublicKey, SecretKey};
 struct SimpleAccount {
-    public_key: PublicKey,
-    private_key: SecretKey
+  public_key: PublicKey,
+  private_key: SecretKey
 }
 ```
 
@@ -16,8 +18,8 @@ For a multisignature account, we can represent this through a vector of keys.
 ```rust
 use namada_sdk::key::common::{PublicKey, SecretKey};
 struct MultisigAccount {
-    public_keys: Vec<PublicKey>,
-    private_keys: Vec<SecretKey>
+  public_keys: Vec<PublicKey>,
+  private_keys: Vec<SecretKey>
 }
 ```
 
@@ -25,51 +27,39 @@ Multisignature accounts, because they are initialized by an on-chain transaction
 
 ```rust
 use namada_sdk::key::common::{PublicKey, SecretKey};
-struct Account {
-    public_key: PublicKey,
-    private_key: SecretKey,
-    revealed: bool
+struct SimpleAccount {
+  public_key: PublicKey,
+  private_key: SecretKey,
+  revealed: bool,
 }
 ```
-
-## Revealing the public key of an implicit account
+### Revealing the public key of an implicit account
 
 In order to reveal the public key of an implicit account, the user must submit a transaction to the ledger.
 
 ```rust
-use namada_sdk::io::NullIo;
-use namada_sdk::NamadaImpl;
-use namada_sdk::chain::ChainId;
+use namada_sdk::signing::default_sign;
 
+// Build the reveal pk transaction using the sdk object
+let reveal_tx_builder = sdk
+  .new_reveal_pk(account.public_key.clone())
+  .signing_keys(vec![account.public_key.clone()]);
+let (mut reveal_tx, signing_data) = reveal_tx_builder
+  .build(&sdk)
+  .await
+  .expect("unable to build reveal pk tx");
 
-// Define the namada implementation (assuming we have a wallet, http_client, and shielded_ctx)
-let mut namada = NamadaImpl::new(&http_client, &mut wallet, &mut shielded_ctx, &NullIo)
-        .await
-        .expect("unable to construct Namada object")
-        .chain_id(ChainId::from_str("shielded-expedition.88f17d1d14").unwrap());
-
-// Generate an account (assuming sk is a SecretKey)
-let account = Account {
-            public_key: sk.to_public(),
-            private_key: sk,
-            revealed: false,
-};
-
-// Build the reveal pk transaction using the NamadaImpl object
-let reveal_tx_builder = namada
-    .new_reveal_pk(account.public_key.clone())
-    .signing_keys(vec![account.private_key.clone()]);
-let (mut reveal_tx, signing_data, _) = reveal_tx_builder
-    .build(namada)
-    .await
-    .expect("unable to build reveal pk tx");
 // Sign the transaction
-namada
-    .sign(&mut reveal_tx, &reveal_tx_builder.tx, signing_data)
-    .await
-    .expect("unable to sign reveal pk tx");
+sdk.sign(&mut reveal_tx, &reveal_tx_builder.tx, signing_data, default_sign, ())
+  .await
+  .expect("unable to sign reveal pk tx");
+
 // Submit the signed tx to the ledger for execution
-namada.submit(reveal_tx.clone(), reveal_tx_builder)
+// Assumes account already has funds to cover gas costs
+match sdk.submit(reveal_tx.clone(), &reveal_tx_builder.tx).await {
+  Ok(res) => println!("Tx result: {:?}", res),
+  Err(e) => println!("Tx error: {:?}", e) 
+}
 ```
 
 Once the public key is revealed, the account can be used to sign transactions.

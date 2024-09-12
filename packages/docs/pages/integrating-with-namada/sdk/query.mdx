@@ -1,0 +1,16 @@
+# Querying the Chain
+
+Use the methods in the [`rpc`](https://github.com/anoma/namada/blob/main/crates/sdk/src/rpc.rs) SDK module 
+to directly query your full node's RPC endpoint.
+
+### Example
+This code will attempt to query the chain's current epoch:
+
+```rust
+use namada_sdk::{rpc, Namada};
+
+  match rpc::query_epoch(sdk.client()).await {
+    Ok(current_epoch) => println!("Current epoch: {:?}", current_epoch),
+    Err(e) => println!("Query error: {:?}", e),
+  }
+```

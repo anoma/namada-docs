@@ -1,56 +1,13 @@
 import Expandable from '../../components/Expandable';
+import { Callout } from 'nextra-theme-docs'
 
 # The Namada SDK
 
-The Namada software development kit (SDK) can be found in the `namada` repo under the path [`namada/crates](https://github.com/anoma/namada/tree/main/crates/sdk). The SDK is written in Rust and can be used to interact with the Namada blockchain, by constructing transactions, signing them, and submitting them to the network.
+The Namada software development kit (SDK) can be found in the `namada` repo under the path [`namada/crates/sdk`](https://github.com/anoma/namada/tree/main/crates/sdk). 
+The SDK is written in Rust and can be used to interact with the Namada blockchain by constructing transactions, signing them, and submitting them to the network.
 
-## Quick Start
+This section explains some basic operations using the SDK with example code.
 
-A good starting point to see the SDK in use is to check-out the [namada interface](https://github.com/anoma/namada/tree/main/crates/sdk) repo. This repo contains a simple web application that uses the SDK to interact with the Namada blockchain. However, it is important to note the added complexity arising from the application integrating javascript using [wasm-bindgen](https://rustwasm.github.io/docs/wasm-bindgen/), which is not necessary.
-
-## Installation
-
-The Namada SDK can be installed by creating a new Rust project and adding the following to the `Cargo.toml` file:
-
-
-<Expandable>
-
-```toml
-[package]
-name = "namada-sdk-example"
-version = "0.1.0"
-edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-clap = { version = "4.4.2", features = ["derive", "env"] }
-rand = {version = "0.8", default-features = false}
-rand_core = {version = "0.6", default-features = false}
-serde = { version = "1.0.188", features = ["derive"] }
-serde_json = "1.0.107"
-namada_sdk = { git = "https://github.com/anoma/namada", rev = "v0.31.8", default-features = false, features = ["tendermint-rpc", "std", "async-send", "download-params", "rand"] }
-tendermint-config = "0.34.0"
-tendermint-rpc = { version = "0.34.0", features = ["http-client"]}
-tokio = {version = "1.8.2", default-features = false}
-tempfile = "3.8.0"
-async-trait = "0.1.74"
-markdown-gen = "1.2.1"
-reqwest = "0.11.22"
-minio = "0.1.0"
-itertools = "0.12.0"
-
-[build-dependencies]
-vergen = { version = "8.0.0", features = ["build", "git", "gitcl"] }
-```
-
-</Expandable>
-
-
-Once the sdk is installed, you can use it to interact with the Namada blockchain.
-
-## Table of contents
-
-- [Setting up a client](./sdk/setting-up-a-client.mdx)
-- [Setting up a wallet](./sdk/setting-up-a-wallet.mdx)
-- [Constructing transfers](./sdk/constructing-transfers.mdx)
+<Callout type="info">
+Read the following sections in order, as they may refer to variables, imports or actions taken in previous sections.
+</Callout>

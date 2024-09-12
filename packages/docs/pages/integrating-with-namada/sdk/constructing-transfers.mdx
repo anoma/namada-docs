@@ -1,81 +1,46 @@
 # Constructing transfers
 
-Now that we have the wallet and client set up, we can create the environment necessary for constructing transfers.
-This can be a bit tricky, but the below boilerplate code should do the trick:
-The following imports will be needed in order to generate transfers:
+The SDK provides methods for constructing, signing, and submitting transactions to the chain. These are accessed through the [Chain Context](./context.mdx) object.
+
+### Preparation
+
+Let's assume we have two accounts—Alice and Bob—[added to the wallet](./setting-up-a-wallet.mdx) as in the previous section 
+and that Alice's account already contains sufficient funds.
+
+### Transparent Transfers
+The following code will build a `transparent-transfer` tx that sends 1 NAM from Alice to Bob, then sign it and submit 
+it to the chain.
 
 ```rust
+use namada_sdk::args::TxTransparentTransferData;
 use namada_sdk::args::InputAmount;
-```
+use namada_sdk::signing::default_sign;
 
-After the user has [generated an account](./generating-accounts.mdx) and created the appropriate struct, it is not too difficult to construct and submit transfer transactions.
-
-```rust
-let mut namada = NamadaImpl::new(&http_client, &mut wallet, &mut shielded_ctx, &NullIo)
-        .await
-        .expect("unable to construct Namada object")
-        .chain_id(ChainId::from_str("public-testnet-14.5d79b6958580").unwrap());
-// Transfer the given amount of native tokens from the source account to the
-// destination account.
-async fn gen_transfer(
-    namada: &impl Namada,
-    source: &Account,
-    destination: &Account,
-    amount: InputAmount,
-) -> std::result::Result<ProcessTxResponse, namada_sdk::error::Error> {
-    let mut transfer_tx_builder = namada
-        .new_transfer(
-            TransferSource::Address(Address::from(&source.public_key)),
-            TransferTarget::Address(Address::from(&destination.public_key)),
-            namada.native_token(),
-            amount,
-        )
-        .signing_keys(vec![source.public_key.clone()]);
-    let (mut transfer_tx, signing_data, _epoch) = transfer_tx_builder
-        .build(namada)
-        .await
-        .expect("unable to build transfer");
-    namada
-        .sign(&mut transfer_tx, args: &transfer_tx_builder.tx, signing_data, with: default_sign, user_data: ())
-        .await
-        .expect("unable to sign reveal pk tx");
-    namada.submit(transfer_tx, &transfer_tx_builder.tx).await
-}
-```
-
-Other transactions can be constructed in a similar fashion.
-
-## Shielded transfers
-
-In order to make the transfer shielded, we need to the only difference is to use shielded addresses and keys instead of transparent ones.
-
-It is important to use the shielded extended `SpendingKey` as the source.
-
-```rust
-use std::str::FromStr;
-use namada_sdk::{
-    masp::{
-        PaymentAddress,
-        TransferSource,
-        TransferTarget,
-    },
-    masp_primitives::zip32::ExtendedSpendingKey,
-    key::common::PublicKey,
+// Prepare the tx arguments
+let data = TxTransparentTransferData {
+  source: sdk.wallet().await.find_address("alice".to_string()).expect("Invalid alias").into_owned(),
+  target: sdk.wallet().await.find_address("bob".to_string()).expect("Invalid alias").into_owned(),
+  token: sdk.native_token(),
+  amount: InputAmount::from_str("1").expect("Invalid amount"), 
 };
 
-// Make sure to replace "secret-ex" with an actual Namada extended spending key
-let source = ExtendedSpendingKey::from_str("secret-ex").unwrap();
-// Make sure to replace "payment-addr-ex" with an actual Namada payment address
-let destination = PaymentAddress::from_str("payment-addr-ex").unwrap();
-// Make sure to replace "public-key" with an actual Namada public key
-let fee_payer = PublicKey::from_str("public-key");
-let amount = /* Needed amount here */;
-let mut transfer_tx_builder = namada
-        .new_transfer(
-            TransferSource::ExtendedSpendingKey(source.into()),
-            TransferTarget::PaymentAddress(destination),
-            namada.native_token(),
-            amount,
-        )
-        .signing_keys(vec![fee_payer]);
+// Build the tx
+let mut transfer_tx_builder = sdk
+  .new_transparent_transfer(vec![data])
+  .signing_keys(vec![alice_acct.public_key.clone()]);
+let (mut transfer_tx, signing_data) = transfer_tx_builder
+  .build(&sdk)
+  .await
+  .expect("unable to build transfer");
+
+// Sign the tx
+sdk.sign(&mut transfer_tx, &transfer_tx_builder.tx, signing_data, default_sign, ())
+  .await
+  .expect("unable to sign transparent-transfer tx");
+
+// Submit the signed tx to the ledger for execution
+match sdk.submit(transfer_tx, &transfer_tx_builder.tx).await {
+  Ok(res) => println!("Tx result: {:?}", res),
+  Err(e) => println!("Tx error: {:?}", e) 
+}
 ```

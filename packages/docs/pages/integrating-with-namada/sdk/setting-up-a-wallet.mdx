@@ -1,113 +1,63 @@
 # Setting up an SDK wallet
 
-## Relevant imports
+The SDK exposes methods for interacting with a filesystem wallet. 
+You can insert, read, or remove both transparent and shielded keys/addresses for later use when constructing and signing transactions.
 
-### General imports
-```rust
-// namada_sdk::Namada is a high level interface in order to interact with the Namada SDK
-use namada_sdk::Namada;
-// The NamadaImpl provides convenient implementations to frequently used Namada SDK interactons
-use namada_sdk::NamadaImpl;
-```
-
-### Wallet specific imports
+### Add a Keypair to the Wallet
+If you know an address and secret (private) key, you can add them directly to the wallet:
 
 ```rust
-// SecretKey, common and SchemeType give access to Namada cryptographic keys and their relevant implementations. Namada supports ED25519 and SECP256K1 keys.
+use namada_sdk::address::Address;
 use namada_sdk::key::common::SecretKey;
-use namada_sdk::key::{common, SchemeType};
-// Filesystem wallet utilities (stores the path of the wallet on the filesystem)
-use namada_sdk::wallet::fs::FsWalletUtils;
+
+let alice_sk = SecretKey::from_str("0071b4b45443ead34bef175cac5eaf266f653d122b75e077c87b5146f35f45b6ee").expect("Invalid secret key");
+let alice_address = Address::from_str("tnam1qpm2l32hvlw44fwne8fs0y4qsw2jfy4tvyvyywt8").expect("Invalid address");
+sdk.wallet_mut().await.insert_keypair(
+  "alice".to_string(), // the alias
+  true, // overwrite this alias if it exists in wallet
+  alice_sk,
+  None, // no password
+  Some(alice_address),
+  None // default derivation path
+);
+
+println!("alice: {:?}", sdk.wallet().await.find_address("alice".to_string()));
 ```
 
-## Creating a wallet from a mnemonic
-
-The SDK can create a wallet from a mnemonic phrase. The mnemonic phrase is a 24 word phrase that can be used to restore a wallet. 
+### Derive a Keypair from a Mnemonic
+You can also derive a keypair from a mnemonic:
 
 ```rust
 use namada_sdk::bip39::Mnemonic;
+use namada_sdk::key::SchemeType;
+use namada_sdk::wallet::DerivationPath;
+use namada_sdk::zeroize::Zeroizing;
 
-let mnemonic = Mnemonic::from_phrase(MNEMONIC_CODE, namada_sdk::bip39::Language::English)
+let phrase = "invest canal odor resource valley property chimney royal puzzle inch earth route diagram letter ceiling clinic post zebra hidden promote list valid define wedding";
+let mnemonic = Mnemonic::from_phrase(phrase, namada_sdk::bip39::Language::English).expect("Invalid mnemonic");
+
+let derivation_path = DerivationPath::default_for_transparent_scheme(SchemeType::Ed25519);
+let (_key_alias, _sk) = sdk
+  .wallet_mut()
+  .await
+  .derive_store_key_from_mnemonic_code(
+    SchemeType::Ed25519, // key scheme
+    Some("bob".to_string()), // alias
+    true, // overwrite alias if it exists
+    derivation_path,
+    Some((mnemonic.clone(), Zeroizing::new("".to_owned()))),
+    false, // do not prompt for passphrase
+    None, // no password
+  )
+  .expect("unable to derive key from mnemonic code");
+
+println!("bob: {:?}", sdk.wallet().await.find_address("bob".to_string()));
 ```
 
+### Saving the Wallet
+The sdk wallet exists only in memory until you explicitly save it to disk:
 ```rust
-// Assuming a cometbft node is running on localhost:26657
-let http_client = HttpClient::new("http://localhost:26657").unwrap();
-// Assuming wallet.toml exists in the current directory
-let mut wallet = FsWalletUtils::new(PathBuf::from("wallet.toml"));
-// The key can be generated from the wallet by passing in the mnemonic phrase
-let (_key_alias, sk) = NamadaImpl::new(&http_client, &mut wallet, &mut shielded_ctx, &NullIo)
-            .wallet_mut()
-            .await
-            let (_key_alias, sk) = namada
-            .wallet_mut()
-            .await
-            .derive_store_key_from_mnemonic_code(
-                scheme: SchemeType::Ed25519,
-                alias: Some(alias),
-                alias_force: false,
-                derivation_path: derivation_path,
-                mnemonic_passphrase: Some((mnemonic.clone(), Zeroizing::new("".to_owned()))),
-                prompt_bip39_passphrase: false,
-                password: None,
-            )
-            .expect("unable to derive key from mnemonic code");
+sdk.wallet().await.save().expect("Could not save wallet!");
 ```
 
-In the second part of the above function, the key is derived from the mnemonic phrase. The `alias` is the name of the key that will be stored in the wallet. The `derivation_path` is the path to the key in the HD wallet. The `mnemonic` is the mnemonic phrase that was generated earlier. The `shielded_ctx` is the context for the shielded transactions. The `NullIo` is the IO context for the wallet.
-
-## Generating a new wallet and saving it to the filesystem
-
-It is also possible to create the sdk wallet from scratch. This is more involved because it requires generating a new store for the wallet to exist in.
-
-```rust
-use namada_sdk::{
-    wallet::{
-        Store,
-        StoredKeypair,
-        Wallet,
-        WalletIo,
-    },
-    address::Address,
-    key::{common::SecretKey, PublicKeyHash},
-    },
-};
-use rand::rngs::OsRng;
-
-pub struct SdkWallet {
-    pub wallet: Wallet<SdkWalletUtils>,
-}
-
-impl SdkWallet {
-    pub fn new(sk: SecretKey, nam_address: Address) -> Self {
-        let store = Store::default();
-        let mut wallet = Wallet::new(SdkWalletUtils {}, store);
-        let stored_keypair = StoredKeypair::Raw(sk.clone());
-        let pk_hash = PublicKeyHash::from(&sk.to_public());
-        let alias = "alice".to_string();
-        wallet.insert_keypair(alias, stored_keypair, pk_hash, true);
-        wallet.add_address("nam", nam_address, true);
-        Self { wallet }
-    }
-}
-
-pub struct SdkWalletUtils {}
-
-impl WalletIo for SdkWalletUtils {
-    type Rng = OsRng;
-}
-
-impl Clone for SdkWalletUtils {
-    fn clone(&self) -> Self {
-        SdkWalletUtils::new()
-    }
-}
-
-impl SdkWalletUtils {
-    fn new() -> Self {
-        Self {}
-    }
-}
-```
-
-The above code allows us now to construct any instance of the `SdkWallet` by simply passing in a secret key and the address for the `NAM` token. If we wish to make transfers with other tokens, we would need to add those addresses as well.
+This will write the `wallet.toml` file to the directory you provided when [creating the context](./context.mdx).
