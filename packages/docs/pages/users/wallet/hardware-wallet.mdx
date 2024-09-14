@@ -8,7 +8,7 @@ The Namada Ledger app is still in active development, and the version available 
 See the installation instructions below if you'd like to sideload an updated development version of the app onto your device for testing purposes.
 </Callout>
 
-Both Namada's web wallet extension and the Namada CLI are compatible with the [Ledger](https://www.ledger.com/) hardware wallet. 
+Both the [Namada Keychain](./web-wallet.mdx) browser extension and the Namada CLI are compatible with the [Ledger](https://www.ledger.com/) hardware wallet. 
 This guide will walk you through the process of setting up your Ledger device to work with Namada.
 
 ## Prerequisites
@@ -40,14 +40,21 @@ Scroll down until you find Namada in the list, and select the newest version fro
 
 </Steps>
 
-## Using the Ledger app with the browser extension
+## Using a Ledger with Namada Keychain (browser extension)
+
+You can use the Ledger app with the Namada Keychain browser extension to sign transactions in front-end web apps. See the 
+[Namada Keychain](./web-wallet.mdx) page for general installation and usage instructions.
+
+<Callout>
+Disclaimer: this will oly work on Chrome-enabled browsers at the moment.
+</Callout>
 
 ### Importing (deriving) your Ledger address
 Before any other operations with the Ledger, we will want to derive an address and public key and add them to the extension ([web wallet](./web-wallet.mdx)) under an alias for convenience.
 To derive your address using a Ledger:
 
 <Steps>
-### Open Extension and click `Add keys`
+### Open Namada Keychain and click `Add keys`
 
 ### Click `Connect hardware wallet`
 
@@ -64,7 +71,7 @@ Give your account an easy to remember name.
 </Steps>
 
 ### Display your address/public key
-To display your Ledger address/public key, first open the extension. Find your Ledger account in the list, click the `⋮` icon (three vertical dots) and select 'View keys'. 
+To display your Ledger address/public key, first open Namada Keychain. Find your Ledger account in the list, click the `⋮` icon (three vertical dots) and select 'View keys'. 
 
 ### Signing a transaction
 To sign a transaction from a front-end app (such as [Namadillo](./../../integrating-with-namada/interface.mdx)), follow these steps:
@@ -73,7 +80,7 @@ To sign a transaction from a front-end app (such as [Namadillo](./../../integrat
 ### Connect your device and open the Namada app
 
 ### Set your Ledger as the active account
-Open the extension and click the checkbox next to your Ledger account to set it as the active account.
+Open the Namada Keychain and click the checkbox next to your Ledger account to set it as the active account.
 
 ### Perform your transaction
 

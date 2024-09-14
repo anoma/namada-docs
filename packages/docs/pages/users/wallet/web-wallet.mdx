@@ -1,30 +1,37 @@
 import { Callout } from 'nextra-theme-docs'
 import { Steps } from 'nextra-theme-docs'
 
-# Web Wallet
+# Namada Keychain (browser extension)
 
-## Namada Extension
-You can use the [Namada Extension](https://namada.net/extension) to manage your keys within your browser. By connecting the extension with
+{/* Uncomment below when onboarding site is ready */}
+
+{/*
+<Callout emoji="😎">
+Video guides for installing and using the Namada Keychain are available [here](https://namada-keychain.net).
+</Callout>
+*/}
+
+You can use the [Namada Keychain](https://namada.net/extension) browser extension to manage your keys within your browser. By connecting Namada Keychain with
 web apps built for Namada, you can send or recieve tokens, make IBC transfers, or perform other actions such as voting on governance proposals. 
 
 ## Installation
-The extension is currently available on the [Chrome web store](https://chromewebstore.google.com/detail/namada-extension/hnebcbhjpeejiclgbohcijljcnjdofek), with Firefox support coming soon.
+The Namada Keychain extension is currently available on the [Chrome web store](https://chromewebstore.google.com/detail/namada-extension/hnebcbhjpeejiclgbohcijljcnjdofek), with Firefox support coming soon.
 
 ## Set-up
-After adding the extension to Chrome, follow these steps to create a new wallet:
+After adding Namada Keychain to your browser, follow these steps to create a new wallet:
 
 <Steps>
 
 ### Click 'Launch Initial Set-up'
 
 ### Add or create keys
-You can choose 'Import existing keys' to import an existing wallet from your twelve word mnemonic. You can also use a Ledger hardware wallet -- see [here](./hardware-wallet.mdx)
+You can choose 'Import existing keys' to import an existing wallet from your 12 or 24 word mnemonic, or raw private key. You can also use a Ledger hardware wallet; see [here](./hardware-wallet.mdx)
 for further instructions.  
 
 Click 'Create new keys' and verify that you have read and understood the message to proceed.
 
 ### Safely store your mnemonic
-You will be shown your recovery mnemonic and asked to confirm that you have written it down.
+You will be shown your recovery mnemonic and asked to confirm that you have written it down. You can choose between a 12 or 24 word mnemonic using the toggle at the top.
 
 <Callout type="warning" emoji="❗">
 Write your mnemonic down and store it safely offline.  
@@ -33,10 +40,10 @@ It will allow you to recover your account. Without it, you risk losing access to
 </Callout>
 
 ### Create and safely store your password
-You will also be asked to create a password for the extension. Write down this password -- you will need to enter it regularly when using the extension.
+You will also be asked to create a password for your Namada Keychain. Write down this password; you will need to enter it regularly when using Namada Keychain.
 
 <Callout type="warning" emoji="❗">
-If you lose your password, you will lose access to the extension.
+If you lose your password, you will lose access to your keys stored in Namada Keychain.
 
 Remember: there's no 'recover password with email' option!
 </Callout>
@@ -45,34 +52,34 @@ Remember: there's no 'recover password with email' option!
 Your wallet is ready to use.
 </Steps>
 
-## Using the Extension
-The extension itself only provides key management functionality. To send or receive tokens, you will need to navigate to a compatible
-web app (such as [namada-interface](https://github.com/anoma/namada-interface)) and connect the extension to the site.  
+## Using Namada Keychain
+The Namada Keychain extension itself only provides key management functionality. To send or receive tokens, you will need to navigate to a compatible
+web app (such as [Namadillo](https://github.com/anoma/namada-interface)) and approve a connection to Namada Keychain from the site.  
 
-Here's how to use the extension with Namada-Interface:
+Here's how to use Namada Keychain with Namadillo:
 
 <Steps>
-### Set the network in the extension
-Open the extension and click the 'gear' icon in the top right, then select 'Network'.  
+### Set the network in Namada Keychain
+Open Namada Keychain and click the 'gear' icon in the top right, then select 'Network'.  
 
 Enter a valid chain-id and rpc url for the chain you wish to transact on, and click 'Submit'.
 
-### Navigate to the Namada-interface site
-The Namada-interface for the [Campfire testnet](../../networks/testnets/campfire.mdx) is hosted at [https://interface.luminara.icu](https://interface.luminara.icu). After mainnet
-has launched, a list of hosted Interfaces will be found [here](../../networks/mainnets.mdx).
+### Navigate to a hosted instance of Namadillo
+The Namadillo instance for the [Campfire testnet](../../networks/testnets/campfire.mdx) is hosted at [https://interface.luminara.icu](https://interface.luminara.icu). After mainnet
+has launched, a list of hosted Namadillo instances will be found [here](../../networks/mainnets.mdx).
 
-### Connect the extension
-Click 'Connect to Namada Extension' and approve when prompted. You should see your wallet balance displayed on the page.
+### Connect Namada Keychain
+Click the 'Connect Extension' button and approve when prompted. If everything is configured correctly, you should now see your wallet balance displayed on the page.
 
 ### Interact
-Once connected, you can use the Interface to make transfers or stake with a validator (Note: some functionality may be missing on testnet).
-Whenever you submit a transaction to the chain, you will be prompted to enter your password to allow the extension to sign using your private key.
+Once connected, you can use Namadillo to make transfers or stake with a validator (Note: some functionality may be missing on testnet).
+Whenever you submit a transaction to the chain, you will be prompted to enter your password to allow Namada Keychain to sign using your private key.
 
 ### Disconnect
-If you wish to disconnect (remove permissions) from a site, you can do so in the Settings menu of the extension, under 'Connected Sites'.
+If you wish to disconnect (remove permissions) from a site, you can do so in the Settings menu of Namada Keychain, under 'Connected Sites'.
 
 </Steps>
 
 ## Using a hardware wallet (Ledger)
 See the [hardware wallet](./hardware-wallet.mdx) page for instructions on installing the Namada Ledger app and using it 
-with the extension.
+with Namada Keychain.
