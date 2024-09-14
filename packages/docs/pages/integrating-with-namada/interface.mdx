@@ -1,21 +1,22 @@
 # Namada Interface
 
 ## Front end development with Namada
-The [namada-interface repository](https://github.com/anoma/namada-interface) is a monorepo which contains the Namada Keychain browser extension
+The [namada-interface repository](https://github.com/anoma/namada-interface) is a monorepo that contains the Namada Keychain browser extension
 and associated Namadillo web app. It's a great resource for developers wishing to understand how to incorporate the Namada SDK
 into their front-end applications.
 
 ### Installing from source (for development and experiment purposes)
 
 #### Connect to a testnet or run a local node
-1. Follow the instructions for the [testnets](../networks/testnets.mdx) to connect to a testnet or [set up a local node](../operators/networks/local-network.mdx).
-2. Figure out where the base directory is stored and save its location as a variable such as `export BASE_DIR=<path/to/base/dir>`.
-   You can follow [these docs](../networks/testnets/migrating-testnets.mdx) to save this variable. Go ahead and save the chain id as a variable as well. You can find the chain id by running `cat $BASE_DIR/global-config.toml`. Save this chain-id to the variable `export CHAIN_ID=<CHAIN_ID>`.
+1. Follow the instructions for the [testnets](../networks/testnets.mdx) to connect to a testnet or [set up a local node](../networks/starting-network/local-network.mdx).
+2. Figure out where the base directory is stored and save its location in an environment variable with something like `export BASE_DIR=<path/to/base/dir>`.
+   You can follow [these docs](../networks/testnets/migrating-testnets.mdx) to save this variable. Consider saving the chain ID as an environment variable as well.
+   You can find the chain ID by running `cat $BASE_DIR/global-config.toml`. Save this chain-id to the environment variable `export CHAIN_ID=<CHAIN_ID>`.
 3. You will need to edit the CometBFT config in order to allow Namadillo to connect to your node.
-   The CometBFT config will be located in `$BASE_DIR/$CHAIN_ID/cometbft/config/config.toml`. You will need to change the `cors_allowed_origins` field to `["*"]`. You can do this by running
+   The CometBFT config will be located in `$BASE_DIR/$CHAIN_ID//config.toml`. You will need to change the `cors_allowed_origins` field to `["*"]`. You can do this by running
    ```shell copy
    sed -i 's/cors_allowed_origins = \[\]/cors_allowed_origins = ["*"]/' \
-           $BASE_DIR/$CHAIN_ID/cometbft/config/config.toml
+           $BASE_DIR/$CHAIN_ID/config.toml
    ```
 
 #### Setting up the Namada Keychain extension
@@ -26,9 +27,9 @@ into their front-end applications.
 4. Add the extension to the browser. For example, in Chrome, you can go to `chrome://extensions/` and click `Load unpacked` and select the `namada-interface/apps/extension/build/chrome/` folder.
 
 ## Receiving tokens
-You can show the address of any account by pressing the `Receive` button in the initial view under the "Total Balances" tab. You can copy the address by clicking the copy icon next to the address.
+You can show the address of any account by pressing the `Receive` button in the initial view under the `Total Balances` tab. You can copy the address by clicking the copy icon next to the address.
 This will also display a QR code that can be scanned by a mobile wallet.
 
 ## Sending Transactions
 
-In order to send transactions, you can press the `Send` button in the initial view under the "Total Balances" tab. This will open a modal that will allow you to send tokens to any account, from any account in your wallet that has a positive balance.
+In order to send transactions, you can press the `Send` button in the initial view under the `Total Balances` tab. This will open a modal that will allow you to send tokens to any account, from any account in your wallet that has a positive balance.
