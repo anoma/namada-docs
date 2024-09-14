@@ -22,14 +22,11 @@ into their front-end applications.
 #### Setting up the Namada Keychain extension
 1. Clone the [namada-interface repository](https://github.com/anoma/namada-interface).
 2. Follow the installation instructions in `README.md`.
-3. `cd` into the `namada-interface/apps/extension` directory and run `yarn start:chrome`. This will build the Namada Keychain extension and place it in the `namada-interface/apps/extension/build` directory. It also starts the dev server which will watch for changes.
-4. `cd` into the `namada-interface/apps/namadillo` directory and run `yarn dev:local` in order to launch a local instance of Namadillo.
+3. `cd` into the `namada-interface/apps/extension` directory and run `yarn start:chrome`. This will build the Namada Keychain extension and place it in `namada-interface/apps/extension/build/chrome`. It also starts the dev server which will watch for changes.
+4. `cd` into the `namada-interface/apps/namadillo` directory and run `yarn dev` in order to launch a local instance of Namadillo.
 4. Add the extension to the browser. For example, in Chrome, you can go to `chrome://extensions/` and click `Load unpacked` and select the `namada-interface/apps/extension/build/chrome/` folder.
 
 ## Receiving tokens
-You can show the address of any account by pressing the `Receive` button in the initial view under the `Total Balances` tab. You can copy the address by clicking the copy icon next to the address.
+You can show the address of the current account by hovering over the account name in the top right corner. Clicking it will copy it to the clipboard.
+You can copy the address by clicking the copy icon next to the address.
 This will also display a QR code that can be scanned by a mobile wallet.
-
-## Sending Transactions
-
-In order to send transactions, you can press the `Send` button in the initial view under the `Total Balances` tab. This will open a modal that will allow you to send tokens to any account, from any account in your wallet that has a positive balance.
