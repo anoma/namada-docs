@@ -4,8 +4,8 @@ import { Steps } from 'nextra-theme-docs'
 # Ledger Hardware Wallet
 
 <Callout type="info">
-The Namada Ledger app is still in active development, and the version available on the official Ledger App store is not compatible with the current release of Namada. 
-See the installation instructions below if you'd like to sideload an updated development version of the app onto your device for testing purposes.
+The Namada Ledger app is not yet updated in the Ledger Live catalogue, so the only way to use one in the meantime is with 1) a Ledger **Nano** device and 2) sideloading as a work-around: [Zondax Hub](https://hub.zondax.ch)
+Typically sideloading an unaudited version of the app onto your device is only for testing purposes, but it is effective as a work-around. See the installation instructions below.
 </Callout>
 
 Both the [Namada Keychain](./web-wallet.mdx) browser extension and the Namada CLI are compatible with the [Ledger](https://www.ledger.com/) hardware wallet. 
@@ -46,7 +46,7 @@ You can use the Ledger app with the Namada Keychain browser extension to sign tr
 [Namada Keychain](./web-wallet.mdx) page for general installation and usage instructions.
 
 <Callout>
-Disclaimer: this will oly work on Chrome-enabled browsers at the moment.
+Disclaimer: this will only work on Chrome-enabled browsers at the moment.
 </Callout>
 
 ### Importing (deriving) your Ledger address
@@ -138,6 +138,9 @@ namadac transparent-transfer \
 When constructing the transfer, the CLI will check your wallet for the public key given under `$ALIAS`. You will then be prompted on the device to approve the transaction
 
 ### Troubleshooting
+As written above, the Namada Ledger app is not yet updated in the Ledger Live catalogue, so the only way to use one in the meantime is with 1) a Ledger **Nano** device and 2) sideloading as a work-around: [Zondax Hub](https://hub.zondax.ch)
+Typically sideloading an unaudited version of the app onto your device is only for testing purposes, but it is effective as a work-around.
+
 Some common errors you may encounter while using the Ledger with the Namada CLI:
 
 - `Unable to connect to query address and public key from Ledger: Ledger | App Error: | 21781 [APDU_ERROR] Unknown`  
