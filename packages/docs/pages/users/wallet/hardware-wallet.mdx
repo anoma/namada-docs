@@ -42,7 +42,7 @@ Scroll down until you find Namada in the list, and select the newest version fro
 
 ## Using a Ledger with Namada Keychain (browser extension)
 
-You can use the Ledger app with the Namada Keychain browser extension to sign transactions in front-end web apps. See the 
+You can use the Ledger app with the Namada Keychain browser extension to sign transactions in front-end web apps. **Expert mode must be turned off.**  See the 
 [Namada Keychain](./web-wallet.mdx) page for general installation and usage instructions.
 
 <Callout>
@@ -74,7 +74,7 @@ Give your account an easy to remember name.
 To display your Ledger address/public key, first open Namada Keychain. Find your Ledger account in the list, click the `⋮` icon (three vertical dots) and select 'View keys'. 
 
 ### Signing a transaction
-To sign a transaction from a front-end app (such as [Namadillo](./../../integrating-with-namada/interface.mdx)), follow these steps:
+**Expert mode must be turned off.** To sign a transaction from a front-end app (such as [Namadillo](./../../integrating-with-namada/interface.mdx)), follow these steps:
 
 <Steps>
 ### Connect your device and open the Namada app
@@ -110,10 +110,10 @@ To derive your address using a Ledger:
 
 ### Open the Namada app on your device
 
-### Derive your address/public key
+### Derive your address / public key
 This command will derive your address and public key and add them to your wallet under an `alias` of your choosing:
 ```bash copy
-namadaw --use-device --alias $ALIAS
+namadaw derive --use-device --alias $ALIAS
 ```
 The default derivation path is `m/44'/877'/0'/0'/0`. You can use the flag `--hd-path` to specify a different derivation path. Use `namadaw derive --help` for more information.
 
