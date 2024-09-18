@@ -1,0 +1,70 @@
+import { Callout, Warn } from 'nextra-theme-docs'
+
+# State Sync
+
+When any operator of Namada, be it a full node or validator, joins the network,
+their node will need to sync to the tip of the chain. The simplest way to do
+this is to replay all blocks of the chain starting from genesis. However,
+this is not the most efficient way.
+
+ If an operator trusts the chain past a certain block height, they can fetch
+ snapshots from peers (if they are configured to provide snapshots) and then
+ only replay the chain from this snapshot onward. This is called __state sync__.
+
+ ## Hosting snapshots
+
+ If an operator wishes to produce snapshots, then the `blocks_between_snapshots`
+ parameter must be set under the `[ledger.shell]` table in their `config.toml` file.
+
+ This means that when the chain reaches a block height that is a multiple of the value
+ set for `blocks_between_snapshots`, a background process is started and creates
+ a snapshot file inside the node's base directory.
+
+  This process is not particularly fast, so the number of blocks should be
+  relatively large. Indeed, there is little need to have more than one per epoch.
+ In testnets with short epochs, the number of blocks should be configured so that
+ snapshots are created roughly once per hour.
+
+ It is also recommended that operators choose the same value for `blocks_between_snapshots`
+ so that syncing nodes can use multiple peers while syncing.
+
+If an operator wishes to keep more than a single snapshot at a time, this can
+be configured via the `snapshots_to_keep` parameter under the `[ledger.shell]`
+table as well. If not set, it defaults to one.
+
+## Syncing with State Sync
+
+An operator wishing to sync with state sync needs to configure the `[ledger.cometbft.statesync]`
+table in their `config.toml`. It should be noted that state sync works only when
+syncing from genesis.
+
+First, the `enable` flag should be set to true. Second, at least two RPC servers
+need to be provided to the `rpc_servers` parameter. This is a string containing a comma
+separated list of URLs (no spaces).
+
+The `trust_height` and `trust_hash` are the block height and block hash of the point
+at which the chain is trusted. Only snapshots after this point will be fetched. These can
+ be queried via
+ ```shell copy
+curl -s $RPC_ADDRESS/commit | jq "{height: .result.signed_header.header.height, hash: .result.signed_header.commit.block_id.hash}"
+ ```
+ The `trust_period`
+must also be set.
+<Callout>
+According to the Cometbft documentation, `trust_period` is the period in which headers can be verified.
+<Callout type="warning">
+This value should be significantly smaller than the unbonding period.
+</Callout>
+</Callout>
+
+To estimate the unbonding period length in time, use the following query:
+```shell copy
+namadac query-protocol-parameters
+```
+From this, multiply the unbonding length by the minimum epoch duration.
+
+The `temp_dir` directory can be specified as the place to store partial downloads of a snapshot;
+the default is `/tmp/`.
+
+If any part of state sync fails or is misconfigured, the node will fall back to block sync, i.e. replaying
+all blocks from genesis.
