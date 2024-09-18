@@ -7,7 +7,7 @@ their node will need to sync to the tip of the chain. The simplest way to do
 this is to replay all blocks of the chain starting from genesis. However,
 this is not the most efficient way.
 
- If an operator trusts the chain past a certain blockheight, they can fetch
+ If an operator trusts the chain past a certain block height, they can fetch
  snapshots from peers (if they are configured to provide snapshots) and then
  only replay the chain from this snapshot onward. This is called __state sync__.
 
@@ -16,8 +16,8 @@ this is not the most efficient way.
  If an operator wishes to produce snapshots, then the `blocks_between_snapshots`
  parameter must be set under the `[ledger.shell]` table in their `config.toml` file.
 
- This means that when a block height is reached which is zero modulo the value
- set for `blocks_between_snapshots`, a background process is started which creates
+ This means that when the chain reaches a block height that is a multiple of the value
+ set for `blocks_between_snapshots`, a background process is started and creates
  a snapshot file inside the node's base directory.
 
   This process is not particularly fast, so the number of blocks should be
@@ -38,11 +38,11 @@ An operator wishing to sync with state sync needs to configure the `[ledger.come
 table in their `config.toml`. It should be noted that state sync works only when
 syncing from genesis.
 
-Firstly, the `enable` flag should be set to true. Secondly, at least two rpc servers
-need to be provided to the `rpc_servers` parameter. This is string containing a comma
-separated list of urls (no spaces).
+First, the `enable` flag should be set to true. Second, at least two RPC servers
+need to be provided to the `rpc_servers` parameter. This is a string containing a comma
+separated list of URLs (no spaces).
 
-The `trust_height` and `trust_height` are the blockheight and block hash of the point
+The `trust_height` and `trust_hash` are the block height and block hash of the point
 at which the chain is trusted. Only snapshots after this point will be fetched. These can
  be queried via
  ```shell copy
@@ -57,7 +57,7 @@ This value should be significantly smaller than the unbonding period.
 </Callout>
 </Callout>
 
-To estimate the unbonding period length in time, use the following query
+To estimate the unbonding period length in time, use the following query:
 ```shell copy
 namadac query-protocol-parameters
 ```
