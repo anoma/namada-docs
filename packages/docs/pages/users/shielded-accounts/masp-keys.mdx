@@ -42,11 +42,11 @@ The purpose of giving your keys a birthday is to let the wallet know that when s
 belonging to this key, there is no need to search blocks prior than the specified birthday. This can provide a lot of
 time savings when performing [shielded sync](shielded-sync.mdx).
 
-If not birthday is provided for a spending key, the birthday is set to the genesis block by default. Furthermore, any
+If no birthday is provided for a spending key, the birthday is set to the genesis block by default. Furthermore, any
 viewing key derived from the spending key inherits its birthday.
 
 Birthdays can also be provided when adding or deriving keys. By re-adding an existing key with a new birthday, you can
-update a key's birthday in the wallet. Keys passed to shieled-sync directly (as opposed to being stored in the wallet),
+update a key's birthday in the wallet. Keys passed to shielded-sync directly (as opposed to being stored in the wallet),
 can also be passed in with birthdays. This is done simply by by appending `<<{BIRTHDAY}` to the end of the key.
 
 #### Displaying your spending key and viewing key
