@@ -25,6 +25,30 @@ WARNING: Keep your mnemonic and passphrase safe.
 Loss of either can result in you being locked out of your accounts with no chance of recovering your funds.
 </Callout>
 
+ #### Birthdays
+
+When generating a spending key, you can optionally specify a birthday, like so:
+```bash copy
+namadaw gen --shielded --alias $SPENDING_KEY_ALIAS --birthday $BIRTHDAY
+```
+
+The birthday of a key is a block height before the key was created. Ideally, it should be as close to the current block
+height as possible. Recall that the current block height can be queried via:
+```bash copy
+namadac block
+```
+
+The purpose of giving your keys a birthday is to let the wallet know that when scanning the ledger for MASP transactions
+belonging to this key, there is no need to search blocks prior than the specified birthday. This can provide a lot of
+time savings when performing [shielded sync](shielded-sync.mdx).
+
+If no birthday is provided for a spending key, the birthday is set to the genesis block by default. Furthermore, any
+viewing key derived from the spending key inherits its birthday.
+
+Birthdays can also be provided when adding or deriving keys. By re-adding an existing key with a new birthday, you can
+update a key's birthday in the wallet. Keys passed to shielded-sync directly (as opposed to being stored in the wallet),
+can also be passed in with birthdays. This is done simply by by appending `<<{BIRTHDAY}` to the end of the key.
+
 #### Displaying your spending key and viewing key
 You can display your viewing key with:
 ```bash copy
