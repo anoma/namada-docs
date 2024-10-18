@@ -29,8 +29,8 @@ This guide is intended for Namada Validator operators. It outlines the use of Ho
 
 ## DNS Records:
 
-- Create three CNAME records for nodes: node1, node2, and node3.
-- Create three CNAME records for signers: signer1, signer2, and signer3.
+- Create three DNS A  records for nodes: node1, node2, and node3.
+- Create three DNS A records for signers: signer1, signer2, and signer3.
 
 ## Run These Steps on All Signer Servers:
 
@@ -226,7 +226,7 @@ SO BE SURE THAT NEVER USE LOCAL AND REMOTE SIGNING SAME TIME.
 
 ### TROUBLESHOOTING :
   * check FW ports 
-  * check dns for signers and node cnames 
+  * check dns for signers and node DNS A records 
   * check files and folder paths for horcrux 
   * check same horcrux version on all signers 
   * PING RTT time between nodes and signers ( more delay more issues )
