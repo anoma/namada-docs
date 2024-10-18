@@ -32,6 +32,8 @@ This guide is intended for Namada Validator operators. It outlines the use of Ho
 - Create three DNS A  records for nodes: node1, node2, and node3.
 - Create three DNS A records for signers: signer1, signer2, and signer3.
 
+--- Please note that you can use IP addresses instead of DNS A records. However, I’m using DNS A records here for simplicity and flexibility in managing domain names and potential future changes. Using a domain name allows easier maintenance if the server’s IP address changes.Using IP addresses directly might provide more security since it can help obscure your setup, making it less easily discoverable via DNS lookups. However, keep in mind that this is not a complete security measure, as IP addresses can still be traced through network scans.
+
 ## Run These Steps on All Signer Servers:
 
 1. Create a directory to organize your Horcrux files:
@@ -230,5 +232,6 @@ SO BE SURE THAT NEVER USE LOCAL AND REMOTE SIGNING SAME TIME.
   * check files and folder paths for horcrux 
   * check same horcrux version on all signers 
   * PING RTT time between nodes and signers ( more delay more issues )
+  * IF you want to change signers IP / DNS A record in horcrux config , you have to recreate it from scratch . changing the signers IP or DNS A record in horcrux config will stop horcrux from working as intended 
 
 
