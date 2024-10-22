@@ -17,7 +17,7 @@ This guide is intended for Namada Validator operators. It outlines the use of Ho
 ## Software Requirements:
 
 - Operating System: Ubuntu 22.04.3
-- Application: Horcrux v3.2.3
+- Application: Horcrux v3.3.1
 
 ## Hardware Requirements for Signers:
 
@@ -29,8 +29,10 @@ This guide is intended for Namada Validator operators. It outlines the use of Ho
 
 ## DNS Records:
 
-- Create three CNAME records for nodes: node1, node2, and node3.
-- Create three CNAME records for signers: signer1, signer2, and signer3.
+- Create three DNS A  records for nodes: node1, node2, and node3.
+- Create three DNS A records for signers: signer1, signer2, and signer3.
+
+--- Please note that you can use IP addresses instead of DNS A records. However, I’m using DNS A records here for simplicity and flexibility in managing domain names and potential future changes. Using a domain name allows easier maintenance if the server’s IP address changes.Using IP addresses directly might provide more security since it can help obscure your setup, making it less easily discoverable via DNS lookups. However, keep in mind that this is not a complete security measure, as IP addresses can still be traced through network scans.
 
 ## Run These Steps on All Signer Servers:
 
@@ -45,10 +47,10 @@ HORCRUX_PATH=$(pwd)/HorcruxNamada
 cd HorcruxNamada
 ```
 
-2. Download the horcrux binary v3.2.3
+2. Download the horcrux binary v3.3.1
 
 ```shell copy
-wget https://github.com/strangelove-ventures/horcrux/releases/download/v3.2.3/horcrux_linux-amd64
+wget https://github.com/strangelove-ventures/horcrux/releases/download/v3.3.1/horcrux_linux-amd64
 ```
 
 3. Rename horcrux_linux-amd64 to "horcrux" and copy it to /usr/bin/ and /usr/local/sbin/:
@@ -226,9 +228,10 @@ SO BE SURE THAT NEVER USE LOCAL AND REMOTE SIGNING SAME TIME.
 
 ### TROUBLESHOOTING :
   * check FW ports 
-  * check dns for signers and node cnames 
+  * check dns for signers and node DNS A records 
   * check files and folder paths for horcrux 
   * check same horcrux version on all signers 
   * PING RTT time between nodes and signers ( more delay more issues )
+  * IF you want to change signers IP / DNS A record in horcrux config , you have to recreate it from scratch . changing the signers IP or DNS A record in horcrux config will stop horcrux from working as intended 
 
 
