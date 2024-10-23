@@ -3,7 +3,7 @@
   "transparent-accounts": "Transparent Accounts",
   "shielded-accounts": "MASP & Shielded Transfers",
   "fees": "Fees on Namada",
-  "delegators": "Bonding and Proof-of-stake",
+  "proof-of-stake": "Proof-of-stake",
   "governance": "Governance",
   "public-goods-funding": "Public Goods Funding (PGF)",
   "ibc": "IBC transfers",
