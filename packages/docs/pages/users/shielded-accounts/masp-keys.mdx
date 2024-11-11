@@ -47,7 +47,8 @@ viewing key derived from the spending key inherits its birthday.
 
 Birthdays can also be provided when adding or deriving keys. By re-adding an existing key with a new birthday, you can
 update a key's birthday in the wallet. Keys passed to shielded-sync directly (as opposed to being stored in the wallet),
-can also be passed in with birthdays. This is done simply by by appending `<<{BIRTHDAY}` to the end of the key.
+can also be passed in with birthdays. This is done simply by appending `<<$BLOCK` to the end of the key, where `$BLOCK`
+would be the block height of the key's birthday (for instance, `zvknam...<<99`).
 
 #### Displaying your spending key and viewing key
 You can display your viewing key with:
