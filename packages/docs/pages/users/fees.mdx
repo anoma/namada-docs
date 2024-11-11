@@ -123,7 +123,7 @@ This **might** incentivise validators to prioritise this transaction above those
 
 ## Paying fees with tokens in the MASP
 
-It is also possible to pay for fees using the MASP when dealing with a transfer transaction involving shielded inputs (shielded, and unshielding transfers both natively and with IBC): this is required to prevent information leakage that could defy the purpose of the shielded pool.
+It is also possible to pay for fees using the MASP when dealing with a transfer transaction involving shielded inputs (shielded, and unshielding transfers both natively and with IBC): this is required to prevent information leakage which defeats the purpose of the shielded pool.
 
 When dealing with MASP fee payment, the client will try to deduct the fees from the spending key specfied by `--gas-spending-key` of the shielded transaction and unshield them to the transparent balance of the `--gas-payer` (or the address corresponding to the first key in the `--signing-keys`) before being paid to the block proposer.
 
@@ -184,15 +184,15 @@ namadac query-protocol-parameters
 
 If the transaction exceeds this limit it won't be accepted: the protocol sets a value which should allow for most transactions to be accepted. Should the user be in need to submit a more complex (and therefore gas-demanding) transaction, there are two ways around it, both taking advantage of the fact that the protocol gas limit only applies to the first transaction of the batch.
 
-1. The user can submit a batch of two transactions: the first one just unshield the necessary funds to pay fees for the entire batch whereas the second transaction applies the desired transfer. Since the protocol gas limit only applies to the first transaction of the batch (the one paying fees), the second transaction is free from this limit and can be as complex as required (withing the size and gas limits of the entire block)
-2. The user submit a first transaction paying fees via the MASP. This time though, the transaction unshields an amount which is enough to cover both the gas fees of itself and of the desired masp transaction. After this, the gas payer of the first transaction will still have a transparent balance large enough to cover fees for a second masp transaction that actually performs the desired transfer and does not require any more fee unshielding.
+1. The user can submit a batch of two transactions: the first one just unshields the necessary funds to pay fees for the entire batch whereas the second transaction applies the desired transfer. Since the protocol gas limit only applies to the first transaction of the batch (the one paying fees), the second transaction is free from this limit and can be as complex as required (withing the size and gas limits of the entire block)
+2. The user can submit a first transaction paying fees via the MASP. This time though, the transaction unshields an amount which is enough to cover both the gas fees of itself and of the desired MASP transaction. After this, the gas payer of the first transaction will still have a transparent balance large enough to cover fees for a second MASP transaction that actually performs the desired transfer and does not require any more fee unshielding.
 
 <Callout type="info">
-The firt solution proposed above is currently not supported by the CLI client and requires direct usage of the SDK. 
+The first solution proposed above is currently not supported by the CLI client and requires direct usage of the SDK. 
 </Callout>
 
 Each of these solutions has its own advanatages and drawbacks compared to the other one. Using a single batch with two transactions allows for faster confirmation times and lower gas costs (since a batch will cost less than two separate transactions), but because of the way the SDK builds MASP transactions it could fail sometimes (specifically the SDK invalidates notes that have been spent by the first transaction in the batch which could cause a lack of funds for the second one). Using two separate transactions instead, avoids this issue (since the user can call `shielded-sync` after the first one to recollect all the available funds), but requires more gas overall and longer confirmation times.
 
 <Callout type="warning">
-It is also possible, using either of the two solutions presetend above, to use MASP fee payment to pay fees for non-MASP transactions. Please note that this is discouraged since it could establish a linkage between the masp transaction and the entity behind that.
+It is also possible, using either of the two solutions presetend above, to use MASP fee payment to pay fees for non-MASP transactions. Please note that this is discouraged since it could establish a linkage between the MASP transaction and the entity behind the non-MASP transactions.
 </Callout>
