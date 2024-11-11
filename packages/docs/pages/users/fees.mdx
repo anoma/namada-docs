@@ -63,7 +63,7 @@ For testnet purposes, we recommend [using the faucet](../networks/testnets/fauce
 
 The fee for a transaction is calculated by multiplying `gas-limit` by the gas price.
 Both the `--gas-limit` and the `--gas-price` can be specified by the user. If neither is specified, the default gas limit and minimum gas price is used.
-The default gas limit for any transaction is currently set to `200_000`.
+The default gas limit for any transaction is currently set to `50_000`.
 
 The minimum gas price is set in the genesis file under `minimum_gas_price`.
 One can query the minimum gas prices for all tokens accepted for gas payment in a network with:
@@ -90,9 +90,9 @@ namadac transfer \
 Which will output something along the lines of 
 
 ```md
-Dry-run result: Transaction consumed 147850 gas. Inner transaction <tx-hash> was successfully applied.
+Dry-run result: Transaction consumed 14850 gas. Inner transaction <tx-hash> was successfully applied.
 ```
-This means that we could reasonably make this transfer transaction with a `gas-limit` of 150000.
+This means that we could reasonably make this transfer transaction with a `gas-limit` of 15000.
 
 Hence, when making the transfer, we could specify the `gas-limit` as follows:
 
@@ -103,7 +103,7 @@ namadac transfer \
   --token NAM \
   --amount 10 \
   --signing-keys key1 \
-  --gas-limit 150000
+  --gas-limit 15000
 ```
 
 If for some reason, we wanted to pay a higher gas fee, we could also specify that as follows:
@@ -115,7 +115,7 @@ namadac transfer \
   --token NAM \
   --amount 10 \
   --signing-keys key1 \
-  --gas-limit 150000 \
+  --gas-limit 15000 \
   --gas-price 0.01
 ```
 
@@ -123,14 +123,9 @@ This **might** incentivise validators to prioritise this transaction above those
 
 ## Paying fees with tokens in the MASP
 
-It is also possible to pay for fees using the MASP when dealing with a transfer transaction involving shielded inputs (shielding, shielded, and unshielding transfers both natively and with IBC).
-The purpose of this is to ensure that a user can make transactions on-chain even if they may not have NAM in their transparent balance.
-This is yet another incentive for users to keep the maximum amount of assets in the MASP.
-On top of this, paying fees via the MASP is required to prevent information leakage that could defy the purpose of the shielded pool.
+It is also possible to pay for fees using the MASP when dealing with a transfer transaction involving shielded inputs (shielded, and unshielding transfers both natively and with IBC): this is required to prevent information leakage that could defy the purpose of the shielded pool.
 
-When dealing with MASP fee payment, the client will try to deduct the fees from the source of the shielded transaction and unshield them to the transparent balance of the `--gas-payer` (or the address corresponding to the first key in the `--signing-keys`) before being paid to the block proposer.
-If the shielded account does not have enough funds to cover the gas cost, the user must specify the `--gas-spending-key` flag and set it the alias of another spending key in your wallet.
-The client will try to combine the residual balances of the original sender and this extra key to cover the entirety of the fees.
+When dealing with MASP fee payment, the client will try to deduct the fees from the spending key specfied by `--gas-spending-key` of the shielded transaction and unshield them to the transparent balance of the `--gas-payer` (or the address corresponding to the first key in the `--signing-keys`) before being paid to the block proposer.
 
 For example, if the user has a spending key `spending-key-1` in their wallet, and they want to pay for the fees of a shielded transfer transaction using the MASP, they would run the following command:
 
@@ -141,9 +136,10 @@ namadac transfer \
   --token OSMO \
   --amount 10 \
   --gas-payer my-implicit \
+  --gas-spending-key spending-key-1
 ```
 
-If `spending-key-1` cannot cover for the entire cost, the user can specify an additional spending key for fee payment:
+If `spending-key-1` does not have enough balance or the user simply wants to use a separate key for gas, they can specify a different spending key for fee payment:
 
 ```shell copy 
 namadac transfer \
@@ -155,22 +151,16 @@ namadac transfer \
   --gas-spending-key spending-key-2
 ```
 
-In these examples, `my-implicit` may only have an OSMO balance in their transparent balance, but `spending-key-1` (and possibly `spending-key-2`) may have a positive NAM balance in their shielded balance.
+In these examples, `my-implicit` may only have an OSMO balance in their transparent balance, but `spending-key-1` (or possibly `spending-key-2`) may have a positive NAM balance in their shielded balance.
 In this case, the NAM will be unshielded to the transparent balance of `my-implicit` and then used to pay for the transaction fee.
 So it is requried to unshield just the difference between the gas cost and the transparent balance of the gas payer implicit address.
 
-<Callout type="info">
-It is also possible to use MASP fee payment to pay fees for non-MASP transactions.
-To do so, the user should create a transaction batch where the first transaction is a MASP transaction that unshields the funds for fee payment to the fee payer's address.
-The actual intended transaction can then be attached as the second transaction of the batch.
-</Callout>
-
-### Using a disposable gas payer
+### Using a disposable gas payer (recommended)
 
 It is also possible to use a disposable gas payer to pay for transaction fees.
 This is useful (and recommended) in cases where the user does not want to leak information and reveal the identity of the `--gas-payer` to prevent correlation.
 In order to use a disposable gas payer, the user must include the `--disposable-gas-payer` flag.
-The fees will be deducted from the shielded balance of the shielded transactions source (and optionally from the balance of the `--gas-spending-key` when provided) and unshielded to the transparent balance of an ephemeral transparent address before being paid by the ephemeral address.
+The fees will be deducted from the shielded balance of the shielded transactions `--gas-spending-key` and unshielded to the transparent balance of an ephemeral transparent address before being paid by the ephemeral address.
 
 For example, if the user has the same two spending keys from the previous example in their wallet, and they want to pay for the fees of an unshield transfer transaction using a disposable address, they would run the following command:
 
@@ -184,3 +174,25 @@ namadac unshield \
   --disposable-gas-payer
 ```
 
+### MASP fee payment gas limit
+
+To prevent spamming the network, the protocol establishes a maximum gas limit (`masp_fee_payment_gas_limit`) that can be used when fees are paid via the MASP (this limit applies to the gas used to run the transaction and the validity predicates but does not apply to the gas used by the wrapper transaction). It can be queried with:
+
+```bash copy
+namadac query-protocol-parameters
+```
+
+If the transaction exceeds this limit it won't be accepted: the protocol sets a value which should allow for most transactions to be accepted. Should the user be in need to submit a more complex (and therefore gas-demanding) transaction, there are two ways around it, both taking advantage of the fact that the protocol gas limit only applies to the first transaction of the batch.
+
+1. The user can submit a batch of two transactions: the first one just unshield the necessary funds to pay fees for the entire batch whereas the second transaction applies the desired transfer. Since the protocol gas limit only applies to the first transaction of the batch (the one paying fees), the second transaction is free from this limit and can be as complex as required (withing the size and gas limits of the entire block)
+2. The user submit a first transaction paying fees via the MASP. This time though, the transaction unshields an amount which is enough to cover both the gas fees of itself and of the desired masp transaction. After this, the gas payer of the first transaction will still have a transparent balance large enough to cover fees for a second masp transaction that actually performs the desired transfer and does not require any more fee unshielding.
+
+<Callout type="info">
+The firt solution proposed above is currently not supported by the CLI client and requires direct usage of the SDK. 
+</Callout>
+
+Each of these solutions has its own advanatages and drawbacks compared to the other one. Using a single batch with two transactions allows for faster confirmation times and lower gas costs (since a batch will cost less than two separate transactions), but because of the way the SDK builds MASP transactions it could fail sometimes (specifically the SDK invalidates notes that have been spent by the first transaction in the batch which could cause a lack of funds for the second one). Using two separate transactions instead, avoids this issue (since the user can call `shielded-sync` after the first one to recollect all the available funds), but requires more gas overall and longer confirmation times.
+
+<Callout type="warning">
+It is also possible, using either of the two solutions presetend above, to use MASP fee payment to pay fees for non-MASP transactions. Please note that this is discouraged since it could establish a linkage between the masp transaction and the entity behind that.
+</Callout>
