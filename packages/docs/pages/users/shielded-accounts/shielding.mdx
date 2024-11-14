@@ -38,6 +38,14 @@ namadac shield \
 ```
 
 </Steps>
+<Callout>
+Note: Shielding assets, even using IBC, is an _optimistic operation_. This means that the shielded wallet will assume
+that the transaction succeeded and store the state changes. When this happens, the shielded wallet is said to be in a
+_speculative state_. This occurs even if the transaction ultimately fails.
+
+To move out of a _speculative state_, run [shielded sync](shielded-sync.mdx). This is especially important if a shielding transaction failed as
+the shielded wallet's view of the MASP pool has now diverged from the MASP pool on the chain.
+</Callout>
 
 ### Viewing your balance
 To view the up-to-date balance of your spending key (or viewing key), you must first run the `shielded-sync` command to
