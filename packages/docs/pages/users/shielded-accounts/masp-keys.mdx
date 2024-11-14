@@ -47,7 +47,8 @@ viewing key derived from the spending key inherits its birthday.
 
 Birthdays can also be provided when adding or deriving keys. By re-adding an existing key with a new birthday, you can
 update a key's birthday in the wallet. Keys passed to shielded-sync directly (as opposed to being stored in the wallet),
-can also be passed in with birthdays. This is done simply by by appending `<<{BIRTHDAY}` to the end of the key.
+can also be passed in with birthdays. This is done simply by appending `<<$BLOCK` to the end of the key, where `$BLOCK`
+would be the block height of the key's birthday (for instance, `zvknam...<<99`).
 
 #### Displaying your spending key and viewing key
 You can display your viewing key with:
@@ -86,12 +87,12 @@ namadaw derive --alias $SPENDING_KEY_ALIAS --shielded
 
 ### Adding an existing key or payment address to your wallet
 
-If you know the raw value of a spending key, viewing key or payment address, you can add it to your wallet under an alias so you can more conveniently refer to it later.
+If you know the bech32 encoding of a spending key (`zsknam...`), viewing key (`zvknam...`) or payment address (`znam...`), you can add it to your wallet under an alias so you can more conveniently refer to it later.
 
 ```bash copy
-namadaw add --alias $ALIAS --value $HEX_VALUE
+namadaw add --alias $ALIAS --value $BECH32_ENCODING
 ```
-where `$HEX_VALUE` is the hex value of a spending key, viewing key or payment address.
+where `$BECH32_ENCODING` is one of: spending key, viewing key or payment address.
 
 ### Removing a key/address
 You can remove all keys/addresses associated with an alias from your wallet with:
