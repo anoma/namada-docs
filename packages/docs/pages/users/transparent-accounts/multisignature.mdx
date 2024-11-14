@@ -47,7 +47,7 @@ namadac init-account --alias abc-multisig\
 
 ## Submitting a multisignature transaction
 A multisignature transaction requires that an offline transaction first be constructed so that it can be signed by each required party before
-being submitted to the chain. 
+being submitted to the chain.
 
 <Steps>
 ### Dump the raw tx
@@ -55,7 +55,7 @@ The `--dump-tx` argument will write the transaction to disk. A folder is require
 
 ```bash copy
 mkdir tx_dumps
-namadac transfer --source abc-multisig --target $TARGET \
+namadac transparent-transfer --source abc-multisig --target $TARGET \
   --token nam --amount 2 \
   --signing-keys alice \
   --dump-tx --output-folder-path tx_dumps
