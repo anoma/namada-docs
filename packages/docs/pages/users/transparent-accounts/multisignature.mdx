@@ -63,6 +63,12 @@ namadac transparent-transfer --source abc-multisig --target $TARGET \
 # Example output:
 Transaction serialized to tx_dumps/FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3.tx.
 ```
+<Callout type="info">
+By default, transactions have an expiration of *1 hour* from the time they're created. This can be changed using the `expiration-date` flag and providing a new 
+expiration time (in UTC). You can also use the `no-expiration` flag to set no expiry; although this option is discouraged and should be used with caution.  
+
+Transactions submitted after expiry will not be accepted on-chain.
+</Callout>
 
 ### Sign the transaction with two of the three Keys
 This command will sign the transaction with Alice's key. Afterwards, repeat the command using Bob's key.
