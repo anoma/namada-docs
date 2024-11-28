@@ -66,28 +66,45 @@ Give your account an easy to remember name.
 ### Display your address/public key
 To display your Ledger address/public key, first open Namada Keychain. Find your Ledger account in the list, click the `⋮` icon (three vertical dots) and select 'View keys'. 
 
-### Signing a transaction
-**Expert mode must be turned off.** To sign a transaction from a front-end app (such as [Namadillo](./../../integrating-with-namada/interface.mdx)), follow these steps:
+## Staking using the Ledger
+You can use the Ledger to sign a transactions from a front-end app (such as [Namadillo](./../../integrating-with-namada/interface.mdx)). The example given below is 
+for staking with a validator (or validators), but the signing process is essentially the same for any type of transaction you wish to make (transfers, voting on governance, etc.)  
+
+The following assumes you have completed the steps to install the Namada Ledger app, the Namada Keychain browser extension, and completed the initial setup process as described 
+in [Importing (deriving) your Ledger Address](#importing-deriving-your-ledger-address) above.
 
 <Steps>
-### Connect your device and open the Namada app
+### Open the web app
+In your browser, open [Namadillo](https://interface.namada.tududes.com).
 
-### Set your Ledger as the active account
-Open the Namada Keychain and click the checkbox next to your Ledger account to set it as the active account.
+### Connect the browser extension
+Click the 'Connect Keychain' button in the top right corner and approve the connection request.
 
-### Perform your transaction
+### Navigate to the staking dashboard
+From the left panel, select 'Staking' **(1, below)**. You should see your available NAM balance displayed in the top-center, under 'Available NAM to stake' **(2, below)**. 
+(If your balance is different than expected, check that the correct account is active in the browser extension).
+![Step 1](../../../public/images/stake1.png)
+*Namadillo Staking dashboard*
+### Stake your tokens
+Click on 'Stake' **(either button marked 3, above)**; this will open a new dialog in which you can enter the amounts you wish to stake with each validator **(4, below)**. 
+You can stake with multiple validators in a single action. Click 'Stake' again **(5, below)** when you're ready.
+![Step 2](../../../public/images/stake2.png)
+*Staking to multiple validators at once*
 
-### Review transaction
-You will be presented with a browser pop-up containing a summary of the transaction. You can click `View data` to see the 
-details of what will be submitted on-chain. You can also verify the correct public key is listed under `Signer`. When you're 
-ready to proceed, click `Approve`.  
+### Approve the transaction
+You will be prompted to approve the transaction in a pop-up. After confirming, you will also be asked to confirm the transaction on your Ledger device.
+![Step 3](../../../public/images/stake3.png)
 
-You will be reminded again to connect your device and open the Namada app; click `Submit` to send the signing request to the Ledger.
-
-### Approve on your device
-Review the transaction details on your device and click `Approve` to sign and submit the transaction to the chain.
+### Wait for confirmation
+You will see a grey dialog box in the top right corner of Namadillo notifying that the transaction is being processed. After roughly 10 seconds you will be informed 
+if your transaction was successful.
+![Step 4](../../../public/images/stake4.png)
 </Steps>
 
+#### Worth noting:
+If this is the first transaction you're making using this address, you'll also see a 'Reveal PK' (Reveal Public Key) transaction bundled with your staking transaction(s) **(6, below)**.
+![Step 5](../../../public/images/stake5.png)
+*Example of a staking transaction with Reveal PK message*
 ## Using the Ledger app with the CLI
 You can use your Ledger to sign transactions from the Namada CLI.
 
