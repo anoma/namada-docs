@@ -204,3 +204,40 @@ Using two separate transactions instead avoids this issue (since the user can ca
 It is also possible, using either of the two solutions presented above, to use MASP fee payment to pay fees for non-MASP transactions.
 Please note that this is discouraged since it could establish a linkage between the MASP transaction and the entity behind the non-MASP transactions.
 </Callout>
+
+## Having someone else to pay for tx gas fees
+
+When, for example, you don't have enough balance left to cover transaction's gas fees, you can have someone else to wrap the raw transaction and submit it on your behalf.
+
+First, dump the raw transaction by adding `--dump-tx` flag and specify the `--gas-payer`'s public key and an `--output-folder-path` for the serialized tx. E.g.:
+
+```shell copy
+namadac transparent-transfer \
+  --source a \
+  --target b \
+  --token NAM \
+  --amount 1 \
+  --gas-payer pk-of-gas-payer \
+  --dump-tx \
+  --output-folder-path tx-dump-dir
+```
+
+Then produce a signature for this tx with e.g.:
+
+```shell copy
+namadac utils sign-offline \
+  --data-path tx-dump-dir/*.tx \
+  --secret-keys key-of-a \
+  --output-folder-path tx-dump-dir
+```
+
+You can now pass on the serialized transaction (\*.tx file) and signature (\*.sig) to whoever is going to wrap it.
+
+They can then wrap this tx and submit it to the chain with e.g.:
+
+```shell copy
+namadac tx \
+  --tx-path transaction.tx \
+  --signatures signature.sig \
+  --gas-payer gas-payer-key
+```
