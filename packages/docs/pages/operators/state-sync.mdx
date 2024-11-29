@@ -7,7 +7,7 @@ their node will need to sync to the tip of the chain. The simplest way to do
 this is to replay all blocks of the chain starting from genesis. However,
 this is not the most efficient way.
 
- If an operator trusts the chain past a certain block height, they can fetch
+ If an operator trusts the chain up to a certain block height, they can fetch
  snapshots from peers (if they are configured to provide snapshots) and then
  only replay the chain from this snapshot onward. This is called __state sync__.
 

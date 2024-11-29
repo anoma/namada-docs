@@ -3,9 +3,10 @@ import { Steps } from 'nextra-theme-docs'
 
 # Ledger Hardware Wallet
 
-<Callout type="info">
-The Namada Ledger app is not yet updated in the Ledger Live catalogue, so the only way to use one in the meantime is with 1) a Ledger **Nano** device and 2) sideloading as a work-around: [Zondax Hub](https://hub.zondax.ch)
-Typically sideloading an unaudited version of the app onto your device is only for testing purposes, but it is effective as a work-around. See the installation instructions below.
+<Callout type="info" emoji={"🎉"}>
+The Namada Ledger app is now available on the official Ledger Live app catalog! If you had followed the instructions on previous versions of these 
+docs to install the development version from Zondax Hub, make sure you uninstall any pre-release versions of the app and install the latest 
+version from Ledger Live before proceeding.
 </Callout>
 
 Both the [Namada Keychain](./web-wallet.mdx) browser extension and the Namada CLI are compatible with the [Ledger](https://www.ledger.com/) hardware wallet. 
@@ -18,32 +19,24 @@ In order to use the Ledger with the web wallet, you will need to install the [Na
 you will need to [install the latest version](./../../introduction/install.mdx) of Namada.
 
 ## Installing the Namada Ledger app
-<Callout type="warning">
-The Namada Ledger app is still a work in progress. Use at your own risk. At this preliminary stage of development, it is *highly* recommended that you use a device that 
-does not contain any existing funds.  
-
-When installing a Ledger app from any source besides the official app store, you will be shown a warning to that effect and prompted for confirmation. Please make sure you 
-understand the risks before proceeding. Before installing *any* app from a non-official source, be sure that you trust the authors and the instructions being given. As always, do your own research.
-</Callout>
+The Namada Ledger app is available on the official Ledger Live app catalog. Follow the instructions below to install the app on your device.
 
 <Steps>
 ### Connect your device to your computer 
 The remaining steps assume you have already completed the initial Ledger setup and your device is ready to use.
 
-### Uninstall any existing Namada apps on your device
-
-### Visit the Zondax Hub and prepare your device
-In your browser, visit the [Zondax Hub](https://hub.zondax.ch). Click the "Connect Device" button in the top right corner, and confirm the connection in your browser and on your device.
+### Open the Ledger Live App Catalog
+Open the Ledger Live desktop app and select 'My Device' from the lefthand menu to display the list of available apps.
 
 ### Install the Namada app
-Scroll down until you find Namada in the list, and select the newest version from the dropdown. Click "Install" and confirm on your device.
+Scroll down until you find Namada in the list (or use the search bar), and click the 'Install' button to install the latest version on your device.
 
 </Steps>
 
 ## Using a Ledger with Namada Keychain (browser extension)
 
-You can use the Ledger app with the Namada Keychain browser extension to sign transactions in front-end web apps. **Expert mode must be turned off.**  See the 
-[Namada Keychain](./web-wallet.mdx) page for general installation and usage instructions.
+You can use the Ledger app with the Namada Keychain browser extension to sign transactions in front-end web apps. See the 
+[Namada Keychain](./web-wallet.mdx) page for instructions on installing and using the Namada Keychain browser extension.
 
 <Callout>
 Disclaimer: this will only work on Chrome-enabled browsers at the moment.
@@ -73,36 +66,50 @@ Give your account an easy to remember name.
 ### Display your address/public key
 To display your Ledger address/public key, first open Namada Keychain. Find your Ledger account in the list, click the `⋮` icon (three vertical dots) and select 'View keys'. 
 
-### Signing a transaction
-**Expert mode must be turned off.** To sign a transaction from a front-end app (such as [Namadillo](./../../integrating-with-namada/interface.mdx)), follow these steps:
+## Staking using the Ledger
+You can use the Ledger to sign a transactions from a front-end app (such as [Namadillo](./../../integrating-with-namada/interface.mdx)). The example given below is 
+for staking with a validator (or validators), but the signing process is essentially the same for any type of transaction you wish to make (transfers, voting on governance, etc.)  
+
+The following assumes you have completed the steps to install the Namada Ledger app, the Namada Keychain browser extension, and completed the initial setup process as described 
+in [Importing (deriving) your Ledger Address](#importing-deriving-your-ledger-address) above.
 
 <Steps>
-### Connect your device and open the Namada app
+### Open the web app
+In your browser, open [Namadillo](https://interface.namada.tududes.com).
 
-### Set your Ledger as the active account
-Open the Namada Keychain and click the checkbox next to your Ledger account to set it as the active account.
+### Connect the browser extension
+Click the 'Connect Keychain' button in the top right corner and approve the connection request.
 
-### Perform your transaction
+### Navigate to the staking dashboard
+From the left panel, select 'Staking' **(1, below)**. You should see your available NAM balance displayed in the top-center, under 'Available NAM to stake' **(2, below)**. 
+(If your balance is different than expected, check that the correct account is active in the browser extension).
+![Step 1](../../../public/images/stake1.png)
+*Namadillo Staking dashboard*
+### Stake your tokens
+Click on 'Stake' **(either button marked 3, above)**; this will open a new dialog in which you can enter the amounts you wish to stake with each validator **(4, below)**. 
+You can stake with multiple validators in a single action. Click 'Stake' again **(5, below)** when you're ready.
+![Step 2](../../../public/images/stake2.png)
+*Staking to multiple validators at once*
 
-### Review transaction
-You will be presented with a browser pop-up containing a summary of the transaction. You can click `View data` to see the 
-details of what will be submitted on-chain. You can also verify the correct public key is listed under `Signer`. When you're 
-ready to proceed, click `Approve`.  
+### Approve the transaction
+You will be prompted to approve the transaction in a pop-up. After confirming, you will also be asked to confirm the transaction on your Ledger device.
+![Step 3](../../../public/images/stake3.png)
 
-You will be reminded again to connect your device and open the Namada app; click `Submit` to send the signing request to the Ledger.
-
-### Approve on your device
-Review the transaction details on your device and click `Approve` to sign and submit the transaction to the chain.
+### Wait for confirmation
+You will see a grey dialog box in the top right corner of Namadillo notifying that the transaction is being processed. After roughly 10 seconds you will be informed 
+if your transaction was successful.
+![Step 4](../../../public/images/stake4.png)
 </Steps>
 
+##### Worth noting:
+Whenever you're submitting a transaction of any kind for the first time from an address, you'll also see a 'Reveal PK' (Reveal Public Key) transaction automatically bundled with your other transaction(s) **(6, below)**. 
+![Step 5](../../../public/images/stake5.png)
+*Example of a staking transaction with Reveal PK message*
 ## Using the Ledger app with the CLI
 You can use your Ledger to sign transactions from the Namada CLI.
-<Callout type="warning">
-Make sure the 'expert mode' toggle is set to disabled in the Namada app; this feature has not yet been implemented and may result in crashes.
-</Callout>
 
 ### Importing (deriving) your Ledger address
-Before any other operations with the Ledger, we will want to derive an address and public key and add them to the [file system wallet](./file-system-wallet.mdx) under an alias for convenience.
+Before any other operations with the Ledger, we need to derive an address and public key and add them to the [file system wallet](./file-system-wallet.mdx) under an alias for convenience.
 To derive your address using a Ledger:
 
 <Steps>
@@ -138,8 +145,8 @@ namadac transparent-transfer \
 When constructing the transfer, the CLI will check your wallet for the public key given under `$ALIAS`. You will then be prompted on the device to approve the transaction
 
 ### Troubleshooting
-As written above, the Namada Ledger app is not yet updated in the Ledger Live catalogue, so the only way to use one in the meantime is with 1) a Ledger **Nano** device and 2) sideloading as a work-around: [Zondax Hub](https://hub.zondax.ch)
-Typically sideloading an unaudited version of the app onto your device is only for testing purposes, but it is effective as a work-around.
+As a first step when troubleshooting Ledger issues, make sure that you've updated your Ledger Live app and Ledger firmware to the latest versions. 
+Additionally, check in the Ledger Live app catalog to make sure you have the latest version of the Namada app.
 
 Some common errors you may encounter while using the Ledger with the Namada CLI:
 
@@ -151,6 +158,3 @@ Make sure you're using the correct versions of both the Ledger app and Namada bi
 
 - The CLI panics with `Message:  No signature could be produced for a transaction of type ...`  
 Make sure the Ledger account has been properly [added to your wallet](#importing-deriving-your-ledger-address-1).
-
-- The CLI panics part-way through signing and the Ledger reboots.  
-Make sure the `expert mode` toggle in the Ledger app is set to `disabled`.
