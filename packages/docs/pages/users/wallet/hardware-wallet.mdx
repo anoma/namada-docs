@@ -101,15 +101,15 @@ if your transaction was successful.
 ![Step 4](../../../public/images/stake4.png)
 </Steps>
 
-#### Worth noting:
-If this is the first transaction you're making using this address, you'll also see a 'Reveal PK' (Reveal Public Key) transaction bundled with your staking transaction(s) **(6, below)**.
+##### Worth noting:
+Whenever you're submitting a transaction of any kind for the first time from an address, you'll also see a 'Reveal PK' (Reveal Public Key) transaction automatically bundled with your other transaction(s) **(6, below)**. 
 ![Step 5](../../../public/images/stake5.png)
 *Example of a staking transaction with Reveal PK message*
 ## Using the Ledger app with the CLI
 You can use your Ledger to sign transactions from the Namada CLI.
 
 ### Importing (deriving) your Ledger address
-Before any other operations with the Ledger, we will want to derive an address and public key and add them to the [file system wallet](./file-system-wallet.mdx) under an alias for convenience.
+Before any other operations with the Ledger, we need to derive an address and public key and add them to the [file system wallet](./file-system-wallet.mdx) under an alias for convenience.
 To derive your address using a Ledger:
 
 <Steps>
@@ -145,7 +145,7 @@ namadac transparent-transfer \
 When constructing the transfer, the CLI will check your wallet for the public key given under `$ALIAS`. You will then be prompted on the device to approve the transaction
 
 ### Troubleshooting
-As a first step when troubleshooting Ledger issues, make sure that you have updated your Ledger Live app and Ledger firmware to the latest versions. 
+As a first step when troubleshooting Ledger issues, make sure that you've updated your Ledger Live app and Ledger firmware to the latest versions. 
 Additionally, check in the Ledger Live app catalog to make sure you have the latest version of the Namada app.
 
 Some common errors you may encounter while using the Ledger with the Namada CLI:
