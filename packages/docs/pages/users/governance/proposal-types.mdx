@@ -74,14 +74,12 @@ the amount specified will be sent upon execution of the proposal at the beginnin
     }
 ```
 
-
-
 #### IBC PGF proposals
 
-For a PGF proposal that is to be executed on an IBC chain, the `"Internal"` data structure will be substituted with "IBC" and have the following contents:
+For a PGF proposal that is to be executed on an IBC chain, the `"Internal"` data structure will be substituted with "Ibc" and have the following contents:
 
 ```json
-"IBC": 
+"Ibc": 
     {
         
         "amount": "1337",
@@ -90,3 +88,5 @@ For a PGF proposal that is to be executed on an IBC chain, the `"Internal"` data
         "channel_id": "<channel-id>"
     }
 ```
+
+See an example of a complete proposal here: https://github.com/anoma/namada/blob/main/scripts/funding_proposal_template.json
