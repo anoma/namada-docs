@@ -34,6 +34,14 @@ This guide is intended for Namada Validator operators. It outlines the use of Ho
 
 --- Please note that you can use IP addresses instead of DNS A records. However, I’m using DNS A records here for simplicity and flexibility in managing domain names and potential future changes. Using a domain name allows easier maintenance if the server’s IP address changes.Using IP addresses directly might provide more security since it can help obscure your setup, making it less easily discoverable via DNS lookups. However, keep in mind that this is not a complete security measure, as IP addresses can still be traced through network scans.
 
+## Namada Validator Node Config Requirements :
+
+- `tendermint_mode` should be set to `"Validator"`
+- For an advanced setup (e.g., adding sentry nodes to enhance protection against DDoS attacks), the usual configuration involves 3 signers, 3 sentry nodes, and 3 validators. In this case:
+  On the sentry nodes, set `tendermint_mode = "Full"`.
+  On the validators, set `tendermint_mode = "Validator"`.
+- If not using sentry nodes, simply set `tendermint_mode = "Validator"`.
+
 ## Run These Steps on All Signer Servers:
 
 1. Create a directory to organize your Horcrux files:
