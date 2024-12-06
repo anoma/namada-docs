@@ -1,0 +1,38 @@
+import { Callout, Steps } from 'nextra-theme-docs'
+
+# Staking with Namadillo
+
+You can stake using Namadillo and the Namada Keychain browser extension, including support for Ledger hardware wallets.  
+
+<Steps>
+### Open the staking dashboard
+From the left panel, select 'Staking' **(1, below)**. You should see your available NAM balance displayed in the top-center, under 
+'Available NAM to stake' **(2, below)**. (If your balance is different than expected, check that the correct account is active in the 
+browser extension).
+![Step 1](../../../public/images/namadillo/stake1.png)
+*Namadillo Staking dashboard*
+
+### Choose your validators
+Click on 'Stake' **(either button marked 3, above)**; this will open a new dialog in which you can enter the amounts you wish to stake with each validator **(4, below)**. 
+You can stake with multiple validators in a single action. Click 'Stake' again **(5, below)** when you're ready.
+![Step 2](../../../public/images/namadillo/stake2.png)
+*Staking to multiple validators at once*
+
+### Confirm the staking transaction(s)
+You will be asked to confirm your transaction so it can be signed and submitted to the chain. The dialog will look slightly different 
+depending on whether you're using a Ledger device with the extension or not.
+- Extension only users: You will be prompted to approve the transaction in a pop-up, then prompted to enter your Keychain password.
+- Extension + Ledger users: You will be prompted to approve the transaction in a pop-up. Instead of being prompted for your password, you will be asked to confirm the transaction on your Ledger device.  
+![Step 3](../../../public/images/namadillo/stake3a.png)
+*Confirmation dialog, depending on whether you're using a Ledger to sign*
+
+### Await the result
+You will see a grey dialog box in the top right corner of Namadillo notifying that the transaction is being processed. 
+After roughly 10 seconds you will be informed if your transaction was successful.
+![Step 4](../../../public/images/namadillo/stake4.png)
+</Steps>
+
+<Callout type='info'>
+Remember that any staking transactions require two epochs (on mainnet) after being accepted on chain before taking effect. 
+See the section on [Staking](../../users/delegators.mdx) for more info.
+</Callout>

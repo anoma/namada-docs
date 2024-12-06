@@ -7,5 +7,6 @@
   "governance": "Governance",
   "public-goods-funding": "Public Goods Funding (PGF)",
   "ibc": "IBC transfers",
-  "query": "Querying the Chain"
+  "query": "Querying the Chain",
+  "namadillo": "Using Namadillo"
 }
