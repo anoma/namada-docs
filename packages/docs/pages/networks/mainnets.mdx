@@ -1,3 +1,31 @@
 # Mainnets
-This page will be updated and filled wen mainnet is launched.
+The Namada mainnet is currently live after having been launched on December 3 @ 15:00 UTC.
 
+The genesis files are hosted in the following repository: https://github.com/anoma/namada-mainnet-genesis.
+
+### Mainnet status and attributes:
+- chain ID: `namada.5f5de2dd1b88cba30586420`
+- Namada binaries: [`v1.0.0`](https://github.com/anoma/namada/releases/tag/v1.0.0)
+- Namada libs: [`v0.46.1`](https://github.com/anoma/namada/releases/tag/libs-v0.46.1)
+- CometBFT version: [`v0.37.11`](https://github.com/cometbft/cometbft/releases/tag/v0.37.11)
+
+### Joining the network from the CLI
+The simplest way to join the network is the following:
+```
+export NAMADA_NETWORK_CONFIGS_SERVER="https://github.com/anoma/namada-mainnet-genesis/releases/download/mainnet-genesis"
+export CHAIN_ID=namada.5f5de2dd1b88cba30586420
+ 
+# Download the network files and join
+namadac utils join-network --chain-id $CHAIN_ID
+```
+
+With these steps, a user can join the Namada mainnet, allowing for querying and transacting on the blockchain.
+These beginning steps are necessary for running a full node or a validator node as well.
+More details on how to join the network in these cases can be found in [this mainnet guide](https://github.com/anoma/namada-mainnet-genesis/blob/main/MAINNET-GUIDE.md).
+
+### Services and infrastructure
+
+The `namada-ecosystem` repository contains data on the available mainnet services and infrastructure in json format in [this directory](https://github.com/Luminara-Hub/namada-ecosystem/tree/main/user-and-dev-tools/mainnet).
+This is an actively maintained resource for finding RPC nodes to connect to, active IBC relayers, Namadillo front-end instances, active indexers, state snapshot providers and more.
+
+Block explorers and Namadillo instances can also be found on https://namada.net/apps.
