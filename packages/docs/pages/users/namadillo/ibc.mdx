@@ -1,4 +1,4 @@
-import { Callout } from 'nextra-theme-docs'
+import { Callout, Steps } from 'nextra-theme-docs'
 
 # IBC Transfers with Namadillo
 
@@ -8,3 +8,35 @@ few weeks. Therefore, some sections of Namadillo will not be accessible immediat
 
 Until then, you can experiment with all aspects of Namadillo on [testnet](../networks/testnets.mdx).
 </Callout>
+
+{/* TODO: Finish this section
+
+You can connect your [Keplr wallet](https://www.keplr.app/) with Namadillo to transfer assets in and out of Namada to **Cosmos SDK** chains, 
+via IBC. Namadillo offers both transparent and shielded IBC transfers.
+
+- **Transparent IBC transfers:** these are transfers between (either to or from) a transparent (`tnam...`) Namada address and another chain. After receiving 
+assets to your transparent address, they will be added to your transparent balance. You can (optionally) shield them at a later time. But as always, keep in 
+mind that a third party can view all balances and transactions of any transparent address at any point in the chain's history.
+- **Shielded IBC transfers:** these are transfers between (either to or from) a shielded (`znam...`) Namada address and another chain. 
+These transfers move immediately to/from your shielded balance without needing to pass through your transparent address first. This 
+reduces the chances of accidentally leaking information which could potentially be used by others to make inferences about your on-chain activity.
+
+## Connecting Your Keplr Wallet
+
+
+## The IBC Dashboard
+
+
+## IBC To Namada (from another chain)
+To transfer assets from another chain to your Namada address, do the following:
+
+<Steps>
+### TODO
+</Steps>
+
+## IBC From Namada (to another chain)
+To transfer assets out of Namada to another chain, do the following:
+
+<Steps>
+### TODO
+</Steps> */}
