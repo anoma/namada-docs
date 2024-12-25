@@ -231,7 +231,7 @@ namadac utils sign-offline \
   --output-folder-path tx-dump-dir
 ```
 
-You can now pass on the serialized transaction (\*.tx file) and signature (\*.sig) to whoever is going to wrap it.
+You can now pass on the serialized transaction (`\*.tx` file) and signature (`\offline_signature_*.sig`) to whoever is going to wrap it.
 
 They can then wrap this tx and submit it to the chain with e.g.:
 
@@ -241,3 +241,32 @@ namadac tx \
   --signatures signature.sig \
   --gas-payer gas-payer-key
 ```
+
+They can also produce the wrapper signature offline if this is required. In this case, instead of the previous command, they should first wrap and dump the tx as follows:
+
+```shell copy
+namadac tx \
+  --tx-path transaction.tx \
+  --signatures signature.sig \
+  --gas-payer gas-payer-key \
+  --dump-wrapper-tx \
+  --output-folder-path tx-dump-dir
+```
+
+This will generate a separate serialized transaction (`\*.tx` file). They can then produce the wrapper signature offline:
+
+```shell copy
+namadac utils sign-offline \
+  --data-path tx-dump-dir/*.tx \
+  --secret-key gas-payer-key \
+  --output-folder-path tx-dump-dir
+```
+
+Which generates a serialized wrapper signature (`\offline_wrapper_signature_*.sig`). Finally they can submit the transaction with:
+
+```shell copy
+namadac tx \
+  --tx-path wrapper_transaction.tx \
+  --gas-signature wrapper_signature.sig
+```
+
