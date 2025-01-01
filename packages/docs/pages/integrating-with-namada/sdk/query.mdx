@@ -9,7 +9,7 @@ This code will attempt to query the chain's current epoch:
 ```rust
 use namada_sdk::{rpc, Namada};
 
-  match rpc::query_epoch(sdk.client()).await {
+  match rpc::query_epoch(&sdk.client).await {
     Ok(current_epoch) => println!("Current epoch: {:?}", current_epoch),
     Err(e) => println!("Query error: {:?}", e),
   }
