@@ -2,5 +2,6 @@
     "env-vars": "Node Configuration",
     "running-a-full-node": "Full node step-by-step",
     "logging-config": "Logging configurations",
-    "base-directory": "Base directory"
+    "base-directory": "Base directory",
+    "pruning-cometbft-blocks": "Pruning CometBFT blocks"
 }
