@@ -4,7 +4,8 @@ import { Callout } from 'nextra-theme-docs'
 
 The size of the CometBFT directory will grow with validator signatures, transactions, etc.
 
-The tool [CometPrune](https://github.com/ekhvalov/cometprune) can prune old blocks from your CometBFT directory. It reduces only the CometBFT data `${BASE_DIR}/${CHAIN_ID}/cometbft`, doesn't affect Namada's storage data `${BASE_DIR}/${CHAIN_ID}/db`.
+The tool [CometPrune](https://github.com/ekhvalov/cometprune) can prune old blocks from your CometBFT directory.
+It reduces only the CometBFT data in `${BASE_DIR}/${CHAIN_ID}/cometbft` and does not affect Namada's storage data in `${BASE_DIR}/${CHAIN_ID}/db`.
 
 ### Install CometPrune
 - Download the binary from [the release page](https://github.com/ekhvalov/cometprune/releases)
@@ -21,10 +22,12 @@ go install
 
 2. Prune the blocks
 ```shell copy
-cometprune --path ${BASE_DIR}/${CHAIN_ID}/cometbft/data --keep-blocks <amount of blocks to keep>
+cometprune --path ${BASE_DIR}/${CHAIN_ID}/cometbft/data --keep-blocks $BLOCKS_TO_KEEP
 ```
+where the most recent `$BLOCKS_TO_KEEP` will be retained.
+
 <Callout>
-Leaving the last one block (`--keep-blocks 1`) is enough to restart the node. The tool will reject to delete all blocks, i.e. `--keep-blocks 0` doesn't work. 
+Leaving the last one block (`--keep-blocks 1`) is enough to restart the node successfully. The tool will reject to delete all blocks, i.e. `--keep-blocks 0` doesn't work. 
 </Callout>
 
 3. Restart the node
