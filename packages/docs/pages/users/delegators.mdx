@@ -134,3 +134,14 @@ When the validator that holds a bond is jailed, there are restrictions on what c
 Bonding tokens is always permitted to any validator, even if it is jailed.
 
 Unbonding and redelegating from a jailed validator is not permitted if that validator is enqueued to be slashed (it is *frozen*), as described in [this section on jailing validators for protocol misbehaviors](../operators/validators/jailing.mdx#jailing-for-protocol-misbehavior). Otherwise, unbonding and redelegating is permitted.
+
+## Slashing
+
+Delegators should be aware of the slashing risks associated with a validator when choosing to stake tokens.
+Namada's native slashing mechanism makes it increasingly risky to delegate to a validator with a large amount of stake.
+Please read details of Namada's cubic slashing mechanism [here](../introduction/protocol-intro/cubic-slashing.mdx).
+
+If a validator to whom you are staked is slashed, they will be first be jailed and then have staked tokens confiscated.
+As a delegator, you will have some of your staked tokens held by the validator confiscated from you as well by consequence.
+
+You can avoid risk to high slash rates by delegating to validators with lower stake, thereby also enhancing network decentralization of stake.
