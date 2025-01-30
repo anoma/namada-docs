@@ -49,7 +49,7 @@ One can download the latest binary release from our [releases page](https://gith
 
 E.g.
 ```bash copy
-export TAG="v1.10.4-namada-beta17-rc2" # or latest tagged release
+export TAG="v1.10.5-namada-beta18" # or latest tagged release
 export ARCH="x86_64-unknown-linux-gnu" # or "aarch64-apple-darwin"
 curl -Lo /tmp/hermes.tar.gz https://github.com/heliaxdev/hermes/releases/download/${TAG}/hermes-${TAG}-${ARCH}.tar.gz
 tar -xvzf /tmp/hermes.tar.gz -C /usr/local/bin
@@ -66,7 +66,7 @@ This is also true for the command `cp ./target/release/hermes /usr/local/bin/` b
 
 #### From source
 ```bash copy
-export TAG="v1.10.4-namada-beta17-rc2" # or the latest tagged release
+export TAG="v1.10.5-namada-beta18" # or the latest tagged release
 
 git clone https://github.com/heliaxdev/hermes.git
 git checkout $TAG
@@ -100,7 +100,6 @@ touch $HERMES_CONFIG
 When running Hermes commands, if you don't specify the config file path, `~/.hermes/config.toml` is read as default.
 
 __You can find an example of the config file below__. Essentially, you change only the chain IDs, the RPC addresses, and the key names in the config file for Namada. 
-If you don't have nodes, please set up nodes manually or through our [scripts](#set-up-local-namada-chains-using-the-hermes-script).
 
 <details>
 <summary>Example: config.toml</summary>
@@ -142,8 +141,10 @@ account_prefix = ''  # not used
 key_name = 'relayer'  # The key is an account name you made
 store_prefix = 'ibc'
 trusting_period = '4752s'
-gas_price = { price = 0.0001, denom = 'tnam1qxvg64psvhwumv3mwrrjfcz0h3t3274hwggyzcee' }  # the price isn't used for now, the denom should be a raw token address retrieve denom by namadaw address find --alias "naan"
-rpc_timeout = '30s'
+gas_price = { price = 0.000001, denom = 'tnam1qy440ynh9fwrx8aewjvvmu38zxqgukgc259fzp6h' }  # the denom should be a raw token address retrieve denom by namadaw address find --alias "nam"
+max_gas = 600000
+max_msg_num = 5
+rpc_timeout = '60s'
 memo_prefix = ''
 
 [chains.packet_filter]
@@ -209,7 +210,7 @@ These are the pieces of this puzzle you want to keep your 👀 on:
  - `chains.key_name` specifies the key of the signer who signs a transaction from the relayer. The key should be generated before starting the relayer and 
  will need to be kept topped up with gas funds.
  - `chains.event_source` specifies the URL of the chain's websocket. This must be the same as the `rpc_address` for Hermes to work properly.
- - `chains.gas_price.denom` specifies the token that the relayer pays for IBC transactions. `chains.gas_price.price` isn't used for now in Namada.
+ - `chains.gas_price` specifies the gas token that the relayer pays for IBC transactions.
  - `trusting_period` specifies the maximum period before which the client can not expire. This should be not more than unbonding time in the particular chain. 
 
 You can see more details of configuration in [the official Hermes documentation](https://hermes.informal.systems/documentation/configuration).
