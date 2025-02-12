@@ -3,7 +3,7 @@ import Expandable from "../../../components/Expandable";
 
 # Node Configuration
 
-By default, whenever the namada ledger is started, it will apply the confirguration found in the ledger configuration file `$BASE_DIR/$CHAIN_ID/config.toml`.
+By default, whenever the namada ledger is started, it will apply the configuration found in the ledger configuration file `$BASE_DIR/$CHAIN_ID/config.toml`.
 
 An example of a ledger configuration file is displayed below.
 
@@ -164,3 +164,12 @@ However, in Bash, only the double underscore form can be
 used, because Bash doesn't allow dots in environment variable names. 
 Therefore, we omit the dot form.
 </Callout>
+
+### Optional Functions
+
+**Enable Transaction Indexing**: If you would like your validator to index transactions, set the `indexer` under `[ledger.cometbft.tx_index]` from `null` to `kv`. 
+
+```shell copy
+[ledger.cometbft.tx_index]
+indexer = "kv"
+``` 
