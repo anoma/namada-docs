@@ -102,7 +102,9 @@ namada client unbond \
 ```
 
 ## Withdrawing Unbonded Tokens
-When a user unbonds tokens, the user won't be able to withdraw them immediately. Instead, tokens unbonded in the epoch `n` will be withdrawable starting from the epoch `n + 6` (the literal `6` is set by PoS parameter `unbonding_len`). After tokens are unbonded, the user will be able to see when they can withdraw them via the `bonds` query:
+When a user unbonds tokens, the user won't be able to withdraw them immediately.
+Instead, tokens unbonded in the epoch `n` will be withdrawable starting from the epoch `n + pipeline_len + unbonding_len + cubic_slashing_window_len` (these are all protocol parameters that can be queried for any network).
+After tokens are unbonded, the user will be able to see when they can withdraw them via the `bonds` query:
 
 ```shell copy
 namada client bonds --owner aliace
