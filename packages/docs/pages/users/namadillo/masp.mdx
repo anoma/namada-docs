@@ -4,13 +4,6 @@ import { Callout, Steps } from 'nextra-theme-docs'
 
 Learn more about the shielded pool on Namada beyond Namadillo [here](../shielded-accounts.mdx). 
 
-<Callout type='info'>
-Namada mainnet will launch with most functionality aside from staking and governance disabled, gradually enabling features in stages (via governance proposals) over the first 
-few weeks. Therefore, some sections of Namadillo will not be accessible immediately after launch until its respective functionality has been activated on mainnet.  
-
-Until then, you can experiment with all aspects of Namadillo on [testnet](../networks/testnets.mdx).
-</Callout>
-
 One of Namada's flagship features is the ability to move your assets into the **Multi-Asset Shielded Pool** (*a.k.a.* the 
 *MASP* or *Shielded Pool*). Moving assets into the pool to your shielded balance is referred to as *shielding*, and moving assets out of the pool to your transparent balance 
 is referred to as *unshielding*. By holding eligible assets in the MASP you'll earn rewards in the form of *NAM*, which will automatically 
@@ -84,8 +77,10 @@ Follow the prompts to approve your transaction and wait for it to process, as ex
 </Steps>
 
 ## Viewing your estimated Shielded Rewards
-Shielded rewards accrue each epoch based on the amount of assets you have shielded, and are automatically added to your shielded *NAM* balance. You can 
+Shielded rewards accrue each MASP epoch based on the amount of assets you have shielded, and are automatically added to your shielded *NAM* balance. You can 
 view an estimate of your expected rewards per epoch both in the **MASP** and **Overview** (homepage) sections of Namadillo.  
+
+On mainnet, one MASP epoch is equal to four epochs (that is, 24 hours).
 
 <Callout type="warning">
 **Note:** your actual shielded rewards will depend on the total asset amounts held in the MASP by all users. Therefore, the number shown is only an estimate.
