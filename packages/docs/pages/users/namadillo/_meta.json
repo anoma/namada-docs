@@ -4,5 +4,6 @@
   "governance": "Governance",
   "masp": "Shielding Assets (MASP)",
   "ibc": "IBC Transfers",
-  "transfer": "Transfers Within Namada"
+  "transfer": "Transfers Within Namada",
+  "troubleshooting": "Troubleshooting"
 }
