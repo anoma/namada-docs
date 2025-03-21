@@ -1,0 +1,68 @@
+# An Introduction to Namada addresses and keys
+
+Namada addresses and keys can be one of either *transparent* or *shielded*.
+The type is indicated by the first character in the address or key string - *t* for transparent and *z* for shielded.
+
+**A quick rundown of all the different keys and addresses in Namada, indexed by their prefix:**
+- `tnam`: a transparent address whose balance and transactions are public
+- `tpknam`: a transparent public key used to verify signed txs - the `tnam` address is deterministically derived from this key
+- `zsknam`: a shielded spending key - solely gives a user the power to send tokens from a shielded account
+- `zvknam`: a shielded viewing key - solely gives a user the ability to view token balances from a shielded account
+- `znam`: a shielded payment address - solely used as a target address to receive funds into a shielded account
+
+More details on each of these addresses and keys is provided below.
+
+## Transparent accounts
+A transparent account consists of an address and one or more keypairs.
+The account can be generated from either a seed phrase or a raw private key, which is typically a string of hex-encoded bytes.
+
+There are two different types of transparent addresses, *implicit* and *established*.
+All transparent addresses start with the string `tnam`, and all can hold token balances.
+
+#### Implicit account
+The simplest account type, an implicit address is derived from a single keypair.
+Particularly, one obtains the implicit address by hashing the public key of the keypair and encoding the first 20 bytes with bech32m.
+
+An implicit address and its associated parent keypair are used to authorize (sign for) transactions and pay fees.
+
+More details are found [here](./transparent-accounts/implicit-accounts.mdx).
+
+#### Established address
+An established address can only be initialized with an on-chain transaction.
+One or more cryptographic keys (implicit accounts) are used to create and sign for the established account.
+In general, all multisignature accounts have an established address.
+
+More details are found [here](./transparent-accounts/established-accounts.mdx).
+
+## Shielded accounts
+Shielded accounts are composed of a cryptographic keypair (the spending and viewing key) and one kind of address, the payment addres, of which there can be many associated to a single shielded account.
+
+More details on generating and using shielded keys can be found [here](./shielded-accounts/masp-keys.mdx).
+
+#### Spending key
+Starts with `zsknam` and authorizes a user to send tokens from a single shielded account.
+This is analagous to the private key in the transparent case: the viewing key and payment addresses are derived from this key, so holding it allows full control over the shielded address.
+
+The shielded account can be imported to the CLI wallet either from the raw spending key itself or from a seed phrase that is used to generate the spending key:
+```
+# From raw spending key
+namadaw add --alias $ALIAS --value zsknam... 
+ 
+# From seed
+namadaw derive --alias $ALIAS --shielded # then will prompt user for seed phrase
+```
+
+#### Viewing key
+Starts with `zvknam` and allows a user to view incoming and outgoing balances of a single shielded account and thus the token balances of the account at any given time.
+This key does not authorize the user to spend balances.
+
+#### Payment address
+Starts with `znam` and is a public-facing address that can be shared with others in order to receive funds to a single shielded account.
+
+A very large number of different payment addresses can be generated for the same shielded account.
+Though the payment address is not visible on-chain from a transaction, using a new payment address for receiving funds from various counterparties is an option and can be advantageous from a privacy perspective.
+
+A random payment address can be generated at the CLI with:
+```
+namadaw gen-payment-addr --alias $ALIAS --key $SHIELDED_SPENDING_KEY
+```

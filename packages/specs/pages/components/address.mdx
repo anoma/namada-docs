@@ -1,0 +1,18 @@
+# An Introduction to Namada addresses
+
+Namada uses different address types for different purposes on the blockchain.
+Primarily, addresses on Namada can be either *transparent* or *shielded*, identified by the letter of the first character in the address string - *t* for the former and *z* for the latter.
+
+## Transparent addresses
+There are two different types, *implicit* and *established*.
+All transparent account addresses start with the string `tnam`, and all can hold token balances.
+
+#### Implicit address
+The simplest account type, an implicit address is derived from a single keypair.
+Particularly, one obtains the implicit address by hashing the public key of the keypair and encoding the first 20 bytes with bech32m.
+
+An implicit address and its associated parent keypair are used to authorize (sign for) transactions and pay fees.
+
+#### Established address
+An established address can only be initialized with an on-chain transaction.
+One or more cryptographic keys (implicit accounts) are used to create and sign for the established account.
