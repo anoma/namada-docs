@@ -23,6 +23,17 @@ With these steps, a user can join the Namada mainnet, allowing for querying and 
 These beginning steps are necessary for running a full node or a validator node as well.
 More details on how to join the network in these cases can be found in [this mainnet guide](https://github.com/anoma/namada-mainnet-genesis/blob/main/MAINNET-GUIDE.md).
 
+### Hard forks
+If an operator would like to sync a node from genesis, they must do so by running the appropriate version of the node.
+This version historically changes each time there has been a hard-fork of the network.
+
+The following table describes the hard-forks and the corresponding software version needed to sync a block:
+
+| Starting Block Height | Software Version |
+|------------------------|------------------|
+| 0            | v1.0.0          |
+| 894,000      | v1.1.1          |
+
 ### Services and infrastructure
 
 The `namada-ecosystem` repository contains data on the available mainnet services and infrastructure in json format in [this directory](https://github.com/Luminara-Hub/namada-ecosystem/tree/main/user-and-dev-tools/mainnet).
