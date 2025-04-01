@@ -157,6 +157,10 @@ In these examples, `my-implicit` may only have an OSMO balance in their transpar
 In this case, the NAM will be unshielded to the transparent balance of `my-implicit` and then used to pay for the transaction fee.
 So it is requried to unshield just the difference between the gas cost and the transparent balance of the gas payer implicit address.
 
+<Callout type="info">
+For an atomic batch, the masp fee payment transaction (the first one in the batch) is guaranteed to be committed even if the batch eventually fails.
+</Callout>
+
 ### Using a disposable gas payer (recommended)
 
 It is also possible to use a disposable gas payer to pay for transaction fees.
