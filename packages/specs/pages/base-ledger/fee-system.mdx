@@ -138,6 +138,10 @@ if this is a **valid MASP transaction**, it then reattempts to perform the same 
 If it is successful, the transaction is accepted, otherwise it gets rejected (possibly the entire block is rejected if we are validating a new block).
 So, essentially, MASP fee payment involves allowing the transaction to unshield some tokens to the balance of the fee payer to cover the missing amount.
 
+<Callout type="info">
+In case of an atomic batch the masp fee payment transaction will be committed even if the batch eventually fails. That is, all the state changes coming from the other inner transactions of the batch will be dropped (as per the default behavior of an atomic batch), but an exception will be made for the fee paying inner transaction that will instead be committed to storage to guarantee that fees are paid.
+</Callout>
+
 Since this operation comes before the actual payment, it can be exploited as a DoS vector.
 To prevent this, the protocol enforces a maximum gas limit that can be used for this operation.
 When the time comes, the protocol picks the gas limit for this operation as the minimum between the gas available to the transaction and the protocol parameter;
