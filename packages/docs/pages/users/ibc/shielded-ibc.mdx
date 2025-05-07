@@ -73,8 +73,6 @@ The token should be refunded when the IBC transfer fails.
 
 `--refund-target` can be set to specify the address to be refunded only if you send tokens from a shielded address. In a transparent IBC transfer, tokens will be refunded to the source address.
 
-The refund target address will receive the refund if `--refund-target` is given. You can set a transparent or a payment address for the refund target.
+The refund target address will receive the refund if `--refund-target` is given. You can set only a transparent address for the refund target. Please note that this address should be disposable not to leak infromation.
 
 If no `--refund-target` is given in a transfer from a shielded address, a generated transparent address whose alias is prefixed with `ibc-refund-target` and the token will be refunded to the transparent address.
-
-Please note that it is impossible to refund to the payment address when the refund happens after the MASP epoch when the transfer has started. In this case, the tokens will be refunded to the fallback transparent address that is automatically generated when a payment address is set to the refund target.
