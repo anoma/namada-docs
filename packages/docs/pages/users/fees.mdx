@@ -2,17 +2,23 @@ import { Callout } from "nextra-theme-docs";
 
 # Fees on Namada
 
-In order to settle the market for Namada blockspace demand, fees are coupled with transactions.
-In order for any namada transaction to be considered valid, the correct corresponding fee must be paid.
-The exact fee is set by the user, and must be greater than or equal to the minimum `gas-price` set by governance, which is included in the genesis file under `gas_cost`.
+In order to settle the market for Namada blockspace demand, fees are coupled
+with transactions. In order for any namada transaction to be considered valid,
+the correct corresponding fee must be paid. The exact fee is set by the user,
+and must be greater than or equal to the minimum `gas-price` set by governance,
+which is included in the genesis file under `gas_cost`.
 
 ## How fees are paid
 
-Fees are **always** paid from the balance of an **implicit** address. When explicitly stated, the gas fee is paid by the `--gas-payer` flag.
-If no `--gas-payer` flag is specified, the gas fee is paid by the first key in the `--signing-keys` flag, if those are specified.
-If no `--signing-keys` flag is specified, the client will try to infer the signer from the source of the transaction and use that account as the fee payer.
+Fees are **always** paid from the balance of an **implicit** address. When
+explicitly stated, the gas fee is paid by the `--gas-payer` flag. If no
+`--gas-payer` flag is specified, the gas fee is paid by the first key in the
+`--signing-keys` flag, if those are specified. If no `--signing-keys` flag is
+specified, the client will try to infer the signer from the source of the
+transaction and use that account as the fee payer.
 
-First consider the example of a simple transfer: 
+First consider the example of a simple transfer:
+
 ```shell copy
 namadac transparent-transfer \
   --source my-acc \
@@ -21,11 +27,16 @@ namadac transparent-transfer \
   --amount 10 \
 ```
 
-With no `--gas-payer` or `--signing-keys` explicitly provided, the client will infer the proper account related to `my-acc` from which to take the fees.
-If `my-acc` is an implicit address, the fees will be taken directly from it.
-If it is an established address, the fees will be taken from the implicit address associated with `my-acc` (usually the account used to initialize the established address).
+With no `--gas-payer` or `--signing-keys` explicitly provided, the client will
+infer the proper account related to `my-acc` from which to take the fees. If
+`my-acc` is an implicit address, the fees will be taken directly from it. If it
+is an established address, the fees will be taken from the implicit address
+associated with `my-acc` (usually the account used to initialize the established
+address).
 
-However, another gas payer can be specified in this transaction by providing another implicit address for which the user owns the private key:
+However, another gas payer can be specified in this transaction by providing
+another implicit address for which the user owns the private key:
+
 ```shell copy
 namadac transparent-transfer \
   --source my-acc \
@@ -36,6 +47,7 @@ namadac transparent-transfer \
 ```
 
 Now consider the example of a transfer from a 2-of-n multisignature account:
+
 ```shell copy
 namadac transparent-transfer \
   --source my-multisig \
@@ -45,8 +57,10 @@ namadac transparent-transfer \
   --signing-keys key1,key2
 ```
 
-In this case, the fees will be taken from the first key provided to `--signing-keys`: `key1`.
-As before, any gas payer can be specified by supplying the desired key to the `--gas-payer` argument like such:
+In this case, the fees will be taken from the first key provided to
+`--signing-keys`: `key1`. As before, any gas payer can be specified by supplying
+the desired key to the `--gas-payer` argument like such:
+
 ```shell copy
 namadac transparent-transfer \
   --source my-multisig \
@@ -57,25 +71,34 @@ namadac transparent-transfer \
   --gas-payer key2
 ```
 
-For testnet purposes, we recommend [using the faucet](../networks/testnets/faucet.mdx) to source NAM for transaction fees.
+For testnet purposes, we recommend
+[using the faucet](../networks/testnets/faucet.mdx) to source NAM for
+transaction fees.
 
 ## How fees are calculated
 
-The fee for a transaction is calculated by multiplying `gas-limit` by the gas price.
-Both the `--gas-limit` and the `--gas-price` can be specified by the user. If neither is specified, the default gas limit and minimum gas price is used.
-The default gas limit for any transaction is currently set to `50_000`.
+The fee for a transaction is calculated by multiplying `gas-limit` by the gas
+price. Both the `--gas-limit` and the `--gas-price` can be specified by the
+user. If neither is specified, the default gas limit and minimum gas price is
+used. The default gas limit for any transaction is currently set to `50_000`.
 
-The minimum gas price is set in the genesis file under `minimum_gas_price`.
-One can query the minimum gas prices for all tokens accepted for gas payment in a network with:
+The minimum gas price is set in the genesis file under `minimum_gas_price`. One
+can query the minimum gas prices for all tokens accepted for gas payment in a
+network with:
+
 ```shell copy
 namadac query-protocol-parameters
 ```
 
 ## How to set the gas price and gas limit
 
-It is recommended to set the `gas-limit` based on the transaction being conducted. In order to estimate the `gas-limit` for a particular transaction, the `--dry-run-wrapper` argument should be provided. This means that the transaction is simulated, but not yet sent to the ledger. 
+It is recommended to set the `gas-limit` based on the transaction being
+conducted. In order to estimate the `gas-limit` for a particular transaction,
+the `--dry-run-wrapper` argument should be provided. This means that the
+transaction is simulated, but not yet sent to the ledger.
 
-For example, the following command will simulate a transfer transaction, and return the gas used:
+For example, the following command will simulate a transfer transaction, and
+return the gas used:
 
 ```shell copy
 namadac transfer \
@@ -87,12 +110,15 @@ namadac transfer \
   --dry-run-wrapper
 ```
 
-Which will output something along the lines of 
+Which will output something along the lines of
 
 ```md
-Dry-run result: Transaction consumed 14850 gas. Inner transaction <tx-hash> was successfully applied.
+Dry-run result: Transaction consumed 14850 gas. Inner transaction <tx-hash> was
+successfully applied.
 ```
-This means that we could reasonably make this transfer transaction with a `gas-limit` of 15000.
+
+This means that we could reasonably make this transfer transaction with a
+`gas-limit` of 15000.
 
 Hence, when making the transfer, we could specify the `gas-limit` as follows:
 
@@ -106,7 +132,8 @@ namadac transfer \
   --gas-limit 15000
 ```
 
-If for some reason, we wanted to pay a higher gas fee, we could also specify that as follows:
+If for some reason, we wanted to pay a higher gas fee, we could also specify
+that as follows:
 
 ```shell copy
 namadac transfer \
@@ -119,31 +146,40 @@ namadac transfer \
   --gas-price 0.01
 ```
 
-This **might** incentivise validators to prioritise this transaction above those with a lower gas price.
+This **might** incentivise validators to prioritise this transaction above those
+with a lower gas price.
 
 ## Paying fees with tokens in the MASP
 
-It is also possible to pay for fees using the MASP when dealing with a transaction involving shielded inputs (shielded and unshielding transfers both natively and over IBC).
-This is a good practice when trying to maximize data protection and minimize information leakage.
+It is also possible to pay for fees using the MASP when dealing with a
+transaction involving shielded inputs (shielded and unshielding transfers both
+natively and over IBC). This is a good practice when trying to maximize data
+protection and minimize information leakage.
 
-When dealing with MASP fee payment, the client will first try to deduct the fees from the spending key specfied by `--gas-spending-key` of the shielded transaction and unshield them to the transparent balance of the `--gas-payer` (or the address corresponding to the first key in the `--signing-keys`).
-Then, these fees are paid to the block proposer from the gas payer.
+When dealing with MASP fee payment, the client will first try to deduct the fees
+from the `--source` spending key of the shielded transaction and unshield them
+to the transparent balance of the `--gas-payer` (or the address corresponding to
+the first key in the `--signing-keys`). Then, these fees are paid to the block
+proposer from the gas payer.
 
-For example, if the user has a spending key `spending-key-1` in their wallet, and they want to pay for the fees of a shielded transfer transaction using the MASP, they would run the following command:
+For example, if the user has a spending key `spending-key-1` in their wallet,
+and they want to pay for the fees of a shielded transfer transaction using the
+MASP, they would run the following command:
 
-```shell copy 
+```shell copy
 namadac transfer \
   --source spending-key-1 \
   --target payment-addr-b \
   --token OSMO \
   --amount 10 \
   --gas-payer my-implicit \
-  --gas-spending-key spending-key-1
 ```
 
-If `spending-key-1` does not have enough balance or the user simply wants to use a separate key for gas, they can specify a different spending key for fee payment:
+If `spending-key-1` does not have enough balance or the user simply wants to use
+a separate key for gas, they can specify a different spending key for fee
+payment using the `--gas-spending-key` argument:
 
-```shell copy 
+```shell copy
 namadac transfer \
   --source spending-key-1 \
   --target payment-addr-b \
@@ -153,9 +189,13 @@ namadac transfer \
   --gas-spending-key spending-key-2
 ```
 
-In these examples, `my-implicit` may only have an OSMO balance in their transparent balance, but `spending-key-1` (or possibly `spending-key-2`) may have a positive NAM balance in their shielded balance.
-In this case, the NAM will be unshielded to the transparent balance of `my-implicit` and then used to pay for the transaction fee.
-So it is requried to unshield just the difference between the gas cost and the transparent balance of the gas payer implicit address.
+In these examples, `my-implicit` may only have an OSMO balance in their
+transparent balance, but `spending-key-1` (or possibly `spending-key-2`) may
+have a positive NAM balance in their shielded balance. In this case, the NAM
+will be unshielded to the transparent balance of `my-implicit` and then used to
+pay for the transaction fee. So it is requried to unshield just the difference
+between the gas cost and the transparent balance of the gas payer implicit
+address.
 
 <Callout type="info">
 For an atomic batch, the masp fee payment transaction (the first one in the batch) is guaranteed to be committed even if the batch eventually fails.
@@ -164,11 +204,17 @@ For an atomic batch, the masp fee payment transaction (the first one in the batc
 ### Using a disposable gas payer (recommended)
 
 It is also possible to use a disposable gas payer to pay for transaction fees.
-This is useful (and recommended) in cases where the user does not want to leak information and reveal the identity of the `--gas-payer`.
-In order to use a disposable gas payer, the user must include the `--disposable-gas-payer` flag.
-The fees will be deducted from the shielded balance of the shielded transactions `--gas-spending-key` and unshielded to the transparent balance of an ephemeral transparent address before being paid by the ephemeral address.
+This is useful (and recommended) in cases where the user does not want to leak
+information and reveal the identity of the `--gas-payer`. The disposable gas
+payer is the default option and it's used all the times unless `--gas-payer` is
+specified. The fees will be deducted from the shielded balance of the shielded
+transaction's `--source` or `--gas-spending-key` and unshielded to the
+transparent balance of an ephemeral transparent address before being paid by the
+ephemeral address.
 
-For example, if the user has the same two spending keys from the previous example in their wallet, and they want to pay for the fees of an unshield transaction using a disposable address, they would run the following command:
+For example, if the user has the same two spending keys from the previous
+example in their wallet, and they want to pay for the fees of an unshield
+transaction using a disposable address, they would run the following command:
 
 ```shell copy
 namadac unshield \
@@ -177,32 +223,55 @@ namadac unshield \
   --token OSMO \
   --amount 10 \
   --gas-spending-key spending-key-2 \
-  --disposable-gas-payer
 ```
 
 ### MASP fee payment gas limit
 
-To prevent spamming the network, the protocol establishes a maximum gas limit (`masp_fee_payment_gas_limit`) that can be used when fees are paid via the MASP (this limit applies to the gas used to run the transaction and the validity predicates but does not apply to the gas used by the wrapper transaction). It can be queried with:
+To prevent spamming the network, the protocol establishes a maximum gas limit
+(`masp_fee_payment_gas_limit`) that can be used when fees are paid via the MASP
+(this limit applies to the gas used to run the transaction and the validity
+predicates but does not apply to the gas used by the wrapper transaction). It
+can be queried with:
 
 ```bash copy
 namadac query-protocol-parameters
 ```
 
-If the transaction exceeds this limit it won't be accepted; as such, the protocol sets a value that should allow for most transactions to be accepted. Should the user be in need to submit a more complex (and therefore gas-demanding) transaction, there are two ways around it, both taking advantage of the fact that the protocol gas limit only applies to the first transaction of the batch.
+If the transaction exceeds this limit it won't be accepted; as such, the
+protocol sets a value that should allow for most transactions to be accepted.
+Should the user be in need to submit a more complex (and therefore
+gas-demanding) transaction, there are two ways around it, both taking advantage
+of the fact that the protocol gas limit only applies to the first transaction of
+the batch.
 
-1. The user can submit a batch of two transactions: the first one just unshields the necessary funds to pay fees for the entire batch, while the second transaction applies the desired transfer.
-Since the protocol gas limit only applies to the first transaction of the batch (the one paying fees), the second transaction is free from this limit and can be as complex as required (within the size and gas limits of the entire block).
+1. The user can submit a batch of two transactions: the first one just unshields
+   the necessary funds to pay fees for the entire batch, while the second
+   transaction applies the desired transfer. Since the protocol gas limit only
+   applies to the first transaction of the batch (the one paying fees), the
+   second transaction is free from this limit and can be as complex as required
+   (within the size and gas limits of the entire block).
 
-2. The user can submit a first transaction paying fees via the MASP. This time though, the transaction unshields an amount that is enough to cover both the gas fees of itself and of the desired MASP transaction.
-After this, the gas payer of the first transaction will still have a transparent balance large enough to cover fees for a second MASP transaction that actually performs the desired transfer and does not require any more fee unshielding.
+2. The user can submit a first transaction paying fees via the MASP. This time
+   though, the transaction unshields an amount that is enough to cover both the
+   gas fees of itself and of the desired MASP transaction. After this, the gas
+   payer of the first transaction will still have a transparent balance large
+   enough to cover fees for a second MASP transaction that actually performs the
+   desired transfer and does not require any more fee unshielding.
 
 <Callout type="info">
 The first solution proposed above is currently not supported by the CLI client and requires direct usage of the SDK. 
 </Callout>
 
-Each of these solutions has its own advanatages and drawbacks compared to the other one.
-Using a single batch with two transactions allows for faster confirmation times and lower gas costs (since a batch will cost less than two separate transactions), but because of the way the SDK builds MASP transactions, it could fail sometimes (specifically the SDK invalidates notes that have been spent by the first transaction in the batch, which could cause a lack of funds for the second one).
-Using two separate transactions instead avoids this issue (since the user can call `shielded-sync` after the first one to recollect all the available funds), but requires more gas overall and longer confirmation times.
+Each of these solutions has its own advanatages and drawbacks compared to the
+other one. Using a single batch with two transactions allows for faster
+confirmation times and lower gas costs (since a batch will cost less than two
+separate transactions), but because of the way the SDK builds MASP transactions,
+it could fail sometimes (specifically the SDK invalidates notes that have been
+spent by the first transaction in the batch, which could cause a lack of funds
+for the second one). Using two separate transactions instead avoids this issue
+(since the user can call `shielded-sync` after the first one to recollect all
+the available funds), but requires more gas overall and longer confirmation
+times.
 
 <Callout type="warning">
 It is also possible, using either of the two solutions presented above, to use MASP fee payment to pay fees for non-MASP transactions.
@@ -211,9 +280,13 @@ Please note that this is discouraged since it could establish a linkage between 
 
 ## Having someone else to pay for tx gas fees
 
-When, for example, you don't have enough balance left to cover transaction's gas fees, you can have someone else to wrap the raw transaction and submit it on your behalf.
+When, for example, you don't have enough balance left to cover transaction's gas
+fees, you can have someone else to wrap the raw transaction and submit it on
+your behalf.
 
-First, dump the raw transaction by adding `--dump-tx` flag and specify the `--gas-payer`'s public key and an `--output-folder-path` for the serialized tx. E.g.:
+First, dump the raw transaction by adding `--dump-tx` flag and specify the
+`--gas-payer`'s public key and an `--output-folder-path` for the serialized tx.
+E.g.:
 
 ```shell copy
 namadac transparent-transfer \
@@ -235,7 +308,8 @@ namadac utils sign-offline \
   --output-folder-path tx-dump-dir
 ```
 
-You can now pass on the serialized transaction (`\*.tx` file) and signature (`\offline_signature_*.sig`) to whoever is going to wrap it.
+You can now pass on the serialized transaction (`\*.tx` file) and signature
+(`\offline_signature_*.sig`) to whoever is going to wrap it.
 
 They can then wrap this tx and submit it to the chain with e.g.:
 
@@ -246,7 +320,9 @@ namadac tx \
   --gas-payer gas-payer-key
 ```
 
-They can also produce the wrapper signature offline if this is required. In this case, instead of the previous command, they should first wrap and dump the tx as follows:
+They can also produce the wrapper signature offline if this is required. In this
+case, instead of the previous command, they should first wrap and dump the tx as
+follows:
 
 ```shell copy
 namadac tx \
@@ -257,7 +333,8 @@ namadac tx \
   --output-folder-path tx-dump-dir
 ```
 
-This will generate a separate serialized transaction (`\*.tx` file). They can then produce the wrapper signature offline:
+This will generate a separate serialized transaction (`\*.tx` file). They can
+then produce the wrapper signature offline:
 
 ```shell copy
 namadac utils sign-offline \
@@ -266,11 +343,12 @@ namadac utils sign-offline \
   --output-folder-path tx-dump-dir
 ```
 
-Which generates a serialized wrapper signature (`\offline_wrapper_signature_*.sig`). Finally they can submit the transaction with:
+Which generates a serialized wrapper signature
+(`\offline_wrapper_signature_*.sig`). Finally they can submit the transaction
+with:
 
 ```shell copy
 namadac tx \
   --tx-path wrapper_transaction.tx \
   --gas-signature wrapper_signature.sig
 ```
-
