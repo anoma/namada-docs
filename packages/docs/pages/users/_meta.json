@@ -9,5 +9,6 @@
   "public-goods-funding": "Public Goods Funding (PGF)",
   "ibc": "IBC transfers",
   "query": "Querying the Chain",
+  "keychain": "Namada Keychain",
   "namadillo": "Using Namadillo"
 }

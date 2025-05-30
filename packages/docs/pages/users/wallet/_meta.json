@@ -1,5 +1,5 @@
 {
   "file-system-wallet": "File system wallet",
-  "web-wallet": "Keychain (browser extension)",
+  "web-wallet": "Namada Keychain Browser Extension",
   "hardware-wallet": "Hardware wallet"
 }

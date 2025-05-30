@@ -1,0 +1,41 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Managing Accounts
+
+Follow this quick reference guide to learn how to manage your accounts in the Namada Keychain extension.
+
+## View Your Keys and Addresses
+Click the three vertical dots `⋮` next to an account and select "View keys" to display your addresses and public keys. From here, 
+you can also click the buttons at the bottom to display your Viewing Key and Spending Key (you will be prompted for your password). 
+<Callout type="warning">
+Remember: your addresses and public 
+keys are safe to share, but your Viewing and Spending Keys should always be kept private!
+</Callout>
+
+## Generate a New Payment (Shielded) Address
+Each account can generate many thousands of Payment (Shielded) Addresses, and your total shielded balance will be the sum of all 
+Payment Address balances belonging to your account. To generate a new Payment Address, first click the three vertical dots `⋮` next to an account and select "View keys." From here, click 
+the "Generate Payment Address" button at the bottom of the view. Upon clicking this button, you'll notice the Shielded Address 
+displayed directly above has changed.
+
+## View Your Seed Phrase
+You can view the seed phrase for an account by clicking the three vertical dots `⋮` next to it in the accounts list and selecting "View Seed Phrase." You'll be prompted for your password 
+before the seed phrase is displayed. Note that if you're using a Ledger hardware wallet, this option will not be available because the account seed is tied to the Ledger device.
+<Callout type="error">
+Never share your seed phrase! Anyone who knows your seed phrase can steal your funds.
+</Callout>
+
+## Rename an Account
+Click the three vertical dots `⋮` next to an account and select "Rename" to choose a new name.
+
+## Delete an Account
+Click the three vertical dots `⋮` next to an account and select "Delete" to remove it from your keychain (you will be prompted for your password). Your account and funds will 
+still exist on the blockchain, but you will no longer be able to access it through the Namada Keychain extension until you [import](./add-keys.mdx) it again using its seed phrase.
+
+## Video Tutorial
+For a visual guide on how to manage your accounts, check out the following videos on [namada.help](https://www.namada.help/):
+
+- [How to view your keys](https://www.namada.help/tutorials/how-to-view-your-keys)
+- [How to view your seed phrase](https://www.namada.help/tutorials/how-to-view-your-seed-phrase)
+- [How to rename your wallet](https://www.namada.help/tutorials/how-to-rename-your-wallet)
+- [How to delete your wallet](https://www.namada.help/tutorials/how-to-delete-your-wallet)
