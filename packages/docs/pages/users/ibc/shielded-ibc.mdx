@@ -67,3 +67,12 @@ namadac ibc-transfer \
 
 Gas fees can be paid like all the other transactions either directly from an implicit account adding `--gas-payer $IMPLICIT_ADDRESS` or via the MASP.
 For more information please refer to the [fees section](../fees.mdx).
+
+### Refund when IBC transfer failure
+The token should be refunded when the IBC transfer fails.
+
+`--refund-target` can be set to specify the address to be refunded only if you send tokens from a shielded address. In a transparent IBC transfer, tokens will be refunded to the source address.
+
+The refund target address will receive the refund if `--refund-target` is given. You can set only a transparent address for the refund target. Please note that this address should be disposable not to leak infromation.
+
+If no `--refund-target` is given in a transfer from a shielded address, a generated transparent address whose alias is prefixed with `ibc-refund-target` and the token will be refunded to the transparent address.
