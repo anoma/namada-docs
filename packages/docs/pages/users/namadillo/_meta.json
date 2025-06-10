@@ -1,12 +1,12 @@
 {
   "overview": "Getting Started",
   "staking": "Staking",
-  "governance": "Governance",
   "assets": "Managing Your Assets",
   "shield": "Shielding Assets",
   "unshield": "Unshielding Assets",
   "ibc": "IBC Transfers",
   "transfer": "Transfers Within Namada",
+  "governance": "Governance",
   "history": "History",
   "troubleshooting": "Troubleshooting"
 }
