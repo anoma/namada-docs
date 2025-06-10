@@ -1,9 +1,12 @@
 {
   "overview": "Getting Started",
   "staking": "Staking",
-  "governance": "Governance",
-  "masp": "Shielding Assets (MASP)",
+  "assets": "Managing Your Assets",
+  "shield": "Shielding Assets",
+  "unshield": "Unshielding Assets",
   "ibc": "IBC Transfers",
   "transfer": "Transfers Within Namada",
+  "governance": "Governance",
+  "history": "History",
   "troubleshooting": "Troubleshooting"
 }

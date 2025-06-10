@@ -1,102 +1,64 @@
 import { Callout, Steps } from 'nextra-theme-docs'
 
-# IBC Transfers with Namadillo
+# IBC Transfers
 
-Learn more about IBC on Namada beyond Namadillo [here](../ibc.mdx). 
+If you're looking for information on IBC operations using the Namada CLI, please see [here](../ibc.mdx).  
 
 You can connect Namadillo to your [Keplr wallet](https://www.keplr.app/) to transfer assets between Namada and IBC compatible chains, such as 
-*Osmosis* and the *Cosmos Hub*. Namadillo supports both transparent and shielded IBC transfers.
+*Osmosis* and the *Cosmos Hub*. Namadillo supports transparent and shielded IBC deposits and withdrawals.  
 
-- **Transparent IBC transfers:** Transfers between a transparent (`tnam...`) address and another chain. After receiving 
-assets to your transparent address, they will be added to your transparent balance. You can (optionally) shield them at a later time. But as always, keep in 
-mind that a third party can view all balances and transactions of any transparent address at any point in the chain's history. You can use your 
-transparent address to both send and receive assets over IBC.
-- **Shielded IBC transfers:** Transfers between a shielded (`znam...`) address and another chain. 
-These transfers move immediately to/from your shielded balance without needing to pass through your transparent address first. This 
-[reduces](../../introduction/privacy.mdx) the chances of leaking information about your on-chain activity.  
+## Connecting to Keplr
 
-When using Namadillo, you can only use your shielded address to receive assets. (To send them over 
-IBC, you must first unshield them.)
+This section assumes you have already installed Keplr and created or imported an account. For help getting started with Keplr, please refer to https://help.keplr.app/start.  
 
-## Connecting To Keplr
-To send IBC assets to Namada, you will need an account on the source chain (e.g. *Osmosis*, *Cosmos Hub*, etc.) containing the assets you wish to send.  
+To connect Keplr to Namadillo, click the **Connect Wallet** button while creating an IBC transfer and approve the connection request. When properly connected, your Keplr wallet address will be displayed 
+and you'll see a Keplr icon at the top of Namadillo.
 
-[Keplr wallet](https://www.keplr.app/) is the most widely used wallet app for Cosmos SDK chains. Namadillo has Keplr integration to allow IBC transfers 
-to and from your existing Keplr accounts.  
+![Keplr connect](../../../public/images/namadillo/keplr-connect.png)
+*Connecting Keplr to Namadillo*  
 
-This rest of this section assumes you have already created and funded an account on the source chain using Keplr. For help getting started with Keplr, 
-please refer to https://help.keplr.app/start.  
+![Keplr connected](../../../public/images/namadillo/keplr-connect-2.png)
+*Keplr connection visible in top bar*
 
-Once you've installed Keplr and created or imported an account on the source chain, follow these steps to connect Keplr with Namadillo:
+## Deposit (IBC Transfers to Namada)
 
-1. Click *IBC Transfer* in the left sidebar of Namadillo **(1)** to open the IBC panel.
-2. Click *Connect Wallet* **(2)**.
-3. Click *Approve* in Keplr when the *Requesting Connection* **(3)** popup appears
+In order to deposit IBC assets into Namada, you must first install Keplr, create or import an account, and fund it on the source chain. Then, connect 
+Keplr to Namadillo (see above). Keplr is needed to sign the IBC transaction on the source chain.  
 
-![Connect Keplr](../../../public/images/namadillo/keplr.png)
-*Connecting your Keplr wallet to Namadillo*
+To deposit IBC assets into Namada, do the following:
+1. Select **IBC Transfer** in the left sidebar of Namadillo, and select the **Deposit** tab from the top of the view.
+2. Connect your Keplr wallet by clicking the **Connect Wallet** button and approving the connection request. Once connected, your Keplr wallet address will be displayed 
+and you'll see a Keplr icon at the top of Namadillo.
+3. Select the source chain/asset and amount you wish to deposit.
+4. Use the toggle button to select whether you wish to make a transparent or shielded deposit. Depending on your choice, the color scheme of the interface will change and 
+the receiving address will automatically be filled with your transparent or shielded address, respectively.
+5. Click **Submit** to begin. Approve the transaction via your Keplr wallet. After a few seconds, you should see a confirmation dialog with the details of your IBC transfer.  
 
-## Sending IBC Transfers 'To Namada' (from another chain)
-You can bring assets from another chain to your Namada shielded or transparent balance; think of this as 'depositing' assets from other chains into 
-Namada.  
+After depositing assets, you'll be able to see them in the [Manage Assets](./assets.mdx) section of Namadillo. You'll also be able to see the transaction 
+in the [History](./history.mdx) section.
 
-Begin by selecting '*To Namada*' **(1)** in the *IBC Transfer* section and follow these steps:  
+<Callout type="info">
+Making a shielded deposit from the **IBC Transfer** section is equivalent to selecting **Shield Assets** and then **IBC Shield** from the topbar. See 
+the [Shielding Assets](./shield.mdx) section for more details, including important information on Shielded Rewards.
+</Callout>
 
-![Ibc in details](../../../public/images/namadillo/ibc-in1.png)
-*Making an IBC transfer into Namada (i.e. Depositing assets)*
+## Withdraw (IBC Transfers from Namada)
 
-<Steps>
-### Enter the transfer details
-- **(2)**: Click to select the *network you wish to bring assets from* (e.g. Osmosis, Cosmos Hub, etc.). Once you've selected a network, your address 
-on the sending chain will be read from Keplr and displayed here.
-- **(3)**: Click to select the asset you wish to transfer.
-- **(4)**: Enter the amount to transfer.
-- **(5)**: Click to specify whether to send the asset to your shielded or transparent address.
-- **(6)**: Your receiving address will be automatically filled from the Keychain extension. If you selected *Shielded* directly above, this will show 
-your shielded address; if you selected *Transparent* it will show your transparent address. The address shown will match the currently selected account 
-in the Keychain extension.
-- **(7)**: The transaction fee for this transfer -- note that fees are paid in the asset being transferred.
-- **(8)**: When you've chosen a source network, asset, amount, and whether to send to your shielded or transparent address, click *Submit* to begin the transfer.
+When withdrawing IBC assets from Namada, you may wish to install and connect Keplr as discussed above. This will allow you to automatically fill the 
+receiver address with your Keplr address on the destination chain. However, you can also proceed without Keplr by manually entering the receiver address.
 
-### Click 'Submit' and approve your transaction
-After entering the required transfer info, click *Submit*, at which point you'll be prompted to approve the transaction.  
+To withdraw IBC assets from Namada, do the following:
+1. Select **IBC Transfer** in the left sidebar of Namadillo, and select the **Withdraw** tab from the top of the view.
+2. Select the destination chain/asset and amount you wish to unshield.
+3. Use the toggle button to select whether you wish to make a transparent or shielded withdrawal. Depending on your choice, the color scheme of the interface will change and 
+the sender address will automatically be filled with your transparent or shielded address, respectively.
+4. You can either connect your Keplr wallet or manually enter a destination address. To connect your Keplr wallet, click **Connect Wallet** and approve the connection request. 
+Once connected, your Keplr address will be displayed and you'll see a Keplr icon at the top of Namadillo. To manually enter a destination address, click the 
+**Custom Address** toggle and enter the address in the text field. Remember that the receiver address must be a valid address on the destination chain (e.g. an address beginning 
+with *osmo...* if the destination chain is *Osmosis*).
+5. Click **Submit** to begin. Approve the transaction via Namada Keychain. After a few seconds, you will see a confirmation dialog with the details of your IBC transfer.  
 
-Note that when IBC transferring assets to Namada, you'll be asked to confirm the transaction in Keplr (not Namada Keychain).  
-
-![IBC in confirm](../../../public/images/namadillo/ibc-in2.png)
-*Confirming the transaction in Keplr*
-</Steps>
-
-## Sending IBC Transfers 'From Namada' (to another chain)
-You can also transfer assets (including, but not limited to, NAM) to another chain. Remember that you can only make outgoing IBC transfers from your transparent 
-address -- if you wish to transfer shielded assets, you must unshield them first.  
-
-Begin by selecting '*From Namada*' **(1)** in the *IBC Transfer* section and follow these steps:  
-
-![IBC out details](../../../public/images/namadillo/ibc-out1.png)
-*IBC Transferring assets out of Namada*
-
-<Steps>
-### Enter the transfer details
-- **(2)**: Your transparent address (from which the transfer is being sent). This is automatically filled from the Keychain extension based on your 
-currently selected account. Note that outgoing IBC transfers using Namadillo cannot be made from a shielded account.
-- **(3)**: Click to select the asset you wish to transfer.
-- **(4)**: Enter the amount to transfer.
-- **(5)**: Select *My Address* to automatically set the receiver to your Keplr address on the destination chain. Select *Custom Address* to enter a different address. 
-(See below for more details.)
-- **(6)**: Click here to select the destination chain.
-- **(7)**: The transaction fee for this transfer -- note that fees are paid in NAM.
-- **(8)**: When you've chosen an asset, amount, destination chain, and receiving address, click *Submit* to begin the transfer.  
-
-**Setting a custom receiver address:**  
-By selecting *Custom Address*, you can send assets to an address not in your Keplr wallet. Choosing this option also (optionally) lets you attach 
-a memo to the transaction. *Make sure the receiver is a valid address on the destination chain* -- e.g. if the destination chain is *Osmosis*, the 
-address should have an *osmo* prefix.
-
-
-![IBC custom receiver](../../../public/images/namadillo/ibc-out2.png)
-
-### Click 'Submit' and approve your transaction
-After entering the required transfer info, click *Submit*. You'll be prompted to approve the transaction and it will begin processing. When the transfer 
-has completed, the status will update to show *Transfer Completed*.
-</Steps> 
+<Callout type="info">
+Withdrawing a shielded asset from the **IBC Transfer** section is equivalent to selecting **Unshield** and then **IBC Unshield** from the topbar. See 
+the [Unshielding Assets](./unshield.mdx) section for more details, including important information on failed transactions and refund addresses.
+</Callout>
