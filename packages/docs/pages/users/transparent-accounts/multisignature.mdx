@@ -51,41 +51,38 @@ being submitted to the chain.
 
 <Steps>
 ### Dump the raw tx
-The `--dump-tx` argument will write the transaction to disk. A folder is required to be specified where the transaction will be dumped.
-
+The `--dump-tx` argument will write the transaction to disk. A folder is required to be specified where the transaction will be dumped (use `.` for the current directory).
+Consider the example of a transparent transfer:
 ```bash copy
-mkdir tx_dumps
 namadac transparent-transfer --source abc-multisig --target $TARGET \
   --token nam --amount 2 \
-  --signing-keys alice \
-  --dump-tx --output-folder-path tx_dumps
+  --dump-tx --output-folder-path . \
+  --node $NODE
 
 # Example output:
-Transaction serialized to tx_dumps/FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3.tx.
+Transaction serialized to ./9c92fe1f2cdc64956582e69b898101e6df78700968fcad5e88bfc1cdf0a5496d.tx.
 ```
 <Callout type="info">
-By default, transactions have an expiration of *1 hour* from the time they're created. This can be changed using the `expiration-date` flag and providing a new 
-expiration time (in UTC). You can also use the `no-expiration` flag to set no expiry; although this option is discouraged and should be used with caution.  
-
-Transactions submitted after expiry will not be accepted on-chain.
+By default, transactions have an expiration of *1 hour* from the time they're created. This can be changed using the `--expiration` flag and providing a new 
+expiration time (in UTC). Transactions submitted after expiry will not be accepted on-chain.
 </Callout>
 
-### Sign the transaction with two of the three Keys
-This command will sign the transaction with Alice's key. Afterwards, repeat the command using Bob's key.
+### Sign the transaction with the necessary number of keys (2 in this case)
+This command will sign the transaction with Alice's key and Bob's key:
 
 ```bash copy
 cd tx_dumps
-namadac sign-tx \
-  --tx-path FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3.tx \
-  --signing-keys alice \
-  --owner abc-multisig
+namadac utils sign-offline \
+  --data-path 9c92fe1f2cdc64956582e69b898101e6df78700968fcad5e88bfc1cdf0a5496d.tx \
+  --secret-keys alice,bob \
 ```
+
 You should have created two new files -- one with Alice's signature and one with Bob's.
 ```bash copy
-# contents of tx_dumps directory
-FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3.tx
-offline_signature_FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3_tpknam1qpnpmq2mpxaag9e0xcczgc0w66pzaxvpnhysjsm8h5tgmajgvunwck67w5j.tx
-offline_signature_FC2955C6B252EF6E93B1B54923B2178A7DC47E06D27448A43426487DF4BAD0E3_tpknam1qqjnwcwpjy09ty4v0z6jwpkr04m3q2h0dgr6j62dfs4g6q6l4dk5yy5we05.tx
+# contents of current directory
+9c92fe1f2cdc64956582e69b898101e6df78700968fcad5e88bfc1cdf0a5496d.tx
+offline_signature_9c92fe1f2cdc64956582e69b898101e6df78700968fcad5e88bfc1cdf0a5496d_tpknam1qpnpmq2mpxaag9e0xcczgc0w66pzaxvpnhysjsm8h5tgmajgvunwck67w5j.sig
+offline_signature_9c92fe1f2cdc64956582e69b898101e6df78700968fcad5e88bfc1cdf0a5496d_tpknam1qqjnwcwpjy09ty4v0z6jwpkr04m3q2h0dgr6j62dfs4g6q6l4dk5yy5we05.sig
 ```
 To make things easier in the next step, we'll save these filenames to the shell variables `TX`, `SIG1` and `SIG2`.
 
@@ -97,8 +94,7 @@ an implicit account that will pay the transaction fees.
 namadac tx \
   --tx-path $TX \
   --signatures $SIG1 $SIG2 \
-  --owner abc-multisig \
-  --gas-payer alice
+  --gas-payer alice --node $NODE
 ```
 <Callout type="info">
 Note the lack of commas used in the `--signatures` argument.
@@ -116,7 +112,7 @@ namadac update-account \
 --address abc-multisig \
 --public-keys alice,bob,charlie \
 --threshold 1 \
---signing-keys alice,bob
+--signing-keys alice,bob --node $NODE
 ```
 <Callout type="info">
 Note: you must include both the threshold and the list of public keys to be associated with this account, even if there is no change to one of those values.
@@ -132,7 +128,7 @@ to a file and collect the required signatures.
 One can check that the threshold has been updated correctly by running:
 ```shell
 namadac query-account \
---owner abc-multisig
+--owner abc-multisig --node $NODE
 ```
 This will list the threshold and all associated public keys of an account.
 
