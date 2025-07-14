@@ -26,6 +26,7 @@ jobs:
     needs: [checks]
     env:
       REGISTRY_URL: ghcr.io
+      REPOSITORY: ${{ github.repository }}
     strategy:
       fail-fast: false
       matrix:
@@ -59,7 +60,7 @@ jobs:
           context: .
           file: Dockerfile
           push: ${{ github.ref == 'refs/heads/master' }}
-          tags: ${{ env.REGISTRY_URL }}/anoma/namada-docs:${{ matrix.docker.image }}-main
+          tags: ${{ env.REGISTRY_URL }}/${{ env.REPOSITORY }}:${{ matrix.docker.image }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             "TARGET=${{ matrix.docker.path }}"
